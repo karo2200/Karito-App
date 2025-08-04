@@ -17,9 +17,8 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
+        <ThemedText type="subtitle">خدمات</ThemedText>
+        <ThemedView>
           <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
           to see changes. Press{" "}
           <ThemedText type="defaultSemiBold">
@@ -30,7 +29,7 @@ export default function HomeScreen() {
             })}
           </ThemedText>{" "}
           to open developer tools.
-        </ThemedText>
+        </ThemedView>
       </ThemedView>
     </ParallaxScrollView>
   );
