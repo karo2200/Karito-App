@@ -10,7 +10,7 @@ import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import "react-native-reanimated";
-import { useColorScheme } from "../../hooks/useColorScheme";
+import { useColorScheme } from "../hooks/useColorScheme";
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const fontsLoaded = useLoadFonts();
@@ -28,7 +28,7 @@ export default function RootLayout() {
           tabBarStyle: {
             backgroundColor: "white",
             borderTopWidth: 0,
-            height: 70,
+            height: 84,
             borderTopRightRadius: 30,
             borderTopLeftRadius: 30,
             shadowColor: "#000",
