@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { ThemedView } from "./ThemedView";
+import { ThemedView } from "./atoms/ThemedView";
 import { useBottomTabOverflow } from../ hooks / useColorSchemeround;
 ";
 
