@@ -1,5 +1,3 @@
-import { ScrollView } from "react-native";
-
 import { ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { Car, Menu } from "iconsax-react-native";
@@ -24,20 +22,20 @@ export function HeaderItem({ Icon, title }) {
   );
 }
 
-export default function HeaderSection({
+export default function ServiceHeaderSection({
   items = [
     { Icon: Menu, title: "همه خدمات" },
     { Icon: Car, title: "خودرو" },
   ],
 }) {
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ThemedView>
       <ThemedText>خدمات</ThemedText>
       <ThemedView style={{ flexDirection: "row-reverse" }}>
         {items?.map((item, index) => (
           <HeaderItem Icon={item?.Icon} title={item?.title} key={`${index}`} />
         ))}
       </ThemedView>
-    </ScrollView>
+    </ThemedView>
   );
 }

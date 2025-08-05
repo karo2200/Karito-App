@@ -1,12 +1,14 @@
+import { ServiceHeaderSection } from "@/components";
+import ThemedContainer from "@/components/atoms/ThemedContainer";
 import { ScrollView, StyleSheet } from "react-native";
-
-import HeaderSection from "./HeaderSection";
 
 export default function TabTwoScreen() {
   return (
-    <ScrollView style={{ flex: 1, marginTop: 100 }}>
-      <HeaderSection />
-    </ScrollView>
+    <ThemedContainer>
+      <ScrollView style={{ flex: 1, marginTop: 100 }}>
+        <ServiceHeaderSection />
+      </ScrollView>
+    </ThemedContainer>
   );
 }
 
