@@ -1,8 +1,7 @@
 import { StyleSheet } from "react-native";
 
+import { ThemedText, ThemedView } from "@/components";
 import { Home2 } from "iconsax-react-native";
-import { ThemedText } from "../../../components/atoms/ThemedText";
-import { ThemedView } from "../../../components/atoms/ThemedView";
 
 export default function HomeScreen() {
   return (

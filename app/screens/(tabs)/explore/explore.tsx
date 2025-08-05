@@ -1,19 +1,11 @@
 import { ScrollView, StyleSheet } from "react-native";
 
-import { HambergerMenu } from "iconsax-react-native";
-import { ThemedText } from "../../../../components/atoms/ThemedText";
-import { ThemedView } from "../../../../components/atoms/ThemedView";
+import HeaderSection from "./HeaderSection";
 
 export default function TabTwoScreen() {
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <ThemedText>خدمات</ThemedText>
-      <ThemedView>
-        <ThemedView>
-          <HambergerMenu color="#f00" />
-          <ThemedText>همه خدمات</ThemedText>
-        </ThemedView>
-      </ThemedView>
+    <ScrollView style={{ flex: 1, marginTop: 100 }}>
+      <HeaderSection />
     </ScrollView>
   );
 }

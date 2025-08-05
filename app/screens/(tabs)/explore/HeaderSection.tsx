@@ -1,32 +1,42 @@
 import { ScrollView } from "react-native";
 
-import { HambergerMenu } from "iconsax-react-native";
-import { ThemedText } from "../../../../components/atoms/ThemedText";
-import { ThemedView } from "../../../../components/atoms/ThemedView";
+import { ThemedText, ThemedView } from "@/components";
+import { Colors } from "@/constants/Colors";
+import { Car, Menu } from "iconsax-react-native";
 
-export function HeaderItem() {
+export function HeaderItem({ Icon, title }) {
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <ThemedText>خدمات</ThemedText>
-      <ThemedView>
-        <ThemedView>
-          <HambergerMenu color="#f00" />
-          <ThemedText>همه خدمات</ThemedText>
-        </ThemedView>
+    <ThemedView style={{ alignItems: "center", marginLeft: 34 }}>
+      <ThemedView
+        style={{
+          width: 64,
+          height: 64,
+          borderRadius: 12,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: Colors.gray50,
+        }}
+      >
+        <Icon color={Colors.hint500} size={24} />
       </ThemedView>
-    </ScrollView>
+      <ThemedText>{title}</ThemedText>
+    </ThemedView>
   );
 }
 
-export default function HeaderSection() {
+export default function HeaderSection({
+  items = [
+    { Icon: Menu, title: "همه خدمات" },
+    { Icon: Car, title: "خودرو" },
+  ],
+}) {
   return (
     <ScrollView style={{ flex: 1 }}>
       <ThemedText>خدمات</ThemedText>
-      <ThemedView>
-        <ThemedView>
-          <HambergerMenu color="#f00" />
-          <ThemedText>همه خدمات</ThemedText>
-        </ThemedView>
+      <ThemedView style={{ flexDirection: "row-reverse" }}>
+        {items?.map((item, index) => (
+          <HeaderItem Icon={item?.Icon} title={item?.title} key={`${index}`} />
+        ))}
       </ThemedView>
     </ScrollView>
   );
