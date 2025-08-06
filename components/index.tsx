@@ -3,4 +3,4 @@ export { default as ThemedContainer } from "./atoms/ThemedContainer";
 export { default as ThemedText } from "./atoms/ThemedText";
 export { default as ThemedView } from "./atoms/ThemedView";
 // molecules
-export { default as ServiceHeaderSection } from "./molecules/ServiceHeaderSection";
+export { default as ServiceHeaderItem } from "./molecules/ServiceHeaderItem";

@@ -1,4 +1,4 @@
-import { SafeAreaView, type ViewProps } from "react-native";
+import { Dimensions, SafeAreaView, type ViewProps } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useMemo } from "react";
@@ -19,7 +19,12 @@ export default function ThemedContainer({
     "background"
   );
   const containerStyle = useMemo(() => {
-    return { flex: 1, backgroundColor };
+    return {
+      flex: 1,
+      backgroundColor,
+      width: Dimensions.get("screen").width,
+      padding: 20,
+    };
   }, []);
   return <SafeAreaView style={[containerStyle, style]} {...otherProps} />;
 }
