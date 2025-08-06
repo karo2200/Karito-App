@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import ServiceOrg from "@/components/organisms/service/ServiceOrg";
+import { StyleSheet, View } from "react-native";
 
 export default function ExploreScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>🔍 Explore Screen</Text>
+      <ServiceOrg />
     </View>
   );
 }
