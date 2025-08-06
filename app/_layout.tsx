@@ -1,26 +1,36 @@
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
+import { useEffect } from "react";
+import { I18nManager, View } from "react-native";
 import "react-native-reanimated";
-import { useColorScheme } from "../hooks/useColorScheme";
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  useEffect(() => {
+    if (!I18nManager.isRTL) {
+      I18nManager.allowRTL(true);
+      I18nManager.forceRTL(true);
+    }
+  }, []);
+
   const fontsLoaded = useLoadFonts();
+
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: "#FFFFFF",
+    },
+  };
 
   if (!fontsLoaded) {
     return null;
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={MyTheme}>
       <Tabs
         screenOptions={({ route }) => ({
           headerShown: true,
@@ -83,9 +93,9 @@ export default function RootLayout() {
           options={{
             title: "کاریتو",
             tabBarLabel: "خانه",
-            headerTitleAlign: "center",
-
             headerTitleStyle: {
+              textAlign: "right",
+
               color: Colors.hint500,
               fontSize: 20,
               fontWeight: "bold",

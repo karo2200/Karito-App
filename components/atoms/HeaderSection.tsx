@@ -14,7 +14,7 @@ export function HeaderItem({ Icon, title }) {
           borderRadius: 12,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: Colors.gray50,
+          backgroundColor: Colors.hint50,
         }}
       >
         <Icon color={Colors.hint500} size={24} />
