@@ -1,15 +1,19 @@
 import ThemedContainer from "@/components/atoms/ThemedContainer";
-import { ScrollView } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import ServiceBodySection from "./ServiceBodySection";
 import ServiceHeaderSection from "./ServiceHeaderSection";
 
 export default function ServiceOrg() {
   return (
     <ThemedContainer>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={styles.flex1}>
         <ServiceHeaderSection />
         <ServiceBodySection />
       </ScrollView>
     </ThemedContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  flex1: { flex: 1 },
+});

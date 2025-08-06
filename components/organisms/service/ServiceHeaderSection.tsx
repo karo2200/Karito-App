@@ -1,6 +1,7 @@
 import { ThemedText, ThemedView } from "@/components";
 import HeaderItem from "@/components/molecules/ServiceHeaderItem";
 import { Car, Menu } from "iconsax-react-native";
+import { StyleSheet } from "react-native";
 
 export default function ServiceHeaderSection({
   items = [
@@ -10,8 +11,8 @@ export default function ServiceHeaderSection({
 }) {
   return (
     <ThemedView>
-      <ThemedText>خدمات</ThemedText>
-      <ThemedView style={{ flexDirection: "row" }}>
+      <ThemedText fontType="bold">خدمات</ThemedText>
+      <ThemedView style={styles.listContainer}>
         {items?.map((item, index) => (
           <HeaderItem Icon={item?.Icon} title={item?.title} key={`${index}`} />
         ))}
@@ -19,3 +20,7 @@ export default function ServiceHeaderSection({
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  listContainer: { flexDirection: "row-reverse", flex: 1 },
+});
