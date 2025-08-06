@@ -7,8 +7,10 @@ import NounHouseIcon from "@/assets/icons/noun-house";
 import ThemedText from "@/components/atoms/ThemedText";
 import ThemedView from "@/components/atoms/ThemedView";
 import { Colors } from "@/constants/Colors";
+import { FontType } from "@/constants/Fonts";
+import { ComponentType } from "react";
 
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 
 export default function Categories() {
   return (
@@ -18,12 +20,12 @@ export default function Categories() {
         <HeaderItem
           Icon={() => <NounHouseIcon />}
           title={"تمیزکاری و نظافت"}
-          style={{ width: "100%" }}
+          style={{ width: 171 }}
         />
         <HeaderItem
           Icon={() => <CosmeticsIcon />}
           title={"سلامت و زیبایی"}
-          style={{ width: "100%" }}
+          style={{ width: 171 }}
         />
       </View>
       <View style={styles.flexRow}>
@@ -36,9 +38,17 @@ export default function Categories() {
   );
 }
 
-function HeaderItem({ Icon, title, style }) {
+function HeaderItem({
+  Icon,
+  title,
+  style,
+}: {
+  Icon: ComponentType;
+  title: string;
+  style?: ViewStyle;
+}) {
   return (
-    <ThemedView style={{ alignItems: "center", gap: 5 }}>
+    <ThemedView style={{ alignItems: "center" }}>
       <ThemedView
         style={[
           {
@@ -52,18 +62,21 @@ function HeaderItem({ Icon, title, style }) {
           style,
         ]}
       >
-        <Icon color={Colors.hint500} size={24} />
+        <Icon />
       </ThemedView>
-      <ThemedText type="text">{title}</ThemedText>
+      <ThemedText type="text" style={styles.text}>
+        {title}
+      </ThemedText>
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, marginHorizontal: 16 },
   title: {
     textAlign: "right",
     marginVertical: 16,
+    fontWeight: 700,
   },
 
   flexRow: {
@@ -72,4 +85,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+
+  text: { marginTop: 4, fontFamily: FontType.YekanBakhRegular },
 });

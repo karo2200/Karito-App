@@ -1,9 +1,22 @@
 import ThemedText from "@/components/atoms/ThemedText";
-import { Image, StyleSheet, View } from "react-native";
+import { FontType } from "@/constants/Fonts";
+import { Image, StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
 
-export default function SpecialistItem() {
+export default function SpecialistItem({
+  item,
+  style,
+  onItemPress,
+}: {
+  onItemPress: () => void;
+  item: any;
+  style?: ViewStyle | undefined;
+}) {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={[styles.container, style]}
+      activeOpacity={1}
+      onPress={onItemPress}
+    >
       <Image
         style={styles.image}
         source={require("../../../../assets/images/Home-Banner.png")}
@@ -11,7 +24,7 @@ export default function SpecialistItem() {
       <ThemedText style={styles.title} numberOfLines={2}>
         محمد مردانی (سلامت و زیبایی)
       </ThemedText>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -24,6 +37,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 14,
     marginTop: 10,
+    fontFamily: FontType.YekanBakhRegular,
   },
 
   image: {

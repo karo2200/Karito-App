@@ -1,4 +1,5 @@
-import { ScrollView, StyleSheet } from "react-native";
+import CustomCarousel from "@/components/atoms/CustomCarousel";
+import { ScrollView } from "react-native";
 import Banner from "./Views/Banner";
 import Categories from "./Views/Categories";
 import HorizontalServiceList from "./Views/HorizontalServiceList";
@@ -10,18 +11,17 @@ export default function HomeScreen() {
       <Categories />
       <Banner />
       <HorizontalServiceList
+        title="پر طرفداردار ترین خدمات"
+        loading={false}
+        data={[{}, {}]}
+      />
+      <CustomCarousel />
+      <HorizontalServiceList
         title="انواع جابجایی"
         loading={false}
         data={[{}]}
       />
-      <HorizontalSpeciaLists />
+      <HorizontalSpeciaLists data={[{ id: 1 }, { id: 2 }]} />
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-});
