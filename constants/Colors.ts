@@ -25,4 +25,5 @@ export const Colors = {
   },
   hint500: "#5D47EA",
   gray50: "#F9FAFB",
+  mediumGray: "#A3A3A3",
 };
