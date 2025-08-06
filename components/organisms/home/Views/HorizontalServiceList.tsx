@@ -1,13 +1,24 @@
 import ThemedText from "@/components/atoms/ThemedText";
+import { FontType } from "@/constants/Fonts";
 import React, { useCallback, useRef } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import ServiceItem from "./ServiceItem";
 
-export default function HorizontalServiceList({ title, data, loading }) {
+export default function HorizontalServiceList({
+  title,
+  data,
+  loading,
+}: {
+  title: string;
+  data: any;
+  loading: boolean;
+}) {
   const listRef = useRef<FlatList>(null);
 
   const renderItem = useCallback(
-    ({ item, index }) => <ServiceItem />,
+    ({ index }: { index: number }) => (
+      <ServiceItem style={index === 0 ? { marginRight: 16 } : undefined} />
+    ),
     [loading]
   );
 
@@ -22,6 +33,7 @@ export default function HorizontalServiceList({ title, data, loading }) {
       <FlatList
         ref={listRef}
         data={data}
+        inverted
         showsHorizontalScrollIndicator={false}
         horizontal
         renderItem={renderItem}
@@ -35,12 +47,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
     textAlign: "right",
+    marginHorizontal: 16,
+    fontFamily: FontType.YekanBakhBold,
   },
 
   container: {
     flexDirection: "column",
     width: "100%",
-    paddingVertical: 16,
+    paddingVertical: 8,
   },
 
   header: {

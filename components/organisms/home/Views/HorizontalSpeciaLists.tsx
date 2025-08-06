@@ -4,11 +4,23 @@ import { FlatList, StyleSheet, View } from "react-native";
 import ThemedText from "@/components/atoms/ThemedText";
 import SpecialistItem from "./SpecialistItem";
 
-const RenderItem = ({ item, onItemPress }) => (
-  <SpecialistItem item={item} onItemPress={onItemPress} />
+const RenderItem = ({
+  item,
+  onItemPress,
+  index,
+}: {
+  item: any;
+  onItemPress: () => void;
+  index: number;
+}) => (
+  <SpecialistItem
+    item={item}
+    onItemPress={onItemPress}
+    style={index === 0 ? { marginRight: 16 } : undefined}
+  />
 );
 
-function HorizontalSpeciaLists({ data = [{ id: 1 }, { id: 2 }] }) {
+function HorizontalSpeciaLists({ data }: { data: any }) {
   const listRef = useRef<FlatList>(null);
 
   return (
@@ -25,8 +37,9 @@ function HorizontalSpeciaLists({ data = [{ id: 1 }, { id: 2 }] }) {
         keyExtractor={(item) => item?.id}
         showsHorizontalScrollIndicator={false}
         horizontal
-        renderItem={({ item }) => (
-          <RenderItem item={item} onItemPress={() => {}} />
+        inverted
+        renderItem={({ item, index }) => (
+          <RenderItem item={item} onItemPress={() => {}} index={index} />
         )}
       />
     </View>
@@ -39,12 +52,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
     textAlign: "right",
+    paddingHorizontal: 16,
   },
 
   container: {
     flexDirection: "column",
     width: "100%",
-    paddingVertical: 16,
+    paddingTop: 8,
+    paddingBottom: 20,
   },
 
   header: {
