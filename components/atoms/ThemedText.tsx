@@ -1,5 +1,6 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
+import { FontType } from "@/constants/Fonts";
 import { useThemeColor } from "../../hooks/useThemeColor";
 
 export type ThemedTextProps = TextProps & {
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
   default: {
     fontSize: 14,
     lineHeight: 24,
+    fontFamily: FontType.YekanBakhBold,
   },
   defaultSemiBold: {
     fontSize: 16,
@@ -62,5 +64,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "400",
     color: "#000000",
+    textAlign: "right",
   },
 });
