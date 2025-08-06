@@ -1,22 +1,25 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import Banner from "./Views/Banner";
+import Categories from "./Views/Categories";
+import HorizontalServiceList from "./Views/HorizontalServiceList";
+import HorizontalSpeciaLists from "./Views/HorizontalSpeciaLists";
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>🌍 Welcome to Home!</Text>
-    </View>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Categories />
+      <Banner />
+      <HorizontalServiceList
+        title="انواع جابجایی"
+        loading={false}
+        data={[{}]}
+      />
+      <HorizontalSpeciaLists />
+    </ScrollView>
   );
 }
 
-export const tabBarLabel = "خانه"; // 👈 این مهمه
-export const title = "خانه";
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
