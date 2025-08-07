@@ -1,6 +1,5 @@
 import { ThemedText, ThemedView } from "@/components";
 import HeaderItem from "@/components/molecules/ServiceHeaderItem";
-import { useState } from "react";
 import { StyleSheet } from "react-native";
 
 export default function ServiceBodySection({
@@ -18,15 +17,14 @@ export default function ServiceBodySection({
         "https://www.visualdictionaryonline.com/images/plants-gardening/plants/flower/examples-flowers_1.jpg",
     },
   ],
+  selectedService,
+}: {
+  items?: any[];
+  selectedService?: any;
 }) {
-  const [selectedItem, setSelectedItem] = useState(items[0]);
-
-  const onItemPress = (index: number) => {
-    setSelectedItem(items[index]);
-  };
   return (
     <ThemedView>
-      <ThemedText fontType="bold">خدمات</ThemedText>
+      <ThemedText fontType="bold">{selectedService?.title}</ThemedText>
       <ThemedView style={styles.listContainer}>
         {items?.map((item, index) => (
           <HeaderItem
@@ -34,9 +32,6 @@ export default function ServiceBodySection({
             title={item?.title}
             key={`${index}`}
             height={98}
-            id={item?.id}
-            onItemPress={() => onItemPress(index)}
-            selectedItem={selectedItem}
           />
         ))}
       </ThemedView>
@@ -46,5 +41,4 @@ export default function ServiceBodySection({
 
 const styles = StyleSheet.create({
   listContainer: { flexDirection: "row" },
-  itemStyle: { width: 98, height: 98 },
 });

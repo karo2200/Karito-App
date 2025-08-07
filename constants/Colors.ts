@@ -33,4 +33,5 @@ export const Colors = {
   gray900: "#111827",
   grayMedium: "#D4D4D4",
   disabledIcon: "#E5E7EB",
+  strokeGray: "#D2D5DA",
 };

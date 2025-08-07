@@ -22,9 +22,16 @@ export default function HeaderItem({
   id,
 }: HeaderItemProps) {
   return (
-    <TouchableOpacity onPress={onItemPress}>
+    <TouchableOpacity onPress={onItemPress} disabled={!onItemPress}>
       <ThemedView style={styles.container}>
-        <ThemedView style={[styles.imgContainer, { height, width: height }]}>
+        <ThemedView
+          style={[
+            selectedItem && selectedItem?.id === id
+              ? styles.selectedImgContainer
+              : styles.imgContainer,
+            { height, width: height },
+          ]}
+        >
           {imagePath ? (
             <CustomImage src={imagePath} resizeMode="cover" />
           ) : Icon ? (
@@ -45,16 +52,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.gray50,
+    borderColor: Colors.gray50,
     overflow: "hidden",
     marginBottom: 12,
+    borderWidth: 2,
   },
   selectedImgContainer: {
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.gray50,
+    backgroundColor: Colors.hint50,
+    borderColor: Colors.hint500,
     overflow: "hidden",
     marginBottom: 12,
+    borderWidth: 2,
   },
 
   container: { alignItems: "center", marginLeft: 34 },

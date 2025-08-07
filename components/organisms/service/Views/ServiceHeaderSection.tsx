@@ -1,20 +1,25 @@
 import { ThemedText, ThemedView } from "@/components";
 import HeaderItem from "@/components/molecules/ServiceHeaderItem";
-import { Car, Menu } from "iconsax-react-native";
 import { StyleSheet } from "react-native";
 
 export default function ServiceHeaderSection({
-  items = [
-    { Icon: Menu, title: "همه خدمات" },
-    { Icon: Car, title: "خودرو" },
-  ],
+  selectedService,
+  onServiceItemPress,
+  serviceItems,
 }) {
   return (
     <ThemedView>
       <ThemedText fontType="bold">خدمات</ThemedText>
       <ThemedView style={styles.listContainer}>
-        {items?.map((item, index) => (
-          <HeaderItem Icon={item?.Icon} title={item?.title} key={`${index}`} />
+        {serviceItems?.map((item, index) => (
+          <HeaderItem
+            Icon={item?.Icon}
+            title={item?.title}
+            key={`${index}`}
+            id={item?.id}
+            onItemPress={() => onServiceItemPress(index)}
+            selectedItem={selectedService}
+          />
         ))}
       </ThemedView>
     </ThemedView>
