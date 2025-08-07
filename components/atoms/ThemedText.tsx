@@ -33,7 +33,7 @@ export default function ThemedText({
         style,
         {
           fontFamily:
-            fontType == "bold"
+            fontType === "bold"
               ? FontType.YekanBakhBold
               : fontType === "regular"
               ? FontType.YekanBakhRegular
