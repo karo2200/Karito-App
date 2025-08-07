@@ -7,6 +7,7 @@ export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
   type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link" | "text";
+  fontType?: "bold" | "regular" | "medium";
 };
 
 export default function ThemedText({
@@ -14,6 +15,7 @@ export default function ThemedText({
   lightColor,
   darkColor,
   type = "default",
+  fontType = "regular",
   ...rest
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
@@ -29,6 +31,15 @@ export default function ThemedText({
         type === "link" ? styles.link : undefined,
         type === "text" ? styles.text : undefined,
         style,
+        {
+          fontFamily:
+            fontType == "bold"
+              ? FontType.YekanBakhBold
+              : fontType === "regular"
+              ? FontType.YekanBakhRegular
+              : FontType.YekanBakhMedium,
+          textAlign: "right",
+        },
       ]}
       {...rest}
     />
