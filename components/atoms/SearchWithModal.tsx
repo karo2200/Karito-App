@@ -90,9 +90,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
     paddingHorizontal: 12,
-    height: 32,
+    height: 36,
     borderWidth: 1,
     borderColor: Colors.disabledIcon,
+    justifyContent: "center",
   },
 
   icon: {

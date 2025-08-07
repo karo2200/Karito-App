@@ -34,4 +34,6 @@ export const Colors = {
   grayMedium: "#D4D4D4",
   disabledIcon: "#E5E7EB",
   strokeGray: "#D2D5DA",
+  label: "#1F2937",
+  link25: "#2C2D40",
 };
