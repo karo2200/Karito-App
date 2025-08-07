@@ -34,4 +34,9 @@ export const Colors = {
   grayMedium: "#D4D4D4",
   disabledIcon: "#E5E7EB",
   strokeGray: "#D2D5DA",
+  info50: "#E1F4FA",
+  info200: "#84D0E9",
+  info900: "#105481",
+  info700: "#1C83B6",
+  title: "#6D7280",
 };

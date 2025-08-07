@@ -103,7 +103,7 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
-          name="explore/index"
+          name="service/index"
           options={{ title: "کاریتو", tabBarLabel: "خدمات" }}
         />
       </Tabs>
