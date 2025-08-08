@@ -15,7 +15,9 @@ import { StyleSheet, View, ViewStyle } from "react-native";
 export default function Categories() {
   return (
     <View style={styles.container}>
-      <ThemedText style={styles.title}>خدمات</ThemedText>
+      <ThemedText fontType="bold" style={styles.title}>
+        خدمات
+      </ThemedText>
       <View style={styles.flexRow}>
         <HeaderItem
           Icon={() => <NounHouseIcon />}

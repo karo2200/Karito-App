@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import React, { useCallback, useRef } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { Tabs } from "react-native-collapsible-tab-view";
@@ -7,9 +8,16 @@ import OrderCard from "./OrderCard";
 export default function InProgressOrders() {
   const listRef = useRef<FlatList>(null);
 
+  const router = useRouter();
+
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
-      <OrderCard item={item} onOrderPress={() => {}} />
+      <OrderCard
+        item={item}
+        onOrderPress={() => {
+          router.push("/order/orderDetail");
+        }}
+      />
     ),
     []
   );

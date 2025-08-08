@@ -38,6 +38,7 @@ export default function ThemedText({
               : fontType === "regular"
               ? FontType.YekanBakhRegular
               : FontType.YekanBakhMedium,
+          fontWeight: fontType === "bold" ? "700" : "400",
           textAlign: "right",
         },
       ]}

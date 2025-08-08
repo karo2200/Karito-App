@@ -36,4 +36,6 @@ export const Colors = {
   strokeGray: "#D2D5DA",
   label: "#1F2937",
   link25: "#2C2D40",
+  gray500: "#6D7280",
+  darkError: "#E11D48",
 };
