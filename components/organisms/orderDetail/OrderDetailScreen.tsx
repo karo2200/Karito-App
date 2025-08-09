@@ -1,11 +1,33 @@
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedText from "@/components/atoms/ThemedText";
+import { useToast } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
 import * as React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import useOrderDetailHook from "./hooks/OrderDetail.hook";
+import FinishWorkSheet from "./Views/FinishWorkSheet";
 
 export default function OrderDetailScreen() {
+  const { showToast } = useToast();
+
+  const { onBillPress, setFinishWorkVisible, finishWorkVisible } =
+    useOrderDetailHook();
+
+  const handleSuccess = () => {
+    showToast({
+      message: "عملیات با موفقیت انجام شد",
+      type: "success",
+      title: "تبریک!",
+    });
+  };
+
   return (
     <ThemedContainer>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -39,7 +61,11 @@ export default function OrderDetailScreen() {
           </ThemedText>
         </View>
         <View style={styles.rowView2}>
-          <ThemedText style={{ color: Colors.darkError }}>لغو سفارش</ThemedText>
+          <Pressable onPress={handleSuccess}>
+            <ThemedText style={{ color: Colors.darkError }}>
+              لغو سفارش
+            </ThemedText>
+          </Pressable>
           <ThemedText fontType="bold" style={{ color: "black" }}>
             در انتظار تایید متخصص...
           </ThemedText>
@@ -73,6 +99,19 @@ export default function OrderDetailScreen() {
           </ThemedText>
         </View>
       </ScrollView>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.payment}
+        onPress={() => onBillPress()}
+      >
+        <ThemedText type="defaultSemiBold" style={styles.textBtn}>
+          مشاهده صورت حساب
+        </ThemedText>
+      </TouchableOpacity>
+      <FinishWorkSheet
+        visible={finishWorkVisible}
+        setVisible={() => setFinishWorkVisible(false)}
+      />
     </ThemedContainer>
   );
 }
@@ -107,4 +146,20 @@ const styles = StyleSheet.create({
   },
 
   address: { color: Colors.label, width: "80%" },
+
+  textBtn: {
+    fontWeight: "400",
+    color: "white",
+  },
+
+  payment: {
+    backgroundColor: Colors.hint500,
+    paddingVertical: 10,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    bottom: 24,
+    borderRadius: 4,
+  },
 });
