@@ -39,4 +39,6 @@ export const Colors = {
   info900: "#105481",
   info700: "#1C83B6",
   title: "#6D7280",
+  label: "#1F2937",
+  link25: "#2C2D40",
 };

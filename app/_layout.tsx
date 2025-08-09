@@ -21,7 +21,7 @@ export default function RootLayout() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: "#FFFFFF",
+      background: "#ffffff",
     },
   };
 
@@ -32,6 +32,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={MyTheme}>
       <Tabs
+        initialRouteName="home/index"
         screenOptions={({ route }) => ({
           headerShown: true,
           safeAreaInsets: { top: 0, bottom: 0 },
@@ -42,7 +43,7 @@ export default function RootLayout() {
             borderTopRightRadius: 30,
             borderTopLeftRadius: 30,
             shadowColor: "#000",
-            shadowOpacity: 0.1,
+            shadowOpacity: 0.3,
             shadowOffset: { width: 0, height: 5 },
             shadowRadius: 10,
             elevation: 5,
@@ -51,7 +52,8 @@ export default function RootLayout() {
           tabBarInactiveTintColor: Colors.mediumGray,
           tabBarLabelStyle: {
             fontSize: 12,
-            fontFamily: FontType.APACE_MONO,
+            fontFamily: FontType.YekanBakhRegular,
+            marginTop: 4,
           },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = "ios-home";
@@ -74,6 +76,7 @@ export default function RootLayout() {
                     borderBottomLeftRadius: 2,
                     borderBottomRightRadius: 2,
                     marginBottom: 6,
+                    marginTop: 8,
                   }}
                 />
 
@@ -89,10 +92,10 @@ export default function RootLayout() {
         })}
       >
         <Tabs.Screen
-          name="home/index"
+          name="order/index"
           options={{
             title: "کاریتو",
-            tabBarLabel: "خانه",
+            tabBarLabel: "سفارش‌های من",
             headerTitleStyle: {
               textAlign: "right",
 
@@ -105,6 +108,20 @@ export default function RootLayout() {
         <Tabs.Screen
           name="service/index"
           options={{ title: "کاریتو", tabBarLabel: "خدمات" }}
+        />
+        <Tabs.Screen
+          name="home/index"
+          options={{
+            title: "کاریتو",
+            tabBarLabel: "خانه",
+            headerTitleStyle: {
+              textAlign: "right",
+
+              color: Colors.hint500,
+              fontSize: 20,
+              fontWeight: "bold",
+            },
+          }}
         />
       </Tabs>
       <StatusBar style="auto" />
