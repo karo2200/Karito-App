@@ -4,14 +4,19 @@ import LocationIcon from "@/assets/icons/Location";
 import PercentIcon from "@/assets/icons/Percent";
 import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedText from "@/components/atoms/ThemedText";
+import LogOutActionSheet from "@/components/molecules/LogOutActionSheet";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as React from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import useProfileHook from "./hooks/Profile.hook";
 
 export default function ProfileScreen() {
   const router = useRouter();
+
+  const { exitVisible, setExitVisible } = useProfileHook();
+
   return (
     <ThemedContainer>
       <View style={styles.flex1}>
@@ -33,10 +38,18 @@ export default function ProfileScreen() {
         <List
           title="مدیریت آدرس‌ها"
           icon={<LocationIcon />}
-          onPress={() => {}}
+          onPress={() => {
+            router.push("/profile/address");
+          }}
         />
-        <List title="تخفیف‌ها" icon={<PercentIcon />} onPress={() => {}} />
-        <Pressable style={styles.rowView}>
+        <List
+          title="تخفیف‌ها"
+          icon={<PercentIcon />}
+          onPress={() => {
+            router.push("/profile/offers");
+          }}
+        />
+        <Pressable style={styles.rowView} onPress={() => setExitVisible(true)}>
           <Ionicons name="log-out-outline" size={24} color={Colors.danger600} />
           <ThemedText
             fontType="bold"
@@ -56,6 +69,10 @@ export default function ProfileScreen() {
         </ThemedText>
         <Ionicons name="log-in-outline" size={24} color={Colors.hint500} />
       </TouchableOpacity>
+      <LogOutActionSheet
+        visible={exitVisible}
+        onClose={() => setExitVisible(false)}
+      />
     </ThemedContainer>
   );
 }

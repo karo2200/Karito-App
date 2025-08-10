@@ -24,7 +24,7 @@ type ToastProps = {
   message: string;
   title?: string;
   timeout?: number;
-  type?: "success" | "error";
+  type?: "success" | "error" | "warning";
   containerStyle?: ViewStyle;
 };
 
@@ -78,13 +78,15 @@ function Toast({
   }, [message]);
 
   return (
-    <View style={styles.toast}>
+    <View style={type === "warning" ? styles.bottomToast : styles.toast}>
       <View
         style={[
           type === "success"
             ? styles.successContainer
             : type === "error"
             ? styles.errorContainer
+            : type === "warning"
+            ? styles.warnContainer
             : styles.container,
           { opacity, ...style },
         ]}
@@ -107,7 +109,12 @@ function Toast({
                 {message}
               </ThemedText>
             </View>
-            <Ionicons name="close" size={10} color={Colors.iconGreen} />
+            <Ionicons
+              name="close"
+              size={10}
+              color={Colors.iconGreen}
+              onPress={() => setOpacity(0)}
+            />
           </Fragment>
         ) : type === "error" ? (
           <Fragment>
@@ -127,6 +134,22 @@ function Toast({
               </ThemedText>
             </View>
           </Fragment>
+        ) : type === "warning" ? (
+          <>
+            <ThemedText
+              fontType="bold"
+              style={styles.warnTitle}
+              numberOfLines={2}
+            >
+              {message}
+            </ThemedText>
+            <Ionicons
+              name="close"
+              size={16}
+              color={Colors.hint500}
+              onPress={() => setOpacity(0)}
+            />
+          </>
         ) : (
           <ThemedText fontType="bold" style={styles.text}>
             {message}
@@ -157,6 +180,18 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderGreen,
   },
 
+  warnContainer: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    backgroundColor: Colors.hint50,
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+    borderRadius: 12,
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: Colors.hint200,
+  },
+
   errorContainer: {
     flexDirection: "row-reverse",
     alignItems: "center",
@@ -172,6 +207,14 @@ const styles = StyleSheet.create({
   toast: {
     position: "absolute",
     top: 70,
+    left: 10,
+    right: 10,
+    zIndex: 1000,
+  },
+
+  bottomToast: {
+    position: "absolute",
+    bottom: 100,
     left: 10,
     right: 10,
     zIndex: 1000,
@@ -195,5 +238,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: "white",
+  },
+
+  warnTitle: {
+    color: Colors.hint900,
+    marginLeft: 8,
   },
 });

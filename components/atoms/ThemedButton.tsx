@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 4,
   },
 
   textColor: { color: Colors.hint500 },
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 4,
   },
 
   disabled: {
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 4,
   },
 
   flex1: {
