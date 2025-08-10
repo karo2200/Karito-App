@@ -22,7 +22,7 @@ export default function CanceledOrders() {
       refreshing={true}
       // onRefresh={refetch}
       contentContainerStyle={styles.tabStyle}
-      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
       renderItem={renderItem}
       onEndReached={() => {
         // if (hasNextPage) {
