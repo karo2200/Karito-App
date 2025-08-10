@@ -71,58 +71,6 @@ export default function AddressScreen() {
 }
 
 const styles = StyleSheet.create({
-  flex1: { flex: 1 },
-
-  textBtn: {
-    color: Colors.hint500,
-    marginRight: 6,
-  },
-
-  payment: {
-    borderColor: Colors.hint500,
-    borderWidth: 1,
-    paddingVertical: 8,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    borderRadius: 4,
-    flexDirection: "row",
-    marginBottom: 44,
-  },
-
-  rowView: {
-    flexDirection: "row-reverse",
-    paddingVertical: 18,
-  },
-
-  listContainer: {
-    flexDirection: "row-reverse",
-    paddingVertical: 16,
-    paddingHorizontal: 5,
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottomColor: Colors.grayMedium,
-    borderBottomWidth: 1,
-  },
-
-  headerContainer: {
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.gray50,
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 16,
-    marginBottom: 24,
-  },
-
-  number: {
-    color: Colors.semiBlack,
-    fontWeight: "600",
-    marginTop: 8,
-  },
-
   groupView: {
     alignItems: "flex-start",
     overflow: "hidden",

@@ -26,6 +26,8 @@ export const Colors = {
   hint500: "#5D47EA",
   hint50: "#ECEAFD",
   hint100: "#CECAFA",
+  hint200: "#ADA9F7",
+  hint900: "#4000AD",
   gray50: "#F9FAFB",
   mediumGray: "#A3A3A3",
   lightGray: "#F6F6F6",
