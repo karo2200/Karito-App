@@ -11,17 +11,12 @@ import Svg, {
   Mask,
   Path,
   Stop,
+  SvgProps,
 } from "react-native-svg";
 
-function EmptyAddressSvg() {
+function EmptyAddressSvg(props: SvgProps) {
   return (
-    <Svg
-      width="176"
-      height="180"
-      viewBox="0 0 176 180"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <Svg width="176" height="180" viewBox="0 0 176 180" fill="none" {...props}>
       <Path
         d="M88 176C136.601 176 176 136.601 176 88C176 39.3989 136.601 0 88 0C39.3989 0 0 39.3989 0 88C0 136.601 39.3989 176 88 176Z"
         fill="#ECEAFD"
