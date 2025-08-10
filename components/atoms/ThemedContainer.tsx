@@ -1,4 +1,4 @@
-import { type ViewProps, SafeAreaView } from "react-native";
+import { SafeAreaView, type ViewProps } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useMemo } from "react";
@@ -23,6 +23,7 @@ export default function ThemedContainer({
       flex: 1,
       backgroundColor,
       marginHorizontal: 15,
+      paddingTop: 15,
     };
   }, []);
   return <SafeAreaView style={[containerStyle, style]} {...otherProps} />;

@@ -41,6 +41,7 @@ export default function TimeList() {
     <SectionList
       sections={DATA}
       keyExtractor={(item, index) => item?.[0] + index}
+      style={styles.container}
       renderItem={({ item }) => {
         return (
           <CustomFlatList
@@ -79,12 +80,11 @@ export default function TimeList() {
           {title}
         </ThemedText>
       )}
-      contentContainerStyle={styles.container}
     />
   );
 }
 const styles = StyleSheet.create({
-  container: {},
+  container: { width: "100%" },
 
   sectionTitle: {
     fontSize: 12,

@@ -2,19 +2,22 @@ import {
   CustomFlatList,
   CustomImage,
   Divider,
-  ThemedContainer,
+  SubServiceItem,
   ThemedText,
   ThemedView,
 } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { useRouter } from "expo-router";
 import { InfoCircle } from "iconsax-react-native";
+import { useCallback } from "react";
 import { StyleSheet } from "react-native";
 
 export default function SubCategoryOrg() {
-  const router = useRouter();
+  const renderITEM = useCallback(
+    ({ item, index }) => <SubServiceItem {...{ item, index }} />,
+    []
+  );
   return (
-    <ThemedContainer>
+    <ThemedView style={styles.flex1}>
       <ThemedText style={{ color: Colors.title }}>
         کاریتو / همه خدمات / <ThemedText fontType="bold">نظافت</ThemedText>
       </ThemedText>
@@ -30,22 +33,9 @@ export default function SubCategoryOrg() {
         </ThemedView>
       </ThemedView>
       <Divider height={16} />
-      <ThemedView
-        style={{
-          borderWidth: 1,
-          borderRadius: 6,
-          backgroundColor: Colors.info50,
-          borderColor: Colors.info200,
-          alignItems: "center",
-          flexDirection: "row-reverse",
-          paddingVertical: 8,
-          paddingHorizontal: 20,
-        }}
-      >
+      <ThemedView style={styles.infoView}>
         <InfoCircle color={Colors.info700} size={17} />
-        <ThemedText
-          style={{ color: Colors.info900, marginRight: 16, fontWeight: "400" }}
-        >
+        <ThemedText style={styles.infoText}>
           محاسبه قیمت بعد از انتخاب خدمت
         </ThemedText>
       </ThemedView>
@@ -53,33 +43,11 @@ export default function SubCategoryOrg() {
       <CustomFlatList
         data={[1, 2, 3]}
         ItemSeparatorComponent={() => <Divider height={16} />}
-        renderItem={({ item, index }) => (
-          <ThemedView
-            style={{
-              borderWidth: 1,
-              borderRadius: 6,
-              borderColor: Colors.grayMedium,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingVertical: 8,
-              paddingHorizontal: 20,
-            }}
-          >
-            <ThemedText
-              style={{
-                color: Colors.gray900,
-                marginRight: 16,
-                fontSize: 14,
-                fontWeight: "400",
-              }}
-              onPress={() => router.push("/service/CreateOrderPage")}
-            >
-              محاسبه قیمت بعد از انتخاب خدمت
-            </ThemedText>
-          </ThemedView>
-        )}
+        renderItem={renderITEM}
+        style={styles.flex1}
+        keyExtractor={(item, index) => `${index}`}
       />
-    </ThemedContainer>
+    </ThemedView>
   );
 }
 
@@ -88,5 +56,25 @@ const styles = StyleSheet.create({
 
   rowView: { flexDirection: "row-reverse", marginTop: 6 },
 
-  margin: { marginRight: 8, justifyContent: "space-between" },
+  margin: {
+    marginRight: 8,
+    justifyContent: "space-between",
+  },
+
+  infoView: {
+    borderWidth: 1,
+    borderRadius: 6,
+    backgroundColor: Colors.info50,
+    borderColor: Colors.info200,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row-reverse",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    width: "100%",
+  },
+
+  infoText: { color: Colors.info900, marginRight: 16, fontWeight: "400" },
+
+  flex1: { flex: 1, width: "100%" },
 });

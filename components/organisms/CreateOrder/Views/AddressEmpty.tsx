@@ -6,7 +6,7 @@ import { StyleSheet } from "react-native";
 
 export default function EmptyAddressState() {
   return (
-    <ThemedView>
+    <ThemedView style={styles.main}>
       <ThemedView style={styles.container}>
         <EmptyAddressSvg />
         <Divider height={23} />
@@ -23,11 +23,17 @@ export default function EmptyAddressState() {
 }
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    width: "100%",
+  },
+
   container: {
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
     marginTop: DeviceHeight * 0.15,
+    width: "100%",
   },
 
   btn: { width: "100%", marginTop: 70 },
