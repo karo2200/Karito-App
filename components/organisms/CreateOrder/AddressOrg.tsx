@@ -7,14 +7,14 @@ import {
 import { StyleSheet } from "react-native";
 
 import { ProgressBar } from "@/components/molecules/ProgressBar";
-import AddressMap from "./Views/AddressMap";
+import SelectOrderTime from "../SelectTime";
 
 export default function AddressOrg() {
   return (
     <ThemedContainer style={styles.container}>
       <ProgressBar percent={70} />
       <ThemedView style={styles.flex1}>
-        <AddressMap />
+        <SelectOrderTime />
       </ThemedView>
       <ThemedView style={styles.bottomView}>
         <ThemedButton title="بعدی" style={styles.flex1} disabled />

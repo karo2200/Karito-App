@@ -38,7 +38,6 @@ export default function ThemedText({
               : fontType === "regular"
               ? FontType.YekanBakhRegular
               : FontType.YekanBakhMedium,
-          // fontWeight: fontType === "bold" ? "700" : "400",
           textAlign: "right",
         },
       ]}
@@ -58,13 +57,12 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    lineHeight: 32,
+    fontSize: 14,
+    lineHeight: 24,
   },
   subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 12,
+    lineHeight: 24,
   },
   link: {
     lineHeight: 30,
