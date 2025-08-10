@@ -36,7 +36,7 @@ export default function LoginActionSheet() {
       <View style={styles.contentView}>
         <TouchableOpacity activeOpacity={0.7} style={styles.btn}>
           <ThemedText type="text" style={styles.title}>
-            شهرهای پر بازدید
+            ورود به عنوان
           </ThemedText>
           <ThemedText fontType="bold" style={styles.text}>
             متخصص
@@ -44,7 +44,7 @@ export default function LoginActionSheet() {
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.7} style={styles.btn}>
           <ThemedText type="text" style={styles.title}>
-            شهرهای پر بازدید
+            ورود به عنوان
           </ThemedText>
           <ThemedText fontType="bold" style={styles.text}>
             مشتری
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderColor: Colors.grayMedium,
     marginBottom: 8,
-    marginLeft: 8,
+    width: "48%",
   },
 
   text: { fontFamily: FontType.YekanBakhRegular, color: Colors.gray900 },

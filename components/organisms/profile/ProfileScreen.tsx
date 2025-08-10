@@ -42,7 +42,13 @@ export default function ProfileScreen() {
             router.push("/profile/address");
           }}
         />
-        <List title="تخفیف‌ها" icon={<PercentIcon />} onPress={() => {}} />
+        <List
+          title="تخفیف‌ها"
+          icon={<PercentIcon />}
+          onPress={() => {
+            router.push("/profile/offers");
+          }}
+        />
         <Pressable style={styles.rowView} onPress={() => setExitVisible(true)}>
           <Ionicons name="log-out-outline" size={24} color={Colors.danger600} />
           <ThemedText
