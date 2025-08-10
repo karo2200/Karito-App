@@ -6,6 +6,8 @@ export default function useOrderDetailHook() {
 
   const [finishWorkVisible, setFinishWorkVisible] = useState(false);
 
+  const isDone = true;
+
   const onBillPress = () => {
     // setFinishWorkVisible(true);
     router.push("/order/payment");
@@ -15,5 +17,6 @@ export default function useOrderDetailHook() {
     finishWorkVisible,
     setFinishWorkVisible,
     onBillPress,
+    isDone,
   };
 }

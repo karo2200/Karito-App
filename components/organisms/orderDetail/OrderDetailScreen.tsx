@@ -13,11 +13,12 @@ import {
 } from "react-native";
 import useOrderDetailHook from "./hooks/OrderDetail.hook";
 import FinishWorkSheet from "./Views/FinishWorkSheet";
+import SpecialistData from "./Views/SpecialistData";
 
 export default function OrderDetailScreen() {
   const { showToast } = useToast();
 
-  const { onBillPress, setFinishWorkVisible, finishWorkVisible } =
+  const { onBillPress, setFinishWorkVisible, finishWorkVisible, isDone } =
     useOrderDetailHook();
 
   const handleSuccess = () => {
@@ -60,15 +61,19 @@ export default function OrderDetailScreen() {
             زمان
           </ThemedText>
         </View>
-        <View style={styles.rowView2}>
+        <View style={[styles.rowView2, isDone && { paddingRight: 0 }]}>
           <Pressable onPress={handleSuccess}>
             <ThemedText style={{ color: Colors.darkError }}>
               لغو سفارش
             </ThemedText>
           </Pressable>
-          <ThemedText fontType="bold" style={{ color: "black" }}>
-            در انتظار تایید متخصص...
-          </ThemedText>
+          {isDone ? (
+            <SpecialistData />
+          ) : (
+            <ThemedText fontType="bold" style={{ color: "black" }}>
+              در انتظار تایید متخصص...
+            </ThemedText>
+          )}
         </View>
         <ThemedText fontType="bold" style={{ color: "black" }}>
           جزئیات
@@ -81,7 +86,7 @@ export default function OrderDetailScreen() {
             خدمت درخواستی
           </ThemedText>
         </View>
-        <View style={[styles.rowView, {}]}>
+        <View style={styles.rowView}>
           <ThemedText type="text" style={styles.address} numberOfLines={2}>
             تهران، خیابان ولیعصر، نرسیده به اسفندیاری، بعد از کوچه ناصری، برج
             کیان، طبقه ۸
