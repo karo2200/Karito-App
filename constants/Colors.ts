@@ -47,6 +47,7 @@ export const Colors = {
   danger900: "#B21F21",
   danger200: "#EB9A9C",
   danger500: "#EF443C",
+  danger600: "#E03B3A",
   semiBlack: "#171717",
   grayLight: "#E5E5E5",
   solid50: "#FAFAFA",

@@ -104,6 +104,13 @@ export default function RootLayout() {
           })}
         >
           <Tabs.Screen
+            name="profile/index"
+            options={{
+              title: "",
+              tabBarLabel: "پروفایل",
+            }}
+          />
+          <Tabs.Screen
             name="order"
             options={{
               title: "",
