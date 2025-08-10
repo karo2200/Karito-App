@@ -104,7 +104,7 @@ export default function RootLayout() {
           })}
         >
           <Tabs.Screen
-            name="profile/index"
+            name="profile"
             options={{
               title: "",
               tabBarLabel: "پروفایل",

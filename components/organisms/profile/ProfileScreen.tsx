@@ -38,7 +38,9 @@ export default function ProfileScreen() {
         <List
           title="مدیریت آدرس‌ها"
           icon={<LocationIcon />}
-          onPress={() => {}}
+          onPress={() => {
+            router.push("/profile/address");
+          }}
         />
         <List title="تخفیف‌ها" icon={<PercentIcon />} onPress={() => {}} />
         <Pressable style={styles.rowView} onPress={() => setExitVisible(true)}>

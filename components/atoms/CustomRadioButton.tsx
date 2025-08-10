@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    alignItems: "center",
+    alignItems: "flex-start",
     flexDirection: "row",
     marginLeft: 4,
     flexShrink: 1,

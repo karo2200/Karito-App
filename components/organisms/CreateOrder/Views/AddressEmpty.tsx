@@ -1,3 +1,4 @@
+import EmptyAddressSvg from "@/assets/icons/EmptyAddress";
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import { DeviceHeight } from "@/constants/Dimension";
 import { FontStyle } from "@/constants/Fonts";
@@ -7,6 +8,7 @@ export default function EmptyAddressState() {
   return (
     <ThemedView>
       <ThemedView style={styles.container}>
+        <EmptyAddressSvg />
         <Divider height={23} />
         <ThemedText>هیچ آدرسی وارد نکرده‌اید!</ThemedText>
       </ThemedView>
