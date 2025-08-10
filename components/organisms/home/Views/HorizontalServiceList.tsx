@@ -25,7 +25,7 @@ export default function HorizontalServiceList({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <ThemedText type="default" style={styles.title}>
+        <ThemedText type="default" fontType="bold" style={styles.title}>
           {title}
         </ThemedText>
       </View>

@@ -7,10 +7,12 @@ import {
   ThemedView,
 } from "@/components";
 import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router";
 import { InfoCircle } from "iconsax-react-native";
 import { StyleSheet } from "react-native";
 
 export default function SubCategoryOrg() {
+  const router = useRouter();
   return (
     <ThemedContainer>
       <ThemedText style={{ color: Colors.title }}>
@@ -70,6 +72,7 @@ export default function SubCategoryOrg() {
                 fontSize: 14,
                 fontWeight: "400",
               }}
+              onPress={() => router.push("/service/AddressPage")}
             >
               محاسبه قیمت بعد از انتخاب خدمت
             </ThemedText>
@@ -82,6 +85,8 @@ export default function SubCategoryOrg() {
 
 const styles = StyleSheet.create({
   image: { width: 44, height: 44, borderRadius: 4, overflow: "hidden" },
+
   rowView: { flexDirection: "row-reverse", marginTop: 6 },
+
   margin: { marginRight: 8, justifyContent: "space-between" },
 });

@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
-const { width, height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 export default function LoginActionSheet() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
@@ -56,61 +56,12 @@ export default function LoginActionSheet() {
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: "100%",
-    height: 250,
-    marginTop: 4,
-  },
-
-  inputContainer: {
-    alignItems: "center",
-    backgroundColor: Colors.hint500,
-    bottom: "10%",
-  },
-
-  container: {
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    margin: 16,
-    marginTop: 0,
-    height: 32,
-  },
-
-  input: {
-    flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    fontSize: 12,
-    fontFamily: FontType.YekanBakhRegular,
-  },
-
-  button: {
-    flexDirection: "row",
-    backgroundColor: "white",
-    borderRadius: 8,
-    alignItems: "center",
-  },
-
-  city: {
-    marginHorizontal: 8,
-  },
-
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 8,
     paddingVertical: 4,
-  },
-
-  flexWrap: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "flex-end",
   },
 
   btn: {

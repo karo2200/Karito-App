@@ -41,4 +41,9 @@ export const Colors = {
   title: "#6D7280",
   label: "#1F2937",
   link25: "#2C2D40",
+  gray500: "#6D7280",
+  darkError: "#E11D48",
+  background: "#FFFFFF",
+  white: "#FFFFFF",
+  gray300: "#d2d5da",
 };

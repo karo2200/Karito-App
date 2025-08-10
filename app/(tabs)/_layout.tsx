@@ -1,3 +1,4 @@
+import { ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { Ionicons } from "@expo/vector-icons";
@@ -35,7 +36,9 @@ export default function RootLayout() {
         initialRouteName="home/index"
         screenOptions={({ route }) => ({
           headerShown: true,
-          safeAreaInsets: { top: 0, bottom: 0 },
+          headerRight: () => <RightIcon />,
+          headerStatusBarHeight: 25,
+          tabBarSafeAreaInset: { bottom: "never" },
           tabBarStyle: {
             backgroundColor: "white",
             borderTopWidth: 0,
@@ -92,35 +95,24 @@ export default function RootLayout() {
         })}
       >
         <Tabs.Screen
-          name="order/index"
+          name="order"
           options={{
-            title: "کاریتو",
+            title: "",
             tabBarLabel: "سفارش‌های من",
-            headerTitleStyle: {
-              textAlign: "right",
-
-              color: Colors.hint500,
-              fontSize: 20,
-              fontWeight: "bold",
-            },
           }}
         />
         <Tabs.Screen
           name="service/index"
-          options={{ title: "کاریتو", tabBarLabel: "خدمات" }}
+          options={{
+            title: "",
+            tabBarLabel: "خدمات",
+          }}
         />
         <Tabs.Screen
           name="home/index"
           options={{
-            title: "کاریتو",
+            title: "",
             tabBarLabel: "خانه",
-            headerTitleStyle: {
-              textAlign: "right",
-
-              color: Colors.hint500,
-              fontSize: 20,
-              fontWeight: "bold",
-            },
           }}
         />
       </Tabs>
@@ -128,3 +120,18 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+const RightIcon = () => {
+  return (
+    <ThemedText
+      fontType="bold"
+      style={{
+        fontSize: 20,
+        color: Colors.hint500,
+        marginRight: 10,
+      }}
+    >
+      کاریتو
+    </ThemedText>
+  );
+};

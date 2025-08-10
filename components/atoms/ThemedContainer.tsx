@@ -1,7 +1,8 @@
-import { Dimensions, SafeAreaView, type ViewProps } from "react-native";
+import { type ViewProps } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useMemo } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;
@@ -22,8 +23,7 @@ export default function ThemedContainer({
     return {
       flex: 1,
       backgroundColor,
-      width: Dimensions.get("screen").width,
-      padding: 20,
+      marginHorizontal: 15,
     };
   }, []);
   return <SafeAreaView style={[containerStyle, style]} {...otherProps} />;
