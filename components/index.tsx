@@ -16,5 +16,5 @@ export { default as ServiceHeaderItem } from "./molecules/ServiceHeaderItem";
 
 // organisms
 
-export { default as AddressOrg } from "./organisms/address/AddressOrg";
+export { default as AddressOrg } from "./organisms/CreateOrder/AddressOrg";
 export { default as SubServiceOrg } from "./organisms/subService/SubCategoryOrg";

@@ -72,7 +72,7 @@ export default function SubCategoryOrg() {
                 fontSize: 14,
                 fontWeight: "400",
               }}
-              onPress={() => router.push("/service/AddressPage")}
+              onPress={() => router.push("/service/CreateOrderPage")}
             >
               محاسبه قیمت بعد از انتخاب خدمت
             </ThemedText>
