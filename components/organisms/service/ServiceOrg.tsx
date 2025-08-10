@@ -1,4 +1,4 @@
-import { Divider, ThemedContainer, ThemedView } from "@/components";
+import { Divider, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -12,29 +12,23 @@ export default function ServiceOrg() {
     useServiceTabHook();
 
   return (
-    <ThemedContainer>
-      <ScrollView style={styles.flex1}>
-        <ThemedView style={styles.container}>
-          <Ionicons
-            name="search-outline"
-            size={20}
-            color={Colors.unfilledText}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="جستجو"
-            textAlign="right"
-            textAlignVertical="center"
-            placeholderTextColor={Colors.unfilledText}
-          />
-        </ThemedView>
-        <ServiceHeaderSection
-          {...{ onServiceItemPress, selectedService, serviceItems }}
+    <ScrollView style={styles.flex1}>
+      <ThemedView style={styles.container}>
+        <Ionicons name="search-outline" size={20} color={Colors.unfilledText} />
+        <TextInput
+          style={styles.input}
+          placeholder="جستجو"
+          textAlign="right"
+          textAlignVertical="center"
+          placeholderTextColor={Colors.unfilledText}
         />
-        <Divider />
-        <ServiceBodySection selectedService={selectedService} />
-      </ScrollView>
-    </ThemedContainer>
+      </ThemedView>
+      <ServiceHeaderSection
+        {...{ onServiceItemPress, selectedService, serviceItems }}
+      />
+      <Divider />
+      <ServiceBodySection selectedService={selectedService} />
+    </ScrollView>
   );
 }
 
@@ -47,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 8,
     paddingHorizontal: 10,
-    margin: 16,
+    marginVertical: 16,
     marginTop: 0,
     height: 32,
     borderWidth: 1,

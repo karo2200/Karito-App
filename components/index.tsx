@@ -13,6 +13,7 @@ export { default as ThemedView } from "./atoms/ThemedView";
 
 export { default as LoginActionSheet } from "./molecules/LoginActionSheet";
 export { default as ServiceHeaderItem } from "./molecules/ServiceHeaderItem";
+export { default as SubServiceItem } from "./molecules/SubServiceItem";
 
 // organisms
 

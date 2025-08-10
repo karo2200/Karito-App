@@ -61,4 +61,5 @@ export const Colors = {
   solid50: "#FAFAFA",
   darkGray: "#737373",
   gray400: "#9CA3AF",
+  gray800: "#1F2937",
 };

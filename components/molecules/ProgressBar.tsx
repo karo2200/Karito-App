@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { DeviceWidth } from "@/constants/Dimension";
 import React, { JSX } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -33,8 +34,8 @@ export function ProgressBar({
 const styles = StyleSheet.create({
   progressContainer: {
     marginBottom: 16,
-    marginTop: 8,
     borderRadius: 200,
+    width: DeviceWidth * 0.95,
   },
 
   progress: {

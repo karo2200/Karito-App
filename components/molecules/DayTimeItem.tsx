@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import { StyleSheet } from "react-native";
+import { DimensionValue, StyleSheet } from "react-native";
 import { ThemedText, ThemedView } from "..";
 
 export default function DayTimeItem({
@@ -8,6 +8,12 @@ export default function DayTimeItem({
   width,
   height,
   checked,
+}: {
+  title: string;
+  subtitle?: string;
+  width: DimensionValue;
+  height?: DimensionValue;
+  checked?: boolean;
 }) {
   return (
     <ThemedView
