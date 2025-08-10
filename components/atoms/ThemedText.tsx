@@ -38,7 +38,7 @@ export default function ThemedText({
               : fontType === "regular"
               ? FontType.YekanBakhRegular
               : FontType.YekanBakhMedium,
-          fontWeight: fontType === "bold" ? "700" : "400",
+          // fontWeight: fontType === "bold" ? "700" : "400",
           textAlign: "right",
         },
       ]}
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   default: {
     fontSize: 14,
     lineHeight: 24,
-    fontFamily: FontType.YekanBakhBold,
   },
   defaultSemiBold: {
     fontSize: 16,

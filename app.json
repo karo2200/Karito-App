@@ -33,6 +33,13 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": true,
+          "locationPermission": "Allow KartioApp to use your location"
+        }
       ]
     ],
     "experiments": {

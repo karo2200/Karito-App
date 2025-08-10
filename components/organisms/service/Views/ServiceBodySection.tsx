@@ -1,5 +1,6 @@
 import { ThemedText, ThemedView } from "@/components";
 import HeaderItem from "@/components/molecules/ServiceHeaderItem";
+import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 
 export default function ServiceBodySection({
@@ -22,6 +23,8 @@ export default function ServiceBodySection({
   items?: any[];
   selectedService?: any;
 }) {
+  const router = useRouter();
+
   return (
     <ThemedView>
       <ThemedText fontType="bold">{selectedService?.title}</ThemedText>
@@ -32,6 +35,7 @@ export default function ServiceBodySection({
             title={item?.title}
             key={`${index}`}
             height={98}
+            onItemPress={() => router.push("/service/SubServicePage")}
           />
         ))}
       </ThemedView>

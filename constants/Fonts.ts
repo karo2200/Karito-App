@@ -1,5 +1,11 @@
 import { useFonts } from "expo-font";
 
+export enum FontStyle {
+  bold = "bold",
+  regular = "regular",
+  medium = "medium",
+}
+
 export enum FontType {
   APACE_MONO = "SpaceMono",
   YekanBakhThin = "YekanBakhThin",
