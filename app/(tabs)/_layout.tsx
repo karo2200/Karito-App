@@ -5,7 +5,15 @@ import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Category, Document, Home2, Profile } from "iconsax-react-native";
+import {
+  Category,
+  Document,
+  DocumentText,
+  Home2,
+  Profile,
+  Task,
+  Wallet1,
+} from "iconsax-react-native";
 import { useEffect } from "react";
 import { I18nManager, StyleSheet, View } from "react-native";
 import "react-native-reanimated";
@@ -13,6 +21,23 @@ import "react-native-reanimated";
 type TabBarIconProps = {
   focused: boolean;
   Icon: React.ComponentType<{ size?: number; color?: string }>;
+};
+
+type RollType = "specialist" | "customer";
+
+const tabsConfig = {
+  customer: [
+    { name: "profile", label: "پروفایل", icon: Profile },
+    { name: "order", label: "سفارش‌ها", icon: Document },
+    { name: "service", label: "خدمات", icon: Category },
+    { name: "home", label: "خانه", icon: Home2 },
+  ],
+  specialist: [
+    { name: "profile", label: "پروفایل", icon: Profile },
+    { name: "income/index", label: "درآمد", icon: Wallet1 },
+    { name: "mission/index", label: "ماموریت‌ها‌", icon: Task },
+    { name: "home", label: "لیست کارها", icon: DocumentText },
+  ],
 };
 
 export default function RootLayout() {
@@ -31,6 +56,9 @@ export default function RootLayout() {
       (segments[2] === "payment" || segments[2] === "paymentStatus"));
 
   const fontsLoaded = useLoadFonts();
+
+  const role: RollType = "specialist";
+  const config = tabsConfig[role] || [];
 
   const MyTheme = {
     ...DefaultTheme,
@@ -69,7 +97,7 @@ export default function RootLayout() {
     <ToastProvider>
       <ThemeProvider value={MyTheme}>
         <Tabs
-          initialRouteName="home/index"
+          initialRouteName="home"
           screenOptions={({ route }) => ({
             headerShown: true,
             title: "",
@@ -81,7 +109,18 @@ export default function RootLayout() {
             tabBarLabelStyle: styles.tabBarLabelStyle,
           })}
         >
-          <Tabs.Screen
+          {config.map((tab) => (
+            <Tabs.Screen
+              key={tab.name}
+              name={tab.name}
+              options={{
+                tabBarLabel: tab.label,
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: tab.icon }),
+              }}
+            />
+          ))}
+          {/* <Tabs.Screen
             name="profile"
             options={{
               tabBarLabel: "پروفایل",
@@ -89,30 +128,56 @@ export default function RootLayout() {
                 tabBarIcon({ focused, Icon: Profile }),
             }}
           />
-          <Tabs.Screen
-            name="order"
-            options={{
-              tabBarLabel: "سفارش‌های من",
+          {role === "specialist" && (
+            <>
+              <Tabs.Screen
+                name="income/index"
+                options={{
+                  tabBarLabel: "سفارش‌های من",
 
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Document }),
-            }}
-          />
-          <Tabs.Screen
-            name="service"
-            options={{
-              tabBarLabel: "خدمات",
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Category }),
-            }}
-          />
-          <Tabs.Screen
+                  tabBarIcon: ({ focused }) =>
+                    tabBarIcon({ focused, Icon: Wallet1 }),
+                }}
+              />
+              <Tabs.Screen
+                name="mission/index"
+                options={{
+                  tabBarLabel: "خدمات",
+                  tabBarIcon: ({ focused }) =>
+                    tabBarIcon({ focused, Icon: Task }),
+                }}
+              />
+            </>
+          )} */}
+
+          {/* {role === "customer" && (
+            <>
+              <Tabs.Screen
+                name="order"
+                options={{
+                  tabBarLabel: "سفارش‌های من",
+
+                  tabBarIcon: ({ focused }) =>
+                    tabBarIcon({ focused, Icon: Document }),
+                }}
+              />
+              <Tabs.Screen
+                name="service"
+                options={{
+                  tabBarLabel: "خدمات",
+                  tabBarIcon: ({ focused }) =>
+                    tabBarIcon({ focused, Icon: Category }),
+                }}
+              />
+            </>
+          )} */}
+          {/* <Tabs.Screen
             name="home/index"
             options={{
               tabBarLabel: "خانه",
               tabBarIcon: ({ focused }) => tabBarIcon({ focused, Icon: Home2 }),
             }}
-          />
+          /> */}
         </Tabs>
         <StatusBar style="auto" />
       </ThemeProvider>

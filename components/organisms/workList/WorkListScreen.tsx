@@ -1,10 +1,10 @@
 import NoOrderIcon from "@/assets/icons/No-Order";
-import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedText from "@/components/atoms/ThemedText";
 import ThemedView from "@/components/atoms/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useCallback } from "react";
 import {
   Dimensions,
@@ -13,20 +13,30 @@ import {
   TextInput,
   View,
 } from "react-native";
-import OfferCard from "../offers/Views/OfferCard";
+import OrderCard from "../order/Views/OrderCard";
 
 const { height } = Dimensions.get("window");
 
 export default function WorkListScreen() {
+  const router = useRouter();
   const listRef = React.useRef<FlatList>(null);
 
   const renderItem = useCallback(
-    ({ item }: { item: any }) => <OfferCard item={item} key={item?.id} />,
+    ({ item }: { item: any }) => (
+      <OrderCard
+        item={item}
+        key={item?.id}
+        onOrderPress={() => {
+          router.push("/order/orderDetail");
+        }}
+        isCustomer={false}
+      />
+    ),
     []
   );
 
   return (
-    <ThemedContainer>
+    <View style={{ flex: 1 }}>
       <ThemedView style={styles.container}>
         <Ionicons name="search-outline" size={20} color={Colors.unfilledText} />
         <TextInput
@@ -40,7 +50,7 @@ export default function WorkListScreen() {
       <FlatList
         ref={listRef}
         keyExtractor={(item) => item?.id}
-        data={[]}
+        data={[{}]}
         refreshing={true}
         // onRefresh={refetch}
         showsVerticalScrollIndicator={false}
@@ -59,7 +69,7 @@ export default function WorkListScreen() {
           </View>
         )}
       />
-    </ThemedContainer>
+    </View>
   );
 }
 
@@ -80,6 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     marginVertical: 16,
+    marginHorizontal: 15,
     height: 32,
     borderWidth: 1,
     borderColor: Colors.strokeGray,
