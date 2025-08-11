@@ -1,10 +1,10 @@
 import { ThemedContainer } from "@/components";
-import ServiceOrg from "@/components/organisms/service/ServiceOrg";
+import ExpertIncome from "@/components/organisms/expertIncome";
 
 export default function ServicePage() {
   return (
     <ThemedContainer>
-      <ServiceOrg />
+      <ExpertIncome />
     </ThemedContainer>
   );
 }
