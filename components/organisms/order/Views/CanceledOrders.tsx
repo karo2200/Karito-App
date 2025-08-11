@@ -1,6 +1,5 @@
 import React, { useCallback, useRef } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { Tabs } from "react-native-collapsible-tab-view";
 import ListEmptyOrder from "./ListEmptyOrder";
 import OrderCard from "./OrderCard";
 
@@ -15,7 +14,7 @@ export default function CanceledOrders() {
   );
 
   return (
-    <Tabs.FlatList
+    <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}
       data={[{}, {}, {}, {}]}
@@ -37,5 +36,6 @@ export default function CanceledOrders() {
 const styles = StyleSheet.create({
   tabStyle: {
     paddingBottom: 100,
+    marginTop: 8,
   },
 });
