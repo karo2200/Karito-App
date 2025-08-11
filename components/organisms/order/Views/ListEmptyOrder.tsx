@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
+    marginTop: "20%",
   },
 
   txtBtn: {
