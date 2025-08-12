@@ -6,6 +6,7 @@ export default function useOrderDetailHook() {
   const router = useRouter();
 
   const [finishWorkVisible, setFinishWorkVisible] = useState(false);
+  const [foundLocationVisible, setFoundLocationVisible] = useState(false);
 
   const isDone = true;
   const isCustomer = false;
@@ -32,5 +33,7 @@ export default function useOrderDetailHook() {
     isDone,
     isCustomer,
     makeCall,
+    setFoundLocationVisible,
+    foundLocationVisible,
   };
 }

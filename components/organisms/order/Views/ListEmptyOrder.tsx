@@ -3,12 +3,20 @@ import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-export default function ListEmptyOrder() {
+export default function ListEmptyOrder({
+  onSeeListPress,
+}: {
+  onSeeListPress: () => void;
+}) {
   return (
     <View style={styles.flex1}>
       <NoOrderIcon />
       <ThemedText style={styles.title}>هیچ سفارشی در لیست ندارید!</ThemedText>
-      <TouchableOpacity style={styles.btn} activeOpacity={1}>
+      <TouchableOpacity
+        style={styles.btn}
+        activeOpacity={1}
+        onPress={onSeeListPress}
+      >
         <ThemedText style={styles.txtBtn}>مشاهده لیست خدمات</ThemedText>
       </TouchableOpacity>
     </View>

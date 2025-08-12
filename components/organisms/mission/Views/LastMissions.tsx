@@ -26,7 +26,7 @@ export default function LastMissions() {
     <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}
-      data={[{}, {}, {}, {}]}
+      data={[]}
       refreshing={true}
       // onRefresh={refetch}
       contentContainerStyle={styles.tabStyle}
@@ -37,7 +37,9 @@ export default function LastMissions() {
         //   fetchNextPage();
         // }
       }}
-      ListEmptyComponent={() => <ListEmptyOrder />}
+      ListEmptyComponent={() => (
+        <ListEmptyOrder onSeeListPress={() => router.push("/workList")} />
+      )}
     />
   );
 }

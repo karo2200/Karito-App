@@ -37,7 +37,9 @@ export default function InprogressMissions() {
         //   fetchNextPage();
         // }
       }}
-      ListEmptyComponent={() => <ListEmptyOrder />}
+      ListEmptyComponent={() => (
+        <ListEmptyOrder onSeeListPress={() => router.push("/workList")} />
+      )}
     />
   );
 }

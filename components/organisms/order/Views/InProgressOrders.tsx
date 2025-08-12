@@ -1,13 +1,13 @@
-import { useRouter } from "expo-router";
 import React, { useCallback, useRef } from "react";
 import { FlatList, StyleSheet } from "react-native";
+import useOrderHook from "../hooks/Order.hook";
 import ListEmptyOrder from "./ListEmptyOrder";
 import OrderCard from "./OrderCard";
 
 export default function InProgressOrders() {
   const listRef = useRef<FlatList>(null);
 
-  const router = useRouter();
+  const { router } = useOrderHook();
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
@@ -36,7 +36,9 @@ export default function InProgressOrders() {
         //   fetchNextPage();
         // }
       }}
-      ListEmptyComponent={() => <ListEmptyOrder />}
+      ListEmptyComponent={() => (
+        <ListEmptyOrder onSeeListPress={() => router.push("/(tabs)/home")} />
+      )}
     />
   );
 }

@@ -7,6 +7,7 @@ import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedText from "@/components/atoms/ThemedText";
 import { useToast } from "@/components/atoms/Toast";
+import LocationActionSheet from "@/components/molecules/LocationActionSheet";
 import { Colors } from "@/constants/Colors";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
@@ -31,6 +32,8 @@ export default function OrderDetailScreen() {
     isDone,
     isCustomer,
     makeCall,
+    setFoundLocationVisible,
+    foundLocationVisible,
   } = useOrderDetailHook();
 
   const handleSuccess = () => {
@@ -198,12 +201,17 @@ export default function OrderDetailScreen() {
             type="outline"
             style={styles.btn}
             rightIcon={<CloseIcon style={{ marginLeft: 8 }} />}
+            onPress={() => setFoundLocationVisible(true)}
           />
         </View>
       )}
       <FinishWorkSheet
         visible={finishWorkVisible}
         setVisible={() => setFinishWorkVisible(false)}
+      />
+      <LocationActionSheet
+        visible={foundLocationVisible}
+        onClose={() => setFoundLocationVisible(false)}
       />
     </ThemedContainer>
   );
