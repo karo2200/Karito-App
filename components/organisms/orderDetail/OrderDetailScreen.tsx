@@ -8,6 +8,7 @@ import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedText from "@/components/atoms/ThemedText";
 import { useToast } from "@/components/atoms/Toast";
 import LocationActionSheet from "@/components/molecules/LocationActionSheet";
+import PaymentWaitingSheet from "@/components/molecules/PaymentWaitingSheet";
 import { Colors } from "@/constants/Colors";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
@@ -34,6 +35,8 @@ export default function OrderDetailScreen() {
     makeCall,
     setFoundLocationVisible,
     foundLocationVisible,
+    specialistFinishWorkVisible,
+    setSpecialistFinishWorkVisible,
   } = useOrderDetailHook();
 
   const handleSuccess = () => {
@@ -195,6 +198,7 @@ export default function OrderDetailScreen() {
             title="قبول کار"
             style={styles.btn}
             rightIcon={<TickIcon style={{ marginLeft: 8 }} />}
+            onPress={() => setSpecialistFinishWorkVisible(true)}
           />
           <ThemedButton
             title="رد کار"
@@ -212,6 +216,10 @@ export default function OrderDetailScreen() {
       <LocationActionSheet
         visible={foundLocationVisible}
         onClose={() => setFoundLocationVisible(false)}
+      />
+      <PaymentWaitingSheet
+        visible={specialistFinishWorkVisible}
+        onClose={() => setSpecialistFinishWorkVisible(false)}
       />
     </ThemedContainer>
   );

@@ -7,6 +7,8 @@ export default function useOrderDetailHook() {
 
   const [finishWorkVisible, setFinishWorkVisible] = useState(false);
   const [foundLocationVisible, setFoundLocationVisible] = useState(false);
+  const [specialistFinishWorkVisible, setSpecialistFinishWorkVisible] =
+    useState(false);
 
   const isDone = true;
   const isCustomer = false;
@@ -35,5 +37,7 @@ export default function useOrderDetailHook() {
     makeCall,
     setFoundLocationVisible,
     foundLocationVisible,
+    specialistFinishWorkVisible,
+    setSpecialistFinishWorkVisible,
   };
 }
