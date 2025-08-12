@@ -5,7 +5,9 @@ import { useEffect } from "react";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    YekanBakhRegular: require("../assets/fonts/Yekan Bakh EN 01 Hairline.ttf"),
+    YekanBakhRegular: require("../assets/fonts/Yekan Bakh EN 04 Regular.ttf"),
+    YekanBakhBold: require("../assets/fonts/Yekan Bakh EN 06 Bold.ttf"),
+    YekanBakhMedium: require("../assets/fonts/Yekan Bakh EN 05 Medium.ttf"),
   });
 
   useEffect(() => {
@@ -17,5 +19,17 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  return <Stack screenOptions={{ headerShown: false }}></Stack>;
+  const isLoggedIn = false;
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Protected guard={isLoggedIn}>
+        <Stack.Screen name="(tabs)" />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!isLoggedIn}>
+        <Stack.Screen name="LoginPage" />
+        <Stack.Screen name="OTPScreen" />
+      </Stack.Protected>
+    </Stack>
+  );
 }
