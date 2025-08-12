@@ -27,7 +27,7 @@ export default function WorkListScreen() {
         item={item}
         key={item?.id}
         onOrderPress={() => {
-          router.push("/order/orderDetail");
+          router.push("/workList/orderDetail");
         }}
         isCustomer={false}
       />

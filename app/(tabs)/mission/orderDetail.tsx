@@ -1,5 +1,5 @@
 import OrderDetailScreen from "@/components/organisms/orderDetail/OrderDetailScreen";
 
-export default function workDetailPage() {
+export default function OrderDetailPage() {
   return <OrderDetailScreen />;
 }

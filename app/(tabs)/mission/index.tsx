@@ -1,5 +1,5 @@
-import WorkListScreen from "@/components/organisms/workList/WorkListScreen";
+import MissionScreen from "@/components/organisms/mission/MissionScreen";
 
-export default function HomePage() {
-  return <WorkListScreen />;
+export default function MissionPage() {
+  return <MissionScreen />;
 }
