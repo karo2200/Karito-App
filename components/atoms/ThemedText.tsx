@@ -6,7 +6,14 @@ import { useThemeColor } from "../../hooks/useThemeColor";
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link" | "text";
+  type?:
+    | "default"
+    | "title"
+    | "defaultSemiBold"
+    | "subtitle"
+    | "link"
+    | "text"
+    | "header";
   fontType?: "bold" | "regular" | "medium";
 };
 
@@ -24,13 +31,6 @@ export default function ThemedText({
     <Text
       style={[
         { color },
-        type === "default" ? styles.default : undefined,
-        type === "title" ? styles.title : undefined,
-        type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
-        type === "subtitle" ? styles.subtitle : undefined,
-        type === "link" ? styles.link : undefined,
-        type === "text" ? styles.text : undefined,
-        style,
         {
           fontFamily:
             fontType === "bold"
@@ -40,6 +40,14 @@ export default function ThemedText({
               : FontType.YekanBakhMedium,
           textAlign: "right",
         },
+        type === "default" ? styles.default : undefined,
+        type === "title" ? styles.title : undefined,
+        type === "defaultSemiBold" ? styles.defaultSemiBold : undefined,
+        type === "subtitle" ? styles.subtitle : undefined,
+        type === "link" ? styles.link : undefined,
+        type === "text" ? styles.text : undefined,
+        type === "header" ? styles.header : undefined,
+        style,
       ]}
       {...rest}
     />
@@ -72,5 +80,8 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "#000000",
     textAlign: "right",
+  },
+  header: {
+    fontSize: 48,
   },
 });

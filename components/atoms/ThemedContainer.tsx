@@ -22,7 +22,7 @@ export default function ThemedContainer({
     return {
       flex: 1,
       backgroundColor,
-      marginHorizontal: 15,
+      paddingHorizontal: 15,
       paddingTop: 15,
     };
   }, []);
