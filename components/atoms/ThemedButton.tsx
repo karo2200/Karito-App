@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { JSX } from "react";
 import {
   ButtonProps,
   StyleProp,
@@ -13,6 +14,7 @@ type ThemedButtonProps = ButtonProps & {
   type?: "outline" | "filled";
   style?: StyleProp<ViewStyle>;
   fontType?: "bold" | "regular" | "medium";
+  LeftIcon?: JSX.Element;
 };
 
 export default function ThemedButton({
@@ -22,6 +24,7 @@ export default function ThemedButton({
   style,
   fontType,
   disabled,
+  LeftIcon,
   ...rest
 }: ThemedButtonProps) {
   return (
@@ -53,6 +56,7 @@ export default function ThemedButton({
           {title}
         </ThemedText>
       </TouchableOpacity>
+      {LeftIcon && LeftIcon}
     </View>
   );
 }
@@ -66,6 +70,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 4,
+    flexDirection: "row",
   },
 
   textColor: { color: Colors.hint500 },
@@ -79,6 +84,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 4,
+    flexDirection: "row",
   },
 
   disabled: {
@@ -87,6 +93,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 4,
+    flexDirection: "row",
   },
 
   flex1: {
