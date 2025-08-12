@@ -1,21 +1,22 @@
+import { useRouter } from "expo-router";
 import React, { useCallback, useRef } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import useOrderHook from "../hooks/Order.hook";
-import ListEmptyOrder from "./ListEmptyOrder";
-import OrderCard from "./OrderCard";
+import ListEmptyOrder from "../../order/Views/ListEmptyOrder";
+import OrderCard from "../../order/Views/OrderCard";
 
-export default function InProgressOrders() {
+export default function LastMissions() {
   const listRef = useRef<FlatList>(null);
 
-  const { router } = useOrderHook();
+  const router = useRouter();
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
       <OrderCard
         item={item}
         onOrderPress={() => {
-          router.push("/order/orderDetail");
+          router.push("/mission/orderDetail");
         }}
+        isCustomer={false}
       />
     ),
     []
@@ -25,7 +26,7 @@ export default function InProgressOrders() {
     <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}
-      data={[{}, {}, {}, {}]}
+      data={[]}
       refreshing={true}
       // onRefresh={refetch}
       contentContainerStyle={styles.tabStyle}
@@ -37,7 +38,7 @@ export default function InProgressOrders() {
         // }
       }}
       ListEmptyComponent={() => (
-        <ListEmptyOrder onSeeListPress={() => router.push("/(tabs)/home")} />
+        <ListEmptyOrder onSeeListPress={() => router.push("/workList")} />
       )}
     />
   );

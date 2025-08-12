@@ -14,6 +14,7 @@ type ThemedButtonProps = ButtonProps & {
   type?: "outline" | "filled";
   style?: StyleProp<ViewStyle>;
   fontType?: "bold" | "regular" | "medium";
+  rightIcon?: JSX.Element;
   LeftIcon?: JSX.Element;
 };
 
@@ -24,6 +25,7 @@ export default function ThemedButton({
   style,
   fontType,
   disabled,
+  rightIcon,
   LeftIcon,
   ...rest
 }: ThemedButtonProps) {
@@ -55,6 +57,7 @@ export default function ThemedButton({
         >
           {title}
         </ThemedText>
+        {rightIcon}
       </TouchableOpacity>
       {LeftIcon && LeftIcon}
     </View>
@@ -101,5 +104,6 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
 });

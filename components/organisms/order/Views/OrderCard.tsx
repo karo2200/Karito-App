@@ -1,3 +1,4 @@
+import LocationIcon from "@/assets/icons/Location";
 import UserFrameIcon from "@/assets/icons/UserFrameIcon";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
@@ -6,9 +7,11 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const OrderCard = ({
   item,
+  isCustomer = true,
   onOrderPress,
 }: {
   item: any;
+  isCustomer?: boolean;
   onOrderPress: () => void;
 }) => {
   return (
@@ -26,16 +29,31 @@ const OrderCard = ({
           1,200,000 تومان
         </ThemedText>
         <View style={styles.row}>
-          <ThemedText type="text" style={styles.user}>
-            موسی مرادیان
-          </ThemedText>
-          <UserFrameIcon />
+          {isCustomer ? (
+            <>
+              <ThemedText type="text" style={styles.user}>
+                موسی مرادیان
+              </ThemedText>
+              <UserFrameIcon />
+            </>
+          ) : (
+            <>
+              <ThemedText type="text" style={styles.user}>
+                پاسداران، خ دولت مهستان ۵
+              </ThemedText>
+              <LocationIcon width={16} height={16} />
+            </>
+          )}
         </View>
       </View>
       <View style={styles.rowView}>
-        <View style={styles.label}>
-          <ThemedText type="text">ثبت شده</ThemedText>
-        </View>
+        {isCustomer ? (
+          <View style={styles.label}>
+            <ThemedText type="text">ثبت شده</ThemedText>
+          </View>
+        ) : (
+          <View />
+        )}
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.detailBtn}

@@ -1,10 +1,13 @@
 import React, { useCallback, useRef } from "react";
 import { FlatList, StyleSheet } from "react-native";
+import useOrderHook from "../hooks/Order.hook";
 import ListEmptyOrder from "./ListEmptyOrder";
 import OrderCard from "./OrderCard";
 
 export default function CanceledOrders() {
   const listRef = useRef<FlatList>(null);
+
+  const { router } = useOrderHook();
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
@@ -28,7 +31,9 @@ export default function CanceledOrders() {
         //   fetchNextPage();
         // }
       }}
-      ListEmptyComponent={() => <ListEmptyOrder />}
+      ListEmptyComponent={() => (
+        <ListEmptyOrder onSeeListPress={() => router.push("/(tabs)/home")} />
+      )}
     />
   );
 }

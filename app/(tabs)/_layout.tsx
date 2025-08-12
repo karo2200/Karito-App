@@ -5,7 +5,15 @@ import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Category, Document, Home2, Profile } from "iconsax-react-native";
+import {
+  Category,
+  Document,
+  DocumentText,
+  Home2,
+  Profile,
+  Task,
+  Wallet1,
+} from "iconsax-react-native";
 import { useEffect } from "react";
 import { I18nManager, StyleSheet, View } from "react-native";
 import "react-native-reanimated";
@@ -14,6 +22,11 @@ type TabBarIconProps = {
   focused: boolean;
   Icon: React.ComponentType<{ size?: number; color?: string }>;
 };
+
+export enum RoleType {
+  Specialist = "specialist",
+  Customer = "customer",
+}
 
 export default function RootLayout() {
   useEffect(() => {
@@ -31,6 +44,8 @@ export default function RootLayout() {
       (segments[2] === "payment" || segments[2] === "paymentStatus"));
 
   const fontsLoaded = useLoadFonts();
+
+  let role: RoleType = RoleType.Specialist;
 
   const MyTheme = {
     ...DefaultTheme,
@@ -55,12 +70,12 @@ export default function RootLayout() {
             },
           ]}
         />
-
-        <Icon
-          size={24}
-          color={focused ? Colors.hint500 : Colors.mediumGray}
-          style={{ marginBottom: 5 }}
-        />
+        <View style={{ marginBottom: 5 }}>
+          <Icon
+            size={24}
+            color={focused ? Colors.hint500 : Colors.mediumGray}
+          />
+        </View>
       </View>
     );
   };
@@ -69,7 +84,9 @@ export default function RootLayout() {
     <ToastProvider>
       <ThemeProvider value={MyTheme}>
         <Tabs
-          initialRouteName="home/index"
+          initialRouteName={
+            role === RoleType.Specialist ? "workList" : "home/index"
+          }
           screenOptions={({ route }) => ({
             headerShown: true,
             title: "",
@@ -89,11 +106,30 @@ export default function RootLayout() {
                 tabBarIcon({ focused, Icon: Profile }),
             }}
           />
+
+          <Tabs.Screen
+            name="income/index"
+            options={{
+              tabBarLabel: "درآمد",
+              href: role === RoleType.Specialist ? undefined : null,
+              tabBarIcon: ({ focused }) =>
+                tabBarIcon({ focused, Icon: Wallet1 }),
+            }}
+          />
+          <Tabs.Screen
+            name="mission"
+            options={{
+              tabBarLabel: "ماموریت‌ها‌",
+              href: role === RoleType.Specialist ? undefined : null,
+              tabBarIcon: ({ focused }) => tabBarIcon({ focused, Icon: Task }),
+            }}
+          />
+
           <Tabs.Screen
             name="order"
             options={{
               tabBarLabel: "سفارش‌های من",
-
+              href: role === RoleType.Specialist ? null : undefined,
               tabBarIcon: ({ focused }) =>
                 tabBarIcon({ focused, Icon: Document }),
             }}
@@ -102,14 +138,25 @@ export default function RootLayout() {
             name="service"
             options={{
               tabBarLabel: "خدمات",
+              href: role === RoleType.Specialist ? null : undefined,
               tabBarIcon: ({ focused }) =>
                 tabBarIcon({ focused, Icon: Category }),
+            }}
+          />
+          <Tabs.Screen
+            name="workList"
+            options={{
+              tabBarLabel: "لیست کارها",
+              href: role === RoleType.Specialist ? undefined : null,
+              tabBarIcon: ({ focused }) =>
+                tabBarIcon({ focused, Icon: DocumentText }),
             }}
           />
           <Tabs.Screen
             name="home/index"
             options={{
               tabBarLabel: "خانه",
+              href: role === RoleType.Specialist ? null : undefined,
               tabBarIcon: ({ focused }) => tabBarIcon({ focused, Icon: Home2 }),
             }}
           />
