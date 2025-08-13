@@ -49,7 +49,6 @@ export default memo(HorizontalSpeciaLists);
 
 const styles = StyleSheet.create({
   title: {
-    fontWeight: "bold",
     color: "black",
     textAlign: "right",
     paddingHorizontal: 16,

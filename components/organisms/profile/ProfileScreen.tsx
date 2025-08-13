@@ -8,6 +8,7 @@ import LogOutActionSheet from "@/components/molecules/LogOutActionSheet";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import useProfileHook from "./hooks/Profile.hook";
@@ -15,7 +16,8 @@ import useProfileHook from "./hooks/Profile.hook";
 export default function ProfileScreen() {
   const router = useRouter();
 
-  const { exitVisible, setExitVisible } = useProfileHook();
+  const { exitVisible, setExitVisible, isCustomer, onCallPress } =
+    useProfileHook();
 
   return (
     <ThemedContainer>
@@ -35,20 +37,52 @@ export default function ProfileScreen() {
           </View>
           <EditIcon />
         </View>
-        <List
-          title="مدیریت آدرس‌ها"
-          icon={<LocationIcon />}
-          onPress={() => {
-            router.push("/profile/address");
-          }}
-        />
-        <List
-          title="تخفیف‌ها"
-          icon={<PercentIcon />}
-          onPress={() => {
-            router.push("/profile/offers");
-          }}
-        />
+        {!isCustomer && (
+          <View style={styles.rowView2}>
+            <View style={styles.labelContainer}>
+              <ThemedText type="text" style={{ color: Colors.label }}>
+                ماموریت موفق
+              </ThemedText>
+              <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
+                ۳۵
+              </ThemedText>
+            </View>
+            <View style={styles.labelContainer}>
+              <ThemedText type="text" style={{ color: Colors.label }}>
+                روز در کاریتو
+              </ThemedText>
+              <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
+                ۳۵
+              </ThemedText>
+            </View>
+          </View>
+        )}
+        {isCustomer ? (
+          <>
+            <List
+              title="مدیریت آدرس‌ها"
+              icon={<LocationIcon />}
+              onPress={() => {
+                router.push("/profile/address");
+              }}
+            />
+            <List
+              title="تخفیف‌ها"
+              icon={<PercentIcon />}
+              onPress={() => {
+                router.push("/profile/offers");
+              }}
+            />
+          </>
+        ) : (
+          <List
+            title="تماس با پشتیبانی"
+            icon={<CallCalling color={"black"} size={20} />}
+            onPress={() => {
+              onCallPress();
+            }}
+          />
+        )}
         <Pressable style={styles.rowView} onPress={() => setExitVisible(true)}>
           <Ionicons name="log-out-outline" size={24} color={Colors.danger600} />
           <ThemedText
@@ -59,16 +93,18 @@ export default function ProfileScreen() {
           </ThemedText>
         </Pressable>
       </View>
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={styles.payment}
-        onPress={() => router.push("/home")}
-      >
-        <ThemedText fontType="bold" style={styles.textBtn}>
-          ورود به عنوان متخصص
-        </ThemedText>
-        <Ionicons name="log-in-outline" size={24} color={Colors.hint500} />
-      </TouchableOpacity>
+      {isCustomer && (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.payment}
+          onPress={() => router.push("/home")}
+        >
+          <ThemedText fontType="bold" style={styles.textBtn}>
+            ورود به عنوان متخصص
+          </ThemedText>
+          <Ionicons name="log-in-outline" size={24} color={Colors.hint500} />
+        </TouchableOpacity>
+      )}
       <LogOutActionSheet
         visible={exitVisible}
         onClose={() => setExitVisible(false)}
@@ -103,6 +139,13 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
   },
 
+  rowView2: {
+    flexDirection: "row",
+    marginTop: 16,
+    marginBottom: 35,
+    justifyContent: "space-between",
+  },
+
   listContainer: {
     flexDirection: "row-reverse",
     paddingVertical: 16,
@@ -128,6 +171,18 @@ const styles = StyleSheet.create({
     color: Colors.semiBlack,
     fontWeight: "600",
     marginTop: 8,
+  },
+
+  labelContainer: {
+    borderWidth: 1,
+    borderColor: Colors.grayMedium,
+    borderRadius: 12,
+    padding: 4,
+    gap: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "48%",
+    paddingVertical: 8,
   },
 });
 

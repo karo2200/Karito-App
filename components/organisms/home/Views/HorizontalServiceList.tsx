@@ -44,7 +44,6 @@ export default function HorizontalServiceList({
 
 const styles = StyleSheet.create({
   title: {
-    fontWeight: "bold",
     color: "black",
     textAlign: "right",
     marginHorizontal: 16,

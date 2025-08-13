@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "right",
     marginVertical: 16,
-    fontWeight: 700,
   },
 
   flexRow: {
