@@ -5,7 +5,7 @@ import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Category, Document, Home2, Profile } from "iconsax-react-native";
+import { DocumentText, Profile, Task, Wallet1 } from "iconsax-react-native";
 import { useEffect } from "react";
 import { I18nManager, StyleSheet, View } from "react-native";
 import "react-native-reanimated";
@@ -15,16 +15,11 @@ type TabBarIconProps = {
   Icon: React.ComponentType<{ size?: number; color?: string }>;
 };
 
-export enum RoleType {
-  Specialist = "specialist",
-  Customer = "customer",
-}
-
 export default function RootLayout() {
   useEffect(() => {
-    if (!I18nManager.isRTL) {
-      I18nManager.allowRTL(true);
-      I18nManager.forceRTL(true);
+    if (I18nManager.isRTL) {
+      I18nManager.allowRTL(false);
+      I18nManager.forceRTL(false);
     }
   }, []);
 
@@ -36,8 +31,6 @@ export default function RootLayout() {
     (segments[2] === "payment" || segments[2] === "paymentStatus");
 
   const fontsLoaded = useLoadFonts();
-
-  let role: RoleType = RoleType.Specialist;
 
   const MyTheme = {
     ...DefaultTheme,
@@ -76,7 +69,7 @@ export default function RootLayout() {
     <ToastProvider>
       <ThemeProvider value={MyTheme}>
         <Tabs
-          initialRouteName={"home/index"}
+          initialRouteName={"workList"}
           screenOptions={({ route }) => ({
             headerShown: true,
             title: "",
@@ -96,27 +89,29 @@ export default function RootLayout() {
                 tabBarIcon({ focused, Icon: Profile }),
             }}
           />
+
           <Tabs.Screen
-            name="order"
+            name="income/index"
             options={{
-              tabBarLabel: "سفارش‌های من",
+              tabBarLabel: "درآمدها",
               tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Document }),
+                tabBarIcon({ focused, Icon: Wallet1 }),
             }}
           />
           <Tabs.Screen
-            name="service"
+            name="mission"
             options={{
-              tabBarLabel: "خدمات",
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Category }),
+              tabBarLabel: "ماموریتها",
+              tabBarIcon: ({ focused }) => tabBarIcon({ focused, Icon: Task }),
             }}
           />
+
           <Tabs.Screen
-            name="home/index"
+            name="workList"
             options={{
-              tabBarLabel: "خانه",
-              tabBarIcon: ({ focused }) => tabBarIcon({ focused, Icon: Home2 }),
+              tabBarLabel: "لیست کارها",
+              tabBarIcon: ({ focused }) =>
+                tabBarIcon({ focused, Icon: DocumentText }),
             }}
           />
         </Tabs>

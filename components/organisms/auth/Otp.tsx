@@ -10,7 +10,8 @@ import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import useUserStore from "@/stores/loginStore";
+import { useRoute } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
@@ -23,9 +24,9 @@ const schema = yup.object().shape({
 });
 
 const OTPSection = () => {
+  const { setIsExpert, setIsLoggedIn } = useUserStore();
   const { params } = useRoute();
   const phoneNumber = params?.phone;
-  const { navigate } = useNavigation();
 
   const [isTimerActive, setIsTimerActive] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(60);
@@ -56,7 +57,9 @@ const OTPSection = () => {
   } = methods;
 
   const onPress = (formData: any) => {
-    navigate("tabs");
+    // navigate("tabs");
+    setIsExpert(false);
+    setIsLoggedIn(true);
   };
 
   const formatTime = (seconds: number) => {

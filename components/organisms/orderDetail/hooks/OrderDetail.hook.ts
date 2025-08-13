@@ -14,7 +14,6 @@ export default function useOrderDetailHook() {
   const isCustomer = false;
 
   const onBillPress = () => {
-    // setFinishWorkVisible(true);
     router.push("/order/payment");
   };
 

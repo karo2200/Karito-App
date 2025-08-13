@@ -1,6 +1,7 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
+import useUserStore from "@/stores/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -9,6 +10,7 @@ import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 const { height } = Dimensions.get("window");
 
 export default function LoginActionSheet() {
+  const { setIsExpert } = useUserStore();
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   useEffect(() => {
@@ -18,6 +20,9 @@ export default function LoginActionSheet() {
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
   };
+
+  const loginAsExpert = () => setIsExpert(true);
+  const loginAsCustomer = () => setIsExpert(false);
 
   return (
     <ActionSheet
@@ -34,7 +39,11 @@ export default function LoginActionSheet() {
         <ThemedText fontType="bold">ورود</ThemedText>
       </View>
       <View style={styles.contentView}>
-        <TouchableOpacity activeOpacity={0.7} style={styles.btn}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.btn}
+          onPress={loginAsExpert}
+        >
           <ThemedText type="text" style={styles.title}>
             ورود به عنوان
           </ThemedText>
@@ -42,7 +51,11 @@ export default function LoginActionSheet() {
             متخصص
           </ThemedText>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} style={styles.btn}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.btn}
+          onPress={loginAsCustomer}
+        >
           <ThemedText type="text" style={styles.title}>
             ورود به عنوان
           </ThemedText>

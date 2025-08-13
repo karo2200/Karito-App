@@ -1,5 +1,6 @@
 import { ToastProvider } from "@/components/atoms/Toast";
 import useNetworkStatus from "@/hooks/useNetworkStatus";
+import useUserStore from "@/stores/loginStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -14,6 +15,8 @@ export default function RootLayout() {
   });
 
   const { isConnected, type, ip } = useNetworkStatus();
+
+  const { isLoggedIn, isExpert } = useUserStore();
 
   useEffect(() => {
     if (loaded) {
@@ -36,13 +39,15 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  const isLoggedIn = false;
 
   return (
     <ToastProvider>
       <ThemeProvider value={MyTheme}>
         <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Protected guard={isLoggedIn}>
+          <Stack.Protected guard={isLoggedIn && isExpert}>
+            <Stack.Screen name="(expertTabs)" />
+          </Stack.Protected>
+          <Stack.Protected guard={isLoggedIn && !isExpert}>
             <Stack.Screen name="(tabs)" />
           </Stack.Protected>
 
