@@ -5,6 +5,7 @@ import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -110,6 +111,6 @@ const styles = StyleSheet.create({
   },
 
   page: {
-    width: width,
+    width: Platform.OS === "web" ? Math.min(width, 480) : width,
   },
 });
