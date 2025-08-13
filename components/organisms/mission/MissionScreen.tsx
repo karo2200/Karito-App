@@ -5,6 +5,7 @@ import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -35,7 +36,7 @@ export default function MissionScreen() {
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {/* Tab Bar */}
       <View style={styles.tabContainer}>
         {tabs.map((tab, index) => (
@@ -108,6 +109,6 @@ const styles = StyleSheet.create({
   },
 
   page: {
-    width: width,
+    width: Platform.OS === "web" ? Math.min(width, 480) : width,
   },
 });

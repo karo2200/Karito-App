@@ -3,11 +3,11 @@ import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "../atoms/ThemedButton";
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 export default function PaymentWaitingSheet({
   visible,
@@ -32,10 +32,7 @@ export default function PaymentWaitingSheet({
   };
 
   return (
-    <ActionSheet
-      ref={actionSheetRef}
-      containerStyle={{ minHeight: height / 3.5 }}
-    >
+    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
       <View style={styles.header}>
         <Ionicons
           name="close"
@@ -100,4 +97,9 @@ const styles = StyleSheet.create({
   },
 
   icon: { alignSelf: "center", marginBottom: 24 },
+
+  container: {
+    minHeight: height / 3.5,
+    width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+  },
 });

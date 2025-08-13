@@ -1,3 +1,4 @@
+import { ThemedContainer } from "@/components";
 import { ToastProvider } from "@/components/atoms/Toast";
 import useNetworkStatus from "@/hooks/useNetworkStatus";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
@@ -8,9 +9,9 @@ import { useEffect } from "react";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    YekanBakhRegular: require("../assets/fonts/Yekan Bakh EN 04 Regular.ttf"),
-    YekanBakhBold: require("../assets/fonts/Yekan Bakh EN 06 Bold.ttf"),
-    YekanBakhMedium: require("../assets/fonts/Yekan Bakh EN 05 Medium.ttf"),
+    YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
+    YekanBakhBold: require("../assets/fonts/YekanBakhENBold.ttf"),
+    YekanBakhMedium: require("../assets/fonts/YekanBakhENMedium.ttf"),
   });
 
   const { isConnected, type, ip } = useNetworkStatus();
@@ -36,21 +37,23 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   return (
     <ToastProvider>
       <ThemeProvider value={MyTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Protected guard={isLoggedIn}>
-            <Stack.Screen name="(tabs)" />
-          </Stack.Protected>
+        <ThemedContainer>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Protected guard={isLoggedIn}>
+              <Stack.Screen name="(tabs)" />
+            </Stack.Protected>
 
-          <Stack.Protected guard={!isLoggedIn}>
-            <Stack.Screen name="LoginPage" />
-            <Stack.Screen name="OTPScreen" />
-          </Stack.Protected>
-        </Stack>
+            <Stack.Protected guard={!isLoggedIn}>
+              <Stack.Screen name="LoginPage" />
+              <Stack.Screen name="OTPScreen" />
+            </Stack.Protected>
+          </Stack>
+        </ThemedContainer>
       </ThemeProvider>
     </ToastProvider>
   );

@@ -48,5 +48,6 @@ const styles = StyleSheet.create({
   tabStyle: {
     paddingBottom: 100,
     marginTop: 8,
+    flexGrow: 1,
   },
 });

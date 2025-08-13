@@ -1,7 +1,8 @@
-import { Platform, SafeAreaView, type ViewProps } from "react-native";
-
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useMemo } from "react";
+import { Dimensions, Platform, View, type ViewProps } from "react-native";
+
+const { width } = Dimensions.get("window");
 
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;
@@ -14,6 +15,9 @@ export default function ThemedContainer({
   darkColor,
   ...otherProps
 }: ThemedViewProps) {
+  const isWeb = Platform.OS === "web";
+  const isLargeScreen = width > 600;
+
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
     "background"
@@ -22,10 +26,25 @@ export default function ThemedContainer({
     return {
       flex: 1,
       backgroundColor,
-      paddingHorizontal: 15,
-      marginHorizontal: Platform.OS === "ios" ? 15 : 0,
-      paddingTop: 15,
+      // paddingHorizontal: 15,
+      // marginHorizontal: Platform.OS === "ios" ? 15 : 0,
+      // paddingTop: 15,
     };
   }, []);
-  return <SafeAreaView style={[containerStyle, style]} {...otherProps} />;
+
+  return (
+    <View
+      style={[
+        containerStyle,
+        isWeb &&
+          isLargeScreen && {
+            maxWidth: 480,
+            alignSelf: "center",
+            width: "100%",
+          },
+        style,
+      ]}
+      {...otherProps}
+    />
+  );
 }
