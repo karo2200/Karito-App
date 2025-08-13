@@ -19,7 +19,9 @@ export default function ScreenNameWithBack({ title }: { title: string }) {
 }
 
 const styles = StyleSheet.create({
-  title: { color: "black", fontWeight: "700" },
+  title: {
+    color: "black",
+  },
 
   backBtn: { paddingLeft: 8 },
 

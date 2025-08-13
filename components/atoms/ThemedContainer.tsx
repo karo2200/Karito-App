@@ -1,4 +1,4 @@
-import { SafeAreaView, type ViewProps } from "react-native";
+import { Platform, SafeAreaView, type ViewProps } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useMemo } from "react";
@@ -23,6 +23,7 @@ export default function ThemedContainer({
       flex: 1,
       backgroundColor,
       paddingHorizontal: 15,
+      marginHorizontal: Platform.OS === "ios" ? 15 : 0,
       paddingTop: 15,
     };
   }, []);

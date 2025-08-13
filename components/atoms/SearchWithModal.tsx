@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
     paddingHorizontal: 12,
-    height: 36,
     borderWidth: 1,
     borderColor: Colors.disabledIcon,
     justifyContent: "center",
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
 
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "right",
     color: "black",
     fontFamily: FontType.YekanBakhRegular,

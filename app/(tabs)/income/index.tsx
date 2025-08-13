@@ -1,5 +1,10 @@
-import MissionScreen from "@/components/organisms/mission/MissionScreen";
+import { ThemedContainer } from "@/components";
+import ExpertIncome from "@/components/organisms/expertIncome";
 
 export default function IncomePage() {
-  return <MissionScreen />;
+  return (
+    <ThemedContainer>
+      <ExpertIncome />
+    </ThemedContainer>
+  );
 }

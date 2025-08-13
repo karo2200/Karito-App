@@ -58,6 +58,7 @@ export default function Banner() {
 
       <ActionSheet
         ref={actionSheetRef}
+        keyboardHandlerEnabled={false}
         containerStyle={{ minHeight: height / 2.5 }}
       >
         <View style={styles.header}>
@@ -67,7 +68,7 @@ export default function Banner() {
             color={Colors.mediumGray}
             onPress={() => closeActionSheet()}
           />
-          <ThemedText>کدام شهر هستید؟</ThemedText>
+          <ThemedText fontType="bold">کدام شهر هستید؟</ThemedText>
         </View>
         <SearchWithModal />
         <View style={styles.contentView}>

@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
 
   tabLabelActive: {
     color: Colors.hint500,
-    fontWeight: "bold",
   },
 
   page: {
