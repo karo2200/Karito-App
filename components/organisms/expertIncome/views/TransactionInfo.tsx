@@ -6,21 +6,21 @@ import { useCallback } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import EmptyIncom from "./EmptyIncom";
-import SelectDateActionSheet from "./SelectDateActionSheet";
 
 export default function TransactionInfo() {
   const renderItem = useCallback(
     ({ item, index }) => <IncomeInfoItem {...{ item, index }} />,
     []
   );
+  const onCalenderPress = () => {
+    SheetManager.hideAll();
+    SheetManager.show("calendar-sheet");
+  };
   return (
     <ThemedView>
-      <SelectDateActionSheet
-        onClose={() => SheetManager.hide("calendar-sheet")}
-      />
       <ThemedView style={styles.headerContainer}>
         <ThemedView style={styles.headerView}>
-          <TouchableOpacity onPress={() => SheetManager.show("calendar-sheet")}>
+          <TouchableOpacity onPress={onCalenderPress}>
             <CalendarIcon size={24} color={Colors.hint500} disabled />
           </TouchableOpacity>
           <ThemedText style={styles.blackTxt} fontType="bold">

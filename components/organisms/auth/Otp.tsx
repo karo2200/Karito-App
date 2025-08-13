@@ -4,11 +4,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import { ThemedText, ThemedView } from "@/components";
+import { CustomImage, ThemedText, ThemedView } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
-import { DeviceWidth } from "@/constants/Dimension";
+import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
@@ -71,6 +71,10 @@ const OTPSection = () => {
     <KeyboardAutoHide>
       <FormProvider {...methods}>
         <View style={styles.form}>
+          <CustomImage
+            localSource={require("@/assets/images/loginBg.png")}
+            style={styles.image}
+          />
           <AuthHeader />
           <ThemedText style={styles.subtitle}>
             {`لطفا کد چهار رقمی ارسال شده به شماره ${phoneNumber} را وارد کنید`}
@@ -137,5 +141,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FontType.YekanBakhRegular,
     color: Colors.black,
+  },
+
+  image: {
+    alignSelf: "flex-end",
+    width: DeviceWidth * 0.5,
+    height: DeviceHeight * 0.6,
+    position: "absolute",
+    zIndex: 1,
   },
 });
