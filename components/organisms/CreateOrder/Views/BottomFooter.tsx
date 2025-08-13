@@ -1,6 +1,6 @@
-import { Divider, ThemedButton } from "@/components";
+import { Divider, ThemedButton, ThemedView } from "@/components";
 import { StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type BottomFooterProps = {
   onNextPress?: () => void;
@@ -13,8 +13,11 @@ export default function BottomFooter({
   onBackPress,
   nextDisabled,
 }: BottomFooterProps) {
+  const insets = useSafeAreaInsets();
+  const marginBottom = insets.bottom + 10;
+
   return (
-    <SafeAreaView style={styles.bottomView}>
+    <ThemedView style={[styles.bottomView, { marginBottom }]}>
       <ThemedButton
         title="بعدی"
         style={styles.flex1}
@@ -28,7 +31,7 @@ export default function BottomFooter({
         style={styles.flex1}
         onPress={onBackPress}
       />
-    </SafeAreaView>
+    </ThemedView>
   );
 }
 

@@ -11,7 +11,6 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { ThemedText } from "..";
 
 export default React.forwardRef(
   (
@@ -100,35 +99,31 @@ export default React.forwardRef(
             )}
           </Text>
         )}
-        {mode === "input" ? (
-          <View style={styles.inputView}>
-            {leftIcon && leftIcon}
-            <TextInput
-              editable={!disabled}
-              ref={ref}
-              maxLength={maxLength}
-              numberOfLines={textArea ? 4 : 1}
-              placeholder={placeholder}
-              placeholderTextColor={Colors.mediumGray}
-              autoCapitalize={autoCapitalize}
-              keyboardType={keyboardType}
-              multiline={textArea ? true : false}
-              value={field.value?.toString()}
-              onChangeText={onChange}
-              onBlur={field.onBlur}
-              style={[
-                {
-                  textAlignVertical: textArea ? "top" : "center",
-                  color: color,
-                },
-                styles.inputStyle,
-              ]}
-            />
-            {clearIcon && <CloseCircle color={Colors.gray300} variant="Bold" />}
-          </View>
-        ) : (
-          <ThemedText>{field?.value ?? "-"}</ThemedText>
-        )}
+        <View style={styles.inputView}>
+          {leftIcon && leftIcon}
+          <TextInput
+            editable={!disabled}
+            ref={ref}
+            maxLength={maxLength}
+            numberOfLines={textArea ? 4 : 1}
+            placeholder={placeholder}
+            placeholderTextColor={Colors.mediumGray}
+            autoCapitalize={autoCapitalize}
+            keyboardType={keyboardType}
+            multiline={textArea ? true : false}
+            value={field.value?.toString()}
+            onChangeText={onChange}
+            onBlur={field.onBlur}
+            style={[
+              {
+                textAlignVertical: textArea ? "top" : "center",
+                color: color,
+              },
+              styles.inputStyle,
+            ]}
+          />
+          {clearIcon && <CloseCircle color={Colors.gray300} variant="Bold" />}
+        </View>
         {fieldState.error?.message && (
           <Text style={styles.errorTxt}>{fieldState.error?.message}</Text>
         )}
@@ -140,7 +135,7 @@ export default React.forwardRef(
 const styles = StyleSheet.create({
   inputStyle: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 16,
     height: "100%",
     textAlign: "left",
     width: "100%",
@@ -157,6 +152,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: Colors.gray300,
+    backgroundColor: Colors.background,
   },
 
   label: {
@@ -164,6 +160,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FontType.YekanBakhRegular,
     textAlign: "right",
+    marginBottom: 4,
   },
 
   errorTxt: {

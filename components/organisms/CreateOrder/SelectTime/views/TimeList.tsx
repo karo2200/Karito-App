@@ -42,6 +42,7 @@ export default function TimeList() {
       sections={DATA}
       keyExtractor={(item, index) => item?.[0] + index}
       style={styles.container}
+      showsVerticalScrollIndicator={false}
       renderItem={({ item }) => {
         return (
           <CustomFlatList
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 8,
     marginBottom: 4,
-    minWidth: DeviceWidth / 3 - 30,
+    minWidth: DeviceWidth / 3 - 20,
     alignItems: "center",
     justifyContent: "center",
   },

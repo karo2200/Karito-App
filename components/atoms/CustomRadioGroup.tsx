@@ -54,7 +54,9 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     flexDirection: "row",
     flexShrink: 1,
+    width: "100%",
+    backgroundColor: "blue",
   },
 
-  label: { marginBottom: 4 },
+  label: { marginBottom: 16 },
 });

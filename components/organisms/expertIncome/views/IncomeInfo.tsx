@@ -12,7 +12,11 @@ export default function IncomeInfo() {
   return (
     <ThemedView>
       <ThemedView style={styles.headerContainer}>
-        <ThemedText type="defaultSemiBold" fontType="bold">
+        <ThemedText
+          type="defaultSemiBold"
+          fontType="bold"
+          style={styles.fontSize}
+        >
           ۱٫2۰۰٫۵۰۰ ریال
         </ThemedText>
         <ThemedText style={styles.headerTxt} fontType="bold">
@@ -65,4 +69,6 @@ const styles = StyleSheet.create({
   title: { color: Colors.link25 },
 
   value: { color: Colors.black },
+
+  fontSize: { fontSize: 24 },
 });

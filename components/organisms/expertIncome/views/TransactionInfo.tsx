@@ -2,15 +2,13 @@ import { CustomFlatList, ThemedText, ThemedView } from "@/components";
 import IncomeInfoItem from "@/components/molecules/IncomeInfoItem";
 import { Colors } from "@/constants/Colors";
 import { Calendar as CalendarIcon } from "iconsax-react-native";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import EmptyIncom from "./EmptyIncom";
 import SelectDateActionSheet from "./SelectDateActionSheet";
 
 export default function TransactionInfo() {
-  const [visibleCalendar, setCalendarVisible] = useState(true);
-
   const renderItem = useCallback(
     ({ item, index }) => <IncomeInfoItem {...{ item, index }} />,
     []
@@ -18,8 +16,7 @@ export default function TransactionInfo() {
   return (
     <ThemedView>
       <SelectDateActionSheet
-        visible={visibleCalendar}
-        onClose={() => setCalendarVisible(false)}
+        onClose={() => SheetManager.hide("calendar-sheet")}
       />
       <ThemedView style={styles.headerContainer}>
         <ThemedView style={styles.headerView}>

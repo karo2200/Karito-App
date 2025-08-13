@@ -2,7 +2,7 @@ import React from "react";
 
 import { ThemedButton, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { DeviceWidth } from "@/constants/Dimension";
+import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { StyleSheet, Text } from "react-native";
 
@@ -14,7 +14,13 @@ type FooterProps = {
 const Footer = ({ onPress, hasError }: FooterProps) => {
   return (
     <ThemedView style={styles.button}>
-      <ThemedButton title={"ورود"} disabled={hasError} onPress={onPress} />
+      <ThemedButton
+        title={"ورود"}
+        disabled={hasError}
+        onPress={onPress}
+        disabledColor={Colors.hint50}
+        disabledTextColor={Colors.mediumGray}
+      />
       <Text style={styles.txt}>
         ورود به منزله پذیرش
         <Text style={styles.color}> قوانین و مقررات</Text> کاریتو است.
@@ -28,7 +34,7 @@ export default Footer;
 const styles = StyleSheet.create({
   button: {
     position: "absolute",
-    bottom: 100,
+    bottom: DeviceHeight * 0.15,
     width: DeviceWidth - 40,
     alignSelf: "center",
     zIndex: 1,
