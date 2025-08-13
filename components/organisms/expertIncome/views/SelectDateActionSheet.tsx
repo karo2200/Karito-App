@@ -5,12 +5,11 @@ import { DeviceHeight } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Trash } from "iconsax-react-native";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import ActionSheet, {
   ActionSheetRef,
   SheetDefinition,
-  SheetManager,
 } from "react-native-actions-sheet";
 import DatePicker, { getFormatedDate } from "react-native-datetimepicker-pro";
 
@@ -30,18 +29,6 @@ export default function SelectDateActionSheet({
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const [selectedDate, setSelectedDate] = useState("");
 
-  useEffect(() => {
-    if (visible) {
-      SheetManager.show("calendar-sheet");
-    }
-  }, [visible]);
-
-  const closeActionSheet = () => {
-    onClose?.();
-    SheetManager.hide("calendar-sheet");
-    // actionSheetRef.current?.hide();
-  };
-
   return (
     <ActionSheet
       ref={actionSheetRef}
@@ -56,7 +43,7 @@ export default function SelectDateActionSheet({
           name="close"
           size={24}
           color={Colors.mediumGray}
-          onPress={() => closeActionSheet()}
+          onPress={onClose}
         />
         <ThemedText fontType="bold">فیلترها</ThemedText>
       </View>
