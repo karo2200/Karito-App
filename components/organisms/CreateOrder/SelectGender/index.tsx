@@ -19,12 +19,7 @@ export default function SelectGender(props: any) {
       <ThemedText type="title" fontType="bold">
         جنسیت متخصص را انتخاب کنید:
       </ThemedText>
-      <ThemedView
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
+      <ThemedView style={styles.listContainer}>
         {genderOptions?.map(({ value, Icon, title }, index) => (
           <TouchableOpacity
             key={value}
@@ -80,4 +75,10 @@ const styles = StyleSheet.create({
 
   selectedText: { color: Colors.hint500 },
   deSelectedText: { color: Colors.semiBlack },
+
+  listContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 16,
+  },
 });

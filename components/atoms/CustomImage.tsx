@@ -1,18 +1,26 @@
-import { Image, ImageProps, ImageResizeMode, StyleSheet } from "react-native";
+import {
+  Image,
+  ImageProps,
+  ImageResizeMode,
+  ImageSourcePropType,
+  StyleSheet,
+} from "react-native";
 
 export type CustomImageProps = ImageProps & {
-  src: string;
+  src?: string;
   resizeMode?: ImageResizeMode | undefined;
+  localSource?: ImageSourcePropType;
 };
 
 export default function CustomImage({
   src,
   style,
   resizeMode = "contain",
+  localSource,
 }: CustomImageProps) {
   return (
     <Image
-      source={{ uri: src }}
+      source={localSource ?? { uri: src }}
       style={[styles.fullView, style]}
       resizeMode={resizeMode}
     />

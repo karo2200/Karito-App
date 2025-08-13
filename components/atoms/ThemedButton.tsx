@@ -16,6 +16,8 @@ type ThemedButtonProps = ButtonProps & {
   fontType?: "bold" | "regular" | "medium";
   rightIcon?: JSX.Element;
   LeftIcon?: JSX.Element;
+  disabledColor?: string;
+  disabledTextColor?: string;
 };
 
 export default function ThemedButton({
@@ -27,13 +29,15 @@ export default function ThemedButton({
   disabled,
   rightIcon,
   LeftIcon,
+  disabledColor = Colors.gray300,
+  disabledTextColor = Colors.white,
   ...rest
 }: ThemedButtonProps) {
   return (
     <View
       style={[
         disabled
-          ? styles.disabled
+          ? { ...styles.disabled, backgroundColor: disabledColor }
           : type === "outline"
           ? styles.outline
           : styles.filled,
@@ -48,7 +52,7 @@ export default function ThemedButton({
         <ThemedText
           style={
             disabled
-              ? styles.textFilledColor
+              ? { color: disabledTextColor }
               : type == "outline"
               ? styles.textColor
               : styles.textFilledColor

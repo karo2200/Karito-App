@@ -5,6 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import { ThemedText, ThemedView } from "@/components";
+import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
 import { DeviceWidth } from "@/constants/Dimension";
@@ -67,48 +68,52 @@ const OTPSection = () => {
   };
 
   return (
-    <FormProvider {...methods}>
-      <View style={styles.form}>
-        <AuthHeader />
-        <ThemedText style={styles.subtitle}>
-          {`لطفا کد چهار رقمی ارسال شده به شماره ${phoneNumber} را وارد کنید`}
-        </ThemedText>
-        <ThemedView
-          style={{
-            alignSelf: "center",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <ThemedCodeFeild length={4} name="otpCode" />
-          {isTimerActive ? (
-            <ThemedText
-              style={{ color: Colors.hint500, textAlign: "center" }}
-            >{`${formatTime(secondsLeft)} تا تلاش مجدد`}</ThemedText>
-          ) : (
-            <ThemedText style={{ color: Colors.hint500, textAlign: "center" }}>
-              تلاش مجدد
-            </ThemedText>
-          )}
-          <ThemedText
-            fontType="bold"
-            style={{ color: Colors.hint500, textAlign: "center" }}
-          >
-            ویرایش شماره تلفن همراه
+    <KeyboardAutoHide>
+      <FormProvider {...methods}>
+        <View style={styles.form}>
+          <AuthHeader />
+          <ThemedText style={styles.subtitle}>
+            {`لطفا کد چهار رقمی ارسال شده به شماره ${phoneNumber} را وارد کنید`}
           </ThemedText>
-        </ThemedView>
-      </View>
-      <Footer
-        onPress={handleSubmit(onPress)}
-        hasError={
-          errors?.["otpCode"]?.message?.length > 0 ||
-          !getValues("otpCode") ||
-          getValues("otpCode")?.length < 4
-            ? true
-            : false
-        }
-      />
-    </FormProvider>
+          <ThemedView
+            style={{
+              alignSelf: "center",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <ThemedCodeFeild length={4} name="otpCode" />
+            {isTimerActive ? (
+              <ThemedText
+                style={{ color: Colors.hint500, textAlign: "center" }}
+              >{`${formatTime(secondsLeft)} تا تلاش مجدد`}</ThemedText>
+            ) : (
+              <ThemedText
+                style={{ color: Colors.hint500, textAlign: "center" }}
+              >
+                تلاش مجدد
+              </ThemedText>
+            )}
+            <ThemedText
+              fontType="bold"
+              style={{ color: Colors.hint500, textAlign: "center" }}
+            >
+              ویرایش شماره تلفن همراه
+            </ThemedText>
+          </ThemedView>
+        </View>
+        <Footer
+          onPress={handleSubmit(onPress)}
+          hasError={
+            errors?.["otpCode"]?.message?.length > 0 ||
+            !getValues("otpCode") ||
+            getValues("otpCode")?.length < 4
+              ? true
+              : false
+          }
+        />
+      </FormProvider>
+    </KeyboardAutoHide>
   );
 };
 

@@ -18,5 +18,5 @@ const styles = StyleSheet.create({
     color: Colors.hint500,
   },
 
-  margin: { marginTop: DeviceHeight * 0.27 },
+  margin: { marginTop: DeviceHeight * 0.27, marginBottom: 32 },
 });

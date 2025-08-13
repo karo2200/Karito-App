@@ -11,7 +11,7 @@ export default function DayTimeItem({
 }: {
   title: string;
   subtitle?: string;
-  width: DimensionValue;
+  width?: DimensionValue;
   height?: DimensionValue;
   checked?: boolean;
 }) {

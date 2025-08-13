@@ -4,8 +4,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
+import { CustomImage } from "@/components";
+import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
-import { DeviceWidth } from "@/constants/Dimension";
+import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import Footer from "./views/Footer";
@@ -36,27 +38,34 @@ const LoginSection = () => {
   };
 
   return (
-    <FormProvider {...methods}>
-      <View style={styles.form}>
-        <AuthHeader />
-        <ThemedInput
-          label="لطفا شماره موبایل خود را وارد کنید."
-          {...register("phone")}
-          placeholder="09123456789"
-          keyboardType="numeric"
-          maxLength={11}
+    <KeyboardAutoHide>
+      <FormProvider {...methods}>
+        <View style={styles.form}>
+          <CustomImage
+            localSource={require("@/assets/images/loginBg.png")}
+            style={styles.image}
+          />
+          <AuthHeader />
+          <ThemedInput
+            label="لطفا شماره موبایل خود را وارد کنید."
+            {...register("phone")}
+            placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+            keyboardType="numeric"
+            maxLength={11}
+          />
+        </View>
+        <Footer
+          onPress={handleSubmit(onPress)}
+          hasError={
+            errors?.["phone"]?.message?.length > 0 ||
+            getValues("phone")?.length < 1 ||
+            !getValues("phone")
+              ? true
+              : false
+          }
         />
-      </View>
-      <Footer
-        onPress={handleSubmit(onPress)}
-        hasError={
-          errors?.["phone"]?.message?.length > 0 ||
-          getValues("phone")?.length < 1
-            ? true
-            : false
-        }
-      />
-    </FormProvider>
+      </FormProvider>
+    </KeyboardAutoHide>
   );
 };
 
@@ -74,5 +83,13 @@ const styles = StyleSheet.create({
   form: {
     width: "100%",
     flex: 1,
+  },
+
+  image: {
+    alignSelf: "flex-end",
+    width: DeviceWidth * 0.5,
+    height: DeviceHeight * 0.6,
+    position: "absolute",
+    zIndex: 1,
   },
 });

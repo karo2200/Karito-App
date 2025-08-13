@@ -8,7 +8,6 @@ export default function DayHeader() {
         title={`${index}شنبه`}
         subtitle="۱/۱۷"
         width={80}
-        height={72}
         checked={index === 0 ? true : false}
       />
     );
@@ -22,6 +21,7 @@ export default function DayHeader() {
       ItemSeparatorComponent={() => <Divider width={8} height={0} />}
       inverted
       snapToEnd
+      showsHorizontalScrollIndicator={false}
     />
   );
 }

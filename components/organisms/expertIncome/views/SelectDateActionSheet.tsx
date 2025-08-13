@@ -24,7 +24,7 @@ export default function SelectDateActionSheet({
   visible,
   onClose,
 }: {
-  visible: boolean;
+  visible?: boolean;
   onClose: () => void;
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
