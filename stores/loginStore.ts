@@ -1,5 +1,5 @@
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createStore } from "zustand/vanilla";
 
 type UserStoreType = {
   isLoggedIn: boolean;
@@ -8,7 +8,7 @@ type UserStoreType = {
   setIsExpert: (value: boolean) => void;
 };
 
-const useUserStore = createStore<UserStoreType>()(
+const useUserStore = create<UserStoreType>()(
   persist(
     (set) => ({
       isLoggedIn: false,

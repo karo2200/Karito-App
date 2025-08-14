@@ -1,3 +1,4 @@
+import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Linking, Platform } from "react-native";
@@ -11,7 +12,8 @@ export default function useOrderDetailHook() {
     useState(false);
 
   const isDone = true;
-  const isCustomer = false;
+
+  const { isExpert, setIsExpert } = useUserStore();
 
   const onBillPress = () => {
     router.push("/order/payment");
@@ -32,7 +34,7 @@ export default function useOrderDetailHook() {
     setFinishWorkVisible,
     onBillPress,
     isDone,
-    isCustomer,
+    isExpert,
     makeCall,
     setFoundLocationVisible,
     foundLocationVisible,

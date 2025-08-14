@@ -8,6 +8,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
 export default function RootLayout() {
+  const { isLoggedIn, isExpert } = useUserStore();
+
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/Yekan Bakh EN 04 Regular.ttf"),
     YekanBakhBold: require("../assets/fonts/Yekan Bakh EN 06 Bold.ttf"),
@@ -15,8 +17,6 @@ export default function RootLayout() {
   });
 
   const { isConnected, type, ip } = useNetworkStatus();
-
-  const { isLoggedIn, isExpert } = useUserStore();
 
   useEffect(() => {
     if (loaded) {

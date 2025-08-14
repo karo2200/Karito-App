@@ -1,6 +1,5 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { FontType } from "@/constants/Fonts";
 import useUserStore from "@/stores/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
@@ -10,7 +9,7 @@ import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 const { height } = Dimensions.get("window");
 
 export default function LoginActionSheet() {
-  const { setIsExpert } = useUserStore();
+  const { setIsExpert, isExpert } = useUserStore();
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   useEffect(() => {
@@ -21,8 +20,15 @@ export default function LoginActionSheet() {
     actionSheetRef.current?.hide();
   };
 
-  const loginAsExpert = () => setIsExpert(true);
-  const loginAsCustomer = () => setIsExpert(false);
+  const loginAsExpert = () => {
+    setIsExpert(true);
+    closeActionSheet();
+  };
+
+  const loginAsCustomer = () => {
+    setIsExpert(false);
+    closeActionSheet();
+  };
 
   return (
     <ActionSheet
@@ -41,25 +47,37 @@ export default function LoginActionSheet() {
       <View style={styles.contentView}>
         <TouchableOpacity
           activeOpacity={0.7}
-          style={styles.btn}
+          style={isExpert ? styles.selected : styles.btn}
           onPress={loginAsExpert}
         >
-          <ThemedText type="text" style={styles.title}>
+          <ThemedText
+            type="text"
+            style={[styles.title, isExpert && { color: Colors.hint500 }]}
+          >
             ورود به عنوان
           </ThemedText>
-          <ThemedText fontType="bold" style={styles.text}>
+          <ThemedText
+            fontType="bold"
+            style={[styles.text, isExpert && { color: Colors.hint500 }]}
+          >
             متخصص
           </ThemedText>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.7}
-          style={styles.btn}
+          style={!isExpert ? styles.selected : styles.btn}
           onPress={loginAsCustomer}
         >
-          <ThemedText type="text" style={styles.title}>
+          <ThemedText
+            type="text"
+            style={[styles.title, !isExpert && { color: Colors.hint500 }]}
+          >
             ورود به عنوان
           </ThemedText>
-          <ThemedText fontType="bold" style={styles.text}>
+          <ThemedText
+            fontType="bold"
+            style={[styles.text, !isExpert && { color: Colors.hint500 }]}
+          >
             مشتری
           </ThemedText>
         </TouchableOpacity>
@@ -89,7 +107,7 @@ const styles = StyleSheet.create({
     width: "48%",
   },
 
-  text: { fontFamily: FontType.YekanBakhRegular, color: Colors.gray900 },
+  text: { color: Colors.gray900 },
 
   title: {
     marginBottom: 2,
@@ -100,5 +118,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 61,
+  },
+
+  selected: {
+    borderColor: Colors.hint500,
+    borderWidth: 2,
+    backgroundColor: Colors.hint50,
+    borderRadius: 12,
+    paddingVertical: 11,
+    paddingHorizontal: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
+    width: "48%",
   },
 });
