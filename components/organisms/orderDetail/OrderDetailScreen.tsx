@@ -48,7 +48,7 @@ export default function OrderDetailScreen() {
   };
 
   return (
-    <ThemedContainer>
+    <ThemedContainer style={{ paddingHorizontal: 15 }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}

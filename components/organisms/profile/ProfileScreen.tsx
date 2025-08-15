@@ -2,7 +2,6 @@ import EditIcon from "@/assets/icons/Edit";
 import EmptyProfileIcon from "@/assets/icons/EmptyProfile";
 import LocationIcon from "@/assets/icons/Location";
 import PercentIcon from "@/assets/icons/Percent";
-import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedText from "@/components/atoms/ThemedText";
 import LogOutActionSheet from "@/components/molecules/LogOutActionSheet";
 import { Colors } from "@/constants/Colors";
@@ -20,7 +19,7 @@ export default function ProfileScreen() {
     useProfileHook();
 
   return (
-    <ThemedContainer>
+    <View style={styles.container}>
       <View style={styles.flex1}>
         <View style={styles.headerContainer}>
           <EmptyProfileIcon />
@@ -109,7 +108,7 @@ export default function ProfileScreen() {
         visible={exitVisible}
         onClose={() => setExitVisible(false)}
       />
-    </ThemedContainer>
+    </View>
   );
 }
 
@@ -183,6 +182,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "48%",
     paddingVertical: 8,
+  },
+
+  container: {
+    paddingHorizontal: 15,
+    flex: 1,
   },
 });
 

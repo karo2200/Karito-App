@@ -26,9 +26,10 @@ export default function InprogressMissions() {
     <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}
-      data={[{}, {}, {}, {}]}
+      data={[{}, {}, {}]}
       refreshing={true}
       // onRefresh={refetch}
+      style={{ flex: 1 }}
       contentContainerStyle={styles.tabStyle}
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}
@@ -48,5 +49,6 @@ const styles = StyleSheet.create({
   tabStyle: {
     paddingBottom: 100,
     marginTop: 8,
+    flexGrow: 1,
   },
 });

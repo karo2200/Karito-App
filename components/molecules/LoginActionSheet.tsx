@@ -3,10 +3,16 @@ import { Colors } from "@/constants/Colors";
 import useUserStore from "@/stores/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
-import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 export default function LoginActionSheet() {
   const { setIsExpert, isExpert } = useUserStore();
@@ -31,10 +37,7 @@ export default function LoginActionSheet() {
   };
 
   return (
-    <ActionSheet
-      ref={actionSheetRef}
-      containerStyle={{ minHeight: height / 3.5 }}
-    >
+    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
       <View style={styles.header}>
         <Ionicons
           name="close"
@@ -131,5 +134,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 8,
     width: "48%",
+},
+  container: {
+    minHeight: height / 3.5,
+    width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
   },
 });

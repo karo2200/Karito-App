@@ -9,7 +9,7 @@ import { StyleSheet } from "react-native";
 
 const LoginScreen = () => {
   return (
-    <ThemedContainer>
+    <ThemedContainer style={styles.container}>
       <LoginSection />
     </ThemedContainer>
   );
@@ -35,5 +35,9 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontFamily: FontType.YekanBakhHeavy,
     color: Colors.hint500,
+  },
+
+  container: {
+    paddingHorizontal: 15,
   },
 });
