@@ -3,7 +3,13 @@ import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 import ThemedText from "./ThemedText";
 
-export default function ScreenNameWithBack({ title }: { title: string }) {
+export default function ScreenNameWithBack({
+  title,
+  onBackPress,
+}: {
+  title: string;
+  onBackPress?: () => void;
+}) {
   const router = useRouter();
 
   return (
@@ -11,7 +17,10 @@ export default function ScreenNameWithBack({ title }: { title: string }) {
       <ThemedText fontType="bold" style={styles.title}>
         {title}
       </ThemedText>
-      <Pressable onPress={() => router.back()} style={styles.backBtn}>
+      <Pressable
+        onPress={() => (onBackPress ? onBackPress?.() : router.back())}
+        style={styles.backBtn}
+      >
         <BackArrowIcon />
       </Pressable>
     </View>
@@ -26,7 +35,6 @@ const styles = StyleSheet.create({
   backBtn: { paddingLeft: 8 },
 
   container: {
-    flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
     flexDirection: "row",

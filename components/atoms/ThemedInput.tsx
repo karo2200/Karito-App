@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   View,
+  ViewStyle,
 } from "react-native";
 
 export default React.forwardRef(
@@ -34,6 +35,8 @@ export default React.forwardRef(
       onChangeText,
       onSetHeight,
       control,
+      readOnly = false,
+      style,
     }: {
       name: any;
       placeholder?: string;
@@ -65,6 +68,8 @@ export default React.forwardRef(
       maxLength?: number;
       leftIcon?: JSX.Element;
       clearIcon?: boolean;
+      style?: ViewStyle;
+      readOnly?: boolean;
       autoCapitalize?:
         | "none"
         | "sentences"
@@ -75,6 +80,7 @@ export default React.forwardRef(
       onSetHeight?: (value: number) => void;
       control?: any;
     },
+
     ref: any
   ) => {
     const { field, fieldState } = useController({ name, control });
@@ -90,7 +96,10 @@ export default React.forwardRef(
     };
 
     return (
-      <View onLayout={onSetHeight ? onLayout : undefined} style={{ width }}>
+      <View
+        onLayout={onSetHeight ? onLayout : undefined}
+        style={[{ width }, style]}
+      >
         {label && (
           <Text style={styles.label}>
             {label}
@@ -107,6 +116,7 @@ export default React.forwardRef(
             maxLength={maxLength}
             numberOfLines={textArea ? 4 : 1}
             placeholder={placeholder}
+            readOnly={readOnly}
             placeholderTextColor={Colors.mediumGray}
             autoCapitalize={autoCapitalize}
             keyboardType={keyboardType}

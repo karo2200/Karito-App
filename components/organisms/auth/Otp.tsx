@@ -26,6 +26,7 @@ const schema = yup.object().shape({
 const OTPSection = () => {
   const { setIsExpert, setIsLoggedIn } = useUserStore();
   const { params } = useRoute();
+
   const phoneNumber = params?.phone;
 
   const [isTimerActive, setIsTimerActive] = useState(true);
@@ -57,7 +58,6 @@ const OTPSection = () => {
   } = methods;
 
   const onPress = (formData: any) => {
-    // navigate("tabs");
     setIsExpert(false);
     setIsLoggedIn(true);
   };

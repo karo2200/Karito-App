@@ -4,18 +4,20 @@ import { ThemedButton, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, ViewStyle } from "react-native";
 
 type FooterProps = {
   onPress: () => void;
   hasError?: boolean;
+  title?: string;
+  style?: ViewStyle;
 };
 
-const Footer = ({ onPress, hasError }: FooterProps) => {
+const Footer = ({ onPress, hasError, title = "ورود", style }: FooterProps) => {
   return (
-    <ThemedView style={styles.button}>
+    <ThemedView style={[styles.button, style]}>
       <ThemedButton
-        title={"ورود"}
+        title={title}
         disabled={hasError}
         onPress={onPress}
         disabledColor={Colors.hint50}
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
   button: {
     position: "absolute",
     bottom: DeviceHeight * 0.15,
-    width: DeviceWidth - 40,
+    width: DeviceWidth - 30,
     alignSelf: "center",
     zIndex: 1,
   },
