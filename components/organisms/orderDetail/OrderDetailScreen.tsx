@@ -31,7 +31,7 @@ export default function OrderDetailScreen() {
     setFinishWorkVisible,
     finishWorkVisible,
     isDone,
-    isCustomer,
+    isExpert,
     makeCall,
     setFoundLocationVisible,
     foundLocationVisible,
@@ -53,7 +53,7 @@ export default function OrderDetailScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
       >
-        {isCustomer ? (
+        {!isExpert ? (
           <Breadcrumb
             items={[
               { label: "سفارش‌های من", href: "/order" },
@@ -64,7 +64,7 @@ export default function OrderDetailScreen() {
         ) : (
           <ScreenNameWithBack title="سرمایش و گرمایش (تعمیر و سرویس کولر آبی)" />
         )}
-        {isCustomer && (
+        {!isExpert && (
           <React.Fragment>
             <ThemedText fontType="bold" style={{ marginTop: 4 }}>
               سرمایش و گرمایش (تعمیر و سرویس کولر آبی)
@@ -79,7 +79,7 @@ export default function OrderDetailScreen() {
             1,200,000 تومان
           </ThemedText>
           <ThemedText fontType="bold" style={{ color: Colors.gray500 }}>
-            {isCustomer ? "هزینه" : "دستمزد"}
+            {!isExpert ? "هزینه" : "دستمزد"}
           </ThemedText>
         </View>
         <View style={styles.rowView}>
@@ -90,7 +90,7 @@ export default function OrderDetailScreen() {
             زمان
           </ThemedText>
         </View>
-        {isCustomer && (
+        {!isExpert && (
           <View style={[styles.rowView2, isDone && { paddingRight: 0 }]}>
             <Pressable onPress={handleSuccess}>
               <ThemedText style={{ color: Colors.darkError }}>
@@ -106,7 +106,7 @@ export default function OrderDetailScreen() {
             )}
           </View>
         )}
-        {!isCustomer && <Divider height={16} />}
+        {isExpert && <Divider height={16} />}
         <ThemedText fontType="bold" style={{ color: "black" }}>
           جزئیات
         </ThemedText>
@@ -124,11 +124,11 @@ export default function OrderDetailScreen() {
             کیان، طبقه ۸
           </ThemedText>
           <ThemedText type="text" style={{ color: Colors.gray500 }}>
-            {isCustomer ? "آدرس" : "آدرس دقیق"}
+            {!isExpert ? "آدرس" : "آدرس دقیق"}
           </ThemedText>
         </View>
         <View style={styles.rowView}>
-          {isCustomer ? (
+          {!isExpert ? (
             <React.Fragment>
               <ThemedText type="text" style={{ color: Colors.label }}>
                 1
@@ -149,7 +149,7 @@ export default function OrderDetailScreen() {
             </React.Fragment>
           )}
         </View>
-        {!isCustomer && (
+        {isExpert && (
           <View>
             <Divider height={16} />
             <ThemedText fontType="bold" style={{ color: "black" }}>
@@ -182,7 +182,7 @@ export default function OrderDetailScreen() {
           </View>
         )}
       </ScrollView>
-      {isCustomer ? (
+      {!isExpert ? (
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.payment}

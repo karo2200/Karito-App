@@ -15,7 +15,7 @@ import useProfileHook from "./hooks/Profile.hook";
 export default function ProfileScreen() {
   const router = useRouter();
 
-  const { exitVisible, setExitVisible, isCustomer, onCallPress } =
+  const { exitVisible, setExitVisible, isExpert, onCallPress, setIsExpert } =
     useProfileHook();
 
   return (
@@ -36,7 +36,7 @@ export default function ProfileScreen() {
           </View>
           <EditIcon />
         </View>
-        {!isCustomer && (
+        {isExpert && (
           <View style={styles.rowView2}>
             <View style={styles.labelContainer}>
               <ThemedText type="text" style={{ color: Colors.label }}>
@@ -56,7 +56,7 @@ export default function ProfileScreen() {
             </View>
           </View>
         )}
-        {isCustomer ? (
+        {!isExpert ? (
           <>
             <List
               title="مدیریت آدرس‌ها"
@@ -92,11 +92,11 @@ export default function ProfileScreen() {
           </ThemedText>
         </Pressable>
       </View>
-      {isCustomer && (
+      {!isExpert && (
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.payment}
-          onPress={() => router.push("/home")}
+          onPress={() => setIsExpert(true)}
         >
           <ThemedText fontType="bold" style={styles.textBtn}>
             ورود به عنوان متخصص

@@ -1,5 +1,6 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import useUserStore from "@/stores/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
@@ -16,6 +17,8 @@ export default function LogOutActionSheet({
   onClose: () => void;
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  const { setIsLoggedIn, setIsExpert } = useUserStore();
 
   useEffect(() => {
     if (visible) {
@@ -43,7 +46,14 @@ export default function LogOutActionSheet({
         <ThemedText style={styles.title}>
           آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟
         </ThemedText>
-        <ThemedButton title="خروج" fontType="medium" />
+        <ThemedButton
+          title="خروج"
+          fontType="medium"
+          onPress={() => {
+            setIsLoggedIn(false);
+            setIsExpert(false);
+          }}
+        />
         <ThemedButton
           fontType="medium"
           type="outline"

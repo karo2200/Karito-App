@@ -1,3 +1,4 @@
+import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Linking, Platform } from "react-native";
@@ -7,7 +8,7 @@ export default function useProfileHook() {
 
   const [exitVisible, setExitVisible] = useState(false);
 
-  const isCustomer = false;
+  const { isExpert, setIsExpert } = useUserStore();
 
   const onCallPress = () => {
     if (Platform.OS === "web") {
@@ -21,7 +22,8 @@ export default function useProfileHook() {
     exitVisible,
     setExitVisible,
     router,
-    isCustomer,
+    isExpert,
     onCallPress,
+    setIsExpert,
   };
 }

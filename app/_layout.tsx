@@ -1,6 +1,7 @@
 import { ThemedContainer } from "@/components";
 import { ToastProvider } from "@/components/atoms/Toast";
 import useNetworkStatus from "@/hooks/useNetworkStatus";
+import useUserStore from "@/stores/loginStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -8,6 +9,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
 export default function RootLayout() {
+  const { isLoggedIn, isExpert } = useUserStore();
+
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
     YekanBakhBold: require("../assets/fonts/YekanBakhENBold.ttf"),
@@ -37,23 +40,23 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  const isLoggedIn = true;
 
   return (
     <ToastProvider>
       <ThemeProvider value={MyTheme}>
-        <ThemedContainer>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Protected guard={isLoggedIn}>
-              <Stack.Screen name="(tabs)" />
-            </Stack.Protected>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Protected guard={isLoggedIn && isExpert}>
+            <Stack.Screen name="(expertTabs)" />
+          </Stack.Protected>
+          <Stack.Protected guard={isLoggedIn && !isExpert}>
+            <Stack.Screen name="(tabs)" />
+          </Stack.Protected>
 
-            <Stack.Protected guard={!isLoggedIn}>
-              <Stack.Screen name="LoginPage" />
-              <Stack.Screen name="OTPScreen" />
-            </Stack.Protected>
-          </Stack>
-        </ThemedContainer>
+          <Stack.Protected guard={!isLoggedIn}>
+            <Stack.Screen name="LoginPage" />
+            <Stack.Screen name="OTPScreen" />
+          </Stack.Protected>
+        </Stack>
       </ThemeProvider>
     </ToastProvider>
   );

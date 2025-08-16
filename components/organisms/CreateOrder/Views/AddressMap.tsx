@@ -9,8 +9,8 @@ import {
   View,
 } from "react-native";
 
-I18nManager.allowRTL(true); // Enable RTL
-I18nManager.forceRTL(true);
+I18nManager.allowRTL(false); // Enable RTL
+I18nManager.forceRTL(false);
 
 export default function AddressMap() {
   const [selectedDistrict, setSelectedDistrict] = useState();
