@@ -76,6 +76,24 @@ export default function RootLayout() {
                 headerLeft: () => <></>,
               }}
             />
+            <Stack.Screen
+              name="PersonalInfoPage"
+              options={{
+                headerShown: true,
+                title: "",
+                headerRight: () => <RightIcon />,
+                headerLeft: () => <></>,
+              }}
+            />
+            <Stack.Screen
+              name="CertificateInfoPage"
+              options={{
+                headerShown: true,
+                title: "",
+                headerRight: () => <RightIcon />,
+                headerLeft: () => <></>,
+              }}
+            />
           </Stack.Protected>
         </Stack>
       </ThemeProvider>
