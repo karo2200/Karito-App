@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -16,7 +17,7 @@ const useUserStore = create<UserStoreType>()(
       setIsLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
       setIsExpert: (isExpert: boolean) => set({ isExpert }),
     }),
-    { name: "user-storage" }
+    { name: "user-storage", getStorage: () => AsyncStorage }
   )
 );
 export default useUserStore;
