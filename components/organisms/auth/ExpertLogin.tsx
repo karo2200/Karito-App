@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 import ExpertIcon from "@/assets/icons/ExpertIcon";
 import { ThemedText } from "@/components";
@@ -37,52 +37,53 @@ const ExpertLogin = () => {
   };
 
   return (
-    <KeyboardAutoHide>
-      <FormProvider {...methods}>
-        <View style={styles.form}>
-          <ThemedText
-            fontType="bold"
-            type="defaultSemiBold"
-            style={{ marginVertical: 17 }}
-          >
-            کسب درآمد از حرفه و تخصص!
-          </ThemedText>
-          <ThemedText>
-            با ثبت‌نام در کاریتو برای تخصص خود مشتری پیدا کنید و به کسب درآمد
-            روزانه بپردازید.
-          </ThemedText>
+    <Fragment>
+      <KeyboardAutoHide>
+        <FormProvider {...methods}>
+          <View style={styles.form}>
+            <ThemedText
+              fontType="bold"
+              type="defaultSemiBold"
+              style={{ marginVertical: 17 }}
+            >
+              کسب درآمد از حرفه و تخصص!
+            </ThemedText>
+            <ThemedText>
+              با ثبت‌نام در کاریتو برای تخصص خود مشتری پیدا کنید و به کسب درآمد
+              روزانه بپردازید.
+            </ThemedText>
 
-          <ThemedText
-            fontType="bold"
-            type="defaultSemiBold"
-            style={{ marginTop: "10%", marginBottom: 16 }}
-          >
-            تکمیل ثبت‌نام
-          </ThemedText>
-          <ThemedInput
-            label="لطفا شماره موبایل خود را وارد کنید."
-            {...register("phone")}
-            placeholder="۰۹۱۲۳۴۵۶۷۸۹"
-            keyboardType="numeric"
-            maxLength={11}
-          />
-          <Footer
-            title="ثبت نام"
-            onPress={handleSubmit(onPress)}
-            hasError={
-              errors?.["phone"]?.message?.length > 0 ||
-              getValues("phone")?.length < 1 ||
-              !getValues("phone")
-                ? true
-                : false
-            }
-            style={styles.button}
-          />
-        </View>
-
-        <ExpertIcon style={styles.image} />
-      </FormProvider>
-    </KeyboardAutoHide>
+            <ThemedText
+              fontType="bold"
+              type="defaultSemiBold"
+              style={{ marginTop: "10%", marginBottom: 16 }}
+            >
+              تکمیل ثبت‌نام
+            </ThemedText>
+            <ThemedInput
+              label="لطفا شماره موبایل خود را وارد کنید."
+              {...register("phone")}
+              placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+              keyboardType="numeric"
+              maxLength={11}
+            />
+            <Footer
+              title="ثبت نام"
+              onPress={handleSubmit(onPress)}
+              hasError={
+                errors?.["phone"]?.message?.length > 0 ||
+                getValues("phone")?.length < 1 ||
+                !getValues("phone")
+                  ? true
+                  : false
+              }
+              style={styles.button}
+            />
+          </View>
+        </FormProvider>
+      </KeyboardAutoHide>
+      <ExpertIcon style={styles.image} />
+    </Fragment>
   );
 };
 

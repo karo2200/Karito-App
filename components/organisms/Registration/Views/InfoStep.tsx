@@ -6,15 +6,28 @@ import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet, View } from "react-native";
+import useExpertHook from "../hooks/Expert.hook";
 
 const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
+  const { router } = useExpertHook();
+
   return (
     <View>
       <ScreenNameWithBack title="تکمیل اطلاعات" onBackPress={onPrevPress} />
       <View style={styles.form}>
         <Divider height={14} />
-        <InfoList title={"اطلاعات شخصی"} onPress={() => {}} />
-        <InfoList title={"مدارک"} onPress={() => {}} />
+        <InfoList
+          title={"اطلاعات شخصی"}
+          onPress={() => {
+            router.push("/PersonalInfoPage");
+          }}
+        />
+        <InfoList
+          title={"مدارک"}
+          onPress={() => {
+            router.push("/CertificateInfoPage");
+          }}
+        />
         <InfoList title={"احراز هویت"} onPress={() => {}} />
       </View>
     </View>
@@ -35,14 +48,16 @@ const styles = StyleSheet.create({
     padding: 12,
     marginVertical: 10,
     flexDirection: "column",
-    maxHeight: 100,
+    minHeight: 88,
+    width: "100%",
+    justifyContent: "center",
   },
 
   rowView: {
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    marginTop: 12,
+    marginVertical: 12,
   },
 
   label: {
