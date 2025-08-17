@@ -1,10 +1,13 @@
 import React from "react";
 
+import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import ThemedText from "@/components/atoms/ThemedText";
 import UploadImage from "@/components/atoms/UploadImage";
+import { days, monthsName } from "@/constants/StaticData";
+import useUserStore from "@/stores/loginStore";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRoute } from "@react-navigation/native";
 import { FormProvider, useForm } from "react-hook-form";
@@ -14,24 +17,32 @@ import * as yup from "yup";
 const schema = yup.object().shape({
   name: yup
     .string()
-    .length(50, "تعداد کارکترها بیش از حد مجاز است.")
-    .required(""),
+    // .length(50, "تعداد کارکترها بیش از حد مجاز است.")
+    .required("نام خود را وارد کنید."),
   family: yup
     .string()
-    .length(50, "تعداد کارکترها بیش از حد مجاز است.")
-    .required(""),
+    // .length(50, "تعداد کارکترها بیش از حد مجاز است.")
+    .required("نام خانوادگی خود را وارد کنید."),
   code: yup
     .string()
     .length(10, "کد ملی بدرستی وارد نشده است")
     .required("لطفا کد ملی خود را وارد کنید"),
+  codeImage: yup.string(),
+  year: yup.string(),
+  month: yup.string(),
+  day: yup.string(),
+  profilePhoto: yup.string(),
 });
 
 const PersonalInfo = () => {
   const { params } = useRoute();
 
+  const { setIsLoggedIn } = useUserStore();
+
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: { code: "1232222222" },
   });
   const {
     handleSubmit,
@@ -40,7 +51,9 @@ const PersonalInfo = () => {
     control,
   } = methods;
 
-  const onPress = (formData: any) => {};
+  const onPress = (formData: any) => {
+    setIsLoggedIn(true);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -56,7 +69,6 @@ const PersonalInfo = () => {
             {...register("name")}
             placeholder="نام"
             maxLength={50}
-            readOnly={true}
           />
           <ThemedInput
             label="نام خانوادگی*"
@@ -68,10 +80,27 @@ const PersonalInfo = () => {
           <ThemedText style={styles.birthdate}>تاریخ تولد</ThemedText>
           <View style={styles.rowView}>
             <ThemedInput
-              {...register("code")}
+              {...register("year")}
               placeholder="سال"
               keyboardType="numeric"
               maxLength={4}
+              style={{ width: "40%" }}
+            />
+
+            <DropDownPicker
+              {...register("month")}
+              label="ماه"
+              data={monthsName}
+              width={"33%"}
+              right={"9%"}
+            />
+
+            <DropDownPicker
+              {...register("day")}
+              label="روز"
+              data={days}
+              width={"20%"}
+              right={"36%"}
             />
           </View>
 
@@ -89,7 +118,7 @@ const PersonalInfo = () => {
             maxLength={10}
             readOnly={true}
           />
-          <UploadImage name="profilePhoto" control={control} />
+          <UploadImage name="codeImage" control={control} />
 
           <UploadImage
             name="profilePhoto"
@@ -129,7 +158,8 @@ const styles = StyleSheet.create({
   margin: { marginTop: 32 },
 
   rowView: {
-    flexDirection: "row",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
   },
 
   birthdate: {

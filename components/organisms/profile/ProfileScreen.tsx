@@ -6,17 +6,20 @@ import ThemedText from "@/components/atoms/ThemedText";
 import LogOutActionSheet from "@/components/molecules/LogOutActionSheet";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import useProfileHook from "./hooks/Profile.hook";
 
 export default function ProfileScreen() {
-  const router = useRouter();
-
-  const { exitVisible, setExitVisible, isExpert, onCallPress, setIsExpert } =
-    useProfileHook();
+  const {
+    exitVisible,
+    setExitVisible,
+    isExpert,
+    onCallPress,
+    setIsExpert,
+    router,
+  } = useProfileHook();
 
   return (
     <View style={styles.container}>
@@ -34,7 +37,7 @@ export default function ProfileScreen() {
               0912-3276543
             </ThemedText>
           </View>
-          <EditIcon />
+          <EditIcon onPress={() => router.push("/profile/editProfile")} />
         </View>
         {isExpert && (
           <View style={styles.rowView2}>
