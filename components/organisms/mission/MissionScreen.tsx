@@ -62,6 +62,8 @@ export default function MissionScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onScrollEnd}
+        style={{ transform: [{ scaleX: -1 }] }}
+        contentContainerStyle={{ transform: [{ scaleX: -1 }] }}
       >
         {tabs.map((tab, index) => (
           <View key={index} style={styles.page}>

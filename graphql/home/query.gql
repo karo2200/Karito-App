@@ -1,0 +1,19 @@
+query city_getAll(
+  $skip: Int
+  $take: Int
+  $where: CityDtoFilterInput
+  $order: [CityDtoSortInput!]
+) {
+  city_getAll(skip: $skip, take: $take, where: $where, order: $order) {
+    items {
+      id
+      isActive
+      name
+      provinceId
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}

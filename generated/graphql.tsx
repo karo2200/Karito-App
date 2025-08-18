@@ -1466,6 +1466,32 @@ export type Auth_VerifyOtpMutation = {
   };
 };
 
+export type City_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<CityDtoFilterInput>;
+  order?: InputMaybe<Array<CityDtoSortInput> | CityDtoSortInput>;
+}>;
+
+export type City_GetAllQuery = {
+  __typename?: "Query";
+  city_getAll?: {
+    __typename?: "City_getAllCollectionSegment";
+    items?: Array<{
+      __typename?: "CityDto";
+      id: any;
+      isActive: boolean;
+      name: string;
+      provinceId: any;
+    }> | null;
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  } | null;
+};
+
 export type User_GetMyProfileQueryVariables = Exact<{ [key: string]: never }>;
 
 export type User_GetMyProfileQuery = {
@@ -1550,6 +1576,43 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
         Auth_VerifyOtpDocument,
         variables,
       )(),
+    ...options,
+  });
+};
+
+export const City_GetAllDocument = `
+    query city_getAll($skip: Int, $take: Int, $where: CityDtoFilterInput, $order: [CityDtoSortInput!]) {
+  city_getAll(skip: $skip, take: $take, where: $where, order: $order) {
+    items {
+      id
+      isActive
+      name
+      provinceId
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+
+export const useCity_GetAllQuery = <TData = City_GetAllQuery, TError = unknown>(
+  variables?: City_GetAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<City_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<City_GetAllQuery, TError, TData>["queryKey"];
+  },
+) => {
+  return useQuery<City_GetAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined ? ["city_getAll"] : ["city_getAll", variables],
+    queryFn: fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
+      City_GetAllDocument,
+      variables,
+    ),
     ...options,
   });
 };

@@ -14,16 +14,23 @@ import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
 const { height, width } = Dimensions.get("window");
 
-export default function LoginActionSheet() {
+export default function LoginActionSheet({
+  visible,
+  setVisible,
+}: {
+  visible: boolean;
+  setVisible: () => void;
+}) {
   const { setIsExpert, isExpert } = useUserStore();
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   useEffect(() => {
     actionSheetRef.current?.show();
-  }, []);
+  }, [visible]);
 
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
+    setVisible?.();
   };
 
   const loginAsExpert = () => {
@@ -37,7 +44,12 @@ export default function LoginActionSheet() {
   };
 
   return (
-    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
+    <ActionSheet
+      ref={actionSheetRef}
+      containerStyle={styles.container}
+      gestureEnabled
+      onClose={() => actionSheetRef.current?.hide()}
+    >
       <View style={styles.header}>
         <Ionicons
           name="close"
@@ -134,7 +146,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 8,
     width: "48%",
-},
+  },
   container: {
     minHeight: height / 3.5,
     width: Platform.OS === "web" ? Math.min(width, 480) : "100%",

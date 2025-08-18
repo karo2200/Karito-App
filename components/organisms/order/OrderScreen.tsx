@@ -62,6 +62,8 @@ export default function OrderScreen() {
         ref={scrollRef}
         horizontal
         pagingEnabled
+        style={{ transform: [{ scaleX: -1 }] }}
+        contentContainerStyle={{ transform: [{ scaleX: -1 }] }}
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onScrollEnd}
       >
