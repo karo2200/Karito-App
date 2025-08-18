@@ -11,48 +11,45 @@ import {
   View,
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
-import useHomeHook from "../organisms/home/hooks/Home.hook";
 
 const { height, width } = Dimensions.get("window");
 
-export default function LoginActionSheet() {
-  const { setIsExpert, isExpert, setIsSelectRole } = useUserStore();
-
-  const { selectRoleVisible, setSelectRoleVisibe } = useHomeHook();
+export default function LoginActionSheet({
+  visible,
+  setVisible,
+}: {
+  visible: boolean;
+  setVisible: () => void;
+}) {
+  const { setIsExpert, isExpert } = useUserStore();
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      actionSheetRef.current?.show();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     actionSheetRef.current?.show();
-  }, [selectRoleVisible]);
+  }, [visible]);
 
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
+    setVisible?.();
   };
 
   const loginAsExpert = () => {
     setIsExpert(true);
-    setIsSelectRole(true);
-    setSelectRoleVisibe(false);
     closeActionSheet();
   };
 
   const loginAsCustomer = () => {
     setIsExpert(false);
-    setIsSelectRole(true);
-    setSelectRoleVisibe(false);
     closeActionSheet();
   };
 
   return (
-    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
+    <ActionSheet
+      ref={actionSheetRef}
+      containerStyle={styles.container}
+      gestureEnabled
+      onClose={() => actionSheetRef.current?.hide()}
+    >
       <View style={styles.header}>
         <Ionicons
           name="close"
