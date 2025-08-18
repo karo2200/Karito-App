@@ -1,0 +1,21 @@
+mutation auth_requestOtp($phoneNumber: String!, $userType: UserType!) {
+  auth_requestOtp(phoneNumber: $phoneNumber, userType: $userType) {
+    status {
+      code
+      value
+    }
+  }
+}
+
+mutation auth_verifyOtp(
+  $phoneNumber: String!
+  $userType: UserType!
+  $otp: String!
+) {
+  auth_verifyOtp(phoneNumber: $phoneNumber, userType: $userType, otp: $otp) {
+    status {
+      code
+      value
+    }
+  }
+}

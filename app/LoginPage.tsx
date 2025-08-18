@@ -7,7 +7,7 @@ import { DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { StyleSheet } from "react-native";
 
-const LoginScreen = () => {
+const LoginPage = () => {
   return (
     <ThemedContainer style={styles.container}>
       <LoginSection />
@@ -15,7 +15,7 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default LoginPage;
 
 const styles = StyleSheet.create({
   button: {
