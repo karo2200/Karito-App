@@ -6,8 +6,7 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { DocumentText, Profile, Task, Wallet1 } from "iconsax-react-native";
-import { useEffect } from "react";
-import { I18nManager, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
 type TabBarIconProps = {
@@ -16,12 +15,12 @@ type TabBarIconProps = {
 };
 
 export default function RootLayout() {
-  useEffect(() => {
-    if (I18nManager.isRTL) {
-      I18nManager.allowRTL(false);
-      I18nManager.forceRTL(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (I18nManager.isRTL) {
+  //     I18nManager.allowRTL(false);
+  //     I18nManager.forceRTL(false);
+  //   }
+  // }, []);
 
   const segments = useSegments();
 

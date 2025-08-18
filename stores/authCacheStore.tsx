@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create, StateCreator } from "zustand";
 import { persist, PersistOptions } from "zustand/middleware";
 
@@ -43,7 +42,6 @@ export const authCacheStore = create<AuthCacheType>(
     }),
     {
       name: "auth-cache-storage",
-      getStorage: () => AsyncStorage,
       // storage: createJSONStorage(() => mmkvStorage.mmkvStatesStorage),
     }
   )

@@ -100,12 +100,13 @@ const SearchSelect = forwardRef<any, Props>(
                 </TouchableOpacity>
               )}
             />
+            <ThemedButton
+              title="انتخاب"
+              fontType="bold"
+              onPress={() => actionSheetRef.current?.hide()}
+              style={{ marginBottom: 40 }}
+            />
           </View>
-          <ThemedButton
-            title="انتخاب"
-            fontType="bold"
-            onPress={() => actionSheetRef.current?.hide()}
-          />
         </ActionSheet>
       </View>
     );

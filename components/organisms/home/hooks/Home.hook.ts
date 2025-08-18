@@ -38,6 +38,24 @@ export default function useHomeHook() {
     }
   }, [isSelectRole]);
 
+  // ⏱ باز شدن خودکار هر ۳۰ ثانیه اگه انتخابی انجام نشده باشه
+  // useEffect(() => {
+  //   const openWithDelay = () => {
+  //     if (!answered) actionSheetRef.current?.show();
+  //   };
+
+  //   // بار اول ۵ ثانیه بعد
+  //   const firstTimeout = setTimeout(openWithDelay, 5000);
+
+  //   // دفعات بعد هر ۳۰ ثانیه
+  //   const interval = setInterval(openWithDelay, 30000);
+
+  //   return () => {
+  //     clearTimeout(firstTimeout);
+  //     clearInterval(interval);
+  //   };
+  // }, [answered]);
+
   return {
     router,
     selectRoleVisible,
