@@ -1,6 +1,5 @@
-import mmkvStorage from "@/services/mmkvZustandStorage";
 import { create, StateCreator } from "zustand";
-import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
+import { persist, PersistOptions } from "zustand/middleware";
 
 type AuthCacheType = {
   accessToken?: any;
@@ -43,7 +42,7 @@ export const authCacheStore = create<AuthCacheType>(
     }),
     {
       name: "auth-cache-storage",
-      storage: createJSONStorage(() => mmkvStorage.mmkvStatesStorage),
+      // storage: createJSONStorage(() => mmkvStorage.mmkvStatesStorage),
     }
   )
 );

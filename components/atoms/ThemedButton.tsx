@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { JSX } from "react";
 import {
+  ActivityIndicator,
   ButtonProps,
   StyleProp,
   StyleSheet,
@@ -18,6 +19,7 @@ type ThemedButtonProps = ButtonProps & {
   LeftIcon?: JSX.Element;
   disabledColor?: string;
   disabledTextColor?: string;
+  isLoading?: boolean;
 };
 
 export default function ThemedButton({
@@ -31,6 +33,7 @@ export default function ThemedButton({
   LeftIcon,
   disabledColor = Colors.gray300,
   disabledTextColor = Colors.white,
+  isLoading,
   ...rest
 }: ThemedButtonProps) {
   return (
@@ -39,31 +42,39 @@ export default function ThemedButton({
         disabled
           ? { ...styles.disabled, backgroundColor: disabledColor }
           : type === "outline"
-          ? styles.outline
-          : styles.filled,
+            ? styles.outline
+            : styles.filled,
         style,
       ]}
     >
-      <TouchableOpacity
-        onPress={onPress}
-        style={styles.flex1}
-        disabled={disabled}
-      >
-        <ThemedText
-          style={
-            disabled
-              ? { color: disabledTextColor }
-              : type == "outline"
-              ? styles.textColor
-              : styles.textFilledColor
-          }
-          fontType={fontType}
-        >
-          {title}
-        </ThemedText>
-        {rightIcon}
-      </TouchableOpacity>
-      {LeftIcon && LeftIcon}
+      {isLoading ? (
+        <View style={styles.flex1}>
+          <ActivityIndicator color={Colors.white} />
+        </View>
+      ) : (
+        <>
+          <TouchableOpacity
+            onPress={onPress}
+            style={styles.flex1}
+            disabled={disabled}
+          >
+            <ThemedText
+              style={
+                disabled
+                  ? { color: disabledTextColor }
+                  : type == "outline"
+                    ? styles.textColor
+                    : styles.textFilledColor
+              }
+              fontType={fontType}
+            >
+              {title}
+            </ThemedText>
+            {rightIcon}
+          </TouchableOpacity>
+          {LeftIcon && LeftIcon}
+        </>
+      )}
     </View>
   );
 }

@@ -10,10 +10,17 @@ type FooterProps = {
   onPress: () => void;
   hasError?: boolean;
   title?: string;
+  isNextLoading?: boolean;
   style?: ViewStyle;
 };
 
-const Footer = ({ onPress, hasError, title = "ورود", style }: FooterProps) => {
+const Footer = ({
+  onPress,
+  hasError,
+  title = "ورود",
+  style,
+  isNextLoading,
+}: FooterProps) => {
   return (
     <ThemedView style={[styles.button, style]}>
       <ThemedButton
@@ -22,6 +29,7 @@ const Footer = ({ onPress, hasError, title = "ورود", style }: FooterProps) =
         onPress={onPress}
         disabledColor={Colors.hint50}
         disabledTextColor={Colors.mediumGray}
+        isLoading={isNextLoading}
       />
       <Text style={styles.txt}>
         ورود به منزله پذیرش

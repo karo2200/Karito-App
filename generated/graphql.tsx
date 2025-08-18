@@ -1,10 +1,10 @@
 import {
+  useMutation,
   useQuery,
-  useInfiniteQuery,
+  UseMutationOptions,
   UseQueryOptions,
-  UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
-import { fetcher } from "graphql/fetcher";
+import { fetcher } from "@/graphql/fetcher";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -1439,6 +1439,33 @@ export type UuidOperationFilterInput = {
   nlte?: InputMaybe<Scalars["UUID"]["input"]>;
 };
 
+export type Auth_RequestOtpMutationVariables = Exact<{
+  phoneNumber: Scalars["String"]["input"];
+  userType: UserType;
+}>;
+
+export type Auth_RequestOtpMutation = {
+  __typename?: "Mutation";
+  auth_requestOtp: {
+    __typename?: "ResponseBase";
+    status: { __typename?: "ResponseStatus"; code: number; value: string };
+  };
+};
+
+export type Auth_VerifyOtpMutationVariables = Exact<{
+  phoneNumber: Scalars["String"]["input"];
+  userType: UserType;
+  otp: Scalars["String"]["input"];
+}>;
+
+export type Auth_VerifyOtpMutation = {
+  __typename?: "Mutation";
+  auth_verifyOtp: {
+    __typename?: "ResponseBaseOfAuthResult";
+    status: { __typename?: "ResponseStatus"; code: number; value: string };
+  };
+};
+
 export type User_GetMyProfileQueryVariables = Exact<{ [key: string]: never }>;
 
 export type User_GetMyProfileQuery = {
@@ -1452,6 +1479,79 @@ export type User_GetMyProfileQuery = {
       phoneNumber: string;
     } | null;
   };
+};
+
+export const Auth_RequestOtpDocument = `
+    mutation auth_requestOtp($phoneNumber: String!, $userType: UserType!) {
+  auth_requestOtp(phoneNumber: $phoneNumber, userType: $userType) {
+    status {
+      code
+      value
+    }
+  }
+}
+    `;
+
+export const useAuth_RequestOtpMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    Auth_RequestOtpMutation,
+    TError,
+    Auth_RequestOtpMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Auth_RequestOtpMutation,
+    TError,
+    Auth_RequestOtpMutationVariables,
+    TContext
+  >({
+    mutationKey: ["auth_requestOtp"],
+    mutationFn: (variables?: Auth_RequestOtpMutationVariables) =>
+      fetcher<Auth_RequestOtpMutation, Auth_RequestOtpMutationVariables>(
+        Auth_RequestOtpDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
+
+export const Auth_VerifyOtpDocument = `
+    mutation auth_verifyOtp($phoneNumber: String!, $userType: UserType!, $otp: String!) {
+  auth_verifyOtp(phoneNumber: $phoneNumber, userType: $userType, otp: $otp) {
+    status {
+      code
+      value
+    }
+  }
+}
+    `;
+
+export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    Auth_VerifyOtpMutation,
+    TError,
+    Auth_VerifyOtpMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Auth_VerifyOtpMutation,
+    TError,
+    Auth_VerifyOtpMutationVariables,
+    TContext
+  >({
+    mutationKey: ["auth_verifyOtp"],
+    mutationFn: (variables?: Auth_VerifyOtpMutationVariables) =>
+      fetcher<Auth_VerifyOtpMutation, Auth_VerifyOtpMutationVariables>(
+        Auth_VerifyOtpDocument,
+        variables,
+      )(),
+    ...options,
+  });
 };
 
 export const User_GetMyProfileDocument = `
@@ -1474,36 +1574,26 @@ export const useUser_GetMyProfileQuery = <
   TError = unknown,
 >(
   variables?: User_GetMyProfileQueryVariables,
-  options?: UseQueryOptions<User_GetMyProfileQuery, TError, TData>,
+  options?: Omit<
+    UseQueryOptions<User_GetMyProfileQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      User_GetMyProfileQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
 ) => {
-  return useQuery<User_GetMyProfileQuery, TError, TData>(
-    variables === undefined
-      ? ["user_getMyProfile"]
-      : ["user_getMyProfile", variables],
-    fetcher<User_GetMyProfileQuery, User_GetMyProfileQueryVariables>(
+  return useQuery<User_GetMyProfileQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["user_getMyProfile"]
+        : ["user_getMyProfile", variables],
+    queryFn: fetcher<User_GetMyProfileQuery, User_GetMyProfileQueryVariables>(
       User_GetMyProfileDocument,
       variables,
     ),
-    options,
-  );
-};
-
-export const useInfiniteUser_GetMyProfileQuery = <
-  TData = User_GetMyProfileQuery,
-  TError = unknown,
->(
-  variables?: User_GetMyProfileQueryVariables,
-  options?: UseInfiniteQueryOptions<User_GetMyProfileQuery, TError, TData>,
-) => {
-  return useInfiniteQuery<User_GetMyProfileQuery, TError, TData>(
-    variables === undefined
-      ? ["user_getMyProfile.infinite"]
-      : ["user_getMyProfile.infinite", variables],
-    (metaData) =>
-      fetcher<User_GetMyProfileQuery, User_GetMyProfileQueryVariables>(
-        User_GetMyProfileDocument,
-        { ...variables, ...(metaData.pageParam ?? {}) },
-      )(),
-    options,
-  );
+    ...options,
+  });
 };

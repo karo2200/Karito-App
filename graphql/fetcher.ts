@@ -15,7 +15,7 @@ async function graphqlFetcher<T extends QueryType>(
   return await graphQLClient.request(GQL, args);
 }
 
-export function fetcher(query: string, variables?: any) {
+export function fetcher<TData, TVariables>(query: string, variables?: any) {
   count = count += 1;
   return async (): Promise<any> => {
     const accessToken = authCacheStore?.getState()?.accessToken;

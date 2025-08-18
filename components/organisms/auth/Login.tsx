@@ -8,8 +8,8 @@ import { CustomImage } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
-import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
+import useLoginHook from "./login.hook";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
 
@@ -21,21 +21,19 @@ const schema = yup.object().shape({
 });
 
 const LoginSection = () => {
-  const router = useRouter();
+  const { isSendingCode, onDoLogin } = useLoginHook();
+
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
   });
+
   const {
     handleSubmit,
     register,
     formState: { errors },
     getValues,
   } = methods;
-
-  const onPress = (formData: any) => {
-    router.push(`/OTPScreen?phone=${formData?.phone}`);
-  };
 
   return (
     <KeyboardAutoHide>
@@ -55,7 +53,8 @@ const LoginSection = () => {
           />
         </View>
         <Footer
-          onPress={handleSubmit(onPress)}
+          onPress={handleSubmit(onDoLogin)}
+          isNextLoading={isSendingCode}
           hasError={
             errors?.["phone"]?.message?.length > 0 ||
             getValues("phone")?.length < 1 ||
