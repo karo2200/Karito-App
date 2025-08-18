@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import CustomRadioButton from "./CustomRadioButton";
+import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
 
 type Option = { label: string; value: string };
@@ -81,11 +82,11 @@ const SearchSelect = forwardRef<any, Props>(
             <FlatList
               data={filtered}
               keyExtractor={(item) => item.value}
+              contentContainerStyle={{ paddingBottom: 50 }}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => {
                     field.onChange(item.value);
-                    actionSheetRef.current?.hide();
                   }}
                   style={styles.selectBtn}
                 >
@@ -94,13 +95,17 @@ const SearchSelect = forwardRef<any, Props>(
                     checked={item.value === field.value}
                     onPress={() => {
                       field.onChange(item.value);
-                      actionSheetRef.current?.hide();
                     }}
                   />
                 </TouchableOpacity>
               )}
             />
           </View>
+          <ThemedButton
+            title="انتخاب"
+            fontType="bold"
+            onPress={() => actionSheetRef.current?.hide()}
+          />
         </ActionSheet>
       </View>
     );

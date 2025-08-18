@@ -1,4 +1,3 @@
-import { useCity_GetAllQuery } from "@/generated/graphql";
 import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -8,8 +7,8 @@ export default function useHomeHook() {
 
   const { isSelectRole } = useUserStore();
 
-  const { data } = useCity_GetAllQuery();
-  console.log("ddddd", data);
+  //   const { data } = useCity_GetAllQuery({ take: 200 });
+  //   console.log("ddddd", data);
   const [selectRoleVisible, setSelectRoleVisibe] = useState<boolean>(false);
 
   useEffect(() => {
