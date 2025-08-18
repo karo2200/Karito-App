@@ -1,0 +1,12 @@
+query user_getMyProfile {
+  user_getMyProfile {
+    status {
+      code
+      value
+    }
+    result {
+      id
+      phoneNumber
+    }
+  }
+}

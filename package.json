@@ -8,11 +8,16 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "generate:ts": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@expo/server": "^0.6.3",
     "@expo/vector-icons": "^14.1.0",
+    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-operations": "^4.6.1",
+    "@graphql-codegen/typescript-react-query": "^6.1.1",
     "@hookform/resolvers": "^5.2.1",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
@@ -39,6 +44,7 @@
     "expo-system-ui": "~5.0.10",
     "expo-web-browser": "~14.2.0",
     "iconsax-react-native": "^0.0.8",
+    "prettier": "^3.6.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hook-form": "^7.62.0",
@@ -47,6 +53,7 @@
     "react-native-confirmation-code-field": "^8.0.1",
     "react-native-datetimepicker-pro": "^1.0.4",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-mmkv": "^3.3.0",
     "react-native-reanimated": "~3.17.4",
     "react-native-reanimated-carousel": "^4.0.2",
     "react-native-safe-area-context": "5.4.0",
