@@ -11,6 +11,8 @@ generates:
       - typescript-operations
       - typescript-react-query
     config:
-      addInfiniteQuery: true
+      addInfiniteQuery: false
+      reactQueryVersion: "5"
+      addSuspeneQuery: true
       fetcher:
-        func: "graphql/fetcher#fetcher"
+        func: "@/graphql/fetcher#fetcher"
