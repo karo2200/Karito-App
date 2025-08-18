@@ -1,4 +1,5 @@
 import { ToastProvider } from "@/components/atoms/Toast";
+import AuthProvider from "@/graphql/AuthProvider";
 import useNetworkStatus from "@/hooks/useNetworkStatus";
 import useUserStore from "@/stores/loginStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
@@ -43,60 +44,62 @@ export default function RootLayout() {
 
   return (
     <ToastProvider>
-      <ThemeProvider value={MyTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Protected guard={isLoggedIn && isExpert}>
-            <Stack.Screen name="(expertTabs)" />
-          </Stack.Protected>
-          <Stack.Protected guard={!isExpert}>
-            <Stack.Screen name="(tabs)" />
-          </Stack.Protected>
+      <AuthProvider>
+        <ThemeProvider value={MyTheme}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Protected guard={isLoggedIn && isExpert}>
+              <Stack.Screen name="(expertTabs)" />
+            </Stack.Protected>
+            <Stack.Protected guard={!isExpert}>
+              <Stack.Screen name="(tabs)" />
+            </Stack.Protected>
 
-          <Stack.Protected guard={!isLoggedIn && !isExpert}>
-            <Stack.Screen name="LoginPage" />
-            <Stack.Screen name="OTPScreen" />
-          </Stack.Protected>
+            <Stack.Protected guard={!isLoggedIn && !isExpert}>
+              <Stack.Screen name="LoginPage" />
+              <Stack.Screen name="OTPScreen" />
+            </Stack.Protected>
 
-          <Stack.Protected guard={!isLoggedIn && isExpert}>
-            <Stack.Screen
-              name="ExpertLoginPage"
-              options={{
-                headerShown: true,
-                title: "",
-                headerRight: () => <RightIcon />,
-                headerLeft: () => <></>,
-              }}
-            />
-            <Stack.Screen
-              name="ExpertRegisterPage"
-              options={{
-                headerShown: true,
-                title: "",
-                headerRight: () => <RightIcon />,
-                headerLeft: () => <></>,
-              }}
-            />
-            <Stack.Screen
-              name="PersonalInfoPage"
-              options={{
-                headerShown: true,
-                title: "",
-                headerRight: () => <RightIcon />,
-                headerLeft: () => <></>,
-              }}
-            />
-            <Stack.Screen
-              name="CertificateInfoPage"
-              options={{
-                headerShown: true,
-                title: "",
-                headerRight: () => <RightIcon />,
-                headerLeft: () => <></>,
-              }}
-            />
-          </Stack.Protected>
-        </Stack>
-      </ThemeProvider>
+            <Stack.Protected guard={!isLoggedIn && isExpert}>
+              <Stack.Screen
+                name="ExpertLoginPage"
+                options={{
+                  headerShown: true,
+                  title: "",
+                  headerRight: () => <RightIcon />,
+                  headerLeft: () => <></>,
+                }}
+              />
+              <Stack.Screen
+                name="ExpertRegisterPage"
+                options={{
+                  headerShown: true,
+                  title: "",
+                  headerRight: () => <RightIcon />,
+                  headerLeft: () => <></>,
+                }}
+              />
+              <Stack.Screen
+                name="PersonalInfoPage"
+                options={{
+                  headerShown: true,
+                  title: "",
+                  headerRight: () => <RightIcon />,
+                  headerLeft: () => <></>,
+                }}
+              />
+              <Stack.Screen
+                name="CertificateInfoPage"
+                options={{
+                  headerShown: true,
+                  title: "",
+                  headerRight: () => <RightIcon />,
+                  headerLeft: () => <></>,
+                }}
+              />
+            </Stack.Protected>
+          </Stack>
+        </ThemeProvider>
+      </AuthProvider>
     </ToastProvider>
   );
 }

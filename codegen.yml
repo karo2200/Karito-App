@@ -1,0 +1,16 @@
+overwrite: true
+schema: "http://193.151.152.161:8081/graphql"
+hooks:
+  afterAllFileWrite:
+    - prettier --write
+documents: "graphql/**/*.gql"
+generates:
+  generated/graphql.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      addInfiniteQuery: true
+      fetcher:
+        func: "graphql/fetcher#fetcher"
