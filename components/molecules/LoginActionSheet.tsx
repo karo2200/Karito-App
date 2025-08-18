@@ -11,16 +11,27 @@ import {
   View,
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import useHomeHook from "../organisms/home/hooks/Home.hook";
 
 const { height, width } = Dimensions.get("window");
 
 export default function LoginActionSheet() {
-  const { setIsExpert, isExpert } = useUserStore();
+  const { setIsExpert, isExpert, setIsSelectRole } = useUserStore();
+
+  const { selectRoleVisible, setSelectRoleVisibe } = useHomeHook();
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   useEffect(() => {
-    actionSheetRef.current?.show();
+    const interval = setInterval(() => {
+      actionSheetRef.current?.show();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    actionSheetRef.current?.show();
+  }, [selectRoleVisible]);
 
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
@@ -28,11 +39,15 @@ export default function LoginActionSheet() {
 
   const loginAsExpert = () => {
     setIsExpert(true);
+    setIsSelectRole(true);
+    setSelectRoleVisibe(false);
     closeActionSheet();
   };
 
   const loginAsCustomer = () => {
     setIsExpert(false);
+    setIsSelectRole(true);
+    setSelectRoleVisibe(false);
     closeActionSheet();
   };
 
@@ -134,7 +149,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 8,
     width: "48%",
-},
+  },
   container: {
     minHeight: height / 3.5,
     width: Platform.OS === "web" ? Math.min(width, 480) : "100%",

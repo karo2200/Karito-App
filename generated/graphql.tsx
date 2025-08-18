@@ -4,7 +4,7 @@ import {
   UseQueryOptions,
   UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
-import { fetcher } from "graphql/fetcher";
+import { fetcher } from "../graphql/fetcher";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -1439,6 +1439,32 @@ export type UuidOperationFilterInput = {
   nlte?: InputMaybe<Scalars["UUID"]["input"]>;
 };
 
+export type City_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<CityDtoFilterInput>;
+  order?: InputMaybe<Array<CityDtoSortInput> | CityDtoSortInput>;
+}>;
+
+export type City_GetAllQuery = {
+  __typename?: "Query";
+  city_getAll?: {
+    __typename?: "City_getAllCollectionSegment";
+    items?: Array<{
+      __typename?: "CityDto";
+      id: any;
+      isActive: boolean;
+      name: string;
+      provinceId: any;
+    }> | null;
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  } | null;
+};
+
 export type User_GetMyProfileQueryVariables = Exact<{ [key: string]: never }>;
 
 export type User_GetMyProfileQuery = {
@@ -1452,6 +1478,57 @@ export type User_GetMyProfileQuery = {
       phoneNumber: string;
     } | null;
   };
+};
+
+export const City_GetAllDocument = `
+    query city_getAll($skip: Int, $take: Int, $where: CityDtoFilterInput, $order: [CityDtoSortInput!]) {
+  city_getAll(skip: $skip, take: $take, where: $where, order: $order) {
+    items {
+      id
+      isActive
+      name
+      provinceId
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+
+export const useCity_GetAllQuery = <TData = City_GetAllQuery, TError = unknown>(
+  variables?: City_GetAllQueryVariables,
+  options?: UseQueryOptions<City_GetAllQuery, TError, TData>,
+) => {
+  return useQuery<City_GetAllQuery, TError, TData>(
+    variables === undefined ? ["city_getAll"] : ["city_getAll", variables],
+    fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
+      City_GetAllDocument,
+      variables,
+    ),
+    options,
+  );
+};
+
+export const useInfiniteCity_GetAllQuery = <
+  TData = City_GetAllQuery,
+  TError = unknown,
+>(
+  variables?: City_GetAllQueryVariables,
+  options?: UseInfiniteQueryOptions<City_GetAllQuery, TError, TData>,
+) => {
+  return useInfiniteQuery<City_GetAllQuery, TError, TData>(
+    variables === undefined
+      ? ["city_getAll.infinite"]
+      : ["city_getAll.infinite", variables],
+    (metaData) =>
+      fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
+        City_GetAllDocument,
+        { ...variables, ...(metaData.pageParam ?? {}) },
+      )(),
+    options,
+  );
 };
 
 export const User_GetMyProfileDocument = `
