@@ -1474,6 +1474,32 @@ export type Auth_VerifyOtpMutation = {
   };
 };
 
+export type City_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<CityDtoFilterInput>;
+  order?: InputMaybe<Array<CityDtoSortInput> | CityDtoSortInput>;
+}>;
+
+export type City_GetAllQuery = {
+  __typename?: "Query";
+  city_getAll?: {
+    __typename?: "City_getAllCollectionSegment";
+    items?: Array<{
+      __typename?: "CityDto";
+      id: any;
+      isActive: boolean;
+      name: string;
+      provinceId: any;
+    }> | null;
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  } | null;
+};
+
 export type ServiceCategory_GetServiceCategoriesQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -1674,6 +1700,78 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
       )(),
     ...options,
   });
+};
+
+export const City_GetAllDocument = `
+    query city_getAll($skip: Int, $take: Int, $where: CityDtoFilterInput, $order: [CityDtoSortInput!]) {
+  city_getAll(skip: $skip, take: $take, where: $where, order: $order) {
+    items {
+      id
+      isActive
+      name
+      provinceId
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+
+export const useCity_GetAllQuery = <TData = City_GetAllQuery, TError = unknown>(
+  variables?: City_GetAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<City_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<City_GetAllQuery, TError, TData>["queryKey"];
+  },
+) => {
+  return useQuery<City_GetAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined ? ["city_getAll"] : ["city_getAll", variables],
+    queryFn: fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
+      City_GetAllDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
+
+export const useInfiniteCity_GetAllQuery = <
+  TData = InfiniteData<City_GetAllQuery>,
+  TError = unknown,
+>(
+  variables: City_GetAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<City_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      City_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<City_GetAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["city_getAll.infinite"]
+            : ["city_getAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
+            City_GetAllDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
 };
 
 export const ServiceCategory_GetServiceCategoriesDocument = `

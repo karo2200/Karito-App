@@ -5,11 +5,17 @@ import Banner from "./Views/Banner";
 import Categories from "./Views/Categories";
 import HorizontalServiceList from "./Views/HorizontalServiceList";
 import HorizontalSpeciaLists from "./Views/HorizontalSpeciaLists";
+import useHomeHook from "./hooks/Home.hook";
 
 export default function HomeScreen() {
+  const { data, selectRoleVisible, setSelectRoleVisibe } = useHomeHook();
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <LoginActionSheet />
+      <LoginActionSheet
+        visible={selectRoleVisible}
+        setVisible={() => setSelectRoleVisibe(false)}
+      />
       <Categories />
       <Banner />
       <HorizontalServiceList

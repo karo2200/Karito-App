@@ -54,12 +54,12 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" />
             </Stack.Protected>
 
-            <Stack.Protected guard={!isLoggedIn && isExpert}>
+            <Stack.Protected guard={!isLoggedIn && !isExpert}>
               <Stack.Screen name="LoginPage" />
               <Stack.Screen name="OTPScreen" />
             </Stack.Protected>
 
-            <Stack.Protected guard={!isLoggedIn && !isExpert}>
+            <Stack.Protected guard={!isLoggedIn && isExpert}>
               <Stack.Screen
                 name="ExpertLoginPage"
                 options={{
