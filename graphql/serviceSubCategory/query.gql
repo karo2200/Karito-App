@@ -2,14 +2,14 @@ query serviceSubCategory_getAll(
   $skip: Int
   $take: Int
   $order: [ServiceSubCategoryDtoSortInput!]
-  $where: ServiceSubCategoryDtoFilterInput
-) {
+) #$where: ServiceSubCategoryDtoFilterInput
+{
   serviceSubCategory_getAll(
     skip: $skip
     take: $take
     order: $order
-    where: $where
-  ) {
+  ) #where: $where
+  {
     pageInfo {
       hasNextPage
       hasPreviousPage

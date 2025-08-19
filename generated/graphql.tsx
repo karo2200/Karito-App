@@ -1506,7 +1506,6 @@ export type ServiceCategory_GetServiceCategoriesQueryVariables = Exact<{
   order?: InputMaybe<
     Array<ServiceCategoryDtoSortInput> | ServiceCategoryDtoSortInput
   >;
-  where?: InputMaybe<ServiceCategoryDtoFilterInput>;
 }>;
 
 export type ServiceCategory_GetServiceCategoriesQuery = {
@@ -1547,7 +1546,6 @@ export type ServiceSubCategory_GetAllQueryVariables = Exact<{
   order?: InputMaybe<
     Array<ServiceSubCategoryDtoSortInput> | ServiceSubCategoryDtoSortInput
   >;
-  where?: InputMaybe<ServiceSubCategoryDtoFilterInput>;
 }>;
 
 export type ServiceSubCategory_GetAllQuery = {
@@ -1803,13 +1801,8 @@ export const useInfiniteCity_GetAllQuery = <
 };
 
 export const ServiceCategory_GetServiceCategoriesDocument = `
-    query serviceCategory_getServiceCategories($skip: Int, $take: Int, $order: [ServiceCategoryDtoSortInput!], $where: ServiceCategoryDtoFilterInput) {
-  serviceCategory_getServiceCategories(
-    skip: $skip
-    take: $take
-    order: $order
-    where: $where
-  ) {
+    query serviceCategory_getServiceCategories($skip: Int, $take: Int, $order: [ServiceCategoryDtoSortInput!]) {
+  serviceCategory_getServiceCategories(skip: $skip, take: $take, order: $order) {
     pageInfo {
       hasNextPage
       hasPreviousPage
@@ -1981,13 +1974,8 @@ export const useInfiniteServiceCategory_GetServiceCategoryQuery = <
 };
 
 export const ServiceSubCategory_GetAllDocument = `
-    query serviceSubCategory_getAll($skip: Int, $take: Int, $order: [ServiceSubCategoryDtoSortInput!], $where: ServiceSubCategoryDtoFilterInput) {
-  serviceSubCategory_getAll(
-    skip: $skip
-    take: $take
-    order: $order
-    where: $where
-  ) {
+    query serviceSubCategory_getAll($skip: Int, $take: Int, $order: [ServiceSubCategoryDtoSortInput!]) {
+  serviceSubCategory_getAll(skip: $skip, take: $take, order: $order) {
     pageInfo {
       hasNextPage
       hasPreviousPage
