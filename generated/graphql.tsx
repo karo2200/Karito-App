@@ -1,8 +1,11 @@
 import {
   useMutation,
   useQuery,
+  useInfiniteQuery,
   UseMutationOptions,
   UseQueryOptions,
+  UseInfiniteQueryOptions,
+  InfiniteData,
 } from "@tanstack/react-query";
 import { fetcher } from "@/graphql/fetcher";
 export type Maybe<T> = T | null;
@@ -1463,6 +1466,11 @@ export type Auth_VerifyOtpMutation = {
   auth_verifyOtp: {
     __typename?: "ResponseBaseOfAuthResult";
     status: { __typename?: "ResponseStatus"; code: number; value: string };
+    result?: {
+      __typename?: "AuthResult";
+      accessToken: string;
+      refreshToken: string;
+    } | null;
   };
 };
 
@@ -1489,6 +1497,116 @@ export type City_GetAllQuery = {
       hasNextPage: boolean;
       hasPreviousPage: boolean;
     };
+  } | null;
+};
+
+export type ServiceCategory_GetServiceCategoriesQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  order?: InputMaybe<
+    Array<ServiceCategoryDtoSortInput> | ServiceCategoryDtoSortInput
+  >;
+  where?: InputMaybe<ServiceCategoryDtoFilterInput>;
+}>;
+
+export type ServiceCategory_GetServiceCategoriesQuery = {
+  __typename?: "Query";
+  serviceCategory_getServiceCategories?: {
+    __typename?: "ServiceCategory_getServiceCategoriesCollectionSegment";
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    items?: Array<{
+      __typename?: "ServiceCategoryDto";
+      name: string;
+      logo: string;
+      id: any;
+    }> | null;
+  } | null;
+};
+
+export type ServiceCategory_GetServiceCategoryQueryVariables = Exact<{
+  id: Scalars["UUID"]["input"];
+}>;
+
+export type ServiceCategory_GetServiceCategoryQuery = {
+  __typename?: "Query";
+  serviceCategory_getServiceCategory: {
+    __typename?: "ServiceCategoryDto";
+    name: string;
+    logo: string;
+    id: any;
+  };
+};
+
+export type ServiceSubCategory_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  order?: InputMaybe<
+    Array<ServiceSubCategoryDtoSortInput> | ServiceSubCategoryDtoSortInput
+  >;
+  where?: InputMaybe<ServiceSubCategoryDtoFilterInput>;
+}>;
+
+export type ServiceSubCategory_GetAllQuery = {
+  __typename?: "Query";
+  serviceSubCategory_getAll?: {
+    __typename?: "ServiceSubCategory_getAllCollectionSegment";
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    items?: Array<{
+      __typename?: "ServiceSubCategoryDto";
+      id: any;
+      logo: string;
+      name: string;
+      serviceCategoryId: any;
+    }> | null;
+  } | null;
+};
+
+export type ServiceSubCategory_GetQueryVariables = Exact<{
+  id: Scalars["UUID"]["input"];
+}>;
+
+export type ServiceSubCategory_GetQuery = {
+  __typename?: "Query";
+  serviceSubCategory_get: {
+    __typename?: "ServiceSubCategoryDto";
+    id: any;
+    logo: string;
+    name: string;
+    serviceCategoryId: any;
+  };
+};
+
+export type ServiceTypes_GatAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  order?: InputMaybe<Array<ServiceTypeDtoSortInput> | ServiceTypeDtoSortInput>;
+  where?: InputMaybe<ServiceTypeDtoFilterInput>;
+}>;
+
+export type ServiceTypes_GatAllQuery = {
+  __typename?: "Query";
+  serviceTypes_gatAll?: {
+    __typename?: "ServiceTypes_gatAllCollectionSegment";
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+    items?: Array<{
+      __typename?: "ServiceTypeDto";
+      name: string;
+      logo: string;
+      id: any;
+      serviceSubCategoryId: any;
+    }> | null;
   } | null;
 };
 
@@ -1551,6 +1669,10 @@ export const Auth_VerifyOtpDocument = `
     status {
       code
       value
+    }
+    result {
+      accessToken
+      refreshToken
     }
   }
 }
@@ -1617,6 +1739,464 @@ export const useCity_GetAllQuery = <TData = City_GetAllQuery, TError = unknown>(
   });
 };
 
+export const useInfiniteCity_GetAllQuery = <
+  TData = InfiniteData<City_GetAllQuery>,
+  TError = unknown,
+>(
+  variables: City_GetAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<City_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      City_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<City_GetAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["city_getAll.infinite"]
+            : ["city_getAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
+            City_GetAllDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceCategory_GetServiceCategoriesDocument = `
+    query serviceCategory_getServiceCategories($skip: Int, $take: Int, $order: [ServiceCategoryDtoSortInput!], $where: ServiceCategoryDtoFilterInput) {
+  serviceCategory_getServiceCategories(
+    skip: $skip
+    take: $take
+    order: $order
+    where: $where
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+    items {
+      name
+      logo
+      id
+    }
+  }
+}
+    `;
+
+export const useServiceCategory_GetServiceCategoriesQuery = <
+  TData = ServiceCategory_GetServiceCategoriesQuery,
+  TError = unknown,
+>(
+  variables?: ServiceCategory_GetServiceCategoriesQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceCategory_GetServiceCategoriesQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceCategory_GetServiceCategoriesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceCategory_GetServiceCategoriesQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["serviceCategory_getServiceCategories"]
+        : ["serviceCategory_getServiceCategories", variables],
+    queryFn: fetcher<
+      ServiceCategory_GetServiceCategoriesQuery,
+      ServiceCategory_GetServiceCategoriesQueryVariables
+    >(ServiceCategory_GetServiceCategoriesDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceCategory_GetServiceCategoriesQuery = <
+  TData = InfiniteData<ServiceCategory_GetServiceCategoriesQuery>,
+  TError = unknown,
+>(
+  variables: ServiceCategory_GetServiceCategoriesQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      ServiceCategory_GetServiceCategoriesQuery,
+      TError,
+      TData
+    >,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceCategory_GetServiceCategoriesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<
+    ServiceCategory_GetServiceCategoriesQuery,
+    TError,
+    TData
+  >(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["serviceCategory_getServiceCategories.infinite"]
+            : ["serviceCategory_getServiceCategories.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceCategory_GetServiceCategoriesQuery,
+            ServiceCategory_GetServiceCategoriesQueryVariables
+          >(ServiceCategory_GetServiceCategoriesDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceCategory_GetServiceCategoryDocument = `
+    query serviceCategory_getServiceCategory($id: UUID!) {
+  serviceCategory_getServiceCategory(id: $id) {
+    name
+    logo
+    id
+  }
+}
+    `;
+
+export const useServiceCategory_GetServiceCategoryQuery = <
+  TData = ServiceCategory_GetServiceCategoryQuery,
+  TError = unknown,
+>(
+  variables: ServiceCategory_GetServiceCategoryQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceCategory_GetServiceCategoryQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceCategory_GetServiceCategoryQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceCategory_GetServiceCategoryQuery, TError, TData>({
+    queryKey: ["serviceCategory_getServiceCategory", variables],
+    queryFn: fetcher<
+      ServiceCategory_GetServiceCategoryQuery,
+      ServiceCategory_GetServiceCategoryQueryVariables
+    >(ServiceCategory_GetServiceCategoryDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceCategory_GetServiceCategoryQuery = <
+  TData = InfiniteData<ServiceCategory_GetServiceCategoryQuery>,
+  TError = unknown,
+>(
+  variables: ServiceCategory_GetServiceCategoryQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      ServiceCategory_GetServiceCategoryQuery,
+      TError,
+      TData
+    >,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceCategory_GetServiceCategoryQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<
+    ServiceCategory_GetServiceCategoryQuery,
+    TError,
+    TData
+  >(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "serviceCategory_getServiceCategory.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceCategory_GetServiceCategoryQuery,
+            ServiceCategory_GetServiceCategoryQueryVariables
+          >(ServiceCategory_GetServiceCategoryDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceSubCategory_GetAllDocument = `
+    query serviceSubCategory_getAll($skip: Int, $take: Int, $order: [ServiceSubCategoryDtoSortInput!], $where: ServiceSubCategoryDtoFilterInput) {
+  serviceSubCategory_getAll(
+    skip: $skip
+    take: $take
+    order: $order
+    where: $where
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+    items {
+      id
+      logo
+      name
+      serviceCategoryId
+    }
+  }
+}
+    `;
+
+export const useServiceSubCategory_GetAllQuery = <
+  TData = ServiceSubCategory_GetAllQuery,
+  TError = unknown,
+>(
+  variables?: ServiceSubCategory_GetAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceSubCategory_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceSubCategory_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceSubCategory_GetAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["serviceSubCategory_getAll"]
+        : ["serviceSubCategory_getAll", variables],
+    queryFn: fetcher<
+      ServiceSubCategory_GetAllQuery,
+      ServiceSubCategory_GetAllQueryVariables
+    >(ServiceSubCategory_GetAllDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceSubCategory_GetAllQuery = <
+  TData = InfiniteData<ServiceSubCategory_GetAllQuery>,
+  TError = unknown,
+>(
+  variables: ServiceSubCategory_GetAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<ServiceSubCategory_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceSubCategory_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<ServiceSubCategory_GetAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["serviceSubCategory_getAll.infinite"]
+            : ["serviceSubCategory_getAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceSubCategory_GetAllQuery,
+            ServiceSubCategory_GetAllQueryVariables
+          >(ServiceSubCategory_GetAllDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceSubCategory_GetDocument = `
+    query serviceSubCategory_get($id: UUID!) {
+  serviceSubCategory_get(id: $id) {
+    id
+    logo
+    name
+    serviceCategoryId
+  }
+}
+    `;
+
+export const useServiceSubCategory_GetQuery = <
+  TData = ServiceSubCategory_GetQuery,
+  TError = unknown,
+>(
+  variables: ServiceSubCategory_GetQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceSubCategory_GetQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceSubCategory_GetQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceSubCategory_GetQuery, TError, TData>({
+    queryKey: ["serviceSubCategory_get", variables],
+    queryFn: fetcher<
+      ServiceSubCategory_GetQuery,
+      ServiceSubCategory_GetQueryVariables
+    >(ServiceSubCategory_GetDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceSubCategory_GetQuery = <
+  TData = InfiniteData<ServiceSubCategory_GetQuery>,
+  TError = unknown,
+>(
+  variables: ServiceSubCategory_GetQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<ServiceSubCategory_GetQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceSubCategory_GetQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<ServiceSubCategory_GetQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "serviceSubCategory_get.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceSubCategory_GetQuery,
+            ServiceSubCategory_GetQueryVariables
+          >(ServiceSubCategory_GetDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceTypes_GatAllDocument = `
+    query serviceTypes_gatAll($skip: Int, $take: Int, $order: [ServiceTypeDtoSortInput!], $where: ServiceTypeDtoFilterInput) {
+  serviceTypes_gatAll(skip: $skip, take: $take, order: $order, where: $where) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+    items {
+      name
+      logo
+      id
+      serviceSubCategoryId
+    }
+  }
+}
+    `;
+
+export const useServiceTypes_GatAllQuery = <
+  TData = ServiceTypes_GatAllQuery,
+  TError = unknown,
+>(
+  variables?: ServiceTypes_GatAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceTypes_GatAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceTypes_GatAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceTypes_GatAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["serviceTypes_gatAll"]
+        : ["serviceTypes_gatAll", variables],
+    queryFn: fetcher<
+      ServiceTypes_GatAllQuery,
+      ServiceTypes_GatAllQueryVariables
+    >(ServiceTypes_GatAllDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceTypes_GatAllQuery = <
+  TData = InfiniteData<ServiceTypes_GatAllQuery>,
+  TError = unknown,
+>(
+  variables: ServiceTypes_GatAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<ServiceTypes_GatAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceTypes_GatAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<ServiceTypes_GatAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["serviceTypes_gatAll.infinite"]
+            : ["serviceTypes_gatAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<ServiceTypes_GatAllQuery, ServiceTypes_GatAllQueryVariables>(
+            ServiceTypes_GatAllDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
 export const User_GetMyProfileDocument = `
     query user_getMyProfile {
   user_getMyProfile {
@@ -1659,4 +2239,39 @@ export const useUser_GetMyProfileQuery = <
     ),
     ...options,
   });
+};
+
+export const useInfiniteUser_GetMyProfileQuery = <
+  TData = InfiniteData<User_GetMyProfileQuery>,
+  TError = unknown,
+>(
+  variables: User_GetMyProfileQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<User_GetMyProfileQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      User_GetMyProfileQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<User_GetMyProfileQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["user_getMyProfile.infinite"]
+            : ["user_getMyProfile.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<User_GetMyProfileQuery, User_GetMyProfileQueryVariables>(
+            User_GetMyProfileDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
 };
