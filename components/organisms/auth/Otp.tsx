@@ -10,9 +10,8 @@ import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
-import useUserStore from "@/stores/loginStore";
-import { useRoute } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
+import useOtpHook from "./hooks/otp.hook";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
 
@@ -24,10 +23,7 @@ const schema = yup.object().shape({
 });
 
 const OTPSection = () => {
-  const { setIsExpert, setIsLoggedIn } = useUserStore();
-  const { params } = useRoute();
-
-  const phoneNumber = params?.phone;
+  const { isVerifying, onDoLogin, phoneNumber } = useOtpHook();
 
   const [isTimerActive, setIsTimerActive] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(60);
@@ -57,11 +53,6 @@ const OTPSection = () => {
     formState: { errors },
   } = methods;
 
-  const onPress = (formData: any) => {
-    setIsExpert(false);
-    setIsLoggedIn(true);
-  };
-
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
       .toString()
@@ -82,13 +73,7 @@ const OTPSection = () => {
           <ThemedText style={styles.subtitle}>
             {`لطفا کد چهار رقمی ارسال شده به شماره ${phoneNumber} را وارد کنید`}
           </ThemedText>
-          <ThemedView
-            style={{
-              alignSelf: "center",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <ThemedView style={styles.codeContainer}>
             <ThemedCodeFeild length={4} name="otpCode" />
             {isTimerActive ? (
               <ThemedText
@@ -110,7 +95,8 @@ const OTPSection = () => {
           </ThemedView>
         </View>
         <Footer
-          onPress={handleSubmit(onPress)}
+          onPress={handleSubmit(onDoLogin)}
+          isNextLoading={isVerifying}
           hasError={
             errors?.["otpCode"]?.message?.length > 0 ||
             !getValues("otpCode") ||
@@ -152,5 +138,11 @@ const styles = StyleSheet.create({
     height: DeviceHeight * 0.6,
     position: "absolute",
     zIndex: 1,
+  },
+
+  codeContainer: {
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

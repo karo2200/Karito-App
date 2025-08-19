@@ -17,5 +17,9 @@ mutation auth_verifyOtp(
       code
       value
     }
+    result {
+      accessToken
+      refreshToken
+    }
   }
 }
