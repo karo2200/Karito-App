@@ -38,7 +38,12 @@ export default function OrderScreen() {
   return (
     <View>
       {/* Tab Bar */}
-      <View style={styles.tabContainer}>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        contentContainerStyle={styles.tabContainer}
+        showsHorizontalScrollIndicator={false}
+      >
         {tabs.map((tab, index) => (
           <TouchableOpacity key={index} onPress={() => onTabPress(index)}>
             <ThemedText
@@ -53,7 +58,7 @@ export default function OrderScreen() {
             {activeTab === index && <View style={styles.tabButtonActive} />}
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
 
       {/* Tab Content */}
       <ScrollView

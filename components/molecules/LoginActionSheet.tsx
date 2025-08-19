@@ -1,7 +1,6 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import useUserStore from "@/stores/loginStore";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { memo } from "react";
 import {
   Dimensions,
@@ -11,53 +10,26 @@ import {
   View,
 } from "react-native";
 
-import Modal from "react-native-modal";
+import ActionSheetContainer from "../atoms/ActionSheetContainer";
 
 const { height, width } = Dimensions.get("screen");
 
 const LoginActionSheet = () => {
-  const {
-    setIsExpert,
-    isExpert,
-    setIsSelectRole,
-    isModalUserLoggedInVisible,
-    setIsModalUserLoggedInVisible,
-  } = useUserStore();
-
-  const closeActionSheet = () => {
-    setIsModalUserLoggedInVisible(false);
-  };
+  const { setIsExpert, isExpert, setIsSelectRole } = useUserStore();
 
   const loginAsExpert = () => {
     setIsExpert(true);
     setIsSelectRole(true);
-    closeActionSheet();
   };
 
   const loginAsCustomer = () => {
     setIsExpert(false);
     setIsSelectRole(true);
-    closeActionSheet();
   };
 
   return (
-    <Modal
-      isVisible={isModalUserLoggedInVisible}
-      onBackdropPress={closeActionSheet}
-      onBackButtonPress={closeActionSheet}
-      style={styles.modal}
-      useNativeDriver
-    >
+    <ActionSheetContainer id="confirmation-action">
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Ionicons
-            name="close"
-            size={24}
-            color={Colors.mediumGray}
-            onPress={() => closeActionSheet()}
-          />
-          <ThemedText fontType="bold">ورود</ThemedText>
-        </View>
         <View style={styles.contentView}>
           <TouchableOpacity
             activeOpacity={0.7}
@@ -97,7 +69,7 @@ const LoginActionSheet = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </Modal>
+    </ActionSheetContainer>
   );
 };
 

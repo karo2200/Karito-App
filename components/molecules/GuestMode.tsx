@@ -1,13 +1,11 @@
 import EmptyAddressSvg from "@/assets/icons/EmptyAddress";
-import useUserStore from "@/stores/loginStore";
+import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import ThemedButton from "../atoms/ThemedButton";
 import ThemedText from "../atoms/ThemedText";
 
 const GuestMode = () => {
-  const { setIsModalUserLoggedInVisible } = useUserStore();
-
   return (
     <View style={styles.container}>
       <EmptyAddressSvg />
@@ -18,7 +16,15 @@ const GuestMode = () => {
         title={"انتخاب نقش"}
         style={styles.btn}
         onPress={() => {
-          setIsModalUserLoggedInVisible(true);
+          showSheet("confirmation-action", {
+            payload: {
+              hasLoading: false,
+              showToastInActionSheet: false,
+              title: "ورود",
+
+              onClose: () => hideSheet("confirmation-action"),
+            },
+          });
         }}
       />
     </View>

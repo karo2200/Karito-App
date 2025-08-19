@@ -2,7 +2,6 @@ import { LoginActionSheet, ThemedContainer, ThemedText } from "@/components";
 import { ToastProvider } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
-import useUserStore from "@/stores/loginStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -30,17 +29,12 @@ export default function RootLayout() {
 
   const segments = useSegments();
 
-  const { isModalUserLoggedInVisible, setIsModalUserLoggedInVisible } =
-    useUserStore();
-
   const hideTabBar =
     // segments.toString().includes("CreateOrderPage") ||
     segments[1] === "order" &&
     (segments[2] === "payment" || segments[2] === "paymentStatus");
 
   const fontsLoaded = useLoadFonts();
-
-  let role: RoleType = RoleType.Specialist;
 
   const MyTheme = {
     ...DefaultTheme,
@@ -74,7 +68,6 @@ export default function RootLayout() {
       </View>
     );
   };
-  console.log("........", isModalUserLoggedInVisible);
 
   return (
     <ToastProvider>
