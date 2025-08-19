@@ -10,26 +10,27 @@ import { Colors } from "@/constants/Colors";
 import { InfoCircle } from "iconsax-react-native";
 import { useCallback } from "react";
 import { StyleSheet } from "react-native";
+import useServiceTypesHook from "./serviceTypes.hook";
 
 export default function SubCategoryOrg() {
+  const { item, items } = useServiceTypesHook();
+
   const renderITEM = useCallback(
     ({ item, index }) => <SubServiceItem {...{ item, index }} />,
     []
   );
+
   return (
     <ThemedView style={styles.flex1}>
       <ThemedText style={{ color: Colors.title }}>
-        کاریتو / همه خدمات / <ThemedText fontType="bold">نظافت</ThemedText>
+        کاریتو / {item?.service} /{" "}
+        <ThemedText fontType="bold">{item?.subService}</ThemedText>
       </ThemedText>
       <ThemedView style={styles.rowView}>
-        <CustomImage
-          src="https://abzarghafouri.com/wp-content/uploads/2023/02/house-cleaning-product-on-wood-table-blue.jpg"
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <CustomImage src={item?.logo} style={styles.image} resizeMode="cover" />
         <ThemedView style={styles.margin}>
-          <ThemedText fontType="bold">نظافت</ThemedText>
-          <ThemedText>خدمات مربوط به تمیزکاری</ThemedText>
+          <ThemedText fontType="bold">{item?.service}</ThemedText>
+          <ThemedText>{`خدمات مربوط به ${item?.subService}`}</ThemedText>
         </ThemedView>
       </ThemedView>
       <Divider height={16} />
@@ -41,7 +42,7 @@ export default function SubCategoryOrg() {
       </ThemedView>
       <Divider height={16} />
       <CustomFlatList
-        data={[1, 2, 3]}
+        data={items}
         ItemSeparatorComponent={() => <Divider height={16} />}
         renderItem={renderITEM}
         style={styles.flex1}

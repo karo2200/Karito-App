@@ -2,13 +2,11 @@ query serviceCategory_getServiceCategories(
   $skip: Int
   $take: Int
   $order: [ServiceCategoryDtoSortInput!]
-  $where: ServiceCategoryDtoFilterInput
 ) {
   serviceCategory_getServiceCategories(
     skip: $skip
     take: $take
     order: $order
-    where: $where
   ) {
     pageInfo {
       hasNextPage

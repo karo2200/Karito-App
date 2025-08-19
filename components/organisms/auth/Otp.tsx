@@ -23,7 +23,7 @@ const schema = yup.object().shape({
 });
 
 const OTPSection = () => {
-  const { isVerifying, onDoLogin, phoneNumber } = useOtpHook();
+  const { isVerifying, onDoLogin, phoneNumber, onRetryPress } = useOtpHook();
 
   const [isTimerActive, setIsTimerActive] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(60);
@@ -77,12 +77,10 @@ const OTPSection = () => {
             <ThemedCodeFeild length={4} name="otpCode" />
             {isTimerActive ? (
               <ThemedText
-                style={{ color: Colors.hint500, textAlign: "center" }}
-              >{`${formatTime(secondsLeft)} تا تلاش مجدد`}</ThemedText>
+                style={styles.timerTxt}
+              >{`${formatTime(secondsLeft)}`}</ThemedText>
             ) : (
-              <ThemedText
-                style={{ color: Colors.hint500, textAlign: "center" }}
-              >
+              <ThemedText style={styles.retryTxt} onPress={onRetryPress}>
                 تلاش مجدد
               </ThemedText>
             )}
@@ -144,5 +142,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  timerTxt: { color: Colors.darkGray, textAlign: "center" },
+
+  retryTxt: {
+    color: Colors.hint500,
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
 });

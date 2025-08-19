@@ -8,7 +8,7 @@ import ServiceHeaderSection from "./Views/ServiceHeaderSection";
 import useServiceTabHook from "./serviceHook";
 
 export default function ServiceOrg() {
-  const { selectedService, onServiceItemPress, serviceItems } =
+  const { selectedService, onServiceItemPress, serviceItems, subServiceItems } =
     useServiceTabHook();
 
   return (
@@ -27,7 +27,10 @@ export default function ServiceOrg() {
         {...{ onServiceItemPress, selectedService, serviceItems }}
       />
       <Divider />
-      <ServiceBodySection selectedService={selectedService} />
+      <ServiceBodySection
+        selectedService={selectedService}
+        items={subServiceItems}
+      />
     </ScrollView>
   );
 }
