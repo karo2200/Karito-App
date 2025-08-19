@@ -1,0 +1,19 @@
+query serviceTypes_gatAll(
+  $skip: Int
+  $take: Int
+  $order: [ServiceTypeDtoSortInput!]
+  $where: ServiceTypeDtoFilterInput
+) {
+  serviceTypes_gatAll(skip: $skip, take: $take, order: $order, where: $where) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+    items {
+      name
+      logo
+      id
+      serviceSubCategoryId
+    }
+  }
+}

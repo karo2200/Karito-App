@@ -15,6 +15,7 @@ export default function useLoginHook() {
       { phoneNumber: formData?.phone, userType: UserType.Customer },
       {
         onSuccess: (data) => {
+          setIsSendingCode(false);
           if (data?.auth_requestOtp?.status?.code === 1) {
             setIsSendingCode(false);
             router.push(`/OTPScreen?phone=${formData?.phone}`);
@@ -23,6 +24,7 @@ export default function useLoginHook() {
           }
         },
         onError: (errorData: any) => {
+          setIsSendingCode(false);
           toast.showToast({
             message: "خطایی پیش آمده است. لطفا بعدا تلاش کنید",
           });

@@ -11,7 +11,7 @@ generates:
       - typescript-operations
       - typescript-react-query
     config:
-      addInfiniteQuery: false
+      addInfiniteQuery: true
       reactQueryVersion: "5"
       addSuspeneQuery: true
       fetcher:
