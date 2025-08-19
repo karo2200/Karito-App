@@ -22,7 +22,11 @@ const GuestMode = () => {
               showToastInActionSheet: false,
               title: "ورود",
 
-              onClose: () => hideSheet("confirmation-action"),
+              onClose: () => {
+                console.log("2222");
+
+                hideSheet("confirmation-action");
+              },
             },
           });
         }}

@@ -1,7 +1,6 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import useUserStore from "@/stores/loginStore";
-import { memo } from "react";
 import {
   Dimensions,
   Platform,
@@ -10,25 +9,49 @@ import {
   View,
 } from "react-native";
 
+import { SheetProps } from "react-native-actions-sheet";
 import ActionSheetContainer from "../atoms/ActionSheetContainer";
 
 const { height, width } = Dimensions.get("screen");
 
-const LoginActionSheet = () => {
+export default function LoginActionSheet(
+  props: SheetProps<"confirmation-action">
+) {
+  const {
+    title,
+    description,
+    onClose = () => {},
+    onConfirm = () => {},
+    negativeText,
+    positiveText,
+    positiveColor,
+    positiveBorderColor,
+    positiveBorderWidth,
+    positiveOutline = true,
+    negativeColor,
+    negativeBorderColor,
+    negativeBorderWidth = 1,
+    negativeOutline = true,
+    negativeBackgroundColor,
+    positiveBackgroundColor,
+    id = "confirmation-action",
+  } = props?.payload ?? {};
   const { setIsExpert, isExpert, setIsSelectRole } = useUserStore();
 
   const loginAsExpert = () => {
+    onClose();
     setIsExpert(true);
     setIsSelectRole(true);
   };
 
   const loginAsCustomer = () => {
+    onClose();
     setIsExpert(false);
     setIsSelectRole(true);
   };
 
   return (
-    <ActionSheetContainer id="confirmation-action">
+    <ActionSheetContainer id="confirmation-action" onClose={() => onClose}>
       <View style={styles.container}>
         <View style={styles.contentView}>
           <TouchableOpacity
@@ -71,9 +94,7 @@ const LoginActionSheet = () => {
       </View>
     </ActionSheetContainer>
   );
-};
-
-export default memo(LoginActionSheet);
+}
 
 const styles = StyleSheet.create({
   header: {

@@ -1625,6 +1625,34 @@ export type User_GetMyProfileQuery = {
   };
 };
 
+export type Address_GetUserAddressesQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  userId: Scalars["UUID"]["input"];
+  where?: InputMaybe<AddressDtoFilterInput>;
+  order?: InputMaybe<Array<AddressDtoSortInput> | AddressDtoSortInput>;
+}>;
+
+export type Address_GetUserAddressesQuery = {
+  __typename?: "Query";
+  address_getUserAddresses?: {
+    __typename?: "Address_getUserAddressesCollectionSegment";
+    items?: Array<{
+      __typename?: "AddressDto";
+      cityName: string;
+      distanceInMeters?: number | null;
+      latitude: number;
+      fullText: any;
+      longitude: string;
+    }> | null;
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  } | null;
+};
+
 export const Auth_RequestOtpDocument = `
     mutation auth_requestOtp($phoneNumber: String!, $userType: UserType!) {
   auth_requestOtp(phoneNumber: $phoneNumber, userType: $userType) {
@@ -2270,6 +2298,94 @@ export const useInfiniteUser_GetMyProfileQuery = <
             User_GetMyProfileDocument,
             { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const Address_GetUserAddressesDocument = `
+    query address_getUserAddresses($skip: Int, $take: Int, $userId: UUID!, $where: AddressDtoFilterInput, $order: [AddressDtoSortInput!]) {
+  address_getUserAddresses(
+    skip: $skip
+    take: $take
+    where: $where
+    order: $order
+    userId: $userId
+  ) {
+    items {
+      cityName
+      distanceInMeters
+      fullText: id
+      latitude
+      longitude: neighborhoodName
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+
+export const useAddress_GetUserAddressesQuery = <
+  TData = Address_GetUserAddressesQuery,
+  TError = unknown,
+>(
+  variables: Address_GetUserAddressesQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Address_GetUserAddressesQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      Address_GetUserAddressesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<Address_GetUserAddressesQuery, TError, TData>({
+    queryKey: ["address_getUserAddresses", variables],
+    queryFn: fetcher<
+      Address_GetUserAddressesQuery,
+      Address_GetUserAddressesQueryVariables
+    >(Address_GetUserAddressesDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteAddress_GetUserAddressesQuery = <
+  TData = InfiniteData<Address_GetUserAddressesQuery>,
+  TError = unknown,
+>(
+  variables: Address_GetUserAddressesQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Address_GetUserAddressesQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Address_GetUserAddressesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<Address_GetUserAddressesQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "address_getUserAddresses.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            Address_GetUserAddressesQuery,
+            Address_GetUserAddressesQueryVariables
+          >(Address_GetUserAddressesDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
         ...restOptions,
       };
     })(),
