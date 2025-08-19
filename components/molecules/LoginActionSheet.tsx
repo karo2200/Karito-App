@@ -21,7 +21,7 @@ export default function LoginActionSheet({
   visible: boolean;
   setVisible: () => void;
 }) {
-  const { setIsExpert, isExpert } = useUserStore();
+  const { setIsExpert, isExpert, setIsLoggedIn } = useUserStore();
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   useEffect(() => {
@@ -40,6 +40,7 @@ export default function LoginActionSheet({
 
   const loginAsCustomer = () => {
     setIsExpert(false);
+    setIsLoggedIn(false);
     closeActionSheet();
   };
 

@@ -41,7 +41,14 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-  console.log({ isExpert });
+
+  const expertScreenOptions = {
+    headerShown: true,
+    title: "",
+    headerRight: () => <RightIcon />,
+    headerLeft: () => <></>,
+  };
+
   return (
     <ToastProvider>
       <AuthProvider>
@@ -50,7 +57,7 @@ export default function RootLayout() {
             <Stack.Protected guard={isLoggedIn && isExpert}>
               <Stack.Screen name="(expertTabs)" />
             </Stack.Protected>
-            <Stack.Protected guard={!isExpert}>
+            <Stack.Protected guard={isLoggedIn && !isExpert}>
               <Stack.Screen name="(tabs)" />
             </Stack.Protected>
 
@@ -62,39 +69,19 @@ export default function RootLayout() {
             <Stack.Protected guard={!isLoggedIn && isExpert}>
               <Stack.Screen
                 name="ExpertLoginPage"
-                options={{
-                  headerShown: true,
-                  title: "",
-                  headerRight: () => <RightIcon />,
-                  headerLeft: () => <></>,
-                }}
+                options={expertScreenOptions}
               />
               <Stack.Screen
                 name="ExpertRegisterPage"
-                options={{
-                  headerShown: true,
-                  title: "",
-                  headerRight: () => <RightIcon />,
-                  headerLeft: () => <></>,
-                }}
+                options={expertScreenOptions}
               />
               <Stack.Screen
                 name="PersonalInfoPage"
-                options={{
-                  headerShown: true,
-                  title: "",
-                  headerRight: () => <RightIcon />,
-                  headerLeft: () => <></>,
-                }}
+                options={expertScreenOptions}
               />
               <Stack.Screen
                 name="CertificateInfoPage"
-                options={{
-                  headerShown: true,
-                  title: "",
-                  headerRight: () => <RightIcon />,
-                  headerLeft: () => <></>,
-                }}
+                options={expertScreenOptions}
               />
             </Stack.Protected>
           </Stack>
