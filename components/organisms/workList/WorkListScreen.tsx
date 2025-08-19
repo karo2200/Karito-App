@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import OrderCard from "../order/Views/OrderCard";
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
 
 export default function WorkListScreen() {
   const router = useRouter();

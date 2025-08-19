@@ -7,7 +7,7 @@ import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "../atoms/ThemedButton";
 
-const { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("screen");
 
 export default function LocationActionSheet({
   visible,

@@ -1,0 +1,42 @@
+import EmptyAddressSvg from "@/assets/icons/EmptyAddress";
+import useUserStore from "@/stores/loginStore";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import ThemedButton from "../atoms/ThemedButton";
+import ThemedText from "../atoms/ThemedText";
+
+const GuestMode = () => {
+  const { setIsModalUserLoggedInVisible } = useUserStore();
+
+  return (
+    <View style={styles.container}>
+      <EmptyAddressSvg />
+      <ThemedText style={styles.text}>
+        لطفا برای استفاده از امکانات اپلیکیشن نقش خود را انتخاب کنید.
+      </ThemedText>
+      <ThemedButton
+        title={"انتخاب نقش"}
+        style={styles.btn}
+        onPress={() => {
+          setIsModalUserLoggedInVisible(true);
+        }}
+      />
+    </View>
+  );
+};
+
+export default GuestMode;
+
+const styles = StyleSheet.create({
+  text: {
+    fontWeight: "500",
+    fontSize: 16,
+    lineHeight: 26,
+    textAlign: "center",
+    marginVertical: 24,
+  },
+
+  container: { flex: 1, alignItems: "center", justifyContent: "center" },
+
+  btn: { width: "50%" },
+});

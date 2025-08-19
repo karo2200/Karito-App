@@ -1,13 +1,13 @@
-import { ThemedText } from "@/components";
+import { LoginActionSheet, ThemedContainer, ThemedText } from "@/components";
 import { ToastProvider } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
+import useUserStore from "@/stores/loginStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Category, Document, Home2, Profile } from "iconsax-react-native";
-import { useEffect } from "react";
-import { I18nManager, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
 type TabBarIconProps = {
@@ -21,14 +21,17 @@ export enum RoleType {
 }
 
 export default function RootLayout() {
-  useEffect(() => {
-    if (!I18nManager.isRTL) {
-      I18nManager.allowRTL(true);
-      I18nManager.forceRTL(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!I18nManager.isRTL) {
+  //     I18nManager.allowRTL(true);
+  //     I18nManager.forceRTL(true);
+  //   }
+  // }, []);
 
   const segments = useSegments();
+
+  const { isModalUserLoggedInVisible, setIsModalUserLoggedInVisible } =
+    useUserStore();
 
   const hideTabBar =
     // segments.toString().includes("CreateOrderPage") ||
@@ -71,57 +74,64 @@ export default function RootLayout() {
       </View>
     );
   };
+  console.log("........", isModalUserLoggedInVisible);
 
   return (
     <ToastProvider>
       <ThemeProvider value={MyTheme}>
-        <Tabs
-          initialRouteName={"home/index"}
-          screenOptions={({ route }) => ({
-            headerShown: true,
-            title: "",
-            headerRight: () => <RightIcon />,
-            tabBarSafeAreaInset: { bottom: "never" },
-            tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBarStyle,
-            tabBarActiveTintColor: Colors.hint500,
-            tabBarInactiveTintColor: Colors.mediumGray,
-            tabBarLabelStyle: styles.tabBarLabelStyle,
-          })}
-        >
-          <Tabs.Screen
-            name="profile"
-            options={{
-              tabBarLabel: "پروفایل",
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Profile }),
-            }}
-          />
-          <Tabs.Screen
-            name="order"
-            options={{
-              tabBarLabel: "سفارش‌های من",
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Document }),
-            }}
-          />
-          <Tabs.Screen
-            name="service"
-            options={{
-              tabBarLabel: "خدمات",
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Category }),
-            }}
-          />
-          <Tabs.Screen
-            name="home/index"
-            options={{
-              tabBarLabel: "خانه",
-              tabBarIcon: ({ focused }) => tabBarIcon({ focused, Icon: Home2 }),
-            }}
-          />
-        </Tabs>
-        <StatusBar style="auto" />
+        <ThemedContainer>
+          <Tabs
+            initialRouteName={"home/index"}
+            screenOptions={({ route }) => ({
+              headerShown: true,
+              title: "",
+              headerRight: () => <RightIcon />,
+              tabBarSafeAreaInset: { bottom: "never" },
+              tabBarStyle: hideTabBar
+                ? { display: "none" }
+                : styles.tabBarStyle,
+              tabBarActiveTintColor: Colors.hint500,
+              tabBarInactiveTintColor: Colors.mediumGray,
+              tabBarLabelStyle: styles.tabBarLabelStyle,
+            })}
+          >
+            <Tabs.Screen
+              name="profile"
+              options={{
+                tabBarLabel: "پروفایل",
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: Profile }),
+              }}
+            />
+            <Tabs.Screen
+              name="order"
+              options={{
+                tabBarLabel: "سفارش‌های من",
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: Document }),
+              }}
+            />
+            <Tabs.Screen
+              name="service"
+              options={{
+                tabBarLabel: "خدمات",
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: Category }),
+              }}
+            />
+            <Tabs.Screen
+              name="home/index"
+              options={{
+                tabBarLabel: "خانه",
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: Home2 }),
+              }}
+            />
+          </Tabs>
+          <StatusBar style="auto" />
+        </ThemedContainer>
       </ThemeProvider>
+      <LoginActionSheet />
     </ToastProvider>
   );
 }

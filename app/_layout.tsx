@@ -1,3 +1,4 @@
+import { ThemedContainer } from "@/components";
 import { ToastProvider } from "@/components/atoms/Toast";
 import AuthProvider from "@/graphql/AuthProvider";
 import useNetworkStatus from "@/hooks/useNetworkStatus";
@@ -10,7 +11,7 @@ import { useEffect } from "react";
 import { RightIcon } from "./(tabs)/_layout";
 
 export default function RootLayout() {
-  const { isLoggedIn, isExpert } = useUserStore();
+  const { isLoggedIn, isExpert, isSelectRole } = useUserStore();
 
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
@@ -46,58 +47,61 @@ export default function RootLayout() {
     <ToastProvider>
       <AuthProvider>
         <ThemeProvider value={MyTheme}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Protected guard={isLoggedIn && isExpert}>
-              <Stack.Screen name="(expertTabs)" />
-            </Stack.Protected>
-            <Stack.Protected guard={!isExpert}>
-              <Stack.Screen name="(tabs)" />
-            </Stack.Protected>
+          <ThemedContainer>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Protected guard={isLoggedIn && isExpert}>
+                <Stack.Screen name="(expertTabs)" />
+              </Stack.Protected>
 
-            <Stack.Protected guard={!isLoggedIn && !isExpert}>
-              <Stack.Screen name="LoginPage" />
-              <Stack.Screen name="OTPScreen" />
-            </Stack.Protected>
+              <Stack.Protected guard={!isExpert}>
+                <Stack.Screen name="(tabs)" />
+              </Stack.Protected>
 
-            <Stack.Protected guard={!isLoggedIn && isExpert}>
-              <Stack.Screen
-                name="ExpertLoginPage"
-                options={{
-                  headerShown: true,
-                  title: "",
-                  headerRight: () => <RightIcon />,
-                  headerLeft: () => <></>,
-                }}
-              />
-              <Stack.Screen
-                name="ExpertRegisterPage"
-                options={{
-                  headerShown: true,
-                  title: "",
-                  headerRight: () => <RightIcon />,
-                  headerLeft: () => <></>,
-                }}
-              />
-              <Stack.Screen
-                name="PersonalInfoPage"
-                options={{
-                  headerShown: true,
-                  title: "",
-                  headerRight: () => <RightIcon />,
-                  headerLeft: () => <></>,
-                }}
-              />
-              <Stack.Screen
-                name="CertificateInfoPage"
-                options={{
-                  headerShown: true,
-                  title: "",
-                  headerRight: () => <RightIcon />,
-                  headerLeft: () => <></>,
-                }}
-              />
-            </Stack.Protected>
-          </Stack>
+              <Stack.Protected guard={!isLoggedIn && !isExpert && isSelectRole}>
+                <Stack.Screen name="LoginPage" />
+                <Stack.Screen name="OTPScreen" />
+              </Stack.Protected>
+
+              <Stack.Protected guard={!isLoggedIn && isExpert}>
+                <Stack.Screen
+                  name="ExpertLoginPage"
+                  options={{
+                    headerShown: true,
+                    title: "",
+                    headerRight: () => <RightIcon />,
+                    headerLeft: () => <></>,
+                  }}
+                />
+                <Stack.Screen
+                  name="ExpertRegisterPage"
+                  options={{
+                    headerShown: true,
+                    title: "",
+                    headerRight: () => <RightIcon />,
+                    headerLeft: () => <></>,
+                  }}
+                />
+                <Stack.Screen
+                  name="PersonalInfoPage"
+                  options={{
+                    headerShown: true,
+                    title: "",
+                    headerRight: () => <RightIcon />,
+                    headerLeft: () => <></>,
+                  }}
+                />
+                <Stack.Screen
+                  name="CertificateInfoPage"
+                  options={{
+                    headerShown: true,
+                    title: "",
+                    headerRight: () => <RightIcon />,
+                    headerLeft: () => <></>,
+                  }}
+                />
+              </Stack.Protected>
+            </Stack>
+          </ThemedContainer>
         </ThemeProvider>
       </AuthProvider>
     </ToastProvider>

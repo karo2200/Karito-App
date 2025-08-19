@@ -9,6 +9,8 @@ type UserStoreType = {
   setIsExpert: (value: boolean) => void;
   isSelectRole: boolean;
   setIsSelectRole: (value: boolean) => void;
+  isModalUserLoggedInVisible: boolean;
+  setIsModalUserLoggedInVisible: (isModalUserLoggedInVisible: boolean) => void;
 };
 
 const useUserStore = create<UserStoreType>()(
@@ -20,6 +22,9 @@ const useUserStore = create<UserStoreType>()(
       setIsExpert: (isExpert: boolean) => set({ isExpert }),
       isSelectRole: false,
       setIsSelectRole: (isSelectRole: boolean) => set({ isSelectRole }),
+      isModalUserLoggedInVisible: false,
+      setIsModalUserLoggedInVisible: (isModalUserLoggedInVisible: boolean) =>
+        set({ isModalUserLoggedInVisible }),
     }),
     { name: "user-storage", getStorage: () => AsyncStorage }
   )

@@ -2,32 +2,36 @@ import { useCity_GetAllQuery } from "@/generated/graphql";
 import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Platform } from "react-native";
 
 export default function useHomeHook() {
   const router = useRouter();
 
-  const { isSelectRole } = useUserStore();
+  const {
+    isSelectRole,
+    isModalUserLoggedInVisible,
+    setIsModalUserLoggedInVisible,
+  } = useUserStore();
 
   const [selectRoleVisible, setSelectRoleVisibe] = useState<boolean>(false);
 
   const { data } = useCity_GetAllQuery({ take: 200 });
-  console.log("ddddd", data);
 
   useEffect(() => {
     if (isSelectRole) {
       setSelectRoleVisibe(false);
-    } else if (Platform.OS === "ios") {
+    }
+    // if (Platform.OS === "ios")
+    else {
       const timeout = setTimeout(() => {
-        setSelectRoleVisibe(true);
+        setIsModalUserLoggedInVisible(true);
 
         const interval = setInterval(() => {
-          setSelectRoleVisibe(true);
+          setIsModalUserLoggedInVisible(true);
         }, 30000);
 
         return () => {
           clearInterval(interval);
-          setSelectRoleVisibe(false);
+          setIsModalUserLoggedInVisible(false);
         };
       }, 5000);
 
