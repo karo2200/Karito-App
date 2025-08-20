@@ -1,0 +1,34 @@
+query serviceRequest_getMyServiceRequests(
+  $skip: Int
+  $take: Int
+  $where: ServiceRequestDetailDtoFilterInput
+  $order: [ServiceRequestDetailDtoSortInput!]
+) {
+  serviceRequest_getMyServiceRequests(
+    skip: $skip
+    take: $take
+    where: $where
+    order: $order
+  ) {
+    items {
+      addressText
+      customerName
+      description
+      id
+      requestDate
+      status
+      serviceTypeName
+      acceptances {
+        actionDate
+        specialistId
+        id
+        specialistName
+        status
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}

@@ -13,6 +13,8 @@ type AuthCacheType = {
   setIsOnBoarded: (isOnBoarded: boolean) => void;
   isUserLoggedIn?: boolean;
   setIsUserLoggedIn: (isUserLoggedIn: boolean) => void;
+  userId: string;
+  setUserId: (userId: string) => void;
   clearAuth: () => void;
 };
 type AuthCacheStore = (
@@ -33,6 +35,8 @@ export const authCacheStore = create<AuthCacheType>(
       setIsOnBoarded: (isOnBoarded: boolean) => set({ isOnBoarded }),
       isUserLoggedIn: false,
       setIsUserLoggedIn: (isUserLoggedIn: boolean) => set({ isUserLoggedIn }),
+      userId: "",
+      setUserId: (userId: string) => set({ userId }),
       clearAuth: () =>
         set({
           accessToken: null,

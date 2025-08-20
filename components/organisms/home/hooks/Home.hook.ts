@@ -1,11 +1,9 @@
-import {
-  useCity_GetAllQuery,
-  useServiceCategory_GetServiceCategoriesQuery,
-} from "@/generated/graphql";
+import { useCity_GetAllQuery } from "@/generated/graphql";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useGetServiceCategoriesQuery } from "../../service/hooks";
 
 export default function useHomeHook() {
   const router = useRouter();
@@ -16,9 +14,7 @@ export default function useHomeHook() {
 
   const { data } = useCity_GetAllQuery({ take: 200 });
 
-  const { data: homeCategoryData } =
-    useServiceCategory_GetServiceCategoriesQuery();
-  console.log("////", homeCategoryData);
+  const { data: homeCategoryData } = useGetServiceCategoriesQuery({});
 
   useEffect(() => {
     if (isSelectRole) {
@@ -62,5 +58,6 @@ export default function useHomeHook() {
     selectRoleVisible,
     setSelectRoleVisibe,
     data,
+    homeCategoryData: homeCategoryData?.pages ?? [],
   };
 }

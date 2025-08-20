@@ -7,7 +7,7 @@ import React, {
   useImperativeHandle,
   useRef,
 } from "react";
-import { Keyboard, Platform, StyleSheet, View, ViewStyle } from "react-native";
+import { Keyboard, StyleSheet, View, ViewStyle } from "react-native";
 import ActionSheet, {
   ActionSheetProps,
   ActionSheetRef,
@@ -105,7 +105,7 @@ function ActionSheetContainer(props: Props, ref: any) {
           <ThemedText fontType="bold">ورود</ThemedText>
         </View>
         {children}
-        {Platform.OS === "android" && <View style={{ bottom: 50 }} />}
+        {/* {Platform.OS === "android" && <View style={{ bottom: 50 }} />} */}
       </View>
     </ActionSheet>
   );

@@ -9,7 +9,14 @@ import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import useProfileHook from "./hooks/Profile.hook";
 
 export default function ProfileScreen() {
@@ -43,6 +50,21 @@ export default function ProfileScreen() {
             </View>
             <EditIcon onPress={() => router.push("/profile/editProfile")} />
           </View>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: 35.6892, // مثلا تهران
+              longitude: 51.389,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
+            }}
+          >
+            <Marker
+              coordinate={{ latitude: 35.6892, longitude: 51.389 }}
+              title="اینجا تهران است"
+              description="یک نمونه مارکر ساده"
+            />
+          </MapView>
           {isExpert && (
             <View style={styles.rowView2}>
               <View style={styles.labelContainer}>
@@ -204,6 +226,11 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
     flex: 1,
+  },
+
+  map: {
+    width: Dimensions.get("window").width / 2,
+    height: Dimensions.get("window").height / 3,
   },
 });
 

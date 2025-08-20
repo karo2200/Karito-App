@@ -1500,6 +1500,45 @@ export type City_GetAllQuery = {
   } | null;
 };
 
+export type ServiceRequest_GetMyServiceRequestsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<ServiceRequestDetailDtoFilterInput>;
+  order?: InputMaybe<
+    Array<ServiceRequestDetailDtoSortInput> | ServiceRequestDetailDtoSortInput
+  >;
+}>;
+
+export type ServiceRequest_GetMyServiceRequestsQuery = {
+  __typename?: "Query";
+  serviceRequest_getMyServiceRequests?: {
+    __typename?: "ServiceRequest_getMyServiceRequestsCollectionSegment";
+    items?: Array<{
+      __typename?: "ServiceRequestDetailDto";
+      addressText: string;
+      customerName: string;
+      description: string;
+      id: any;
+      requestDate: any;
+      status: ServiceRequestStatus;
+      serviceTypeName: string;
+      acceptances: Array<{
+        __typename?: "ServiceAcceptanceDto";
+        actionDate: any;
+        specialistId: any;
+        id: any;
+        specialistName: string;
+        status: ServiceAcceptanceStatus;
+      }>;
+    }> | null;
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  } | null;
+};
+
 export type ServiceCategory_GetServiceCategoriesQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -1794,6 +1833,113 @@ export const useInfiniteCity_GetAllQuery = <
             City_GetAllDocument,
             { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceRequest_GetMyServiceRequestsDocument = `
+    query serviceRequest_getMyServiceRequests($skip: Int, $take: Int, $where: ServiceRequestDetailDtoFilterInput, $order: [ServiceRequestDetailDtoSortInput!]) {
+  serviceRequest_getMyServiceRequests(
+    skip: $skip
+    take: $take
+    where: $where
+    order: $order
+  ) {
+    items {
+      addressText
+      customerName
+      description
+      id
+      requestDate
+      status
+      serviceTypeName
+      acceptances {
+        actionDate
+        specialistId
+        id
+        specialistName
+        status
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_GetMyServiceRequestsQuery = <
+  TData = ServiceRequest_GetMyServiceRequestsQuery,
+  TError = unknown,
+>(
+  variables?: ServiceRequest_GetMyServiceRequestsQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceRequest_GetMyServiceRequestsQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceRequest_GetMyServiceRequestsQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceRequest_GetMyServiceRequestsQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["serviceRequest_getMyServiceRequests"]
+        : ["serviceRequest_getMyServiceRequests", variables],
+    queryFn: fetcher<
+      ServiceRequest_GetMyServiceRequestsQuery,
+      ServiceRequest_GetMyServiceRequestsQueryVariables
+    >(ServiceRequest_GetMyServiceRequestsDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceRequest_GetMyServiceRequestsQuery = <
+  TData = InfiniteData<ServiceRequest_GetMyServiceRequestsQuery>,
+  TError = unknown,
+>(
+  variables: ServiceRequest_GetMyServiceRequestsQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      ServiceRequest_GetMyServiceRequestsQuery,
+      TError,
+      TData
+    >,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceRequest_GetMyServiceRequestsQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<
+    ServiceRequest_GetMyServiceRequestsQuery,
+    TError,
+    TData
+  >(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["serviceRequest_getMyServiceRequests.infinite"]
+            : ["serviceRequest_getMyServiceRequests.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceRequest_GetMyServiceRequestsQuery,
+            ServiceRequest_GetMyServiceRequestsQueryVariables
+          >(ServiceRequest_GetMyServiceRequestsDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
         ...restOptions,
       };
     })(),

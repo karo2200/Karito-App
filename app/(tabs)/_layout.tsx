@@ -1,5 +1,4 @@
-import { LoginActionSheet, ThemedContainer, ThemedText } from "@/components";
-import { ToastProvider } from "@/components/atoms/Toast";
+import { ThemedContainer, ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
@@ -70,62 +69,56 @@ export default function RootLayout() {
   };
 
   return (
-    <ToastProvider>
-      <ThemeProvider value={MyTheme}>
-        <ThemedContainer>
-          <Tabs
-            initialRouteName={"home/index"}
-            screenOptions={({ route }) => ({
-              headerShown: true,
-              title: "",
-              headerRight: () => <RightIcon />,
-              tabBarSafeAreaInset: { bottom: "never" },
-              tabBarStyle: hideTabBar
-                ? { display: "none" }
-                : styles.tabBarStyle,
-              tabBarActiveTintColor: Colors.hint500,
-              tabBarInactiveTintColor: Colors.mediumGray,
-              tabBarLabelStyle: styles.tabBarLabelStyle,
-            })}
-          >
-            <Tabs.Screen
-              name="profile"
-              options={{
-                tabBarLabel: "پروفایل",
-                tabBarIcon: ({ focused }) =>
-                  tabBarIcon({ focused, Icon: Profile }),
-              }}
-            />
-            <Tabs.Screen
-              name="order"
-              options={{
-                tabBarLabel: "سفارش‌های من",
-                tabBarIcon: ({ focused }) =>
-                  tabBarIcon({ focused, Icon: Document }),
-              }}
-            />
-            <Tabs.Screen
-              name="service"
-              options={{
-                tabBarLabel: "خدمات",
-                tabBarIcon: ({ focused }) =>
-                  tabBarIcon({ focused, Icon: Category }),
-              }}
-            />
-            <Tabs.Screen
-              name="home/index"
-              options={{
-                tabBarLabel: "خانه",
-                tabBarIcon: ({ focused }) =>
-                  tabBarIcon({ focused, Icon: Home2 }),
-              }}
-            />
-          </Tabs>
-          <StatusBar style="auto" />
-        </ThemedContainer>
-      </ThemeProvider>
-      <LoginActionSheet />
-    </ToastProvider>
+    <ThemeProvider value={MyTheme}>
+      <ThemedContainer>
+        <Tabs
+          initialRouteName={"home/index"}
+          screenOptions={({ route }) => ({
+            headerShown: true,
+            title: "",
+            headerRight: () => <RightIcon />,
+            tabBarSafeAreaInset: { bottom: "never" },
+            tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBarStyle,
+            tabBarActiveTintColor: Colors.hint500,
+            tabBarInactiveTintColor: Colors.mediumGray,
+            tabBarLabelStyle: styles.tabBarLabelStyle,
+          })}
+        >
+          <Tabs.Screen
+            name="profile"
+            options={{
+              tabBarLabel: "پروفایل",
+              tabBarIcon: ({ focused }) =>
+                tabBarIcon({ focused, Icon: Profile }),
+            }}
+          />
+          <Tabs.Screen
+            name="order"
+            options={{
+              tabBarLabel: "سفارش‌های من",
+              tabBarIcon: ({ focused }) =>
+                tabBarIcon({ focused, Icon: Document }),
+            }}
+          />
+          <Tabs.Screen
+            name="service"
+            options={{
+              tabBarLabel: "خدمات",
+              tabBarIcon: ({ focused }) =>
+                tabBarIcon({ focused, Icon: Category }),
+            }}
+          />
+          <Tabs.Screen
+            name="home/index"
+            options={{
+              tabBarLabel: "خانه",
+              tabBarIcon: ({ focused }) => tabBarIcon({ focused, Icon: Home2 }),
+            }}
+          />
+        </Tabs>
+        <StatusBar style="auto" />
+      </ThemedContainer>
+    </ThemeProvider>
   );
 }
 
