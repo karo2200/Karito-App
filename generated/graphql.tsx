@@ -1539,6 +1539,35 @@ export type ServiceRequest_GetMyServiceRequestsQuery = {
   } | null;
 };
 
+export type ServiceRequest_GetMyServiceAcceptancesQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<ServiceAcceptanceDtoFilterInput>;
+  order?: InputMaybe<
+    Array<ServiceAcceptanceDtoSortInput> | ServiceAcceptanceDtoSortInput
+  >;
+}>;
+
+export type ServiceRequest_GetMyServiceAcceptancesQuery = {
+  __typename?: "Query";
+  serviceRequest_getMyServiceAcceptances?: {
+    __typename?: "ServiceRequest_getMyServiceAcceptancesCollectionSegment";
+    items?: Array<{
+      __typename?: "ServiceAcceptanceDto";
+      actionDate: any;
+      id: any;
+      specialistId: any;
+      specialistName: string;
+      status: ServiceAcceptanceStatus;
+    }> | null;
+    pageInfo: {
+      __typename?: "CollectionSegmentInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  } | null;
+};
+
 export type ServiceCategory_GetServiceCategoriesQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -1937,6 +1966,104 @@ export const useInfiniteServiceRequest_GetMyServiceRequestsQuery = <
             ServiceRequest_GetMyServiceRequestsQuery,
             ServiceRequest_GetMyServiceRequestsQueryVariables
           >(ServiceRequest_GetMyServiceRequestsDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceRequest_GetMyServiceAcceptancesDocument = `
+    query serviceRequest_getMyServiceAcceptances($skip: Int, $take: Int, $where: ServiceAcceptanceDtoFilterInput, $order: [ServiceAcceptanceDtoSortInput!]) {
+  serviceRequest_getMyServiceAcceptances(
+    skip: $skip
+    take: $take
+    where: $where
+    order: $order
+  ) {
+    items {
+      actionDate
+      id
+      specialistId
+      specialistName
+      status
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_GetMyServiceAcceptancesQuery = <
+  TData = ServiceRequest_GetMyServiceAcceptancesQuery,
+  TError = unknown,
+>(
+  variables?: ServiceRequest_GetMyServiceAcceptancesQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceRequest_GetMyServiceAcceptancesQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceRequest_GetMyServiceAcceptancesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceRequest_GetMyServiceAcceptancesQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["serviceRequest_getMyServiceAcceptances"]
+        : ["serviceRequest_getMyServiceAcceptances", variables],
+    queryFn: fetcher<
+      ServiceRequest_GetMyServiceAcceptancesQuery,
+      ServiceRequest_GetMyServiceAcceptancesQueryVariables
+    >(ServiceRequest_GetMyServiceAcceptancesDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceRequest_GetMyServiceAcceptancesQuery = <
+  TData = InfiniteData<ServiceRequest_GetMyServiceAcceptancesQuery>,
+  TError = unknown,
+>(
+  variables: ServiceRequest_GetMyServiceAcceptancesQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      ServiceRequest_GetMyServiceAcceptancesQuery,
+      TError,
+      TData
+    >,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceRequest_GetMyServiceAcceptancesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<
+    ServiceRequest_GetMyServiceAcceptancesQuery,
+    TError,
+    TData
+  >(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["serviceRequest_getMyServiceAcceptances.infinite"]
+            : ["serviceRequest_getMyServiceAcceptances.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceRequest_GetMyServiceAcceptancesQuery,
+            ServiceRequest_GetMyServiceAcceptancesQueryVariables
+          >(ServiceRequest_GetMyServiceAcceptancesDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),
