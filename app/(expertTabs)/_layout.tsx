@@ -1,4 +1,4 @@
-import { ThemedText } from "@/components";
+import { ThemedContainer, ThemedText } from "@/components";
 import { ToastProvider } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
@@ -67,54 +67,59 @@ export default function RootLayout() {
   return (
     <ToastProvider>
       <ThemeProvider value={MyTheme}>
-        <Tabs
-          initialRouteName={"workList"}
-          screenOptions={({ route }) => ({
-            headerShown: true,
-            title: "",
-            headerRight: () => <RightIcon />,
-            tabBarSafeAreaInset: { bottom: "never" },
-            tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBarStyle,
-            tabBarActiveTintColor: Colors.hint500,
-            tabBarInactiveTintColor: Colors.mediumGray,
-            tabBarLabelStyle: styles.tabBarLabelStyle,
-          })}
-        >
-          <Tabs.Screen
-            name="profile"
-            options={{
-              tabBarLabel: "پروفایل",
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Profile }),
-            }}
-          />
+        <ThemedContainer>
+          <Tabs
+            initialRouteName={"workList"}
+            screenOptions={({ route }) => ({
+              headerShown: true,
+              title: "",
+              headerRight: () => <RightIcon />,
+              tabBarSafeAreaInset: { bottom: "never" },
+              tabBarStyle: hideTabBar
+                ? { display: "none" }
+                : styles.tabBarStyle,
+              tabBarActiveTintColor: Colors.hint500,
+              tabBarInactiveTintColor: Colors.mediumGray,
+              tabBarLabelStyle: styles.tabBarLabelStyle,
+            })}
+          >
+            <Tabs.Screen
+              name="profile"
+              options={{
+                tabBarLabel: "پروفایل",
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: Profile }),
+              }}
+            />
 
-          <Tabs.Screen
-            name="income/index"
-            options={{
-              tabBarLabel: "درآمدها",
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: Wallet1 }),
-            }}
-          />
-          <Tabs.Screen
-            name="mission"
-            options={{
-              tabBarLabel: "ماموریتها",
-              tabBarIcon: ({ focused }) => tabBarIcon({ focused, Icon: Task }),
-            }}
-          />
+            <Tabs.Screen
+              name="income/index"
+              options={{
+                tabBarLabel: "درآمدها",
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: Wallet1 }),
+              }}
+            />
+            <Tabs.Screen
+              name="mission"
+              options={{
+                tabBarLabel: "ماموریتها",
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: Task }),
+              }}
+            />
 
-          <Tabs.Screen
-            name="workList"
-            options={{
-              tabBarLabel: "لیست کارها",
-              tabBarIcon: ({ focused }) =>
-                tabBarIcon({ focused, Icon: DocumentText }),
-            }}
-          />
-        </Tabs>
-        <StatusBar style="auto" />
+            <Tabs.Screen
+              name="workList"
+              options={{
+                tabBarLabel: "لیست کارها",
+                tabBarIcon: ({ focused }) =>
+                  tabBarIcon({ focused, Icon: DocumentText }),
+              }}
+            />
+          </Tabs>
+          <StatusBar style="auto" />
+        </ThemedContainer>
       </ThemeProvider>
     </ToastProvider>
   );

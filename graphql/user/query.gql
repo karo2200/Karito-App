@@ -10,3 +10,31 @@ query user_getMyProfile {
     }
   }
 }
+
+query address_getUserAddresses(
+  $skip: Int
+  $take: Int
+  $userId: UUID!
+  $where: AddressDtoFilterInput
+  $order: [AddressDtoSortInput!]
+) {
+  address_getUserAddresses(
+    skip: $skip
+    take: $take
+    where: $where
+    order: $order
+    userId: $userId
+  ) {
+    items {
+      cityName
+      distanceInMeters
+      fullText: id
+      latitude
+      longitude: neighborhoodName
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}

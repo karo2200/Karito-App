@@ -3,12 +3,20 @@ import EmptyProfileIcon from "@/assets/icons/EmptyProfile";
 import LocationIcon from "@/assets/icons/Location";
 import PercentIcon from "@/assets/icons/Percent";
 import ThemedText from "@/components/atoms/ThemedText";
+import GuestMode from "@/components/molecules/GuestMode";
 import LogOutActionSheet from "@/components/molecules/LogOutActionSheet";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import useProfileHook from "./hooks/Profile.hook";
 
 export default function ProfileScreen() {
@@ -19,83 +27,111 @@ export default function ProfileScreen() {
     onCallPress,
     setIsExpert,
     router,
+    userData,
+    isLoggedIn,
   } = useProfileHook();
 
   return (
     <View style={styles.container}>
-      <View style={styles.flex1}>
-        <View style={styles.headerContainer}>
-          <EmptyProfileIcon />
-          <View style={{ flex: 1, paddingHorizontal: 8 }}>
+      {isLoggedIn ? (
+        <View style={styles.flex1}>
+          <View style={styles.headerContainer}>
+            <EmptyProfileIcon />
+            <View style={{ flex: 1, paddingHorizontal: 8 }}>
+              <ThemedText
+                fontType="bold"
+                style={{ color: Colors.semiBlack, fontWeight: "600" }}
+              >
+                {userData?.phoneNumber}
+              </ThemedText>
+              <ThemedText fontType="bold" style={styles.number}>
+                {userData?.phoneNumber}
+              </ThemedText>
+            </View>
+            <EditIcon onPress={() => router.push("/profile/editProfile")} />
+          </View>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: 35.6892, // مثلا تهران
+              longitude: 51.389,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
+            }}
+          >
+            <Marker
+              coordinate={{ latitude: 35.6892, longitude: 51.389 }}
+              title="اینجا تهران است"
+              description="یک نمونه مارکر ساده"
+            />
+          </MapView>
+          {isExpert && (
+            <View style={styles.rowView2}>
+              <View style={styles.labelContainer}>
+                <ThemedText type="text" style={{ color: Colors.label }}>
+                  ماموریت موفق
+                </ThemedText>
+                <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
+                  ۳۵
+                </ThemedText>
+              </View>
+              <View style={styles.labelContainer}>
+                <ThemedText type="text" style={{ color: Colors.label }}>
+                  روز در کاریتو
+                </ThemedText>
+                <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
+                  ۳۵
+                </ThemedText>
+              </View>
+            </View>
+          )}
+          {!isExpert ? (
+            <>
+              <List
+                title="مدیریت آدرس‌ها"
+                icon={<LocationIcon />}
+                onPress={() => {
+                  router.push("/profile/address");
+                }}
+              />
+              <List
+                title="تخفیف‌ها"
+                icon={<PercentIcon />}
+                onPress={() => {
+                  router.push("/profile/offers");
+                }}
+              />
+            </>
+          ) : (
+            <List
+              title="تماس با پشتیبانی"
+              icon={<CallCalling color={"black"} size={20} />}
+              onPress={() => {
+                onCallPress();
+              }}
+            />
+          )}
+          <Pressable
+            style={styles.rowView}
+            onPress={() => setExitVisible(true)}
+          >
+            <Ionicons
+              name="log-out-outline"
+              size={24}
+              color={Colors.danger600}
+            />
             <ThemedText
               fontType="bold"
-              style={{ color: Colors.semiBlack, fontWeight: "600" }}
+              style={{ color: Colors.danger600, marginRight: 4 }}
             >
-              امیر معتمدنیا
+              خروج از حساب کاربری
             </ThemedText>
-            <ThemedText fontType="bold" style={styles.number}>
-              0912-3276543
-            </ThemedText>
-          </View>
-          <EditIcon onPress={() => router.push("/profile/editProfile")} />
+          </Pressable>
         </View>
-        {isExpert && (
-          <View style={styles.rowView2}>
-            <View style={styles.labelContainer}>
-              <ThemedText type="text" style={{ color: Colors.label }}>
-                ماموریت موفق
-              </ThemedText>
-              <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
-                ۳۵
-              </ThemedText>
-            </View>
-            <View style={styles.labelContainer}>
-              <ThemedText type="text" style={{ color: Colors.label }}>
-                روز در کاریتو
-              </ThemedText>
-              <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
-                ۳۵
-              </ThemedText>
-            </View>
-          </View>
-        )}
-        {!isExpert ? (
-          <>
-            <List
-              title="مدیریت آدرس‌ها"
-              icon={<LocationIcon />}
-              onPress={() => {
-                router.push("/profile/address");
-              }}
-            />
-            <List
-              title="تخفیف‌ها"
-              icon={<PercentIcon />}
-              onPress={() => {
-                router.push("/profile/offers");
-              }}
-            />
-          </>
-        ) : (
-          <List
-            title="تماس با پشتیبانی"
-            icon={<CallCalling color={"black"} size={20} />}
-            onPress={() => {
-              onCallPress();
-            }}
-          />
-        )}
-        <Pressable style={styles.rowView} onPress={() => setExitVisible(true)}>
-          <Ionicons name="log-out-outline" size={24} color={Colors.danger600} />
-          <ThemedText
-            fontType="bold"
-            style={{ color: Colors.danger600, marginRight: 4 }}
-          >
-            خروج از حساب کاربری
-          </ThemedText>
-        </Pressable>
-      </View>
-      {!isExpert && (
+      ) : (
+        <GuestMode />
+      )}
+      {!isExpert && isLoggedIn && (
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.payment}
@@ -190,6 +226,11 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
     flex: 1,
+  },
+
+  map: {
+    width: Dimensions.get("window").width / 2,
+    height: Dimensions.get("window").height / 3,
   },
 });
 

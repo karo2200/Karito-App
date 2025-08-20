@@ -1,5 +1,4 @@
 import CustomCarousel from "@/components/atoms/CustomCarousel";
-import LoginActionSheet from "@/components/molecules/LoginActionSheet";
 import { ScrollView } from "react-native";
 import Banner from "./Views/Banner";
 import Categories from "./Views/Categories";
@@ -12,10 +11,6 @@ export default function HomeScreen() {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <LoginActionSheet
-        visible={selectRoleVisible}
-        setVisible={() => setSelectRoleVisibe(false)}
-      />
       <Categories />
       <Banner />
       <HorizontalServiceList

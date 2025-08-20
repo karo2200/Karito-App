@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
 
 export default function FinishWorkSheet({
   visible,

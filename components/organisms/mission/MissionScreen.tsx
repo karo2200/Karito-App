@@ -14,7 +14,7 @@ import {
 import InprogressMissions from "./Views/InprogressMissions";
 import LastMissions from "./Views/LastMissions";
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get("screen");
 
 export default function MissionScreen() {
   const [activeTab, setActiveTab] = React.useState(0);

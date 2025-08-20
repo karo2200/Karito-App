@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import * as React from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
 
 export default function PaymentStatusScreen() {
   const router = useRouter();

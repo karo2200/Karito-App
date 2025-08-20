@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
-const { height } = Dimensions.get("window");
+const { height } = Dimensions.get("screen");
 
 export default function SpecialistData() {
   const actionSheetRef = useRef<ActionSheetRef>(null);

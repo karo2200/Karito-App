@@ -7,7 +7,7 @@ import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "../atoms/ThemedButton";
 
-const { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("screen");
 
 export default function LogOutActionSheet({
   visible,
@@ -18,7 +18,7 @@ export default function LogOutActionSheet({
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { setIsLoggedIn, setIsExpert } = useUserStore();
+  const { setIsLoggedIn, setIsExpert, setIsSelectRole } = useUserStore();
 
   useEffect(() => {
     if (visible) {
@@ -52,6 +52,7 @@ export default function LogOutActionSheet({
           onPress={() => {
             setIsLoggedIn(false);
             setIsExpert(false);
+            setIsSelectRole(false);
           }}
         />
         <ThemedButton

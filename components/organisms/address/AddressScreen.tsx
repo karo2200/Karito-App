@@ -5,18 +5,17 @@ import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedView from "@/components/atoms/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { FontStyle } from "@/constants/Fonts";
-import { useRouter } from "expo-router";
 import { Edit } from "iconsax-react-native";
 import React, { useCallback } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import EmptyAddressState from "../CreateOrder/Views/AddressEmpty";
+import useAddressHook from "./hooks/Address.hook";
 
 export default function AddressScreen() {
-  const router = useRouter();
-
   const listRef = React.useRef<FlatList>(null);
 
-  const data = [];
+  const { addressesData, refetch, hasNextPage, fetchNextPage } =
+    useAddressHook();
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
@@ -43,13 +42,13 @@ export default function AddressScreen() {
         <FlatList
           ref={listRef}
           keyExtractor={(item) => item?.id}
-          data={[]}
+          data={addressesData}
           refreshing={true}
-          // onRefresh={refetch}
+          onRefresh={refetch}
           showsVerticalScrollIndicator={false}
           renderItem={renderItem}
           ListFooterComponent={
-            data.length > 0 ? (
+            addressesData.length > 0 ? (
               <ThemedButton
                 title="افزودن آدرس جدید"
                 fontType={FontStyle.bold}
@@ -59,9 +58,9 @@ export default function AddressScreen() {
             ) : null
           }
           onEndReached={() => {
-            // if (hasNextPage) {
-            //   fetchNextPage();
-            // }
+            if (hasNextPage) {
+              fetchNextPage();
+            }
           }}
           ListEmptyComponent={() => <EmptyAddressState />}
         />

@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
-const { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("screen");
 
 export default function ExitExpertSheet({
   visible,

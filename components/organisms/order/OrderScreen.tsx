@@ -1,8 +1,8 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { DeviceWidth } from "@/constants/Dimension";
 import * as React from "react";
 import {
-  Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
@@ -14,8 +14,6 @@ import {
 import CanceledOrders from "./Views/CanceledOrders";
 import FinishedOrdes from "./Views/FinishedOrders";
 import InProgressOrders from "./Views/InProgressOrders";
-
-const { width } = Dimensions.get("window");
 
 export default function OrderScreen() {
   const [activeTab, setActiveTab] = React.useState(0);
@@ -29,18 +27,23 @@ export default function OrderScreen() {
 
   const onTabPress = (index: number) => {
     setActiveTab(index);
-    scrollRef.current?.scrollTo({ x: width * index, animated: true });
+    scrollRef.current?.scrollTo({ x: DeviceWidth * index, animated: true });
   };
 
   const onScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const pageIndex = Math.round(e.nativeEvent.contentOffset.x / width);
+    const pageIndex = Math.round(e.nativeEvent.contentOffset.x / DeviceWidth);
     setActiveTab(pageIndex);
   };
 
   return (
     <View>
       {/* Tab Bar */}
-      <View style={styles.tabContainer}>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        contentContainerStyle={styles.tabContainer}
+        showsHorizontalScrollIndicator={false}
+      >
         {tabs.map((tab, index) => (
           <TouchableOpacity key={index} onPress={() => onTabPress(index)}>
             <ThemedText
@@ -55,7 +58,7 @@ export default function OrderScreen() {
             {activeTab === index && <View style={styles.tabButtonActive} />}
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
 
       {/* Tab Content */}
       <ScrollView
@@ -113,6 +116,6 @@ const styles = StyleSheet.create({
   },
 
   page: {
-    width: Platform.OS === "web" ? Math.min(width, 480) : width,
+    width: Platform.OS === "web" ? Math.min(DeviceWidth, 480) : DeviceWidth,
   },
 });

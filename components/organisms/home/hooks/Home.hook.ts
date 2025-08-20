@@ -1,8 +1,9 @@
 import { useCity_GetAllQuery } from "@/generated/graphql";
+import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { useGetServiceCategoriesQuery } from "../../service/hooks";
 
 export default function useHomeHook() {
   const router = useRouter();
@@ -12,22 +13,24 @@ export default function useHomeHook() {
   const [selectRoleVisible, setSelectRoleVisibe] = useState<boolean>(false);
 
   const { data } = useCity_GetAllQuery({ take: 200 });
-  console.log("ddddd", data);
+
+  const { data: homeCategoryData } = useGetServiceCategoriesQuery({});
 
   useEffect(() => {
     if (isSelectRole) {
       setSelectRoleVisibe(false);
-    } else if (Platform.OS === "ios") {
+    }
+    // if (Platform.OS === "ios")
+    else {
       const timeout = setTimeout(() => {
-        setSelectRoleVisibe(true);
+        onShow();
 
         const interval = setInterval(() => {
-          setSelectRoleVisibe(true);
+          onShow();
         }, 30000);
 
         return () => {
           clearInterval(interval);
-          setSelectRoleVisibe(false);
         };
       }, 5000);
 
@@ -38,28 +41,23 @@ export default function useHomeHook() {
     }
   }, [isSelectRole]);
 
-  // ⏱ باز شدن خودکار هر ۳۰ ثانیه اگه انتخابی انجام نشده باشه
-  // useEffect(() => {
-  //   const openWithDelay = () => {
-  //     if (!answered) actionSheetRef.current?.show();
-  //   };
+  const onShow = () => {
+    showSheet("confirmation-action", {
+      payload: {
+        hasLoading: false,
+        showToastInActionSheet: false,
+        title: "ورود",
 
-  //   // بار اول ۵ ثانیه بعد
-  //   const firstTimeout = setTimeout(openWithDelay, 5000);
-
-  //   // دفعات بعد هر ۳۰ ثانیه
-  //   const interval = setInterval(openWithDelay, 30000);
-
-  //   return () => {
-  //     clearTimeout(firstTimeout);
-  //     clearInterval(interval);
-  //   };
-  // }, [answered]);
+        onClose: () => hideSheet("confirmation-action"),
+      },
+    });
+  };
 
   return {
     router,
     selectRoleVisible,
     setSelectRoleVisibe,
     data,
+    homeCategoryData: homeCategoryData?.pages ?? [],
   };
 }

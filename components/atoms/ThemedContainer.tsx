@@ -2,7 +2,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { useMemo } from "react";
 import { Dimensions, Platform, View, type ViewProps } from "react-native";
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get("screen");
 
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;
@@ -36,12 +36,11 @@ export default function ThemedContainer({
     <View
       style={[
         containerStyle,
-        isWeb &&
-          isLargeScreen && {
-            maxWidth: 480,
-            alignSelf: "center",
-            width: "100%",
-          },
+        (isWeb || isLargeScreen) && {
+          maxWidth: 480,
+          alignSelf: "center",
+          width: "100%",
+        },
         style,
       ]}
       {...otherProps}

@@ -1,13 +1,11 @@
-import { ThemedText } from "@/components";
-import { ToastProvider } from "@/components/atoms/Toast";
+import { ThemedContainer, ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Category, Document, Home2, Profile } from "iconsax-react-native";
-import { useEffect } from "react";
-import { I18nManager, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
 type TabBarIconProps = {
@@ -21,12 +19,12 @@ export enum RoleType {
 }
 
 export default function RootLayout() {
-  useEffect(() => {
-    if (!I18nManager.isRTL) {
-      I18nManager.allowRTL(true);
-      I18nManager.forceRTL(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!I18nManager.isRTL) {
+  //     I18nManager.allowRTL(true);
+  //     I18nManager.forceRTL(true);
+  //   }
+  // }, []);
 
   const segments = useSegments();
 
@@ -36,8 +34,6 @@ export default function RootLayout() {
     (segments[2] === "payment" || segments[2] === "paymentStatus");
 
   const fontsLoaded = useLoadFonts();
-
-  let role: RoleType = RoleType.Specialist;
 
   const MyTheme = {
     ...DefaultTheme,
@@ -73,8 +69,8 @@ export default function RootLayout() {
   };
 
   return (
-    <ToastProvider>
-      <ThemeProvider value={MyTheme}>
+    <ThemeProvider value={MyTheme}>
+      <ThemedContainer>
         <Tabs
           initialRouteName={"home/index"}
           screenOptions={({ route }) => ({
@@ -121,8 +117,8 @@ export default function RootLayout() {
           />
         </Tabs>
         <StatusBar style="auto" />
-      </ThemeProvider>
-    </ToastProvider>
+      </ThemedContainer>
+    </ThemeProvider>
   );
 }
 

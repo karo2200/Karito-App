@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("screen");
 
 export default function Banner() {
   const actionSheetRef = useRef<ActionSheetRef>(null);

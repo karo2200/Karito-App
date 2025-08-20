@@ -1,8 +1,6 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import useUserStore from "@/stores/loginStore";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useEffect, useRef } from "react";
 import {
   Dimensions,
   Platform,
@@ -10,95 +8,91 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 
-const { height, width } = Dimensions.get("window");
+import { SheetProps } from "react-native-actions-sheet";
+import ActionSheetContainer from "../atoms/ActionSheetContainer";
 
-export default function LoginActionSheet({
-  visible,
-  setVisible,
-}: {
-  visible: boolean;
-  setVisible: () => void;
-}) {
-  const { setIsExpert, isExpert, setIsLoggedIn } = useUserStore();
-  const actionSheetRef = useRef<ActionSheetRef>(null);
+const { height, width } = Dimensions.get("screen");
 
-  useEffect(() => {
-    actionSheetRef.current?.show();
-  }, [visible]);
-
-  const closeActionSheet = () => {
-    actionSheetRef.current?.hide();
-    setVisible?.();
-  };
+export default function LoginActionSheet(
+  props: SheetProps<"confirmation-action">
+) {
+  const {
+    title,
+    description,
+    onClose = () => {},
+    onConfirm = () => {},
+    negativeText,
+    positiveText,
+    positiveColor,
+    positiveBorderColor,
+    positiveBorderWidth,
+    positiveOutline = true,
+    negativeColor,
+    negativeBorderColor,
+    negativeBorderWidth = 1,
+    negativeOutline = true,
+    negativeBackgroundColor,
+    positiveBackgroundColor,
+    id = "confirmation-action",
+  } = props?.payload ?? {};
+  const { setIsExpert, isExpert, setIsSelectRole } = useUserStore();
 
   const loginAsExpert = () => {
+    onClose();
     setIsExpert(true);
-    closeActionSheet();
+    setIsSelectRole(true);
   };
 
   const loginAsCustomer = () => {
+    onClose();
     setIsExpert(false);
-    setIsLoggedIn(false);
-    closeActionSheet();
+    setIsSelectRole(true);
   };
 
   return (
-    <ActionSheet
-      ref={actionSheetRef}
-      containerStyle={styles.container}
-      gestureEnabled
-      onClose={() => actionSheetRef.current?.hide()}
-    >
-      <View style={styles.header}>
-        <Ionicons
-          name="close"
-          size={24}
-          color={Colors.mediumGray}
-          onPress={() => closeActionSheet()}
-        />
-        <ThemedText fontType="bold">ورود</ThemedText>
+    <ActionSheetContainer id="confirmation-action" onClose={() => onClose}>
+      <View style={styles.container}>
+        <View style={styles.contentView}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={isExpert ? styles.selected : styles.btn}
+            onPress={loginAsExpert}
+          >
+            <ThemedText
+              type="text"
+              style={[styles.title, isExpert && { color: Colors.hint500 }]}
+            >
+              ورود به عنوان
+            </ThemedText>
+            <ThemedText
+              fontType="bold"
+              style={[styles.text, isExpert && { color: Colors.hint500 }]}
+            >
+              متخصص
+            </ThemedText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={!isExpert ? styles.selected : styles.btn}
+            onPress={loginAsCustomer}
+          >
+            <ThemedText
+              type="text"
+              style={[styles.title, !isExpert && { color: Colors.hint500 }]}
+            >
+              ورود به عنوان
+            </ThemedText>
+            <ThemedText
+              fontType="bold"
+              style={[styles.text, !isExpert && { color: Colors.hint500 }]}
+            >
+              مشتری
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.contentView}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={isExpert ? styles.selected : styles.btn}
-          onPress={loginAsExpert}
-        >
-          <ThemedText
-            type="text"
-            style={[styles.title, isExpert && { color: Colors.hint500 }]}
-          >
-            ورود به عنوان
-          </ThemedText>
-          <ThemedText
-            fontType="bold"
-            style={[styles.text, isExpert && { color: Colors.hint500 }]}
-          >
-            متخصص
-          </ThemedText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={!isExpert ? styles.selected : styles.btn}
-          onPress={loginAsCustomer}
-        >
-          <ThemedText
-            type="text"
-            style={[styles.title, !isExpert && { color: Colors.hint500 }]}
-          >
-            ورود به عنوان
-          </ThemedText>
-          <ThemedText
-            fontType="bold"
-            style={[styles.text, !isExpert && { color: Colors.hint500 }]}
-          >
-            مشتری
-          </ThemedText>
-        </TouchableOpacity>
-      </View>
-    </ActionSheet>
+    </ActionSheetContainer>
   );
 }
 
@@ -151,5 +145,13 @@ const styles = StyleSheet.create({
   container: {
     minHeight: height / 3.5,
     width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+    backgroundColor: "white",
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+  },
+
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
   },
 });

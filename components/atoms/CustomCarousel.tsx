@@ -10,7 +10,7 @@ import {
 import Carousel from "react-native-reanimated-carousel";
 import ThemedText from "./ThemedText";
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get("screen");
 
 const images = [
   require("../../assets/images/react-logo.png"),
