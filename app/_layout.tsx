@@ -8,6 +8,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { SheetProvider } from "react-native-actions-sheet";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../sheets.tsx";
 import { RightIcon } from "./(tabs)/_layout";
 
@@ -53,44 +54,48 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <ThemeProvider value={MyTheme}>
-        <SheetProvider>
-          <ToastProvider>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Protected guard={isLoggedIn && isExpert}>
-                <Stack.Screen name="(expertTabs)" />
-              </Stack.Protected>
-              <Stack.Protected guard={isLoggedIn && !isExpert}>
-                <Stack.Screen name="(tabs)" />
-              </Stack.Protected>
+      <SafeAreaProvider>
+        <ThemeProvider value={MyTheme}>
+          <SheetProvider>
+            <ToastProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Protected guard={isLoggedIn && isExpert}>
+                  <Stack.Screen name="(expertTabs)" />
+                </Stack.Protected>
+                <Stack.Protected guard={isLoggedIn && !isExpert}>
+                  <Stack.Screen name="(tabs)" />
+                </Stack.Protected>
 
-              <Stack.Protected guard={!isLoggedIn && !isExpert && isSelectRole}>
-                <Stack.Screen name="LoginPage" />
-                <Stack.Screen name="OTPScreen" />
-              </Stack.Protected>
+                <Stack.Protected
+                  guard={!isLoggedIn && !isExpert && isSelectRole}
+                >
+                  <Stack.Screen name="LoginPage" />
+                  <Stack.Screen name="OTPScreen" />
+                </Stack.Protected>
 
-              <Stack.Protected guard={!isLoggedIn && isExpert}>
-                <Stack.Screen
-                  name="ExpertLoginPage"
-                  options={expertScreenOptions}
-                />
-                <Stack.Screen
-                  name="ExpertRegisterPage"
-                  options={expertScreenOptions}
-                />
-                <Stack.Screen
-                  name="PersonalInfoPage"
-                  options={expertScreenOptions}
-                />
-                <Stack.Screen
-                  name="CertificateInfoPage"
-                  options={expertScreenOptions}
-                />
-              </Stack.Protected>
-            </Stack>
-          </ToastProvider>
-        </SheetProvider>
-      </ThemeProvider>
+                <Stack.Protected guard={!isLoggedIn && isExpert}>
+                  <Stack.Screen
+                    name="ExpertLoginPage"
+                    options={expertScreenOptions}
+                  />
+                  <Stack.Screen
+                    name="ExpertRegisterPage"
+                    options={expertScreenOptions}
+                  />
+                  <Stack.Screen
+                    name="PersonalInfoPage"
+                    options={expertScreenOptions}
+                  />
+                  <Stack.Screen
+                    name="CertificateInfoPage"
+                    options={expertScreenOptions}
+                  />
+                </Stack.Protected>
+              </Stack>
+            </ToastProvider>
+          </SheetProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
     </AuthProvider>
   );
 }

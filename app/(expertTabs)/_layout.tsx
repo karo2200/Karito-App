@@ -6,7 +6,7 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { DocumentText, Profile, Task, Wallet1 } from "iconsax-react-native";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import "react-native-reanimated";
 
 type TabBarIconProps = {
@@ -81,6 +81,15 @@ export default function RootLayout() {
               tabBarActiveTintColor: Colors.hint500,
               tabBarInactiveTintColor: Colors.mediumGray,
               tabBarLabelStyle: styles.tabBarLabelStyle,
+              tabBarButton: (props) => (
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={props.onPress}
+                  style={styles.tabButton}
+                >
+                  {props.children}
+                </TouchableOpacity>
+              ),
             })}
           >
             <Tabs.Screen
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
   tabBarStyle: {
     backgroundColor: "white",
     borderTopWidth: 0,
-    height: 84,
+    minHeight: 84,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     shadowColor: "#000",
@@ -169,4 +178,10 @@ const styles = StyleSheet.create({
   },
 
   tabBarIconContainer: { alignItems: "center" },
+
+  tabButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 8,
+  },
 });

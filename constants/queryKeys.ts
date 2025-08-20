@@ -4,4 +4,6 @@ export const queryKeys = {
   serviceSubCategory_getAll: "serviceSubCategory_getAll",
   address_getUserAddresses: "address_getUserAddresses",
   serviceRequest_getMyServiceRequests: "serviceRequest_getMyServiceRequests",
+  serviceRequest_getMyServiceAcceptances:
+    "serviceRequest_getMyServiceAcceptances",
 };

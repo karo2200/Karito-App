@@ -32,3 +32,29 @@ query serviceRequest_getMyServiceRequests(
     }
   }
 }
+
+query serviceRequest_getMyServiceAcceptances(
+  $skip: Int
+  $take: Int
+  $where: ServiceAcceptanceDtoFilterInput
+  $order: [ServiceAcceptanceDtoSortInput!]
+) {
+  serviceRequest_getMyServiceAcceptances(
+    skip: $skip
+    take: $take
+    where: $where
+    order: $order
+  ) {
+    items {
+      actionDate
+      id
+      specialistId
+      specialistName
+      status
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}

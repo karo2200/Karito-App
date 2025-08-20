@@ -1,27 +1,27 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  ServiceRequest_GetMyServiceRequestsDocument,
-  ServiceRequestDetailDtoFilterInput,
-  ServiceRequestDetailDtoSortInput,
+  ServiceAcceptanceDtoFilterInput,
+  ServiceAcceptanceDtoSortInput,
+  ServiceRequest_GetMyServiceAcceptancesDocument,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-type UseGetServiceRequestsOptions = {
+type UseGetServiceAcceptanceOptions = {
   skip?: number;
   take?: number;
-  where?: ServiceRequestDetailDtoFilterInput;
-  order?: [ServiceRequestDetailDtoSortInput];
+  where?: ServiceAcceptanceDtoFilterInput;
+  order?: [ServiceAcceptanceDtoSortInput];
 };
 
-export const useGetServiceRequestsQuery = (
-  options: UseGetServiceRequestsOptions = {}
+export const useGetServiceAcceptanceQuery = (
+  options: UseGetServiceAcceptanceOptions = {}
 ) => {
   return useInfiniteQuery({
-    queryKey: [queryKeys.serviceRequest_getMyServiceRequests, options],
+    queryKey: [queryKeys.serviceRequest_getMyServiceAcceptances, options],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceRequest_GetMyServiceRequestsDocument, {
+      return fetcher(ServiceRequest_GetMyServiceAcceptancesDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
@@ -30,7 +30,7 @@ export const useGetServiceRequestsQuery = (
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       if (
-        lastPage?.serviceRequest_getMyServiceRequests?.pageInfo?.hasNextPage
+        lastPage?.serviceRequest_getMyServiceAcceptances?.pageInfo?.hasNextPage
       ) {
         return allPages.length;
       }
@@ -40,7 +40,7 @@ export const useGetServiceRequestsQuery = (
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.serviceRequest_getMyServiceRequests?.items)
+          ?.map((a) => a?.serviceRequest_getMyServiceAcceptances?.items)
           .flat(),
       };
     },
