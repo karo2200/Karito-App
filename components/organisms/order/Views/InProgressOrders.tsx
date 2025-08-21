@@ -16,6 +16,7 @@ export default function InProgressOrders() {
         onOrderPress={() => {
           router.push("/order/orderDetail");
         }}
+        key={item?.id}
       />
     ),
     []

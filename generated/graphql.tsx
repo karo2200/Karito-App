@@ -35,6 +35,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  Any: { input: any; output: any };
   DateTime: { input: any; output: any };
   Decimal: { input: any; output: any };
   UUID: { input: any; output: any };
@@ -42,11 +43,6 @@ export type Scalars = {
 
 export type AcceptServiceRequestInput = {
   serviceRequestId: Scalars["UUID"]["input"];
-};
-
-export type AcceptServiceRequestPayload = {
-  __typename?: "AcceptServiceRequestPayload";
-  serviceAcceptanceId: Scalars["UUID"]["output"];
 };
 
 export type ActivateCityInput = {
@@ -59,11 +55,6 @@ export type AddAddressInput = {
   longitude: Scalars["Float"]["input"];
   neighborhoodId: Scalars["UUID"]["input"];
   text: Scalars["String"]["input"];
-};
-
-export type AddAddressPayload = {
-  __typename?: "AddAddressPayload";
-  addressId: Scalars["UUID"]["output"];
 };
 
 export type Address = {
@@ -81,35 +72,39 @@ export type Address = {
 
 export type AddressDto = {
   __typename?: "AddressDto";
-  cityName: Scalars["String"]["output"];
-  distanceInMeters?: Maybe<Scalars["Float"]["output"]>;
-  fullText: Scalars["String"]["output"];
   id: Scalars["UUID"]["output"];
   latitude: Scalars["Float"]["output"];
   longitude: Scalars["Float"]["output"];
-  neighborhoodName: Scalars["String"]["output"];
+  neighborhoodId: Scalars["UUID"]["output"];
+  text: Scalars["String"]["output"];
+};
+
+/** A segment of a collection. */
+export type AddressDtoCollectionSegment = {
+  __typename?: "AddressDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<AddressDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
 };
 
 export type AddressDtoFilterInput = {
   and?: InputMaybe<Array<AddressDtoFilterInput>>;
-  cityName?: InputMaybe<StringOperationFilterInput>;
-  distanceInMeters?: InputMaybe<FloatOperationFilterInput>;
-  fullText?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   latitude?: InputMaybe<FloatOperationFilterInput>;
   longitude?: InputMaybe<FloatOperationFilterInput>;
-  neighborhoodName?: InputMaybe<StringOperationFilterInput>;
+  neighborhoodId?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<AddressDtoFilterInput>>;
+  text?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type AddressDtoSortInput = {
-  cityName?: InputMaybe<SortEnumType>;
-  distanceInMeters?: InputMaybe<SortEnumType>;
-  fullText?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   latitude?: InputMaybe<SortEnumType>;
   longitude?: InputMaybe<SortEnumType>;
-  neighborhoodName?: InputMaybe<SortEnumType>;
+  neighborhoodId?: InputMaybe<SortEnumType>;
+  text?: InputMaybe<SortEnumType>;
 };
 
 export type AddressInput = {
@@ -122,24 +117,6 @@ export type AddressInput = {
   serviceRequests: Array<ServiceRequestInput>;
   text: Scalars["String"]["input"];
   updatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-};
-
-/** A segment of a collection. */
-export type Address_GetUserAddressesCollectionSegment = {
-  __typename?: "Address_getUserAddressesCollectionSegment";
-  /** A flattened list of the items. */
-  items?: Maybe<Array<AddressDto>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
-};
-
-/** A segment of a collection. */
-export type Address_NearestAddressesCollectionSegment = {
-  __typename?: "Address_nearestAddressesCollectionSegment";
-  /** A flattened list of the items. */
-  items?: Maybe<Array<AddressDto>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
 };
 
 /** Defines when a policy shall be executed. */
@@ -156,6 +133,48 @@ export type AuthResult = {
   __typename?: "AuthResult";
   accessToken: Scalars["String"]["output"];
   refreshToken: Scalars["String"]["output"];
+};
+
+export type Banner = {
+  __typename?: "Banner";
+  cities: Array<City>;
+  createdAt: Scalars["DateTime"]["output"];
+  id: Scalars["UUID"]["output"];
+  imageUrl: Scalars["String"]["output"];
+  isRemoved: Scalars["Boolean"]["output"];
+  title: Scalars["String"]["output"];
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type BannerDto = {
+  __typename?: "BannerDto";
+  id: Scalars["UUID"]["output"];
+  imageUrl: Scalars["String"]["output"];
+  title: Scalars["String"]["output"];
+};
+
+export type BannerDtoFilterInput = {
+  and?: InputMaybe<Array<BannerDtoFilterInput>>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  imageUrl?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<BannerDtoFilterInput>>;
+  title?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type BannerDtoSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  imageUrl?: InputMaybe<SortEnumType>;
+  title?: InputMaybe<SortEnumType>;
+};
+
+export type BannerInput = {
+  cities: Array<CityInput>;
+  createdAt: Scalars["DateTime"]["input"];
+  id: Scalars["UUID"]["input"];
+  imageUrl: Scalars["String"]["input"];
+  isRemoved: Scalars["Boolean"]["input"];
+  title: Scalars["String"]["input"];
+  updatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
 };
 
 export type BooleanOperationFilterInput = {
@@ -178,6 +197,34 @@ export type CancellationReason = {
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
 };
 
+export type CancellationReasonDto = {
+  __typename?: "CancellationReasonDto";
+  id: Scalars["UUID"]["output"];
+  name: Scalars["String"]["output"];
+};
+
+/** A segment of a collection. */
+export type CancellationReasonDtoCollectionSegment = {
+  __typename?: "CancellationReasonDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<CancellationReasonDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type CancellationReasonDtoFilterInput = {
+  and?: InputMaybe<Array<CancellationReasonDtoFilterInput>>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<CancellationReasonDtoFilterInput>>;
+};
+
+export type CancellationReasonDtoSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+};
+
 export type CancellationReasonInput = {
   createdAt: Scalars["DateTime"]["input"];
   id: Scalars["UUID"]["input"];
@@ -187,8 +234,51 @@ export type CancellationReasonInput = {
   updatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
 };
 
+export type Carousel = {
+  __typename?: "Carousel";
+  cities: Array<City>;
+  createdAt: Scalars["DateTime"]["output"];
+  id: Scalars["UUID"]["output"];
+  imageUrls: Array<Scalars["String"]["output"]>;
+  isRemoved: Scalars["Boolean"]["output"];
+  title: Scalars["String"]["output"];
+  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+export type CarouselDto = {
+  __typename?: "CarouselDto";
+  id: Scalars["UUID"]["output"];
+  imageUrls: Array<Scalars["String"]["output"]>;
+  title: Scalars["String"]["output"];
+};
+
+export type CarouselDtoFilterInput = {
+  and?: InputMaybe<Array<CarouselDtoFilterInput>>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  imageUrls?: InputMaybe<ListStringOperationFilterInput>;
+  or?: InputMaybe<Array<CarouselDtoFilterInput>>;
+  title?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type CarouselDtoSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  title?: InputMaybe<SortEnumType>;
+};
+
+export type CarouselInput = {
+  cities: Array<CityInput>;
+  createdAt: Scalars["DateTime"]["input"];
+  id: Scalars["UUID"]["input"];
+  imageUrls: Array<Scalars["String"]["input"]>;
+  isRemoved: Scalars["Boolean"]["input"];
+  title: Scalars["String"]["input"];
+  updatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
+};
+
 export type City = {
   __typename?: "City";
+  activeBanner?: Maybe<Banner>;
+  activeCarousel?: Maybe<Carousel>;
   addresses: Array<Address>;
   createdAt: Scalars["DateTime"]["output"];
   id: Scalars["UUID"]["output"];
@@ -203,13 +293,27 @@ export type City = {
 
 export type CityDto = {
   __typename?: "CityDto";
+  activeBanner?: Maybe<BannerDto>;
+  activeCarousel?: Maybe<CarouselDto>;
   id: Scalars["UUID"]["output"];
   isActive: Scalars["Boolean"]["output"];
   name: Scalars["String"]["output"];
   provinceId: Scalars["UUID"]["output"];
 };
 
+/** A segment of a collection. */
+export type CityDtoCollectionSegment = {
+  __typename?: "CityDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<CityDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
 export type CityDtoFilterInput = {
+  activeBanner?: InputMaybe<BannerDtoFilterInput>;
+  activeCarousel?: InputMaybe<CarouselDtoFilterInput>;
   and?: InputMaybe<Array<CityDtoFilterInput>>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isActive?: InputMaybe<BooleanOperationFilterInput>;
@@ -219,6 +323,8 @@ export type CityDtoFilterInput = {
 };
 
 export type CityDtoSortInput = {
+  activeBanner?: InputMaybe<BannerDtoSortInput>;
+  activeCarousel?: InputMaybe<CarouselDtoSortInput>;
   id?: InputMaybe<SortEnumType>;
   isActive?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
@@ -226,6 +332,8 @@ export type CityDtoSortInput = {
 };
 
 export type CityInput = {
+  activeBanner?: InputMaybe<BannerInput>;
+  activeCarousel?: InputMaybe<CarouselInput>;
   addresses: Array<AddressInput>;
   createdAt: Scalars["DateTime"]["input"];
   id: Scalars["UUID"]["input"];
@@ -236,15 +344,6 @@ export type CityInput = {
   province: ProvinceInput;
   specialists: Array<SpecialistInput>;
   updatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-};
-
-/** A segment of a collection. */
-export type City_GetAllCollectionSegment = {
-  __typename?: "City_getAllCollectionSegment";
-  /** A flattened list of the items. */
-  items?: Maybe<Array<CityDto>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
 };
 
 /** Information about the offset pagination. */
@@ -276,29 +375,14 @@ export type CreateCityInput = {
   provinceId: Scalars["UUID"]["input"];
 };
 
-export type CreateCityPayload = {
-  __typename?: "CreateCityPayload";
-  cityId: Scalars["UUID"]["output"];
-};
-
 export type CreateNeighborhoodInput = {
   cityId: Scalars["UUID"]["input"];
   name: Scalars["String"]["input"];
 };
 
-export type CreateNeighborhoodPayload = {
-  __typename?: "CreateNeighborhoodPayload";
-  neighborhoodId: Scalars["UUID"]["output"];
-};
-
 export type CreateServiceCategoryInput = {
   logo: Scalars["String"]["input"];
   name: Scalars["String"]["input"];
-};
-
-export type CreateServiceCategoryPayload = {
-  __typename?: "CreateServiceCategoryPayload";
-  serviceCategoryId: Scalars["UUID"]["output"];
 };
 
 export type CreateServiceRequestInput = {
@@ -310,20 +394,10 @@ export type CreateServiceRequestInput = {
   serviceTypeId: Scalars["UUID"]["input"];
 };
 
-export type CreateServiceRequestPayload = {
-  __typename?: "CreateServiceRequestPayload";
-  serviceRequestId: Scalars["UUID"]["output"];
-};
-
 export type CreateServiceSubCategoryInput = {
   logo: Scalars["String"]["input"];
   name: Scalars["String"]["input"];
   serviceCategoryId: Scalars["UUID"]["input"];
-};
-
-export type CreateServiceSubCategoryPayload = {
-  __typename?: "CreateServiceSubCategoryPayload";
-  serviceSubCategoryId: Scalars["UUID"]["output"];
 };
 
 export type CreateServiceTypeInput = {
@@ -332,16 +406,12 @@ export type CreateServiceTypeInput = {
   serviceSubCategoryId: Scalars["UUID"]["input"];
 };
 
-export type CreateServiceTypePayload = {
-  __typename?: "CreateServiceTypePayload";
-  serviceTypeId: Scalars["UUID"]["output"];
-};
-
 export type Customer = {
   __typename?: "Customer";
   addresses: Array<Address>;
   createdAt: Scalars["DateTime"]["output"];
   firstName?: Maybe<Scalars["String"]["output"]>;
+  fullName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
   isRemoved: Scalars["Boolean"]["output"];
@@ -358,6 +428,7 @@ export type CustomerInput = {
   addresses: Array<AddressInput>;
   createdAt: Scalars["DateTime"]["input"];
   firstName?: InputMaybe<Scalars["String"]["input"]>;
+  fullName?: InputMaybe<Scalars["String"]["input"]>;
   gender: Gender;
   id: Scalars["UUID"]["input"];
   isRemoved: Scalars["Boolean"]["input"];
@@ -442,11 +513,63 @@ export enum Gender {
   Male = "MALE",
 }
 
-export type ListFilterInputTypeOfServiceAcceptanceDtoFilterInput = {
-  all?: InputMaybe<ServiceAcceptanceDtoFilterInput>;
+export type ListResponseBaseOfAddressDto = {
+  __typename?: "ListResponseBaseOfAddressDto";
+  result?: Maybe<AddressDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfAddressDtoResultArgs = {
+  order?: InputMaybe<Array<AddressDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<AddressDtoFilterInput>;
+};
+
+export type ListResponseBaseOfCancellationReasonDto = {
+  __typename?: "ListResponseBaseOfCancellationReasonDto";
+  result?: Maybe<CancellationReasonDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfCancellationReasonDtoResultArgs = {
+  order?: InputMaybe<Array<CancellationReasonDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<CancellationReasonDtoFilterInput>;
+};
+
+export type ListResponseBaseOfCityDto = {
+  __typename?: "ListResponseBaseOfCityDto";
+  result?: Maybe<CityDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfCityDtoResultArgs = {
+  order?: InputMaybe<Array<CityDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<CityDtoFilterInput>;
+};
+
+export type ListResponseBaseOfServiceRequestDto = {
+  __typename?: "ListResponseBaseOfServiceRequestDto";
+  result?: Maybe<ServiceRequestDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfServiceRequestDtoResultArgs = {
+  order?: InputMaybe<Array<ServiceRequestDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<ServiceRequestDtoFilterInput>;
+};
+
+export type ListStringOperationFilterInput = {
+  all?: InputMaybe<StringOperationFilterInput>;
   any?: InputMaybe<Scalars["Boolean"]["input"]>;
-  none?: InputMaybe<ServiceAcceptanceDtoFilterInput>;
-  some?: InputMaybe<ServiceAcceptanceDtoFilterInput>;
+  none?: InputMaybe<StringOperationFilterInput>;
+  some?: InputMaybe<StringOperationFilterInput>;
 };
 
 export enum LocationType {
@@ -462,55 +585,64 @@ export type MarkAsArrivedInput = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  address_create: AddAddressPayload;
-  address_delete: SuccessPayload;
-  address_update: SuccessPayload;
+  address_createAddress: ResponseBaseOfAddressDto;
+  address_deleteAddress: ResponseBase;
+  address_updateAddress: ResponseBaseOfAddressDto;
   /** Generates a new access and refresh token pair using a valid refresh token. */
-  auth_refreshToken: AuthResult;
+  auth_refreshToken: ResponseBaseOfAuthResult;
   /** Requests an OTP to be sent to the provided phone number and user type. */
   auth_requestOtp: ResponseBase;
   auth_verifyOtp: ResponseBaseOfAuthResult;
-  city_activate: SuccessPayload;
-  city_create: CreateCityPayload;
-  city_deactivate: SuccessPayload;
-  city_update: SuccessPayload;
-  createCancelationReason: Scalars["UUID"]["output"];
+  banner_createBanner: ResponseBaseOfBannerDto;
+  banner_deleteBanner: ResponseBase;
+  banner_updateBanner: ResponseBaseOfBannerDto;
+  cancelationReason_createCancelationReason: ResponseBaseOfCancellationReasonDto;
+  cancelationReason_deleteCancelationReason: ResponseBase;
+  cancelationReason_updateCancelationReason: ResponseBaseOfCancellationReasonDto;
+  carousel_createCarousel: ResponseBaseOfCarouselDto;
+  carousel_deleteCarousel: ResponseBase;
+  carousel_updateCarousel: ResponseBaseOfCarouselDto;
+  city_activate: ResponseBaseOfCityDto;
+  city_createCity: ResponseBaseOfCityDto;
+  city_deactivate: ResponseBaseOfCityDto;
+  city_setActiveBanner: ResponseBaseOfCityDto;
+  city_setActiveCarousel: ResponseBaseOfCityDto;
+  city_updateCity: ResponseBaseOfCityDto;
   createDiscountCode: Scalars["UUID"]["output"];
   createProvince: Scalars["UUID"]["output"];
   createServiceTypeQuestion: Scalars["UUID"]["output"];
   deleteProvince: Scalars["Boolean"]["output"];
-  neighborhood_create: CreateNeighborhoodPayload;
-  neighborhood_delete: SuccessPayload;
-  neighborhood_update: SuccessPayload;
-  serviceAcceptance_markAsArrived: SuccessPayload;
-  serviceAcceptance_revoke: SuccessPayload;
-  serviceCategory_create: CreateServiceCategoryPayload;
-  serviceCategory_delete: SuccessPayload;
-  serviceCategory_update: SuccessPayload;
-  serviceRequest_accept: AcceptServiceRequestPayload;
-  serviceRequest_cancel: SuccessPayload;
-  serviceRequest_completeService: SuccessPayload;
-  serviceRequest_create: CreateServiceRequestPayload;
-  serviceSubCategory_create: CreateServiceSubCategoryPayload;
-  serviceSubCategory_delete: SuccessPayload;
-  serviceSubCategory_update: SuccessPayload;
-  serviceType_create: CreateServiceTypePayload;
-  serviceType_delete: SuccessPayload;
-  serviceType_update: SuccessPayload;
+  neighborhood_createNeighborhood: ResponseBaseOfNeighborhoodDto;
+  neighborhood_deleteNeighborhood: ResponseBase;
+  neighborhood_updateNeighborhood: ResponseBaseOfNeighborhoodDto;
+  serviceAcceptance_markAsArrived: ResponseBaseOfServiceRequestDto;
+  serviceCategory_createServiceCategory: ResponseBaseOfServiceCategoryDto;
+  serviceCategory_deleteServiceCategory: ResponseBase;
+  serviceCategory_updateServiceCategory: ResponseBaseOfServiceCategoryDto;
+  serviceRequest_accept: ResponseBaseOfServiceRequestDto;
+  serviceRequest_cancel: ResponseBaseOfServiceRequestDto;
+  serviceRequest_completeService: ResponseBaseOfServiceRequestDto;
+  serviceRequest_create: ResponseBaseOfServiceRequestDto;
+  serviceSubCategory_create: ResponseBaseOfServiceSubCategoryDto;
+  serviceSubCategory_delete: ResponseBase;
+  serviceSubCategory_update: ResponseBaseOfServiceSubCategoryDto;
+  serviceType_create: ResponseBaseOfServiceTypeDto;
+  serviceType_delete: ResponseBase;
+  serviceType_update: ResponseBaseOfServiceTypeDto;
   updateProvince: Scalars["Boolean"]["output"];
   /** Allows an owner to create a new admin user. */
   user_createAdmin: ResponseBase;
 };
 
-export type MutationAddress_CreateArgs = {
+export type MutationAddress_CreateAddressArgs = {
   input: AddAddressInput;
 };
 
-export type MutationAddress_DeleteArgs = {
+export type MutationAddress_DeleteAddressArgs = {
   input: DeleteAddressInput;
 };
 
-export type MutationAddress_UpdateArgs = {
+export type MutationAddress_UpdateAddressArgs = {
   input: UpdateAddressInput;
 };
 
@@ -530,11 +662,54 @@ export type MutationAuth_VerifyOtpArgs = {
   userType: UserType;
 };
 
+export type MutationBanner_CreateBannerArgs = {
+  imageUrl: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+};
+
+export type MutationBanner_DeleteBannerArgs = {
+  bannerId: Scalars["UUID"]["input"];
+};
+
+export type MutationBanner_UpdateBannerArgs = {
+  id: Scalars["UUID"]["input"];
+  imageUrl: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+};
+
+export type MutationCancelationReason_CreateCancelationReasonArgs = {
+  name: Scalars["String"]["input"];
+};
+
+export type MutationCancelationReason_DeleteCancelationReasonArgs = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type MutationCancelationReason_UpdateCancelationReasonArgs = {
+  id: Scalars["UUID"]["input"];
+  name: Scalars["String"]["input"];
+};
+
+export type MutationCarousel_CreateCarouselArgs = {
+  imageUrls: Array<Scalars["String"]["input"]>;
+  title: Scalars["String"]["input"];
+};
+
+export type MutationCarousel_DeleteCarouselArgs = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type MutationCarousel_UpdateCarouselArgs = {
+  id: Scalars["UUID"]["input"];
+  imageUrls: Array<Scalars["String"]["input"]>;
+  title: Scalars["String"]["input"];
+};
+
 export type MutationCity_ActivateArgs = {
   input: ActivateCityInput;
 };
 
-export type MutationCity_CreateArgs = {
+export type MutationCity_CreateCityArgs = {
   input: CreateCityInput;
 };
 
@@ -542,12 +717,18 @@ export type MutationCity_DeactivateArgs = {
   input: DeactivateCityInput;
 };
 
-export type MutationCity_UpdateArgs = {
-  input: UpdateCityInput;
+export type MutationCity_SetActiveBannerArgs = {
+  bannerId?: InputMaybe<Scalars["UUID"]["input"]>;
+  cityId: Scalars["UUID"]["input"];
 };
 
-export type MutationCreateCancelationReasonArgs = {
-  name: Scalars["String"]["input"];
+export type MutationCity_SetActiveCarouselArgs = {
+  carouselId?: InputMaybe<Scalars["UUID"]["input"]>;
+  cityId: Scalars["UUID"]["input"];
+};
+
+export type MutationCity_UpdateCityArgs = {
+  input: UpdateCityInput;
 };
 
 export type MutationCreateDiscountCodeArgs = {
@@ -572,15 +753,15 @@ export type MutationDeleteProvinceArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type MutationNeighborhood_CreateArgs = {
+export type MutationNeighborhood_CreateNeighborhoodArgs = {
   input: CreateNeighborhoodInput;
 };
 
-export type MutationNeighborhood_DeleteArgs = {
+export type MutationNeighborhood_DeleteNeighborhoodArgs = {
   input: DeleteNeighborhoodInput;
 };
 
-export type MutationNeighborhood_UpdateArgs = {
+export type MutationNeighborhood_UpdateNeighborhoodArgs = {
   input: UpdateNeighborhoodInput;
 };
 
@@ -588,19 +769,15 @@ export type MutationServiceAcceptance_MarkAsArrivedArgs = {
   input: MarkAsArrivedInput;
 };
 
-export type MutationServiceAcceptance_RevokeArgs = {
-  input: RevokeServiceAcceptanceInput;
-};
-
-export type MutationServiceCategory_CreateArgs = {
+export type MutationServiceCategory_CreateServiceCategoryArgs = {
   input: CreateServiceCategoryInput;
 };
 
-export type MutationServiceCategory_DeleteArgs = {
+export type MutationServiceCategory_DeleteServiceCategoryArgs = {
   input: DeleteServiceCategoryInput;
 };
 
-export type MutationServiceCategory_UpdateArgs = {
+export type MutationServiceCategory_UpdateServiceCategoryArgs = {
   input: UpdateServiceCategoryInput;
 };
 
@@ -723,11 +900,12 @@ export type ProvinceInput = {
 
 export type Query = {
   __typename?: "Query";
-  address_getUserAddresses?: Maybe<Address_GetUserAddressesCollectionSegment>;
-  address_nearestAddresses?: Maybe<Address_NearestAddressesCollectionSegment>;
-  cancelationReasons: Array<CancellationReason>;
-  city_getAll?: Maybe<City_GetAllCollectionSegment>;
-  city_getCity: CityDto;
+  address_getMyAddresses: ListResponseBaseOfAddressDto;
+  address_nearestAddresses: ListResponseBaseOfAddressDto;
+  cancelationReason_getAllCancelationReasons: ListResponseBaseOfCancellationReasonDto;
+  cancelationReason_getCancelationReason: ResponseBaseOfCancellationReasonDto;
+  city_getAll: ListResponseBaseOfCityDto;
+  city_getCity: ResponseBaseOfCityDto;
   discountCodes: Array<DiscountCode>;
   neighborhood_getAll?: Maybe<Neighborhood_GetAllCollectionSegment>;
   neighborhood_getNeighborhood: NeighborhoodDto;
@@ -735,10 +913,10 @@ export type Query = {
   provinces: Array<Province>;
   serviceCategory_getServiceCategories?: Maybe<ServiceCategory_GetServiceCategoriesCollectionSegment>;
   serviceCategory_getServiceCategory: ServiceCategoryDto;
-  serviceRequest_get: ServiceRequestDetailDto;
-  serviceRequest_getAll?: Maybe<ServiceRequest_GetAllCollectionSegment>;
-  serviceRequest_getMyServiceAcceptances?: Maybe<ServiceRequest_GetMyServiceAcceptancesCollectionSegment>;
-  serviceRequest_getMyServiceRequests?: Maybe<ServiceRequest_GetMyServiceRequestsCollectionSegment>;
+  serviceRequest_getAll: ListResponseBaseOfServiceRequestDto;
+  serviceRequest_getMyServiceAcceptances: ListResponseBaseOfServiceRequestDto;
+  serviceRequest_getMyServiceRequests: ListResponseBaseOfServiceRequestDto;
+  serviceRequest_getServiceRequest: ResponseBaseOfServiceRequestDto;
   serviceSubCategory_get: ServiceSubCategoryDto;
   serviceSubCategory_getAll?: Maybe<ServiceSubCategory_GetAllCollectionSegment>;
   serviceTypeQuestionsByServiceType: Array<ServiceTypeQuestionDto>;
@@ -748,28 +926,17 @@ export type Query = {
   user_getMyProfile: ResponseBaseOfUserProfileDto;
 };
 
-export type QueryAddress_GetUserAddressesArgs = {
-  order?: InputMaybe<Array<AddressDtoSortInput>>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  take?: InputMaybe<Scalars["Int"]["input"]>;
+export type QueryAddress_GetMyAddressesArgs = {
   userId: Scalars["UUID"]["input"];
-  where?: InputMaybe<AddressDtoFilterInput>;
 };
 
 export type QueryAddress_NearestAddressesArgs = {
   latitude: Scalars["Float"]["input"];
   longitude: Scalars["Float"]["input"];
-  order?: InputMaybe<Array<AddressDtoSortInput>>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<AddressDtoFilterInput>;
 };
 
-export type QueryCity_GetAllArgs = {
-  order?: InputMaybe<Array<CityDtoSortInput>>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<CityDtoFilterInput>;
+export type QueryCancelationReason_GetCancelationReasonArgs = {
+  id: Scalars["UUID"]["input"];
 };
 
 export type QueryCity_GetCityArgs = {
@@ -802,29 +969,8 @@ export type QueryServiceCategory_GetServiceCategoryArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryServiceRequest_GetArgs = {
+export type QueryServiceRequest_GetServiceRequestArgs = {
   id: Scalars["UUID"]["input"];
-};
-
-export type QueryServiceRequest_GetAllArgs = {
-  order?: InputMaybe<Array<ServiceRequestDetailDtoSortInput>>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<ServiceRequestDetailDtoFilterInput>;
-};
-
-export type QueryServiceRequest_GetMyServiceAcceptancesArgs = {
-  order?: InputMaybe<Array<ServiceAcceptanceDtoSortInput>>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<ServiceAcceptanceDtoFilterInput>;
-};
-
-export type QueryServiceRequest_GetMyServiceRequestsArgs = {
-  order?: InputMaybe<Array<ServiceRequestDetailDtoSortInput>>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<ServiceRequestDetailDtoFilterInput>;
 };
 
 export type QueryServiceSubCategory_GetArgs = {
@@ -879,97 +1025,79 @@ export type RefreshTokenInput = {
 
 export type ResponseBase = {
   __typename?: "ResponseBase";
-  status: ResponseStatus;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfAddressDto = {
+  __typename?: "ResponseBaseOfAddressDto";
+  result?: Maybe<AddressDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
 };
 
 export type ResponseBaseOfAuthResult = {
   __typename?: "ResponseBaseOfAuthResult";
   result?: Maybe<AuthResult>;
-  status: ResponseStatus;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfBannerDto = {
+  __typename?: "ResponseBaseOfBannerDto";
+  result?: Maybe<BannerDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfCancellationReasonDto = {
+  __typename?: "ResponseBaseOfCancellationReasonDto";
+  result?: Maybe<CancellationReasonDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfCarouselDto = {
+  __typename?: "ResponseBaseOfCarouselDto";
+  result?: Maybe<CarouselDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfCityDto = {
+  __typename?: "ResponseBaseOfCityDto";
+  result?: Maybe<CityDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfNeighborhoodDto = {
+  __typename?: "ResponseBaseOfNeighborhoodDto";
+  result?: Maybe<NeighborhoodDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfServiceCategoryDto = {
+  __typename?: "ResponseBaseOfServiceCategoryDto";
+  result?: Maybe<ServiceCategoryDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfServiceRequestDto = {
+  __typename?: "ResponseBaseOfServiceRequestDto";
+  result?: Maybe<ServiceRequestDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfServiceSubCategoryDto = {
+  __typename?: "ResponseBaseOfServiceSubCategoryDto";
+  result?: Maybe<ServiceSubCategoryDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfServiceTypeDto = {
+  __typename?: "ResponseBaseOfServiceTypeDto";
+  result?: Maybe<ServiceTypeDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
 };
 
 export type ResponseBaseOfUserProfileDto = {
   __typename?: "ResponseBaseOfUserProfileDto";
   result?: Maybe<UserProfileDto>;
-  status: ResponseStatus;
-};
-
-export type ResponseStatus = {
-  __typename?: "ResponseStatus";
-  code: Scalars["Int"]["output"];
-  message: Scalars["String"]["output"];
-  value: Scalars["String"]["output"];
-};
-
-export type RevokeServiceAcceptanceInput = {
-  reason: Scalars["String"]["input"];
-  serviceAcceptanceId: Scalars["UUID"]["input"];
-  serviceRequestId: Scalars["UUID"]["input"];
-};
-
-export type ServiceAcceptance = {
-  __typename?: "ServiceAcceptance";
-  actionDate: Scalars["DateTime"]["output"];
-  createdAt: Scalars["DateTime"]["output"];
-  id: Scalars["UUID"]["output"];
-  isRemoved: Scalars["Boolean"]["output"];
-  serviceRequest: ServiceRequest;
-  specialist: Specialist;
-  status: ServiceAcceptanceStatus;
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type ServiceAcceptanceDto = {
-  __typename?: "ServiceAcceptanceDto";
-  actionDate: Scalars["DateTime"]["output"];
-  id: Scalars["UUID"]["output"];
-  specialistId: Scalars["UUID"]["output"];
-  specialistName: Scalars["String"]["output"];
-  status: ServiceAcceptanceStatus;
-};
-
-export type ServiceAcceptanceDtoFilterInput = {
-  actionDate?: InputMaybe<DateTimeOperationFilterInput>;
-  and?: InputMaybe<Array<ServiceAcceptanceDtoFilterInput>>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<ServiceAcceptanceDtoFilterInput>>;
-  specialistId?: InputMaybe<UuidOperationFilterInput>;
-  specialistName?: InputMaybe<StringOperationFilterInput>;
-  status?: InputMaybe<ServiceAcceptanceStatusOperationFilterInput>;
-};
-
-export type ServiceAcceptanceDtoSortInput = {
-  actionDate?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  specialistId?: InputMaybe<SortEnumType>;
-  specialistName?: InputMaybe<SortEnumType>;
-  status?: InputMaybe<SortEnumType>;
-};
-
-export type ServiceAcceptanceInput = {
-  actionDate: Scalars["DateTime"]["input"];
-  createdAt: Scalars["DateTime"]["input"];
-  id: Scalars["UUID"]["input"];
-  isRemoved: Scalars["Boolean"]["input"];
-  serviceRequest: ServiceRequestInput;
-  specialist: SpecialistInput;
-  status: ServiceAcceptanceStatus;
-  updatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
-};
-
-export enum ServiceAcceptanceStatus {
-  Accepted = "ACCEPTED",
-  ArrivedToLocation = "ARRIVED_TO_LOCATION",
-  Completed = "COMPLETED",
-  RevokedByCustomer = "REVOKED_BY_CUSTOMER",
-  RevokedBySpecialist = "REVOKED_BY_SPECIALIST",
-}
-
-export type ServiceAcceptanceStatusOperationFilterInput = {
-  eq?: InputMaybe<ServiceAcceptanceStatus>;
-  in?: InputMaybe<Array<ServiceAcceptanceStatus>>;
-  neq?: InputMaybe<ServiceAcceptanceStatus>;
-  nin?: InputMaybe<Array<ServiceAcceptanceStatus>>;
+  status?: Maybe<Scalars["Any"]["output"]>;
 };
 
 export type ServiceCategory = {
@@ -1025,7 +1153,6 @@ export type ServiceCategory_GetServiceCategoriesCollectionSegment = {
 
 export type ServiceRequest = {
   __typename?: "ServiceRequest";
-  accept: ServiceAcceptance;
   address: Address;
   canSpecialistAcceptBasedOnGender: Scalars["Boolean"]["output"];
   cancelationReason?: Maybe<CancellationReason>;
@@ -1036,53 +1163,60 @@ export type ServiceRequest = {
   isRemoved: Scalars["Boolean"]["output"];
   locationType: LocationType;
   requestDate: Scalars["DateTime"]["output"];
-  serviceAcceptances: Array<ServiceAcceptance>;
   serviceType: ServiceType;
+  specialist?: Maybe<Specialist>;
   specialistGender?: Maybe<Gender>;
   status: ServiceRequestStatus;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
-};
-
-export type ServiceRequestAcceptArgs = {
-  specialist: SpecialistInput;
 };
 
 export type ServiceRequestCanSpecialistAcceptBasedOnGenderArgs = {
   specialist: SpecialistInput;
 };
 
-export type ServiceRequestDetailDto = {
-  __typename?: "ServiceRequestDetailDto";
-  acceptances: Array<ServiceAcceptanceDto>;
+export type ServiceRequestDto = {
+  __typename?: "ServiceRequestDto";
   addressText: Scalars["String"]["output"];
   customerName: Scalars["String"]["output"];
   description: Scalars["String"]["output"];
   id: Scalars["UUID"]["output"];
   requestDate: Scalars["DateTime"]["output"];
   serviceTypeName: Scalars["String"]["output"];
+  specialistName: Scalars["String"]["output"];
   status: ServiceRequestStatus;
 };
 
-export type ServiceRequestDetailDtoFilterInput = {
-  acceptances?: InputMaybe<ListFilterInputTypeOfServiceAcceptanceDtoFilterInput>;
+/** A segment of a collection. */
+export type ServiceRequestDtoCollectionSegment = {
+  __typename?: "ServiceRequestDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<ServiceRequestDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type ServiceRequestDtoFilterInput = {
   addressText?: InputMaybe<StringOperationFilterInput>;
-  and?: InputMaybe<Array<ServiceRequestDetailDtoFilterInput>>;
+  and?: InputMaybe<Array<ServiceRequestDtoFilterInput>>;
   customerName?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<ServiceRequestDetailDtoFilterInput>>;
+  or?: InputMaybe<Array<ServiceRequestDtoFilterInput>>;
   requestDate?: InputMaybe<DateTimeOperationFilterInput>;
   serviceTypeName?: InputMaybe<StringOperationFilterInput>;
+  specialistName?: InputMaybe<StringOperationFilterInput>;
   status?: InputMaybe<ServiceRequestStatusOperationFilterInput>;
 };
 
-export type ServiceRequestDetailDtoSortInput = {
+export type ServiceRequestDtoSortInput = {
   addressText?: InputMaybe<SortEnumType>;
   customerName?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   requestDate?: InputMaybe<SortEnumType>;
   serviceTypeName?: InputMaybe<SortEnumType>;
+  specialistName?: InputMaybe<SortEnumType>;
   status?: InputMaybe<SortEnumType>;
 };
 
@@ -1097,18 +1231,20 @@ export type ServiceRequestInput = {
   locationType: LocationType;
   requestDate: Scalars["DateTime"]["input"];
   serviceType: ServiceTypeInput;
+  specialist?: InputMaybe<SpecialistInput>;
   specialistGender?: InputMaybe<Gender>;
   status: ServiceRequestStatus;
   updatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
 };
 
 export enum ServiceRequestStatus {
+  AcceptedBySpecialist = "ACCEPTED_BY_SPECIALIST",
   Cancelled = "CANCELLED",
   Completed = "COMPLETED",
-  InProgress = "IN_PROGRESS",
   Paid = "PAID",
   Pending = "PENDING",
   PendingPayment = "PENDING_PAYMENT",
+  SpecialistArrivedToLocation = "SPECIALIST_ARRIVED_TO_LOCATION",
 }
 
 export type ServiceRequestStatusOperationFilterInput = {
@@ -1116,33 +1252,6 @@ export type ServiceRequestStatusOperationFilterInput = {
   in?: InputMaybe<Array<ServiceRequestStatus>>;
   neq?: InputMaybe<ServiceRequestStatus>;
   nin?: InputMaybe<Array<ServiceRequestStatus>>;
-};
-
-/** A segment of a collection. */
-export type ServiceRequest_GetAllCollectionSegment = {
-  __typename?: "ServiceRequest_getAllCollectionSegment";
-  /** A flattened list of the items. */
-  items?: Maybe<Array<ServiceRequestDetailDto>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
-};
-
-/** A segment of a collection. */
-export type ServiceRequest_GetMyServiceAcceptancesCollectionSegment = {
-  __typename?: "ServiceRequest_getMyServiceAcceptancesCollectionSegment";
-  /** A flattened list of the items. */
-  items?: Maybe<Array<ServiceAcceptanceDto>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
-};
-
-/** A segment of a collection. */
-export type ServiceRequest_GetMyServiceRequestsCollectionSegment = {
-  __typename?: "ServiceRequest_getMyServiceRequestsCollectionSegment";
-  /** A flattened list of the items. */
-  items?: Maybe<Array<ServiceRequestDetailDto>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
 };
 
 export type ServiceSubCategory = {
@@ -1288,6 +1397,7 @@ export type Specialist = {
   city?: Maybe<City>;
   createdAt: Scalars["DateTime"]["output"];
   firstName?: Maybe<Scalars["String"]["output"]>;
+  fullName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
   idCardImageUrl?: Maybe<Scalars["String"]["output"]>;
@@ -1298,7 +1408,7 @@ export type Specialist = {
   phoneNumber: Scalars["String"]["output"];
   profileImageUrl?: Maybe<Scalars["String"]["output"]>;
   refreshTokens: Array<RefreshToken>;
-  serviceAcceptances: Array<ServiceAcceptance>;
+  serviceRequests: Array<ServiceRequest>;
   serviceSubCategory?: Maybe<ServiceSubCategory>;
   serviceTypes: Array<ServiceType>;
   updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
@@ -1310,6 +1420,7 @@ export type SpecialistInput = {
   city?: InputMaybe<CityInput>;
   createdAt: Scalars["DateTime"]["input"];
   firstName?: InputMaybe<Scalars["String"]["input"]>;
+  fullName?: InputMaybe<Scalars["String"]["input"]>;
   gender: Gender;
   id: Scalars["UUID"]["input"];
   idCardImageUrl?: InputMaybe<Scalars["String"]["input"]>;
@@ -1320,7 +1431,7 @@ export type SpecialistInput = {
   phoneNumber: Scalars["String"]["input"];
   profileImageUrl?: InputMaybe<Scalars["String"]["input"]>;
   refreshTokens: Array<RefreshTokenInput>;
-  serviceAcceptances: Array<ServiceAcceptanceInput>;
+  serviceRequests: Array<ServiceRequestInput>;
   serviceSubCategory?: InputMaybe<ServiceSubCategoryInput>;
   serviceTypes: Array<ServiceTypeInput>;
   updatedAt?: InputMaybe<Scalars["DateTime"]["input"]>;
@@ -1340,11 +1451,6 @@ export type StringOperationFilterInput = {
   nstartsWith?: InputMaybe<Scalars["String"]["input"]>;
   or?: InputMaybe<Array<StringOperationFilterInput>>;
   startsWith?: InputMaybe<Scalars["String"]["input"]>;
-};
-
-export type SuccessPayload = {
-  __typename?: "SuccessPayload";
-  success: Scalars["Boolean"]["output"];
 };
 
 export type UpdateAddressInput = {
@@ -1386,6 +1492,7 @@ export type User = {
   __typename?: "User";
   createdAt: Scalars["DateTime"]["output"];
   firstName?: Maybe<Scalars["String"]["output"]>;
+  fullName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
   isRemoved: Scalars["Boolean"]["output"];
@@ -1400,6 +1507,7 @@ export type User = {
 export type UserInput = {
   createdAt: Scalars["DateTime"]["input"];
   firstName?: InputMaybe<Scalars["String"]["input"]>;
+  fullName?: InputMaybe<Scalars["String"]["input"]>;
   gender: Gender;
   id: Scalars["UUID"]["input"];
   isRemoved: Scalars["Boolean"]["input"];
@@ -1449,10 +1557,7 @@ export type Auth_RequestOtpMutationVariables = Exact<{
 
 export type Auth_RequestOtpMutation = {
   __typename?: "Mutation";
-  auth_requestOtp: {
-    __typename?: "ResponseBase";
-    status: { __typename?: "ResponseStatus"; code: number; value: string };
-  };
+  auth_requestOtp: { __typename?: "ResponseBase"; status?: any | null };
 };
 
 export type Auth_VerifyOtpMutationVariables = Exact<{
@@ -1465,7 +1570,25 @@ export type Auth_VerifyOtpMutation = {
   __typename?: "Mutation";
   auth_verifyOtp: {
     __typename?: "ResponseBaseOfAuthResult";
-    status: { __typename?: "ResponseStatus"; code: number; value: string };
+    status?: any | null;
+    result?: {
+      __typename?: "AuthResult";
+      accessToken: string;
+      refreshToken: string;
+    } | null;
+  };
+};
+
+export type Auth_RefreshTokenMutationVariables = Exact<{
+  accessToken: Scalars["String"]["input"];
+  refreshToken: Scalars["String"]["input"];
+}>;
+
+export type Auth_RefreshTokenMutation = {
+  __typename?: "Mutation";
+  auth_refreshToken: {
+    __typename?: "ResponseBaseOfAuthResult";
+    status?: any | null;
     result?: {
       __typename?: "AuthResult";
       accessToken: string;
@@ -1483,89 +1606,112 @@ export type City_GetAllQueryVariables = Exact<{
 
 export type City_GetAllQuery = {
   __typename?: "Query";
-  city_getAll?: {
-    __typename?: "City_getAllCollectionSegment";
-    items?: Array<{
-      __typename?: "CityDto";
-      id: any;
-      isActive: boolean;
-      name: string;
-      provinceId: any;
-    }> | null;
-    pageInfo: {
-      __typename?: "CollectionSegmentInfo";
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-  } | null;
+  city_getAll: {
+    __typename?: "ListResponseBaseOfCityDto";
+    status?: any | null;
+    result?: {
+      __typename?: "CityDtoCollectionSegment";
+      totalCount: number;
+      items?: Array<{
+        __typename?: "CityDto";
+        id: any;
+        isActive: boolean;
+        name: string;
+        provinceId: any;
+        activeCarousel?: {
+          __typename?: "CarouselDto";
+          imageUrls: Array<string>;
+          id: any;
+          title: string;
+        } | null;
+        activeBanner?: {
+          __typename?: "BannerDto";
+          imageUrl: string;
+          id: any;
+          title: string;
+        } | null;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
 };
 
 export type ServiceRequest_GetMyServiceRequestsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<ServiceRequestDetailDtoFilterInput>;
+  where?: InputMaybe<ServiceRequestDtoFilterInput>;
   order?: InputMaybe<
-    Array<ServiceRequestDetailDtoSortInput> | ServiceRequestDetailDtoSortInput
+    Array<ServiceRequestDtoSortInput> | ServiceRequestDtoSortInput
   >;
 }>;
 
 export type ServiceRequest_GetMyServiceRequestsQuery = {
   __typename?: "Query";
-  serviceRequest_getMyServiceRequests?: {
-    __typename?: "ServiceRequest_getMyServiceRequestsCollectionSegment";
-    items?: Array<{
-      __typename?: "ServiceRequestDetailDto";
-      addressText: string;
-      customerName: string;
-      description: string;
-      id: any;
-      requestDate: any;
-      status: ServiceRequestStatus;
-      serviceTypeName: string;
-      acceptances: Array<{
-        __typename?: "ServiceAcceptanceDto";
-        actionDate: any;
-        specialistId: any;
+  serviceRequest_getMyServiceRequests: {
+    __typename?: "ListResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDtoCollectionSegment";
+      totalCount: number;
+      items?: Array<{
+        __typename?: "ServiceRequestDto";
+        addressText: string;
+        customerName: string;
+        description: string;
         id: any;
+        requestDate: any;
+        status: ServiceRequestStatus;
+        serviceTypeName: string;
         specialistName: string;
-        status: ServiceAcceptanceStatus;
-      }>;
-    }> | null;
-    pageInfo: {
-      __typename?: "CollectionSegmentInfo";
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-  } | null;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
 };
 
 export type ServiceRequest_GetMyServiceAcceptancesQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<ServiceAcceptanceDtoFilterInput>;
+  where?: InputMaybe<ServiceRequestDtoFilterInput>;
   order?: InputMaybe<
-    Array<ServiceAcceptanceDtoSortInput> | ServiceAcceptanceDtoSortInput
+    Array<ServiceRequestDtoSortInput> | ServiceRequestDtoSortInput
   >;
 }>;
 
 export type ServiceRequest_GetMyServiceAcceptancesQuery = {
   __typename?: "Query";
-  serviceRequest_getMyServiceAcceptances?: {
-    __typename?: "ServiceRequest_getMyServiceAcceptancesCollectionSegment";
-    items?: Array<{
-      __typename?: "ServiceAcceptanceDto";
-      actionDate: any;
-      id: any;
-      specialistId: any;
-      specialistName: string;
-      status: ServiceAcceptanceStatus;
-    }> | null;
-    pageInfo: {
-      __typename?: "CollectionSegmentInfo";
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-  } | null;
+  serviceRequest_getMyServiceAcceptances: {
+    __typename?: "ListResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDtoCollectionSegment";
+      totalCount: number;
+      items?: Array<{
+        __typename?: "ServiceRequestDto";
+        addressText: string;
+        customerName: string;
+        description: string;
+        requestDate: any;
+        id: any;
+        serviceTypeName: string;
+        specialistName: string;
+        status: ServiceRequestStatus;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
 };
 
 export type ServiceCategory_GetServiceCategoriesQueryVariables = Exact<{
@@ -1682,7 +1828,7 @@ export type User_GetMyProfileQuery = {
   __typename?: "Query";
   user_getMyProfile: {
     __typename?: "ResponseBaseOfUserProfileDto";
-    status: { __typename?: "ResponseStatus"; code: number; value: string };
+    status?: any | null;
     result?: {
       __typename?: "UserProfileDto";
       id: any;
@@ -1691,7 +1837,7 @@ export type User_GetMyProfileQuery = {
   };
 };
 
-export type Address_GetUserAddressesQueryVariables = Exact<{
+export type Address_GetMyAddressesQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   userId: Scalars["UUID"]["input"];
@@ -1699,33 +1845,34 @@ export type Address_GetUserAddressesQueryVariables = Exact<{
   order?: InputMaybe<Array<AddressDtoSortInput> | AddressDtoSortInput>;
 }>;
 
-export type Address_GetUserAddressesQuery = {
+export type Address_GetMyAddressesQuery = {
   __typename?: "Query";
-  address_getUserAddresses?: {
-    __typename?: "Address_getUserAddressesCollectionSegment";
-    items?: Array<{
-      __typename?: "AddressDto";
-      cityName: string;
-      distanceInMeters?: number | null;
-      latitude: number;
-      fullText: any;
-      longitude: string;
-    }> | null;
-    pageInfo: {
-      __typename?: "CollectionSegmentInfo";
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-  } | null;
+  address_getMyAddresses: {
+    __typename?: "ListResponseBaseOfAddressDto";
+    status?: any | null;
+    result?: {
+      __typename?: "AddressDtoCollectionSegment";
+      items?: Array<{
+        __typename?: "AddressDto";
+        id: any;
+        latitude: number;
+        longitude: number;
+        neighborhoodId: any;
+        text: string;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
 };
 
 export const Auth_RequestOtpDocument = `
     mutation auth_requestOtp($phoneNumber: String!, $userType: UserType!) {
   auth_requestOtp(phoneNumber: $phoneNumber, userType: $userType) {
-    status {
-      code
-      value
-    }
+    status
   }
 }
     `;
@@ -1760,10 +1907,7 @@ export const useAuth_RequestOtpMutation = <
 export const Auth_VerifyOtpDocument = `
     mutation auth_verifyOtp($phoneNumber: String!, $userType: UserType!, $otp: String!) {
   auth_verifyOtp(phoneNumber: $phoneNumber, userType: $userType, otp: $otp) {
-    status {
-      code
-      value
-    }
+    status
     result {
       accessToken
       refreshToken
@@ -1796,19 +1940,72 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
   });
 };
 
+export const Auth_RefreshTokenDocument = `
+    mutation auth_refreshToken($accessToken: String!, $refreshToken: String!) {
+  auth_refreshToken(accessToken: $accessToken, refreshToken: $refreshToken) {
+    status
+    result {
+      accessToken
+      refreshToken
+    }
+  }
+}
+    `;
+
+export const useAuth_RefreshTokenMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    Auth_RefreshTokenMutation,
+    TError,
+    Auth_RefreshTokenMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Auth_RefreshTokenMutation,
+    TError,
+    Auth_RefreshTokenMutationVariables,
+    TContext
+  >({
+    mutationKey: ["auth_refreshToken"],
+    mutationFn: (variables?: Auth_RefreshTokenMutationVariables) =>
+      fetcher<Auth_RefreshTokenMutation, Auth_RefreshTokenMutationVariables>(
+        Auth_RefreshTokenDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
+
 export const City_GetAllDocument = `
     query city_getAll($skip: Int, $take: Int, $where: CityDtoFilterInput, $order: [CityDtoSortInput!]) {
-  city_getAll(skip: $skip, take: $take, where: $where, order: $order) {
-    items {
-      id
-      isActive
-      name
-      provinceId
+  city_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        isActive
+        name
+        provinceId
+        activeCarousel {
+          imageUrls
+          id
+          title
+        }
+        activeBanner {
+          imageUrl
+          id
+          title
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
+    status
   }
 }
     `;
@@ -1869,33 +2066,26 @@ export const useInfiniteCity_GetAllQuery = <
 };
 
 export const ServiceRequest_GetMyServiceRequestsDocument = `
-    query serviceRequest_getMyServiceRequests($skip: Int, $take: Int, $where: ServiceRequestDetailDtoFilterInput, $order: [ServiceRequestDetailDtoSortInput!]) {
-  serviceRequest_getMyServiceRequests(
-    skip: $skip
-    take: $take
-    where: $where
-    order: $order
-  ) {
-    items {
-      addressText
-      customerName
-      description
-      id
-      requestDate
-      status
-      serviceTypeName
-      acceptances {
-        actionDate
-        specialistId
+    query serviceRequest_getMyServiceRequests($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
+  serviceRequest_getMyServiceRequests {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        addressText
+        customerName
+        description
         id
-        specialistName
+        requestDate
         status
+        serviceTypeName
+        specialistName
       }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
+    status
   }
 }
     `;
@@ -1976,24 +2166,26 @@ export const useInfiniteServiceRequest_GetMyServiceRequestsQuery = <
 };
 
 export const ServiceRequest_GetMyServiceAcceptancesDocument = `
-    query serviceRequest_getMyServiceAcceptances($skip: Int, $take: Int, $where: ServiceAcceptanceDtoFilterInput, $order: [ServiceAcceptanceDtoSortInput!]) {
-  serviceRequest_getMyServiceAcceptances(
-    skip: $skip
-    take: $take
-    where: $where
-    order: $order
-  ) {
-    items {
-      actionDate
-      id
-      specialistId
-      specialistName
-      status
+    query serviceRequest_getMyServiceAcceptances($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
+  serviceRequest_getMyServiceAcceptances {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        addressText
+        customerName
+        description
+        requestDate
+        id
+        serviceTypeName
+        specialistName
+        status
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
+    status
   }
 }
     `;
@@ -2489,10 +2681,7 @@ export const useInfiniteServiceTypes_GatAllQuery = <
 export const User_GetMyProfileDocument = `
     query user_getMyProfile {
   user_getMyProfile {
-    status {
-      code
-      value
-    }
+    status
     result {
       id
       phoneNumber
@@ -2565,85 +2754,82 @@ export const useInfiniteUser_GetMyProfileQuery = <
   );
 };
 
-export const Address_GetUserAddressesDocument = `
-    query address_getUserAddresses($skip: Int, $take: Int, $userId: UUID!, $where: AddressDtoFilterInput, $order: [AddressDtoSortInput!]) {
-  address_getUserAddresses(
-    skip: $skip
-    take: $take
-    where: $where
-    order: $order
-    userId: $userId
-  ) {
-    items {
-      cityName
-      distanceInMeters
-      fullText: id
-      latitude
-      longitude: neighborhoodName
+export const Address_GetMyAddressesDocument = `
+    query address_getMyAddresses($skip: Int, $take: Int, $userId: UUID!, $where: AddressDtoFilterInput, $order: [AddressDtoSortInput!]) {
+  address_getMyAddresses(userId: $userId) {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        latitude
+        longitude
+        neighborhoodId
+        text
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
+    status
   }
 }
     `;
 
-export const useAddress_GetUserAddressesQuery = <
-  TData = Address_GetUserAddressesQuery,
+export const useAddress_GetMyAddressesQuery = <
+  TData = Address_GetMyAddressesQuery,
   TError = unknown,
 >(
-  variables: Address_GetUserAddressesQueryVariables,
+  variables: Address_GetMyAddressesQueryVariables,
   options?: Omit<
-    UseQueryOptions<Address_GetUserAddressesQuery, TError, TData>,
+    UseQueryOptions<Address_GetMyAddressesQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<
-      Address_GetUserAddressesQuery,
+      Address_GetMyAddressesQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useQuery<Address_GetUserAddressesQuery, TError, TData>({
-    queryKey: ["address_getUserAddresses", variables],
+  return useQuery<Address_GetMyAddressesQuery, TError, TData>({
+    queryKey: ["address_getMyAddresses", variables],
     queryFn: fetcher<
-      Address_GetUserAddressesQuery,
-      Address_GetUserAddressesQueryVariables
-    >(Address_GetUserAddressesDocument, variables),
+      Address_GetMyAddressesQuery,
+      Address_GetMyAddressesQueryVariables
+    >(Address_GetMyAddressesDocument, variables),
     ...options,
   });
 };
 
-export const useInfiniteAddress_GetUserAddressesQuery = <
-  TData = InfiniteData<Address_GetUserAddressesQuery>,
+export const useInfiniteAddress_GetMyAddressesQuery = <
+  TData = InfiniteData<Address_GetMyAddressesQuery>,
   TError = unknown,
 >(
-  variables: Address_GetUserAddressesQueryVariables,
+  variables: Address_GetMyAddressesQueryVariables,
   options: Omit<
-    UseInfiniteQueryOptions<Address_GetUserAddressesQuery, TError, TData>,
+    UseInfiniteQueryOptions<Address_GetMyAddressesQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseInfiniteQueryOptions<
-      Address_GetUserAddressesQuery,
+      Address_GetMyAddressesQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useInfiniteQuery<Address_GetUserAddressesQuery, TError, TData>(
+  return useInfiniteQuery<Address_GetMyAddressesQuery, TError, TData>(
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
         queryKey: optionsQueryKey ?? [
-          "address_getUserAddresses.infinite",
+          "address_getMyAddresses.infinite",
           variables,
         ],
         queryFn: (metaData) =>
           fetcher<
-            Address_GetUserAddressesQuery,
-            Address_GetUserAddressesQueryVariables
-          >(Address_GetUserAddressesDocument, {
+            Address_GetMyAddressesQuery,
+            Address_GetMyAddressesQueryVariables
+          >(Address_GetMyAddressesDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),

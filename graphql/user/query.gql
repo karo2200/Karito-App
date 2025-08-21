@@ -1,9 +1,6 @@
 query user_getMyProfile {
   user_getMyProfile {
-    status {
-      code
-      value
-    }
+    status
     result {
       id
       phoneNumber
@@ -11,30 +8,27 @@ query user_getMyProfile {
   }
 }
 
-query address_getUserAddresses(
+query address_getMyAddresses(
   $skip: Int
   $take: Int
   $userId: UUID!
   $where: AddressDtoFilterInput
   $order: [AddressDtoSortInput!]
 ) {
-  address_getUserAddresses(
-    skip: $skip
-    take: $take
-    where: $where
-    order: $order
-    userId: $userId
-  ) {
-    items {
-      cityName
-      distanceInMeters
-      fullText: id
-      latitude
-      longitude: neighborhoodName
+  address_getMyAddresses(userId: $userId) {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        latitude
+        longitude
+        neighborhoodId
+        text
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
+    status
   }
 }

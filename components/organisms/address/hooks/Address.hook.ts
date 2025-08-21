@@ -15,6 +15,7 @@ export default function useAddressHook() {
   } = useGetUserAddressesQuery({
     userId: userId,
   });
+  console.log("//////////......", userAddressData);
 
   return {
     router,

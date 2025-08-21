@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     flexDirection: "row-reverse",
     alignItems: "center",
-    marginHorizontal: 16,
+    marginHorizontal: 15,
   },
 
   tabButton: {

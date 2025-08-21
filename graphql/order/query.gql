@@ -1,60 +1,55 @@
 query serviceRequest_getMyServiceRequests(
   $skip: Int
   $take: Int
-  $where: ServiceRequestDetailDtoFilterInput
-  $order: [ServiceRequestDetailDtoSortInput!]
+  $where: ServiceRequestDtoFilterInput
+  $order: [ServiceRequestDtoSortInput!]
 ) {
-  serviceRequest_getMyServiceRequests(
-    skip: $skip
-    take: $take
-    where: $where
-    order: $order
-  ) {
-    items {
-      addressText
-      customerName
-      description
-      id
-      requestDate
-      status
-      serviceTypeName
-      acceptances {
-        actionDate
-        specialistId
+  serviceRequest_getMyServiceRequests {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        addressText
+        customerName
+        description
         id
-        specialistName
+        requestDate
         status
+        serviceTypeName
+        specialistName
       }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
+    status
   }
 }
 
 query serviceRequest_getMyServiceAcceptances(
   $skip: Int
   $take: Int
-  $where: ServiceAcceptanceDtoFilterInput
-  $order: [ServiceAcceptanceDtoSortInput!]
+  $where: ServiceRequestDtoFilterInput
+  $order: [ServiceRequestDtoSortInput!]
 ) {
-  serviceRequest_getMyServiceAcceptances(
-    skip: $skip
-    take: $take
-    where: $where
-    order: $order
-  ) {
-    items {
-      actionDate
-      id
-      specialistId
-      specialistName
-      status
+  serviceRequest_getMyServiceAcceptances {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        addressText
+        customerName
+        description
+        requestDate
+        id
+        serviceTypeName
+        specialistName
+        status
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
+    status
   }
 }

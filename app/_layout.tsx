@@ -30,7 +30,7 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    console.log("......", isConnected);
+    console.log("......", isSelectRole);
   }, [isConnected]);
 
   const MyTheme = {
@@ -67,7 +67,7 @@ export default function RootLayout() {
                 </Stack.Protected>
 
                 <Stack.Protected
-                  guard={!isLoggedIn && !isExpert && isSelectRole}
+                  guard={!isLoggedIn && !isExpert && !isSelectRole}
                 >
                   <Stack.Screen name="LoginPage" />
                   <Stack.Screen name="OTPScreen" />

@@ -2,7 +2,7 @@ import { useCity_GetAllQuery } from "@/generated/graphql";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGetServiceCategoriesQuery } from "../../service/hooks";
 
 export default function useHomeHook() {
@@ -12,34 +12,34 @@ export default function useHomeHook() {
 
   const [selectRoleVisible, setSelectRoleVisibe] = useState<boolean>(false);
 
-  const { data } = useCity_GetAllQuery({ take: 200 });
+  const { data } = useCity_GetAllQuery({ take: 10 });
 
   const { data: homeCategoryData } = useGetServiceCategoriesQuery({});
 
-  useEffect(() => {
-    if (isSelectRole) {
-      setSelectRoleVisibe(false);
-    }
-    // if (Platform.OS === "ios")
-    else {
-      const timeout = setTimeout(() => {
-        onShow();
+  // useEffect(() => {
+  //   if (isSelectRole) {
+  //     setSelectRoleVisibe(false);
+  //   }
+  //   // if (Platform.OS === "ios")
+  //   else {
+  //     const timeout = setTimeout(() => {
+  //       onShow();
 
-        const interval = setInterval(() => {
-          onShow();
-        }, 30000);
+  //       const interval = setInterval(() => {
+  //         onShow();
+  //       }, 30000);
 
-        return () => {
-          clearInterval(interval);
-        };
-      }, 5000);
+  //       return () => {
+  //         clearInterval(interval);
+  //       };
+  //     }, 5000);
 
-      return () => {
-        clearTimeout(timeout);
-        setSelectRoleVisibe(false);
-      };
-    }
-  }, [isSelectRole]);
+  //     return () => {
+  //       clearTimeout(timeout);
+  //       setSelectRoleVisibe(false);
+  //     };
+  //   }
+  // }, [isSelectRole]);
 
   const onShow = () => {
     showSheet("confirmation-action", {

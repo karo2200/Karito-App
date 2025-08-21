@@ -2,8 +2,8 @@ import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   ServiceRequest_GetMyServiceRequestsDocument,
-  ServiceRequestDetailDtoFilterInput,
-  ServiceRequestDetailDtoSortInput,
+  ServiceRequestDtoFilterInput,
+  ServiceRequestDtoSortInput,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -11,8 +11,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 type UseGetServiceRequestsOptions = {
   skip?: number;
   take?: number;
-  where?: ServiceRequestDetailDtoFilterInput;
-  order?: [ServiceRequestDetailDtoSortInput];
+  where?: ServiceRequestDtoFilterInput;
+  order?: [ServiceRequestDtoSortInput];
 };
 
 export const useGetServiceRequestsQuery = (
@@ -30,18 +30,24 @@ export const useGetServiceRequestsQuery = (
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       if (
-        lastPage?.serviceRequest_getMyServiceRequests?.pageInfo?.hasNextPage
+        lastPage?.serviceRequest_getMyServiceRequests?.result?.pageInfo
+          ?.hasNextPage
       ) {
         return allPages.length;
       }
       return undefined;
     },
     select: (data) => {
+      console.log("......", data);
+
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.serviceRequest_getMyServiceRequests?.items)
+          ?.map((a) => a?.serviceRequest_getMyServiceRequests?.result?.items)
           .flat(),
+        totalCount:
+          data?.pages?.[0]?.serviceRequest_getMyServiceRequests?.result
+            ?.totalCount,
       };
     },
   });

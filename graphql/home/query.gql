@@ -4,16 +4,30 @@ query city_getAll(
   $where: CityDtoFilterInput
   $order: [CityDtoSortInput!]
 ) {
-  city_getAll(skip: $skip, take: $take, where: $where, order: $order) {
-    items {
-      id
-      isActive
-      name
-      provinceId
+  city_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        isActive
+        name
+        provinceId
+        activeCarousel {
+          imageUrls
+          id
+          title
+        }
+        activeBanner {
+          imageUrl
+          id
+          title
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-    }
+    status
   }
 }
