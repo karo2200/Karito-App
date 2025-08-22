@@ -1,3 +1,4 @@
+import { ServiceRequestDto } from "@/generated/graphql";
 import React, { useCallback, useRef } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import useOrderHook from "../hooks/Order.hook";
@@ -7,10 +8,17 @@ import OrderCard from "./OrderCard";
 export default function InProgressOrders() {
   const listRef = useRef<FlatList>(null);
 
-  const { router } = useOrderHook();
+  const {
+    router,
+    inProgressData,
+    isRefetching,
+    hasNextPage,
+    refetch,
+    fetchNextPage,
+  } = useOrderHook();
 
   const renderItem = useCallback(
-    ({ item }: { item: any }) => (
+    ({ item }: { item: ServiceRequestDto }) => (
       <OrderCard
         item={item}
         onOrderPress={() => {
@@ -26,16 +34,16 @@ export default function InProgressOrders() {
     <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}
-      data={[{}, {}, {}, {}]}
-      refreshing={true}
-      // onRefresh={refetch}
+      data={inProgressData}
+      refreshing={isRefetching}
+      onRefresh={refetch}
       contentContainerStyle={styles.tabStyle}
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}
       onEndReached={() => {
-        // if (hasNextPage) {
-        //   fetchNextPage();
-        // }
+        if (hasNextPage) {
+          fetchNextPage();
+        }
       }}
       ListEmptyComponent={() => (
         <ListEmptyOrder onSeeListPress={() => router.push("/(tabs)/home")} />

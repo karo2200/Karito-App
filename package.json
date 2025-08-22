@@ -45,6 +45,7 @@
     "expo-web-browser": "~14.2.0",
     "graphql": "^16.11.0",
     "iconsax-react-native": "^0.0.8",
+    "jwt-decode": "^4.0.0",
     "prettier": "^3.6.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",

@@ -66,7 +66,10 @@ export default function OrderScreen() {
         horizontal
         pagingEnabled
         style={{ transform: [{ scaleX: -1 }] }}
-        contentContainerStyle={{ transform: [{ scaleX: -1 }] }}
+        contentContainerStyle={{
+          transform: [{ scaleX: -1 }],
+          flexDirection: "row-reverse",
+        }}
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onScrollEnd}
       >
@@ -88,6 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: "row-reverse",
     alignItems: "center",
     marginHorizontal: 15,
+    width: "93%",
   },
 
   tabButton: {

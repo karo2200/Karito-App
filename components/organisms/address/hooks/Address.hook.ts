@@ -12,10 +12,10 @@ export default function useAddressHook() {
     refetch,
     hasNextPage,
     fetchNextPage,
+    isRefetching,
   } = useGetUserAddressesQuery({
     userId: userId,
   });
-  console.log("//////////......", userAddressData);
 
   return {
     router,
@@ -23,5 +23,6 @@ export default function useAddressHook() {
     hasNextPage,
     fetchNextPage,
     addressesData: userAddressData?.pages ?? [],
+    isRefetching,
   };
 }

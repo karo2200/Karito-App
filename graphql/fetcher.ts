@@ -32,7 +32,6 @@ async function refreshAccessToken() {
     const newAccessToken = data?.auth_refreshToken?.result?.accessToken;
     const newRefreshToken = data?.auth_refreshToken?.result?.refreshToken;
 
-    // ذخیره توکن‌ها در store
     authCacheStore.setState({
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
@@ -55,17 +54,11 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
       graphQLClient.setHeader("authorization", "Bearer " + accessToken);
     }
     try {
-      console.log("=>", query, variables);
       return await graphqlFetcher(query, variables);
     } catch (err: any) {
-      console.log("+++++", err.response?.status);
-
       if (err.response?.status === 401) {
-        // گرفتن توکن جدید
         const newToken = await refreshAccessToken();
         graphQLClient.setHeader("authorization", "Bearer " + newToken);
-
-        // retry request
 
         return await graphqlFetcher(query, variables);
       }

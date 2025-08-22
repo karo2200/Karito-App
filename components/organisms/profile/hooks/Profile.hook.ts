@@ -12,10 +12,9 @@ export default function useProfileHook() {
 
   const { isExpert, setIsExpert, isLoggedIn } = useUserStore();
 
-  const { setUserId, accessToken } = authCacheStore();
+  const { setUserId } = authCacheStore();
 
   const { data } = useUser_GetMyProfileQuery();
-  // console.log("//////", accessToken);
 
   useEffect(() => {
     if (data?.user_getMyProfile?.result) {

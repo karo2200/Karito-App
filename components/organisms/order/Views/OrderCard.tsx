@@ -2,6 +2,7 @@ import LocationIcon from "@/assets/icons/Location";
 import UserFrameIcon from "@/assets/icons/UserFrameIcon";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { ServiceRequestDto } from "@/generated/graphql";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -10,18 +11,16 @@ const OrderCard = ({
   isCustomer = true,
   onOrderPress,
 }: {
-  item: any;
+  item: ServiceRequestDto;
   isCustomer?: boolean;
   onOrderPress: () => void;
 }) => {
   return (
     <View style={styles.container}>
-      <ThemedText fontType="bold">
-        سرمایش و گرمایش (تعمیر و سرویس کولر آبی)
-      </ThemedText>
+      <ThemedText fontType="bold">{item?.serviceTypeName}</ThemedText>
       <View style={styles.dateView}>
         <ThemedText type="text" style={styles.date}>
-          1404/03/15 چهارشنبه ساعت 17:00
+          {item?.requestDate}
         </ThemedText>
       </View>
       <View style={styles.rowView}>
@@ -32,14 +31,14 @@ const OrderCard = ({
           {isCustomer ? (
             <>
               <ThemedText type="text" style={styles.user}>
-                موسی مرادیان
+                {item?.specialistName}
               </ThemedText>
               <UserFrameIcon />
             </>
           ) : (
             <>
               <ThemedText type="text" style={styles.user}>
-                پاسداران، خ دولت مهستان ۵
+                {item?.addressText}
               </ThemedText>
               <LocationIcon width={16} height={16} />
             </>
@@ -49,7 +48,7 @@ const OrderCard = ({
       <View style={styles.rowView}>
         {isCustomer ? (
           <View style={styles.label}>
-            <ThemedText type="text">ثبت شده</ThemedText>
+            <ThemedText type="text">{item?.status}</ThemedText>
           </View>
         ) : (
           <View />

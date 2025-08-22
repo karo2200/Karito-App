@@ -14,7 +14,7 @@ import useAddressHook from "./hooks/Address.hook";
 export default function AddressScreen() {
   const listRef = React.useRef<FlatList>(null);
 
-  const { addressesData, refetch, hasNextPage, fetchNextPage } =
+  const { addressesData, refetch, hasNextPage, fetchNextPage, isRefetching } =
     useAddressHook();
 
   const renderItem = useCallback(
@@ -43,7 +43,7 @@ export default function AddressScreen() {
           ref={listRef}
           keyExtractor={(item) => item?.id}
           data={addressesData}
-          refreshing={true}
+          refreshing={isRefetching}
           onRefresh={refetch}
           showsVerticalScrollIndicator={false}
           renderItem={renderItem}

@@ -10,7 +10,10 @@ query city_getAll(
         id
         isActive
         name
-        provinceId
+        province {
+          id
+          name
+        }
         activeCarousel {
           imageUrls
           id

@@ -1,7 +1,8 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  Address_GetUserAddressesDocument,
+  Address_GetMyAddressesDocument,
+  AddressDtoFilterInput,
   AddressDtoSortInput,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
@@ -11,7 +12,7 @@ type UseGetUserAddressesOptions = {
   skip?: number;
   take?: number;
   userId: string;
-  // where?: AddressDtoFilterInput;
+  where?: AddressDtoFilterInput;
   order?: [AddressDtoSortInput];
 };
 
@@ -19,9 +20,9 @@ export const useGetUserAddressesQuery = (
   options: UseGetUserAddressesOptions
 ) => {
   return useInfiniteQuery({
-    queryKey: [queryKeys.address_getUserAddresses, options],
+    queryKey: [queryKeys.address_getMyAddresses, options],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(Address_GetUserAddressesDocument, {
+      return fetcher(Address_GetMyAddressesDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
@@ -29,7 +30,7 @@ export const useGetUserAddressesQuery = (
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage?.address_getUserAddresses?.pageInfo?.hasNextPage) {
+      if (lastPage?.address_getMyAddresses?.result?.pageInfo?.hasNextPage) {
         return allPages.length;
       }
       return undefined;
@@ -38,8 +39,10 @@ export const useGetUserAddressesQuery = (
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.address_getUserAddresses?.items)
+          ?.map((a) => a?.address_getMyAddresses?.result?.items)
           .flat(),
+        totalCount:
+          data?.pages?.[0]?.address_getMyAddresses?.result?.totalCount,
       };
     },
   });

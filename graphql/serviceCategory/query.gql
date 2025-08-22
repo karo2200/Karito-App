@@ -1,29 +1,32 @@
 query serviceCategory_getServiceCategories(
   $skip: Int
   $take: Int
+  $where: ServiceCategoryDtoFilterInput
   $order: [ServiceCategoryDtoSortInput!]
 ) {
-  serviceCategory_getServiceCategories(
-    skip: $skip
-    take: $take
-    order: $order
-  ) {
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
+  serviceCategory_getServiceCategories {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        name
+        logo
+        id
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
     }
-    items {
-      name
-      logo
-      id
-    }
+    status
   }
 }
 
 query serviceCategory_getServiceCategory($id: UUID!) {
-  serviceCategory_getServiceCategory(id: $id) {
-    name
-    logo
-    id
+  serviceCategory_getServiceCategory {
+    result(id: $id) {
+      name
+      logo
+      id
+    }
+    status
   }
 }

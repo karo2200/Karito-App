@@ -38,8 +38,6 @@ export const useGetServiceRequestsQuery = (
       return undefined;
     },
     select: (data) => {
-      console.log("......", data);
-
       return {
         ...data,
         pages: data?.pages
