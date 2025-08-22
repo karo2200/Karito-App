@@ -21,8 +21,8 @@ query serviceCategory_getServiceCategories(
 }
 
 query serviceCategory_getServiceCategory($id: UUID!) {
-  serviceCategory_getServiceCategory {
-    result(id: $id) {
+  serviceCategory_getServiceCategory(id: $id) {
+    result {
       name
       logo
       id
