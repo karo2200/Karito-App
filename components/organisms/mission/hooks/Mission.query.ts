@@ -12,7 +12,7 @@ type UseGetServiceAcceptanceOptions = {
   skip?: number;
   take?: number;
   where?: ServiceRequestDtoFilterInput;
-  order?: [ServiceRequestDtoSortInput!];
+  order?: [ServiceRequestDtoSortInput];
 };
 
 export const useGetServiceAcceptanceQuery = (

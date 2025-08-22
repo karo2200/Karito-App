@@ -7,6 +7,7 @@ import {
 import authCacheStore from "@/stores/authCacheStore";
 import useUserStore from "@/stores/loginStore";
 import { useRoute } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 
 export default function useOtpHook() {
@@ -17,6 +18,7 @@ export default function useOtpHook() {
   const [isSendingCode, setIsSendingCode] = useState<boolean>(false);
 
   const toast = useToast();
+  const router = useRouter();
 
   const { setIsExpert, setIsLoggedIn } = useUserStore();
   const { setAccessToken, setRefreshToken } = authCacheStore();
@@ -35,8 +37,27 @@ export default function useOtpHook() {
           if (data?.auth_verifyOtp.status?.code === 1) {
             setAccessToken(data?.auth_verifyOtp?.result?.accessToken ?? "");
             setRefreshToken(data?.auth_verifyOtp?.result?.refreshToken ?? "");
-            setIsExpert(false);
+
+            router.push("/");
+          }
+        },
+      }
+    );
+  };
+
+  const onDoExpertLogin = (formData: any) => {
+    setIsVerifying(true);
+    mutate(
+      { phoneNumber, userType: UserType.Specialist, otp: formData?.otpCode },
+      {
+        onSuccess: (data) => {
+          setIsVerifying(false);
+          if (data?.auth_verifyOtp.status?.code === 1) {
+            setAccessToken(data?.auth_verifyOtp?.result?.accessToken ?? "");
+            setRefreshToken(data?.auth_verifyOtp?.result?.refreshToken ?? "");
+            setIsExpert(true);
             setIsLoggedIn(true);
+            router.push(`/ExpertRegisterPage?phone=${phoneNumber}`);
           }
         },
       }
@@ -71,8 +92,9 @@ export default function useOtpHook() {
     isVerifying,
     phoneNumber,
     isSendingCode,
-
+    onDoExpertLogin,
     onDoLogin,
     onSendOtp,
+    router,
   };
 }

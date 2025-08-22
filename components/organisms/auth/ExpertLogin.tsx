@@ -5,10 +5,10 @@ import { ThemedText } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "expo-router";
 import { FormProvider, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import * as yup from "yup";
+import useLoginHook from "./login.hook";
 import Footer from "./views/Footer";
 
 const schema = yup.object().shape({
@@ -19,7 +19,7 @@ const schema = yup.object().shape({
 });
 
 const ExpertLogin = () => {
-  const router = useRouter();
+  const { isSendingCode, onDoExpertLogin } = useLoginHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
@@ -31,10 +31,6 @@ const ExpertLogin = () => {
     formState: { errors },
     getValues,
   } = methods;
-
-  const onPress = (formData: any) => {
-    router.push(`/ExpertRegisterPage?phone=${formData?.phone}`);
-  };
 
   return (
     <Fragment>
@@ -69,7 +65,8 @@ const ExpertLogin = () => {
             />
             <Footer
               title="ثبت نام"
-              onPress={handleSubmit(onPress)}
+              onPress={handleSubmit(onDoExpertLogin)}
+              isNextLoading={isSendingCode}
               hasError={
                 errors?.["phone"]?.message?.length > 0 ||
                 getValues("phone")?.length < 1 ||

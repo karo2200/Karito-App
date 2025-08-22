@@ -1,13 +1,20 @@
-import { useRouter } from "expo-router";
 import React, { useCallback, useRef } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import ListEmptyOrder from "../../order/Views/ListEmptyOrder";
 import OrderCard from "../../order/Views/OrderCard";
+import useMissionsHook from "../hooks/Mission.hook";
 
 export default function LastMissions() {
   const listRef = useRef<FlatList>(null);
 
-  const router = useRouter();
+  const {
+    router,
+    compleateData,
+    completeFetchNextPage,
+    completeHasNextPage,
+    completeIsRefetching,
+    completeRefetch,
+  } = useMissionsHook();
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
@@ -26,16 +33,16 @@ export default function LastMissions() {
     <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}
-      data={[]}
-      refreshing={true}
-      // onRefresh={refetch}
+      data={compleateData}
+      refreshing={completeIsRefetching}
+      onRefresh={completeRefetch}
       contentContainerStyle={styles.tabStyle}
       showsVerticalScrollIndicator={false}
       renderItem={renderItem}
       onEndReached={() => {
-        // if (hasNextPage) {
-        //   fetchNextPage();
-        // }
+        if (completeHasNextPage) {
+          completeFetchNextPage();
+        }
       }}
       ListEmptyComponent={() => (
         <ListEmptyOrder onSeeListPress={() => router.push("/workList")} />

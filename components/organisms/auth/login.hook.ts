@@ -6,6 +6,8 @@ import { useState } from "react";
 export default function useLoginHook() {
   const { mutate } = useAuth_RequestOtpMutation();
   const [isSendingCode, setIsSendingCode] = useState<boolean>(false);
+  const [isSendingExpertCode, setIsSendingExpertCode] =
+    useState<boolean>(false);
   const router = useRouter();
   const toast = useToast();
 
@@ -33,9 +35,34 @@ export default function useLoginHook() {
     );
   };
 
+  const onDoExpertLogin = (formData: any) => {
+    setIsSendingCode(true);
+    router.push(`/ExpertOtpPage?phone=${formData?.phone}`);
+    mutate(
+      { phoneNumber: formData?.phone, userType: UserType.Specialist },
+      {
+        onSuccess: (data) => {
+          setIsSendingCode(false);
+          if (data?.auth_requestOtp?.status?.code === 1) {
+            setIsSendingCode(false);
+            router.push(`/ExpertOtpPage?phone=${formData?.phone}`);
+          } else {
+            toast.showToast({ message: data?.auth_requestOtp?.status?.value });
+          }
+        },
+        onError: (errorData: any) => {
+          setIsSendingCode(false);
+          toast.showToast({
+            message: "خطایی پیش آمده است. لطفا بعدا تلاش کنید",
+          });
+        },
+      }
+    );
+  };
+
   return {
     isSendingCode,
-
+    onDoExpertLogin,
     onDoLogin,
   };
 }

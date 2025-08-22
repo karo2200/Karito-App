@@ -90,6 +90,10 @@ export default function RootLayout() {
                     name="CertificateInfoPage"
                     options={expertScreenOptions}
                   />
+                  <Stack.Screen
+                    name="ExpertOtpPage"
+                    options={expertScreenOptions}
+                  />
                 </Stack.Protected>
               </Stack>
             </ToastProvider>

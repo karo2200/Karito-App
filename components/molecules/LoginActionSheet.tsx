@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 
+import authCacheStore from "@/stores/authCacheStore";
 import { SheetProps } from "react-native-actions-sheet";
 import ActionSheetContainer from "../atoms/ActionSheetContainer";
 
@@ -36,12 +37,17 @@ export default function LoginActionSheet(
     positiveBackgroundColor,
     id = "confirmation-action",
   } = props?.payload ?? {};
-  const { setIsExpert, isExpert, setIsSelectRole } = useUserStore();
+  const { setIsExpert, isExpert, setIsSelectRole, setIsLoggedIn } =
+    useUserStore();
+
+  const { clearAuth } = authCacheStore();
 
   const loginAsExpert = () => {
     onClose();
     setIsExpert(true);
     setIsSelectRole(true);
+    setIsLoggedIn(false);
+    clearAuth();
   };
 
   const loginAsCustomer = () => {

@@ -63,7 +63,10 @@ export default function MissionScreen() {
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={onScrollEnd}
         style={{ transform: [{ scaleX: -1 }] }}
-        contentContainerStyle={{ transform: [{ scaleX: -1 }] }}
+        contentContainerStyle={{
+          transform: [{ scaleX: -1 }],
+          flexDirection: "row-reverse",
+        }}
       >
         {tabs.map((tab, index) => (
           <View key={index} style={styles.page}>
