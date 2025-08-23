@@ -7,7 +7,7 @@ import HorizontalSpeciaLists from "./Views/HorizontalSpeciaLists";
 import useHomeHook from "./hooks/Home.hook";
 
 export default function HomeScreen() {
-  const { data, selectRoleVisible, setSelectRoleVisibe } = useHomeHook();
+  const { activeBanner } = useHomeHook();
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -18,7 +18,7 @@ export default function HomeScreen() {
         loading={false}
         data={[{}, {}]}
       />
-      <CustomCarousel />
+      {activeBanner && <CustomCarousel data={activeBanner} />}
       <HorizontalServiceList
         title="انواع جابجایی"
         loading={false}

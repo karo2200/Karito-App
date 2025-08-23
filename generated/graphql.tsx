@@ -272,6 +272,7 @@ export type CreateServiceRequestInput = {
   description: Scalars["String"]["input"];
   gender?: InputMaybe<Gender>;
   locationType: LocationType;
+  qnAs: Array<QnAInput>;
   requestDate: Scalars["DateTime"]["input"];
   serviceTypeId: Scalars["UUID"]["input"];
 };
@@ -307,6 +308,21 @@ export type DeactivateCityInput = {
   cityId: Scalars["UUID"]["input"];
 };
 
+export type DecimalOperationFilterInput = {
+  eq?: InputMaybe<Scalars["Decimal"]["input"]>;
+  gt?: InputMaybe<Scalars["Decimal"]["input"]>;
+  gte?: InputMaybe<Scalars["Decimal"]["input"]>;
+  in?: InputMaybe<Array<InputMaybe<Scalars["Decimal"]["input"]>>>;
+  lt?: InputMaybe<Scalars["Decimal"]["input"]>;
+  lte?: InputMaybe<Scalars["Decimal"]["input"]>;
+  neq?: InputMaybe<Scalars["Decimal"]["input"]>;
+  ngt?: InputMaybe<Scalars["Decimal"]["input"]>;
+  ngte?: InputMaybe<Scalars["Decimal"]["input"]>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars["Decimal"]["input"]>>>;
+  nlt?: InputMaybe<Scalars["Decimal"]["input"]>;
+  nlte?: InputMaybe<Scalars["Decimal"]["input"]>;
+};
+
 export type DeleteAddressInput = {
   addressId: Scalars["UUID"]["input"];
 };
@@ -327,17 +343,44 @@ export type DeleteServiceTypeInput = {
   serviceTypeId: Scalars["UUID"]["input"];
 };
 
-export type DiscountCode = {
-  __typename?: "DiscountCode";
+export type DiscountCodeDto = {
+  __typename?: "DiscountCodeDto";
   amount: Scalars["Decimal"]["output"];
   code: Scalars["String"]["output"];
-  createdAt: Scalars["DateTime"]["output"];
   expiryDate?: Maybe<Scalars["DateTime"]["output"]>;
   id: Scalars["UUID"]["output"];
   isActive: Scalars["Boolean"]["output"];
   isPercentage: Scalars["Boolean"]["output"];
-  isRemoved: Scalars["Boolean"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+};
+
+/** A segment of a collection. */
+export type DiscountCodeDtoCollectionSegment = {
+  __typename?: "DiscountCodeDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<DiscountCodeDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type DiscountCodeDtoFilterInput = {
+  amount?: InputMaybe<DecimalOperationFilterInput>;
+  and?: InputMaybe<Array<DiscountCodeDtoFilterInput>>;
+  code?: InputMaybe<StringOperationFilterInput>;
+  expiryDate?: InputMaybe<DateTimeOperationFilterInput>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  isActive?: InputMaybe<BooleanOperationFilterInput>;
+  isPercentage?: InputMaybe<BooleanOperationFilterInput>;
+  or?: InputMaybe<Array<DiscountCodeDtoFilterInput>>;
+};
+
+export type DiscountCodeDtoSortInput = {
+  amount?: InputMaybe<SortEnumType>;
+  code?: InputMaybe<SortEnumType>;
+  expiryDate?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  isActive?: InputMaybe<SortEnumType>;
+  isPercentage?: InputMaybe<SortEnumType>;
 };
 
 export type FloatOperationFilterInput = {
@@ -359,6 +402,13 @@ export enum Gender {
   Female = "FEMALE",
   Male = "MALE",
 }
+
+export type ListFilterInputTypeOfServiceRequestQnADtoFilterInput = {
+  all?: InputMaybe<ServiceRequestQnADtoFilterInput>;
+  any?: InputMaybe<Scalars["Boolean"]["input"]>;
+  none?: InputMaybe<ServiceRequestQnADtoFilterInput>;
+  some?: InputMaybe<ServiceRequestQnADtoFilterInput>;
+};
 
 export type ListResponseBaseOfAddressDto = {
   __typename?: "ListResponseBaseOfAddressDto";
@@ -417,6 +467,19 @@ export type ListResponseBaseOfCityDtoResultArgs = {
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<CityDtoFilterInput>;
+};
+
+export type ListResponseBaseOfDiscountCodeDto = {
+  __typename?: "ListResponseBaseOfDiscountCodeDto";
+  result?: Maybe<DiscountCodeDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfDiscountCodeDtoResultArgs = {
+  order?: InputMaybe<Array<DiscountCodeDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<DiscountCodeDtoFilterInput>;
 };
 
 export type ListResponseBaseOfNeighborhoodDto = {
@@ -497,6 +560,19 @@ export type ListResponseBaseOfServiceTypeDtoResultArgs = {
   where?: InputMaybe<ServiceTypeDtoFilterInput>;
 };
 
+export type ListResponseBaseOfServiceTypeQuestionDto = {
+  __typename?: "ListResponseBaseOfServiceTypeQuestionDto";
+  result?: Maybe<ServiceTypeQuestionDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfServiceTypeQuestionDtoResultArgs = {
+  order?: InputMaybe<Array<ServiceTypeQuestionDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<ServiceTypeQuestionDtoFilterInput>;
+};
+
 export type ListStringOperationFilterInput = {
   all?: InputMaybe<StringOperationFilterInput>;
   any?: InputMaybe<Scalars["Boolean"]["input"]>;
@@ -517,41 +593,43 @@ export type MarkAsArrivedInput = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  address_createAddress: ResponseBaseOfAddressDto;
-  address_deleteAddress: ResponseBase;
-  address_updateAddress: ResponseBaseOfAddressDto;
+  address_create: ResponseBaseOfAddressDto;
+  address_delete: ResponseBase;
+  address_update: ResponseBaseOfAddressDto;
   /** Generates a new access and refresh token pair using a valid refresh token. */
   auth_refreshToken: ResponseBaseOfAuthResult;
   /** Requests an OTP to be sent to the provided phone number and user type. */
   auth_requestOtp: ResponseBase;
   auth_verifyOtp: ResponseBaseOfAuthResult;
-  banner_createBanner: ResponseBaseOfBannerDto;
-  banner_deleteBanner: ResponseBase;
-  banner_updateBanner: ResponseBaseOfBannerDto;
-  cancelationReason_createCancelationReason: ResponseBaseOfCancellationReasonDto;
-  cancelationReason_deleteCancelationReason: ResponseBase;
-  cancelationReason_updateCancelationReason: ResponseBaseOfCancellationReasonDto;
-  carousel_createCarousel: ResponseBaseOfCarouselDto;
-  carousel_deleteCarousel: ResponseBase;
-  carousel_updateCarousel: ResponseBaseOfCarouselDto;
+  banner_create: ResponseBaseOfBannerDto;
+  banner_delete: ResponseBase;
+  banner_update: ResponseBaseOfBannerDto;
+  cancelationReason_create: ResponseBaseOfCancellationReasonDto;
+  cancelationReason_delete: ResponseBase;
+  cancelationReason_update: ResponseBaseOfCancellationReasonDto;
+  carousel_create: ResponseBaseOfCarouselDto;
+  carousel_delete: ResponseBase;
+  carousel_update: ResponseBaseOfCarouselDto;
   city_activate: ResponseBaseOfCityDto;
-  city_createCity: ResponseBaseOfCityDto;
+  city_create: ResponseBaseOfCityDto;
   city_deactivate: ResponseBaseOfCityDto;
   city_setActiveBanner: ResponseBaseOfCityDto;
   city_setActiveCarousel: ResponseBaseOfCityDto;
-  city_updateCity: ResponseBaseOfCityDto;
-  createDiscountCode: Scalars["UUID"]["output"];
-  createServiceTypeQuestion: Scalars["UUID"]["output"];
-  neighborhood_createNeighborhood: ResponseBaseOfNeighborhoodDto;
-  neighborhood_deleteNeighborhood: ResponseBase;
-  neighborhood_updateNeighborhood: ResponseBaseOfNeighborhoodDto;
+  city_update: ResponseBaseOfCityDto;
+  discountCode_activate: ResponseBaseOfDiscountCodeDto;
+  discountCode_create: ResponseBaseOfDiscountCodeDto;
+  discountCode_deactivate: ResponseBaseOfDiscountCodeDto;
+  discountCode_delete: ResponseBase;
+  neighborhood_create: ResponseBaseOfNeighborhoodDto;
+  neighborhood_delete: ResponseBase;
+  neighborhood_update: ResponseBaseOfNeighborhoodDto;
   province_create: ResponseBaseOfProvinceDto;
   province_delete: ResponseBase;
   province_update: ResponseBaseOfProvinceDto;
   serviceAcceptance_markAsArrived: ResponseBaseOfServiceRequestDto;
-  serviceCategory_createServiceCategory: ResponseBaseOfServiceCategoryDto;
-  serviceCategory_deleteServiceCategory: ResponseBase;
-  serviceCategory_updateServiceCategory: ResponseBaseOfServiceCategoryDto;
+  serviceCategory_create: ResponseBaseOfServiceCategoryDto;
+  serviceCategory_delete: ResponseBase;
+  serviceCategory_update: ResponseBaseOfServiceCategoryDto;
   serviceRequest_accept: ResponseBaseOfServiceRequestDto;
   serviceRequest_cancel: ResponseBaseOfServiceRequestDto;
   serviceRequest_completeService: ResponseBaseOfServiceRequestDto;
@@ -559,6 +637,9 @@ export type Mutation = {
   serviceSubCategory_create: ResponseBaseOfServiceSubCategoryDto;
   serviceSubCategory_delete: ResponseBase;
   serviceSubCategory_update: ResponseBaseOfServiceSubCategoryDto;
+  serviceTypeQuestion_create: ResponseBaseOfServiceTypeQuestionDto;
+  serviceTypeQuestion_delete: ResponseBase;
+  serviceTypeQuestion_update: ResponseBaseOfServiceTypeQuestionDto;
   serviceType_create: ResponseBaseOfServiceTypeDto;
   serviceType_delete: ResponseBase;
   serviceType_update: ResponseBaseOfServiceTypeDto;
@@ -566,15 +647,15 @@ export type Mutation = {
   user_createAdmin: ResponseBase;
 };
 
-export type MutationAddress_CreateAddressArgs = {
+export type MutationAddress_CreateArgs = {
   input: AddAddressInput;
 };
 
-export type MutationAddress_DeleteAddressArgs = {
+export type MutationAddress_DeleteArgs = {
   input: DeleteAddressInput;
 };
 
-export type MutationAddress_UpdateAddressArgs = {
+export type MutationAddress_UpdateArgs = {
   input: UpdateAddressInput;
 };
 
@@ -594,44 +675,44 @@ export type MutationAuth_VerifyOtpArgs = {
   userType: UserType;
 };
 
-export type MutationBanner_CreateBannerArgs = {
+export type MutationBanner_CreateArgs = {
   imageUrl: Scalars["String"]["input"];
   title: Scalars["String"]["input"];
 };
 
-export type MutationBanner_DeleteBannerArgs = {
+export type MutationBanner_DeleteArgs = {
   bannerId: Scalars["UUID"]["input"];
 };
 
-export type MutationBanner_UpdateBannerArgs = {
+export type MutationBanner_UpdateArgs = {
   id: Scalars["UUID"]["input"];
   imageUrl: Scalars["String"]["input"];
   title: Scalars["String"]["input"];
 };
 
-export type MutationCancelationReason_CreateCancelationReasonArgs = {
+export type MutationCancelationReason_CreateArgs = {
   name: Scalars["String"]["input"];
 };
 
-export type MutationCancelationReason_DeleteCancelationReasonArgs = {
+export type MutationCancelationReason_DeleteArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type MutationCancelationReason_UpdateCancelationReasonArgs = {
+export type MutationCancelationReason_UpdateArgs = {
   id: Scalars["UUID"]["input"];
   name: Scalars["String"]["input"];
 };
 
-export type MutationCarousel_CreateCarouselArgs = {
+export type MutationCarousel_CreateArgs = {
   imageUrls: Array<Scalars["String"]["input"]>;
   title: Scalars["String"]["input"];
 };
 
-export type MutationCarousel_DeleteCarouselArgs = {
+export type MutationCarousel_DeleteArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type MutationCarousel_UpdateCarouselArgs = {
+export type MutationCarousel_UpdateArgs = {
   id: Scalars["UUID"]["input"];
   imageUrls: Array<Scalars["String"]["input"]>;
   title: Scalars["String"]["input"];
@@ -641,7 +722,7 @@ export type MutationCity_ActivateArgs = {
   input: ActivateCityInput;
 };
 
-export type MutationCity_CreateCityArgs = {
+export type MutationCity_CreateArgs = {
   input: CreateCityInput;
 };
 
@@ -659,33 +740,37 @@ export type MutationCity_SetActiveCarouselArgs = {
   cityId: Scalars["UUID"]["input"];
 };
 
-export type MutationCity_UpdateCityArgs = {
+export type MutationCity_UpdateArgs = {
   input: UpdateCityInput;
 };
 
-export type MutationCreateDiscountCodeArgs = {
+export type MutationDiscountCode_ActivateArgs = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type MutationDiscountCode_CreateArgs = {
   amount: Scalars["Decimal"]["input"];
-  code: Scalars["String"]["input"];
   expiryDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  isActive: Scalars["Boolean"]["input"];
   isPercentage: Scalars["Boolean"]["input"];
 };
 
-export type MutationCreateServiceTypeQuestionArgs = {
-  options: Array<Scalars["String"]["input"]>;
-  serviceTypeId: Scalars["UUID"]["input"];
-  title: Scalars["String"]["input"];
+export type MutationDiscountCode_DeactivateArgs = {
+  id: Scalars["UUID"]["input"];
 };
 
-export type MutationNeighborhood_CreateNeighborhoodArgs = {
+export type MutationDiscountCode_DeleteArgs = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type MutationNeighborhood_CreateArgs = {
   input: CreateNeighborhoodInput;
 };
 
-export type MutationNeighborhood_DeleteNeighborhoodArgs = {
+export type MutationNeighborhood_DeleteArgs = {
   input: DeleteNeighborhoodInput;
 };
 
-export type MutationNeighborhood_UpdateNeighborhoodArgs = {
+export type MutationNeighborhood_UpdateArgs = {
   input: UpdateNeighborhoodInput;
 };
 
@@ -706,15 +791,15 @@ export type MutationServiceAcceptance_MarkAsArrivedArgs = {
   input: MarkAsArrivedInput;
 };
 
-export type MutationServiceCategory_CreateServiceCategoryArgs = {
+export type MutationServiceCategory_CreateArgs = {
   input: CreateServiceCategoryInput;
 };
 
-export type MutationServiceCategory_DeleteServiceCategoryArgs = {
+export type MutationServiceCategory_DeleteArgs = {
   input: DeleteServiceCategoryInput;
 };
 
-export type MutationServiceCategory_UpdateServiceCategoryArgs = {
+export type MutationServiceCategory_UpdateArgs = {
   input: UpdateServiceCategoryInput;
 };
 
@@ -744,6 +829,26 @@ export type MutationServiceSubCategory_DeleteArgs = {
 
 export type MutationServiceSubCategory_UpdateArgs = {
   input: UpdateServiceSubCategoryInput;
+};
+
+export type MutationServiceTypeQuestion_CreateArgs = {
+  isRequired: Scalars["Boolean"]["input"];
+  options: Array<Scalars["String"]["input"]>;
+  questionType: QuestionType;
+  serviceTypeId: Scalars["UUID"]["input"];
+  title: Scalars["String"]["input"];
+};
+
+export type MutationServiceTypeQuestion_DeleteArgs = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type MutationServiceTypeQuestion_UpdateArgs = {
+  id: Scalars["UUID"]["input"];
+  isRequired: Scalars["Boolean"]["input"];
+  options: Array<Scalars["String"]["input"]>;
+  questionType: QuestionType;
+  title: Scalars["String"]["input"];
 };
 
 export type MutationServiceType_CreateArgs = {
@@ -821,40 +926,43 @@ export type ProvinceDtoSortInput = {
   name?: InputMaybe<SortEnumType>;
 };
 
+export type QnAInput = {
+  answers: Array<Scalars["String"]["input"]>;
+  questionId: Scalars["UUID"]["input"];
+};
+
 export type Query = {
   __typename?: "Query";
   address_getMyAddresses: ListResponseBaseOfAddressDto;
   address_nearestAddresses: ListResponseBaseOfAddressDto;
   banner_getAll: ListResponseBaseOfBannerDto;
-  banner_getBanner: ResponseBaseOfBannerDto;
-  cancelationReason_getAllCancelationReasons: ListResponseBaseOfCancellationReasonDto;
-  cancelationReason_getCancelationReason: ResponseBaseOfCancellationReasonDto;
+  banner_getById: ResponseBaseOfBannerDto;
+  cancelationReason_getAll: ListResponseBaseOfCancellationReasonDto;
+  cancelationReason_getById: ResponseBaseOfCancellationReasonDto;
   carousel_getAll: ResponseBaseOfListResponseBaseOfCarouselDto;
-  carousel_getCarousel: ResponseBaseOfCarouselDto;
+  carousel_getById: ResponseBaseOfCarouselDto;
   city_getAll: ListResponseBaseOfCityDto;
-  city_getCity: ResponseBaseOfCityDto;
-  discountCodes: Array<DiscountCode>;
+  city_getById: ResponseBaseOfCityDto;
+  discountCode_getAll: ListResponseBaseOfDiscountCodeDto;
+  discountCode_getById: ResponseBaseOfDiscountCodeDto;
   neighborhood_getAll: ListResponseBaseOfNeighborhoodDto;
-  neighborhood_getNeighborhood: ResponseBaseOfNeighborhoodDto;
+  neighborhood_getById: ResponseBaseOfNeighborhoodDto;
   province_getAll: ListResponseBaseOfProvinceDto;
-  province_getProvince: ResponseBaseOfProvinceDto;
-  serviceCategory_getServiceCategories: ListResponseBaseOfServiceCategoryDto;
-  serviceCategory_getServiceCategory: ResponseBaseOfServiceCategoryDto;
+  province_getById: ResponseBaseOfProvinceDto;
+  serviceCategory_getAll: ListResponseBaseOfServiceCategoryDto;
+  serviceCategory_getById: ResponseBaseOfServiceCategoryDto;
   serviceRequest_getAll: ListResponseBaseOfServiceRequestDto;
-  serviceRequest_getMyServiceAcceptances: ListResponseBaseOfServiceRequestDto;
-  serviceRequest_getMyServiceRequests: ListResponseBaseOfServiceRequestDto;
-  serviceRequest_getServiceRequest: ResponseBaseOfServiceRequestDto;
-  serviceSubCategory_get: ResponseBaseOfServiceSubCategoryDto;
+  serviceRequest_getById: ResponseBaseOfServiceRequestDto;
+  serviceRequest_getMyAcceptances: ListResponseBaseOfServiceRequestDto;
+  serviceRequest_getMyRequests: ListResponseBaseOfServiceRequestDto;
   serviceSubCategory_getAll: ListResponseBaseOfServiceSubCategoryDto;
-  serviceTypeQuestionsByServiceType: Array<ServiceTypeQuestionDto>;
-  serviceType_get: ResponseBaseOfServiceTypeDto;
+  serviceSubCategory_getById: ResponseBaseOfServiceSubCategoryDto;
+  serviceTypeQuestion_getById: ResponseBaseOfServiceTypeQuestionDto;
+  serviceTypeQuestion_getByServiceType: ListResponseBaseOfServiceTypeQuestionDto;
+  serviceType_getById: ResponseBaseOfServiceTypeDto;
   serviceTypes_getAll: ListResponseBaseOfServiceTypeDto;
   /** Gets the profile of the currently authenticated user. */
   user_getMyProfile: ResponseBaseOfUserProfileDto;
-};
-
-export type QueryAddress_GetMyAddressesArgs = {
-  userId: Scalars["UUID"]["input"];
 };
 
 export type QueryAddress_NearestAddressesArgs = {
@@ -862,49 +970,62 @@ export type QueryAddress_NearestAddressesArgs = {
   longitude: Scalars["Float"]["input"];
 };
 
-export type QueryBanner_GetBannerArgs = {
+export type QueryBanner_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryCancelationReason_GetCancelationReasonArgs = {
+export type QueryCancelationReason_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryCarousel_GetCarouselArgs = {
+export type QueryCarousel_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryCity_GetCityArgs = {
+export type QueryCity_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryNeighborhood_GetNeighborhoodArgs = {
+export type QueryDiscountCode_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryProvince_GetProvinceArgs = {
+export type QueryNeighborhood_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryServiceCategory_GetServiceCategoryArgs = {
+export type QueryProvince_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryServiceRequest_GetServiceRequestArgs = {
+export type QueryServiceCategory_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryServiceSubCategory_GetArgs = {
+export type QueryServiceRequest_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
 
-export type QueryServiceTypeQuestionsByServiceTypeArgs = {
+export type QueryServiceSubCategory_GetByIdArgs = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type QueryServiceTypeQuestion_GetByIdArgs = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type QueryServiceTypeQuestion_GetByServiceTypeArgs = {
   serviceTypeId: Scalars["UUID"]["input"];
 };
 
-export type QueryServiceType_GetArgs = {
+export type QueryServiceType_GetByIdArgs = {
   id: Scalars["UUID"]["input"];
 };
+
+export enum QuestionType {
+  CheckBox = "CHECK_BOX",
+  RadioButton = "RADIO_BUTTON",
+}
 
 export type ResponseBase = {
   __typename?: "ResponseBase";
@@ -947,6 +1068,12 @@ export type ResponseBaseOfCityDto = {
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
+export type ResponseBaseOfDiscountCodeDto = {
+  __typename?: "ResponseBaseOfDiscountCodeDto";
+  result?: Maybe<DiscountCodeDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
 export type ResponseBaseOfListResponseBaseOfCarouselDto = {
   __typename?: "ResponseBaseOfListResponseBaseOfCarouselDto";
   result?: Maybe<ListResponseBaseOfCarouselDto>;
@@ -986,6 +1113,12 @@ export type ResponseBaseOfServiceSubCategoryDto = {
 export type ResponseBaseOfServiceTypeDto = {
   __typename?: "ResponseBaseOfServiceTypeDto";
   result?: Maybe<ServiceTypeDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfServiceTypeQuestionDto = {
+  __typename?: "ResponseBaseOfServiceTypeQuestionDto";
+  result?: Maybe<ServiceTypeQuestionDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -1039,6 +1172,7 @@ export type ServiceRequestDto = {
   customerName: Scalars["String"]["output"];
   description: Scalars["String"]["output"];
   id: Scalars["UUID"]["output"];
+  qnAs: Array<ServiceRequestQnADto>;
   requestDate: Scalars["DateTime"]["output"];
   serviceTypeName: Scalars["String"]["output"];
   specialistName: Scalars["String"]["output"];
@@ -1062,6 +1196,7 @@ export type ServiceRequestDtoFilterInput = {
   description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<ServiceRequestDtoFilterInput>>;
+  qnAs?: InputMaybe<ListFilterInputTypeOfServiceRequestQnADtoFilterInput>;
   requestDate?: InputMaybe<DateTimeOperationFilterInput>;
   serviceTypeName?: InputMaybe<StringOperationFilterInput>;
   specialistName?: InputMaybe<StringOperationFilterInput>;
@@ -1077,6 +1212,19 @@ export type ServiceRequestDtoSortInput = {
   serviceTypeName?: InputMaybe<SortEnumType>;
   specialistName?: InputMaybe<SortEnumType>;
   status?: InputMaybe<SortEnumType>;
+};
+
+export type ServiceRequestQnADto = {
+  __typename?: "ServiceRequestQnADto";
+  answer: Scalars["String"]["output"];
+  questionText: Scalars["String"]["output"];
+};
+
+export type ServiceRequestQnADtoFilterInput = {
+  and?: InputMaybe<Array<ServiceRequestQnADtoFilterInput>>;
+  answer?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<ServiceRequestQnADtoFilterInput>>;
+  questionText?: InputMaybe<StringOperationFilterInput>;
 };
 
 export enum ServiceRequestStatus {
@@ -1169,6 +1317,29 @@ export type ServiceTypeQuestionDto = {
   id: Scalars["UUID"]["output"];
   options: Array<Scalars["String"]["output"]>;
   title: Scalars["String"]["output"];
+};
+
+/** A segment of a collection. */
+export type ServiceTypeQuestionDtoCollectionSegment = {
+  __typename?: "ServiceTypeQuestionDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<ServiceTypeQuestionDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type ServiceTypeQuestionDtoFilterInput = {
+  and?: InputMaybe<Array<ServiceTypeQuestionDtoFilterInput>>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  options?: InputMaybe<ListStringOperationFilterInput>;
+  or?: InputMaybe<Array<ServiceTypeQuestionDtoFilterInput>>;
+  title?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type ServiceTypeQuestionDtoSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  title?: InputMaybe<SortEnumType>;
 };
 
 export type SingleResponseBaseOfCarouselDto = {
@@ -1354,7 +1525,7 @@ export type City_GetAllQuery = {
   };
 };
 
-export type ServiceRequest_GetMyServiceRequestsQueryVariables = Exact<{
+export type ServiceRequest_GetMyRequestsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<ServiceRequestDtoFilterInput>;
@@ -1363,9 +1534,9 @@ export type ServiceRequest_GetMyServiceRequestsQueryVariables = Exact<{
   >;
 }>;
 
-export type ServiceRequest_GetMyServiceRequestsQuery = {
+export type ServiceRequest_GetMyRequestsQuery = {
   __typename?: "Query";
-  serviceRequest_getMyServiceRequests: {
+  serviceRequest_getMyRequests: {
     __typename?: "ListResponseBaseOfServiceRequestDto";
     status?: any | null;
     result?: {
@@ -1391,7 +1562,7 @@ export type ServiceRequest_GetMyServiceRequestsQuery = {
   };
 };
 
-export type ServiceRequest_GetMyServiceAcceptancesQueryVariables = Exact<{
+export type ServiceRequest_GetMyAcceptancesQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<ServiceRequestDtoFilterInput>;
@@ -1400,9 +1571,9 @@ export type ServiceRequest_GetMyServiceAcceptancesQueryVariables = Exact<{
   >;
 }>;
 
-export type ServiceRequest_GetMyServiceAcceptancesQuery = {
+export type ServiceRequest_GetMyAcceptancesQuery = {
   __typename?: "Query";
-  serviceRequest_getMyServiceAcceptances: {
+  serviceRequest_getMyAcceptances: {
     __typename?: "ListResponseBaseOfServiceRequestDto";
     status?: any | null;
     result?: {
@@ -1428,7 +1599,30 @@ export type ServiceRequest_GetMyServiceAcceptancesQuery = {
   };
 };
 
-export type ServiceCategory_GetServiceCategoriesQueryVariables = Exact<{
+export type ServiceRequest_GetByIdQueryVariables = Exact<{
+  id: Scalars["UUID"]["input"];
+}>;
+
+export type ServiceRequest_GetByIdQuery = {
+  __typename?: "Query";
+  serviceRequest_getById: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDto";
+      addressText: string;
+      customerName: string;
+      description: string;
+      requestDate: any;
+      id: any;
+      serviceTypeName: string;
+      specialistName: string;
+      status: ServiceRequestStatus;
+    } | null;
+  };
+};
+
+export type ServiceCategory_GetAllQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<ServiceCategoryDtoFilterInput>;
@@ -1437,9 +1631,9 @@ export type ServiceCategory_GetServiceCategoriesQueryVariables = Exact<{
   >;
 }>;
 
-export type ServiceCategory_GetServiceCategoriesQuery = {
+export type ServiceCategory_GetAllQuery = {
   __typename?: "Query";
-  serviceCategory_getServiceCategories: {
+  serviceCategory_getAll: {
     __typename?: "ListResponseBaseOfServiceCategoryDto";
     status?: any | null;
     result?: {
@@ -1459,13 +1653,13 @@ export type ServiceCategory_GetServiceCategoriesQuery = {
   };
 };
 
-export type ServiceCategory_GetServiceCategoryQueryVariables = Exact<{
+export type ServiceCategory_GetByIdQueryVariables = Exact<{
   id: Scalars["UUID"]["input"];
 }>;
 
-export type ServiceCategory_GetServiceCategoryQuery = {
+export type ServiceCategory_GetByIdQuery = {
   __typename?: "Query";
-  serviceCategory_getServiceCategory: {
+  serviceCategory_getById: {
     __typename?: "ResponseBaseOfServiceCategoryDto";
     status?: any | null;
     result?: {
@@ -1509,13 +1703,13 @@ export type ServiceSubCategory_GetAllQuery = {
   };
 };
 
-export type ServiceSubCategory_GetQueryVariables = Exact<{
+export type ServiceSubCategory_GetByIdQueryVariables = Exact<{
   id: Scalars["UUID"]["input"];
 }>;
 
-export type ServiceSubCategory_GetQuery = {
+export type ServiceSubCategory_GetByIdQuery = {
   __typename?: "Query";
-  serviceSubCategory_get: {
+  serviceSubCategory_getById: {
     __typename?: "ResponseBaseOfServiceSubCategoryDto";
     status?: any | null;
     result?: {
@@ -1576,7 +1770,6 @@ export type User_GetMyProfileQuery = {
 export type Address_GetMyAddressesQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
-  userId: Scalars["UUID"]["input"];
   where?: InputMaybe<AddressDtoFilterInput>;
   order?: InputMaybe<Array<AddressDtoSortInput> | AddressDtoSortInput>;
 }>;
@@ -1804,9 +1997,9 @@ export const useInfiniteCity_GetAllQuery = <
   );
 };
 
-export const ServiceRequest_GetMyServiceRequestsDocument = `
-    query serviceRequest_getMyServiceRequests($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
-  serviceRequest_getMyServiceRequests {
+export const ServiceRequest_GetMyRequestsDocument = `
+    query serviceRequest_getMyRequests($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
+  serviceRequest_getMyRequests {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         addressText
@@ -1829,72 +2022,64 @@ export const ServiceRequest_GetMyServiceRequestsDocument = `
 }
     `;
 
-export const useServiceRequest_GetMyServiceRequestsQuery = <
-  TData = ServiceRequest_GetMyServiceRequestsQuery,
+export const useServiceRequest_GetMyRequestsQuery = <
+  TData = ServiceRequest_GetMyRequestsQuery,
   TError = unknown,
 >(
-  variables?: ServiceRequest_GetMyServiceRequestsQueryVariables,
+  variables?: ServiceRequest_GetMyRequestsQueryVariables,
   options?: Omit<
-    UseQueryOptions<ServiceRequest_GetMyServiceRequestsQuery, TError, TData>,
+    UseQueryOptions<ServiceRequest_GetMyRequestsQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<
-      ServiceRequest_GetMyServiceRequestsQuery,
+      ServiceRequest_GetMyRequestsQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useQuery<ServiceRequest_GetMyServiceRequestsQuery, TError, TData>({
+  return useQuery<ServiceRequest_GetMyRequestsQuery, TError, TData>({
     queryKey:
       variables === undefined
-        ? ["serviceRequest_getMyServiceRequests"]
-        : ["serviceRequest_getMyServiceRequests", variables],
+        ? ["serviceRequest_getMyRequests"]
+        : ["serviceRequest_getMyRequests", variables],
     queryFn: fetcher<
-      ServiceRequest_GetMyServiceRequestsQuery,
-      ServiceRequest_GetMyServiceRequestsQueryVariables
-    >(ServiceRequest_GetMyServiceRequestsDocument, variables),
+      ServiceRequest_GetMyRequestsQuery,
+      ServiceRequest_GetMyRequestsQueryVariables
+    >(ServiceRequest_GetMyRequestsDocument, variables),
     ...options,
   });
 };
 
-export const useInfiniteServiceRequest_GetMyServiceRequestsQuery = <
-  TData = InfiniteData<ServiceRequest_GetMyServiceRequestsQuery>,
+export const useInfiniteServiceRequest_GetMyRequestsQuery = <
+  TData = InfiniteData<ServiceRequest_GetMyRequestsQuery>,
   TError = unknown,
 >(
-  variables: ServiceRequest_GetMyServiceRequestsQueryVariables,
+  variables: ServiceRequest_GetMyRequestsQueryVariables,
   options: Omit<
-    UseInfiniteQueryOptions<
-      ServiceRequest_GetMyServiceRequestsQuery,
-      TError,
-      TData
-    >,
+    UseInfiniteQueryOptions<ServiceRequest_GetMyRequestsQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseInfiniteQueryOptions<
-      ServiceRequest_GetMyServiceRequestsQuery,
+      ServiceRequest_GetMyRequestsQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useInfiniteQuery<
-    ServiceRequest_GetMyServiceRequestsQuery,
-    TError,
-    TData
-  >(
+  return useInfiniteQuery<ServiceRequest_GetMyRequestsQuery, TError, TData>(
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
         queryKey:
           (optionsQueryKey ?? variables === undefined)
-            ? ["serviceRequest_getMyServiceRequests.infinite"]
-            : ["serviceRequest_getMyServiceRequests.infinite", variables],
+            ? ["serviceRequest_getMyRequests.infinite"]
+            : ["serviceRequest_getMyRequests.infinite", variables],
         queryFn: (metaData) =>
           fetcher<
-            ServiceRequest_GetMyServiceRequestsQuery,
-            ServiceRequest_GetMyServiceRequestsQueryVariables
-          >(ServiceRequest_GetMyServiceRequestsDocument, {
+            ServiceRequest_GetMyRequestsQuery,
+            ServiceRequest_GetMyRequestsQueryVariables
+          >(ServiceRequest_GetMyRequestsDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),
@@ -1904,9 +2089,9 @@ export const useInfiniteServiceRequest_GetMyServiceRequestsQuery = <
   );
 };
 
-export const ServiceRequest_GetMyServiceAcceptancesDocument = `
-    query serviceRequest_getMyServiceAcceptances($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
-  serviceRequest_getMyServiceAcceptances {
+export const ServiceRequest_GetMyAcceptancesDocument = `
+    query serviceRequest_getMyAcceptances($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
+  serviceRequest_getMyAcceptances {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         addressText
@@ -1929,72 +2114,68 @@ export const ServiceRequest_GetMyServiceAcceptancesDocument = `
 }
     `;
 
-export const useServiceRequest_GetMyServiceAcceptancesQuery = <
-  TData = ServiceRequest_GetMyServiceAcceptancesQuery,
+export const useServiceRequest_GetMyAcceptancesQuery = <
+  TData = ServiceRequest_GetMyAcceptancesQuery,
   TError = unknown,
 >(
-  variables?: ServiceRequest_GetMyServiceAcceptancesQueryVariables,
+  variables?: ServiceRequest_GetMyAcceptancesQueryVariables,
   options?: Omit<
-    UseQueryOptions<ServiceRequest_GetMyServiceAcceptancesQuery, TError, TData>,
+    UseQueryOptions<ServiceRequest_GetMyAcceptancesQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<
-      ServiceRequest_GetMyServiceAcceptancesQuery,
+      ServiceRequest_GetMyAcceptancesQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useQuery<ServiceRequest_GetMyServiceAcceptancesQuery, TError, TData>({
+  return useQuery<ServiceRequest_GetMyAcceptancesQuery, TError, TData>({
     queryKey:
       variables === undefined
-        ? ["serviceRequest_getMyServiceAcceptances"]
-        : ["serviceRequest_getMyServiceAcceptances", variables],
+        ? ["serviceRequest_getMyAcceptances"]
+        : ["serviceRequest_getMyAcceptances", variables],
     queryFn: fetcher<
-      ServiceRequest_GetMyServiceAcceptancesQuery,
-      ServiceRequest_GetMyServiceAcceptancesQueryVariables
-    >(ServiceRequest_GetMyServiceAcceptancesDocument, variables),
+      ServiceRequest_GetMyAcceptancesQuery,
+      ServiceRequest_GetMyAcceptancesQueryVariables
+    >(ServiceRequest_GetMyAcceptancesDocument, variables),
     ...options,
   });
 };
 
-export const useInfiniteServiceRequest_GetMyServiceAcceptancesQuery = <
-  TData = InfiniteData<ServiceRequest_GetMyServiceAcceptancesQuery>,
+export const useInfiniteServiceRequest_GetMyAcceptancesQuery = <
+  TData = InfiniteData<ServiceRequest_GetMyAcceptancesQuery>,
   TError = unknown,
 >(
-  variables: ServiceRequest_GetMyServiceAcceptancesQueryVariables,
+  variables: ServiceRequest_GetMyAcceptancesQueryVariables,
   options: Omit<
     UseInfiniteQueryOptions<
-      ServiceRequest_GetMyServiceAcceptancesQuery,
+      ServiceRequest_GetMyAcceptancesQuery,
       TError,
       TData
     >,
     "queryKey"
   > & {
     queryKey?: UseInfiniteQueryOptions<
-      ServiceRequest_GetMyServiceAcceptancesQuery,
+      ServiceRequest_GetMyAcceptancesQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useInfiniteQuery<
-    ServiceRequest_GetMyServiceAcceptancesQuery,
-    TError,
-    TData
-  >(
+  return useInfiniteQuery<ServiceRequest_GetMyAcceptancesQuery, TError, TData>(
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
         queryKey:
           (optionsQueryKey ?? variables === undefined)
-            ? ["serviceRequest_getMyServiceAcceptances.infinite"]
-            : ["serviceRequest_getMyServiceAcceptances.infinite", variables],
+            ? ["serviceRequest_getMyAcceptances.infinite"]
+            : ["serviceRequest_getMyAcceptances.infinite", variables],
         queryFn: (metaData) =>
           fetcher<
-            ServiceRequest_GetMyServiceAcceptancesQuery,
-            ServiceRequest_GetMyServiceAcceptancesQueryVariables
-          >(ServiceRequest_GetMyServiceAcceptancesDocument, {
+            ServiceRequest_GetMyAcceptancesQuery,
+            ServiceRequest_GetMyAcceptancesQueryVariables
+          >(ServiceRequest_GetMyAcceptancesDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),
@@ -2004,9 +2185,91 @@ export const useInfiniteServiceRequest_GetMyServiceAcceptancesQuery = <
   );
 };
 
-export const ServiceCategory_GetServiceCategoriesDocument = `
-    query serviceCategory_getServiceCategories($skip: Int, $take: Int, $where: ServiceCategoryDtoFilterInput, $order: [ServiceCategoryDtoSortInput!]) {
-  serviceCategory_getServiceCategories {
+export const ServiceRequest_GetByIdDocument = `
+    query serviceRequest_getById($id: UUID!) {
+  serviceRequest_getById(id: $id) {
+    result {
+      addressText
+      customerName
+      description
+      requestDate
+      id
+      serviceTypeName
+      specialistName
+      status
+    }
+    status
+  }
+}
+    `;
+
+export const useServiceRequest_GetByIdQuery = <
+  TData = ServiceRequest_GetByIdQuery,
+  TError = unknown,
+>(
+  variables: ServiceRequest_GetByIdQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceRequest_GetByIdQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceRequest_GetByIdQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceRequest_GetByIdQuery, TError, TData>({
+    queryKey: ["serviceRequest_getById", variables],
+    queryFn: fetcher<
+      ServiceRequest_GetByIdQuery,
+      ServiceRequest_GetByIdQueryVariables
+    >(ServiceRequest_GetByIdDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceRequest_GetByIdQuery = <
+  TData = InfiniteData<ServiceRequest_GetByIdQuery>,
+  TError = unknown,
+>(
+  variables: ServiceRequest_GetByIdQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<ServiceRequest_GetByIdQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceRequest_GetByIdQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<ServiceRequest_GetByIdQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "serviceRequest_getById.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceRequest_GetByIdQuery,
+            ServiceRequest_GetByIdQueryVariables
+          >(ServiceRequest_GetByIdDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceCategory_GetAllDocument = `
+    query serviceCategory_getAll($skip: Int, $take: Int, $where: ServiceCategoryDtoFilterInput, $order: [ServiceCategoryDtoSortInput!]) {
+  serviceCategory_getAll {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         name
@@ -2023,72 +2286,64 @@ export const ServiceCategory_GetServiceCategoriesDocument = `
 }
     `;
 
-export const useServiceCategory_GetServiceCategoriesQuery = <
-  TData = ServiceCategory_GetServiceCategoriesQuery,
+export const useServiceCategory_GetAllQuery = <
+  TData = ServiceCategory_GetAllQuery,
   TError = unknown,
 >(
-  variables?: ServiceCategory_GetServiceCategoriesQueryVariables,
+  variables?: ServiceCategory_GetAllQueryVariables,
   options?: Omit<
-    UseQueryOptions<ServiceCategory_GetServiceCategoriesQuery, TError, TData>,
+    UseQueryOptions<ServiceCategory_GetAllQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<
-      ServiceCategory_GetServiceCategoriesQuery,
+      ServiceCategory_GetAllQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useQuery<ServiceCategory_GetServiceCategoriesQuery, TError, TData>({
+  return useQuery<ServiceCategory_GetAllQuery, TError, TData>({
     queryKey:
       variables === undefined
-        ? ["serviceCategory_getServiceCategories"]
-        : ["serviceCategory_getServiceCategories", variables],
+        ? ["serviceCategory_getAll"]
+        : ["serviceCategory_getAll", variables],
     queryFn: fetcher<
-      ServiceCategory_GetServiceCategoriesQuery,
-      ServiceCategory_GetServiceCategoriesQueryVariables
-    >(ServiceCategory_GetServiceCategoriesDocument, variables),
+      ServiceCategory_GetAllQuery,
+      ServiceCategory_GetAllQueryVariables
+    >(ServiceCategory_GetAllDocument, variables),
     ...options,
   });
 };
 
-export const useInfiniteServiceCategory_GetServiceCategoriesQuery = <
-  TData = InfiniteData<ServiceCategory_GetServiceCategoriesQuery>,
+export const useInfiniteServiceCategory_GetAllQuery = <
+  TData = InfiniteData<ServiceCategory_GetAllQuery>,
   TError = unknown,
 >(
-  variables: ServiceCategory_GetServiceCategoriesQueryVariables,
+  variables: ServiceCategory_GetAllQueryVariables,
   options: Omit<
-    UseInfiniteQueryOptions<
-      ServiceCategory_GetServiceCategoriesQuery,
-      TError,
-      TData
-    >,
+    UseInfiniteQueryOptions<ServiceCategory_GetAllQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseInfiniteQueryOptions<
-      ServiceCategory_GetServiceCategoriesQuery,
+      ServiceCategory_GetAllQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useInfiniteQuery<
-    ServiceCategory_GetServiceCategoriesQuery,
-    TError,
-    TData
-  >(
+  return useInfiniteQuery<ServiceCategory_GetAllQuery, TError, TData>(
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
         queryKey:
           (optionsQueryKey ?? variables === undefined)
-            ? ["serviceCategory_getServiceCategories.infinite"]
-            : ["serviceCategory_getServiceCategories.infinite", variables],
+            ? ["serviceCategory_getAll.infinite"]
+            : ["serviceCategory_getAll.infinite", variables],
         queryFn: (metaData) =>
           fetcher<
-            ServiceCategory_GetServiceCategoriesQuery,
-            ServiceCategory_GetServiceCategoriesQueryVariables
-          >(ServiceCategory_GetServiceCategoriesDocument, {
+            ServiceCategory_GetAllQuery,
+            ServiceCategory_GetAllQueryVariables
+          >(ServiceCategory_GetAllDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),
@@ -2098,9 +2353,9 @@ export const useInfiniteServiceCategory_GetServiceCategoriesQuery = <
   );
 };
 
-export const ServiceCategory_GetServiceCategoryDocument = `
-    query serviceCategory_getServiceCategory($id: UUID!) {
-  serviceCategory_getServiceCategory(id: $id) {
+export const ServiceCategory_GetByIdDocument = `
+    query serviceCategory_getById($id: UUID!) {
+  serviceCategory_getById(id: $id) {
     result {
       name
       logo
@@ -2111,69 +2366,61 @@ export const ServiceCategory_GetServiceCategoryDocument = `
 }
     `;
 
-export const useServiceCategory_GetServiceCategoryQuery = <
-  TData = ServiceCategory_GetServiceCategoryQuery,
+export const useServiceCategory_GetByIdQuery = <
+  TData = ServiceCategory_GetByIdQuery,
   TError = unknown,
 >(
-  variables: ServiceCategory_GetServiceCategoryQueryVariables,
+  variables: ServiceCategory_GetByIdQueryVariables,
   options?: Omit<
-    UseQueryOptions<ServiceCategory_GetServiceCategoryQuery, TError, TData>,
+    UseQueryOptions<ServiceCategory_GetByIdQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<
-      ServiceCategory_GetServiceCategoryQuery,
+      ServiceCategory_GetByIdQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useQuery<ServiceCategory_GetServiceCategoryQuery, TError, TData>({
-    queryKey: ["serviceCategory_getServiceCategory", variables],
+  return useQuery<ServiceCategory_GetByIdQuery, TError, TData>({
+    queryKey: ["serviceCategory_getById", variables],
     queryFn: fetcher<
-      ServiceCategory_GetServiceCategoryQuery,
-      ServiceCategory_GetServiceCategoryQueryVariables
-    >(ServiceCategory_GetServiceCategoryDocument, variables),
+      ServiceCategory_GetByIdQuery,
+      ServiceCategory_GetByIdQueryVariables
+    >(ServiceCategory_GetByIdDocument, variables),
     ...options,
   });
 };
 
-export const useInfiniteServiceCategory_GetServiceCategoryQuery = <
-  TData = InfiniteData<ServiceCategory_GetServiceCategoryQuery>,
+export const useInfiniteServiceCategory_GetByIdQuery = <
+  TData = InfiniteData<ServiceCategory_GetByIdQuery>,
   TError = unknown,
 >(
-  variables: ServiceCategory_GetServiceCategoryQueryVariables,
+  variables: ServiceCategory_GetByIdQueryVariables,
   options: Omit<
-    UseInfiniteQueryOptions<
-      ServiceCategory_GetServiceCategoryQuery,
-      TError,
-      TData
-    >,
+    UseInfiniteQueryOptions<ServiceCategory_GetByIdQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseInfiniteQueryOptions<
-      ServiceCategory_GetServiceCategoryQuery,
+      ServiceCategory_GetByIdQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useInfiniteQuery<
-    ServiceCategory_GetServiceCategoryQuery,
-    TError,
-    TData
-  >(
+  return useInfiniteQuery<ServiceCategory_GetByIdQuery, TError, TData>(
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
         queryKey: optionsQueryKey ?? [
-          "serviceCategory_getServiceCategory.infinite",
+          "serviceCategory_getById.infinite",
           variables,
         ],
         queryFn: (metaData) =>
           fetcher<
-            ServiceCategory_GetServiceCategoryQuery,
-            ServiceCategory_GetServiceCategoryQueryVariables
-          >(ServiceCategory_GetServiceCategoryDocument, {
+            ServiceCategory_GetByIdQuery,
+            ServiceCategory_GetByIdQueryVariables
+          >(ServiceCategory_GetByIdDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),
@@ -2270,9 +2517,9 @@ export const useInfiniteServiceSubCategory_GetAllQuery = <
   );
 };
 
-export const ServiceSubCategory_GetDocument = `
-    query serviceSubCategory_get($id: UUID!) {
-  serviceSubCategory_get(id: $id) {
+export const ServiceSubCategory_GetByIdDocument = `
+    query serviceSubCategory_getById($id: UUID!) {
+  serviceSubCategory_getById(id: $id) {
     result {
       id
       logo
@@ -2284,61 +2531,61 @@ export const ServiceSubCategory_GetDocument = `
 }
     `;
 
-export const useServiceSubCategory_GetQuery = <
-  TData = ServiceSubCategory_GetQuery,
+export const useServiceSubCategory_GetByIdQuery = <
+  TData = ServiceSubCategory_GetByIdQuery,
   TError = unknown,
 >(
-  variables: ServiceSubCategory_GetQueryVariables,
+  variables: ServiceSubCategory_GetByIdQueryVariables,
   options?: Omit<
-    UseQueryOptions<ServiceSubCategory_GetQuery, TError, TData>,
+    UseQueryOptions<ServiceSubCategory_GetByIdQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<
-      ServiceSubCategory_GetQuery,
+      ServiceSubCategory_GetByIdQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useQuery<ServiceSubCategory_GetQuery, TError, TData>({
-    queryKey: ["serviceSubCategory_get", variables],
+  return useQuery<ServiceSubCategory_GetByIdQuery, TError, TData>({
+    queryKey: ["serviceSubCategory_getById", variables],
     queryFn: fetcher<
-      ServiceSubCategory_GetQuery,
-      ServiceSubCategory_GetQueryVariables
-    >(ServiceSubCategory_GetDocument, variables),
+      ServiceSubCategory_GetByIdQuery,
+      ServiceSubCategory_GetByIdQueryVariables
+    >(ServiceSubCategory_GetByIdDocument, variables),
     ...options,
   });
 };
 
-export const useInfiniteServiceSubCategory_GetQuery = <
-  TData = InfiniteData<ServiceSubCategory_GetQuery>,
+export const useInfiniteServiceSubCategory_GetByIdQuery = <
+  TData = InfiniteData<ServiceSubCategory_GetByIdQuery>,
   TError = unknown,
 >(
-  variables: ServiceSubCategory_GetQueryVariables,
+  variables: ServiceSubCategory_GetByIdQueryVariables,
   options: Omit<
-    UseInfiniteQueryOptions<ServiceSubCategory_GetQuery, TError, TData>,
+    UseInfiniteQueryOptions<ServiceSubCategory_GetByIdQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseInfiniteQueryOptions<
-      ServiceSubCategory_GetQuery,
+      ServiceSubCategory_GetByIdQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useInfiniteQuery<ServiceSubCategory_GetQuery, TError, TData>(
+  return useInfiniteQuery<ServiceSubCategory_GetByIdQuery, TError, TData>(
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
         queryKey: optionsQueryKey ?? [
-          "serviceSubCategory_get.infinite",
+          "serviceSubCategory_getById.infinite",
           variables,
         ],
         queryFn: (metaData) =>
           fetcher<
-            ServiceSubCategory_GetQuery,
-            ServiceSubCategory_GetQueryVariables
-          >(ServiceSubCategory_GetDocument, {
+            ServiceSubCategory_GetByIdQuery,
+            ServiceSubCategory_GetByIdQueryVariables
+          >(ServiceSubCategory_GetByIdDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),
@@ -2509,8 +2756,8 @@ export const useInfiniteUser_GetMyProfileQuery = <
 };
 
 export const Address_GetMyAddressesDocument = `
-    query address_getMyAddresses($skip: Int, $take: Int, $userId: UUID!, $where: AddressDtoFilterInput, $order: [AddressDtoSortInput!]) {
-  address_getMyAddresses(userId: $userId) {
+    query address_getMyAddresses($skip: Int, $take: Int, $where: AddressDtoFilterInput, $order: [AddressDtoSortInput!]) {
+  address_getMyAddresses {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         id
@@ -2533,7 +2780,7 @@ export const useAddress_GetMyAddressesQuery = <
   TData = Address_GetMyAddressesQuery,
   TError = unknown,
 >(
-  variables: Address_GetMyAddressesQueryVariables,
+  variables?: Address_GetMyAddressesQueryVariables,
   options?: Omit<
     UseQueryOptions<Address_GetMyAddressesQuery, TError, TData>,
     "queryKey"
@@ -2546,7 +2793,10 @@ export const useAddress_GetMyAddressesQuery = <
   },
 ) => {
   return useQuery<Address_GetMyAddressesQuery, TError, TData>({
-    queryKey: ["address_getMyAddresses", variables],
+    queryKey:
+      variables === undefined
+        ? ["address_getMyAddresses"]
+        : ["address_getMyAddresses", variables],
     queryFn: fetcher<
       Address_GetMyAddressesQuery,
       Address_GetMyAddressesQueryVariables
@@ -2575,10 +2825,10 @@ export const useInfiniteAddress_GetMyAddressesQuery = <
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
-        queryKey: optionsQueryKey ?? [
-          "address_getMyAddresses.infinite",
-          variables,
-        ],
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["address_getMyAddresses.infinite"]
+            : ["address_getMyAddresses.infinite", variables],
         queryFn: (metaData) =>
           fetcher<
             Address_GetMyAddressesQuery,

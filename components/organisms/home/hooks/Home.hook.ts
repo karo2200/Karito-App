@@ -1,20 +1,30 @@
-import { useCity_GetAllQuery } from "@/generated/graphql";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
+import authCacheStore from "@/stores/authCacheStore";
 import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useGetServiceCategoriesQuery } from "../../service/hooks";
+import { useGetAllCityQuery } from "./Home.query";
 
 export default function useHomeHook() {
   const router = useRouter();
 
   const { isSelectRole } = useUserStore();
 
+  const { customerCity, setCustomerCity } = authCacheStore();
+
   const [selectRoleVisible, setSelectRoleVisibe] = useState<boolean>(false);
 
-  const { data } = useCity_GetAllQuery({ take: 10 });
+  const { data: cityData, isLoading } = useGetAllCityQuery({
+    where: { isActive: { eq: true } },
+  });
 
-  const { data: homeCategoryData } = useGetServiceCategoriesQuery({});
+  const { data: homeCategoryData } = useGetServiceCategoriesQuery();
+
+  const { data: selectedCityData, isLoading: selectedCityLoading } =
+    useGetAllCityQuery({ where: { name: { eq: customerCity } } });
+
+  console.log(".......", selectedCityData);
 
   useEffect(() => {
     // if (isSelectRole) {
@@ -50,11 +60,19 @@ export default function useHomeHook() {
     });
   };
 
+  const onCityPress = (city: string) => {
+    setCustomerCity(city);
+  };
+
   return {
     router,
     selectRoleVisible,
     setSelectRoleVisibe,
-    data,
+    cityData: cityData?.pages ?? [],
     homeCategoryData: homeCategoryData?.pages ?? [],
+    customerCity,
+    onCityPress,
+    activeBanner: selectedCityData?.pages[0]?.activeBanner,
+    activeCarousel: selectedCityData?.pages[0]?.activeCarousel,
   };
 }

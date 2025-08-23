@@ -11,11 +11,10 @@ query user_getMyProfile {
 query address_getMyAddresses(
   $skip: Int
   $take: Int
-  $userId: UUID!
   $where: AddressDtoFilterInput
   $order: [AddressDtoSortInput!]
 ) {
-  address_getMyAddresses(userId: $userId) {
+  address_getMyAddresses {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         id

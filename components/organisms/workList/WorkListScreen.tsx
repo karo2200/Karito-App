@@ -3,10 +3,11 @@ import ThemedText from "@/components/atoms/ThemedText";
 import ThemedView from "@/components/atoms/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
+import { ServiceRequestDto } from "@/generated/graphql";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import React, { useCallback } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   StyleSheet,
@@ -14,20 +15,32 @@ import {
   View,
 } from "react-native";
 import OrderCard from "../order/Views/OrderCard";
+import useWorkOutHook from "./hooks/WorkList.hook";
 
 const { height } = Dimensions.get("screen");
 
 export default function WorkListScreen() {
-  const router = useRouter();
+  const {
+    router,
+    workData,
+    isRefetching,
+    refetch,
+    hasNextPage,
+    fetchNextPage,
+    searchText,
+    setSearchText,
+    isLoading,
+  } = useWorkOutHook();
+
   const listRef = React.useRef<FlatList>(null);
 
   const renderItem = useCallback(
-    ({ item }: { item: any }) => (
+    ({ item }: { item: ServiceRequestDto }) => (
       <OrderCard
         item={item}
         key={item?.id}
         onOrderPress={() => {
-          router.push("/workList/orderDetail");
+          router.push(`/workList/orderDetail?id=${item?.id}`);
         }}
         isCustomer={false}
       />
@@ -45,30 +58,36 @@ export default function WorkListScreen() {
           textAlign="right"
           textAlignVertical="center"
           placeholderTextColor={Colors.unfilledText}
+          value={searchText}
+          onChangeText={(t) => setSearchText(t)}
         />
       </ThemedView>
-      <FlatList
-        ref={listRef}
-        keyExtractor={(item) => item?.id}
-        data={[{}]}
-        refreshing={true}
-        // onRefresh={refetch}
-        showsVerticalScrollIndicator={false}
-        renderItem={renderItem}
-        onEndReached={() => {
-          // if (hasNextPage) {
-          //   fetchNextPage();
-          // }
-        }}
-        ListEmptyComponent={() => (
-          <View style={styles.flex1}>
-            <NoOrderIcon />
-            <ThemedText style={styles.title}>
-              هیچ سفارشی در لیست ندارید!
-            </ThemedText>
-          </View>
-        )}
-      />
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          ref={listRef}
+          keyExtractor={(item) => item?.id}
+          data={workData}
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          showsVerticalScrollIndicator={false}
+          renderItem={renderItem}
+          onEndReached={() => {
+            if (hasNextPage) {
+              fetchNextPage();
+            }
+          }}
+          ListEmptyComponent={() => (
+            <View style={styles.flex1}>
+              <NoOrderIcon />
+              <ThemedText style={styles.title}>
+                هیچ سفارشی در لیست ندارید!
+              </ThemedText>
+            </View>
+          )}
+        />
+      )}
     </View>
   );
 }

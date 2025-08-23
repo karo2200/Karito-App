@@ -34,11 +34,12 @@ export default function useOtpHook() {
       {
         onSuccess: (data) => {
           setIsVerifying(false);
+
           if (data?.auth_verifyOtp.status?.code === 1) {
             setAccessToken(data?.auth_verifyOtp?.result?.accessToken ?? "");
             setRefreshToken(data?.auth_verifyOtp?.result?.refreshToken ?? "");
-
-            router.push("/");
+            setIsExpert(false);
+            setIsLoggedIn(true);
           }
         },
       }
@@ -55,8 +56,7 @@ export default function useOtpHook() {
           if (data?.auth_verifyOtp.status?.code === 1) {
             setAccessToken(data?.auth_verifyOtp?.result?.accessToken ?? "");
             setRefreshToken(data?.auth_verifyOtp?.result?.refreshToken ?? "");
-            setIsExpert(true);
-            setIsLoggedIn(true);
+
             router.push(`/ExpertRegisterPage?phone=${phoneNumber}`);
           }
         },

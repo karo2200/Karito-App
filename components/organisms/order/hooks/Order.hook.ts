@@ -1,4 +1,4 @@
-import { ServiceRequestStatus } from "@/generated/graphql";
+import { ServiceRequestStatus, SortEnumType } from "@/generated/graphql";
 import { useRouter } from "expo-router";
 import { useGetServiceRequestsQuery } from "./Order.query";
 
@@ -11,6 +11,7 @@ export default function useOrderHook() {
     refetch,
     hasNextPage,
     fetchNextPage,
+    isLoading: inProgressLoading,
   } = useGetServiceRequestsQuery({
     where: {
       or: [
@@ -18,6 +19,7 @@ export default function useOrderHook() {
         { status: { neq: ServiceRequestStatus.Completed } },
       ],
     },
+    order: [{ requestDate: SortEnumType.Desc }],
   });
 
   const {
@@ -26,8 +28,10 @@ export default function useOrderHook() {
     refetch: completeRefetch,
     hasNextPage: completeHasNextPage,
     fetchNextPage: completeFetchNextPage,
+    isLoading: completeLoading,
   } = useGetServiceRequestsQuery({
     where: { status: { eq: ServiceRequestStatus.Completed } },
+    order: [{ requestDate: SortEnumType.Desc }],
   });
 
   const {
@@ -36,8 +40,10 @@ export default function useOrderHook() {
     refetch: cancelledRefetch,
     hasNextPage: cancelledHasNextPage,
     fetchNextPage: cancelledFetchNextPage,
+    isLoading: canceledLoading,
   } = useGetServiceRequestsQuery({
     where: { status: { eq: ServiceRequestStatus.Cancelled } },
+    order: [{ requestDate: SortEnumType.Desc }],
   });
 
   return {
@@ -57,5 +63,8 @@ export default function useOrderHook() {
     cancelledRefetch,
     cancelledHasNextPage,
     cancelledFetchNextPage,
+    completeLoading,
+    canceledLoading,
+    inProgressLoading,
   };
 }

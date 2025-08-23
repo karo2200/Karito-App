@@ -1,43 +1,37 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  ServiceCategoryDtoFilterInput,
   ServiceCategoryDtoSortInput,
-  ServiceCategory_GetServiceCategoriesDocument,
+  ServiceCategory_GetAllDocument,
   ServiceSubCategoryDtoSortInput,
   ServiceSubCategory_GetAllDocument,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-export const useGetServiceCategoriesQuery = ({
-  //   where,
-  order,
-  enabled = true,
-}: {
-  //   where?: ServiceCategoryDtoFilterInput;
+type ServiceCategoriesOptions = {
+  skip?: number;
+  take?: number;
+  where?: ServiceCategoryDtoFilterInput;
   order?: [ServiceCategoryDtoSortInput];
-  enabled?: boolean;
-}) => {
+};
+
+export const useGetServiceCategoriesQuery = (
+  options: ServiceCategoriesOptions = {}
+) => {
   return useInfiniteQuery({
-    queryKey: [
-      queryKeys.ServiceCategory_GetServiceCategoriesQuery,
-      //   where,
-      order,
-      enabled,
-    ],
+    queryKey: [queryKeys.ServiceCategory_GetServiceCategoriesQuery],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceCategory_GetServiceCategoriesDocument, {
+      return fetcher(ServiceCategory_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
-        // where,
-        // order,
+        ...options,
       })();
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (
-        lastPage?.serviceCategory_getServiceCategories?.pageInfo?.hasNextPage
-      ) {
+      if (lastPage?.serviceRequest_getAll?.result?.pageInfo?.hasNextPage) {
         return allPages.length;
       }
       return undefined;
@@ -46,8 +40,9 @@ export const useGetServiceCategoriesQuery = ({
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.serviceCategory_getServiceCategories?.items)
+          ?.map((a) => a?.serviceRequest_getAll?.result?.items)
           .flat(),
+        totalCount: data?.pages?.[0]?.serviceRequest_getAll?.result?.totalCount,
       };
     },
   });

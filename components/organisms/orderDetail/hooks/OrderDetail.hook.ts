@@ -1,10 +1,14 @@
 import useUserStore from "@/stores/loginStore";
+import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Linking, Platform } from "react-native";
+import { useGetServiceById } from "./OrderDetail.guery";
 
 export default function useOrderDetailHook() {
   const router = useRouter();
+
+  const { params } = useRoute();
 
   const [finishWorkVisible, setFinishWorkVisible] = useState(false);
   const [foundLocationVisible, setFoundLocationVisible] = useState(false);
@@ -14,6 +18,10 @@ export default function useOrderDetailHook() {
   const isDone = true;
 
   const { isExpert, setIsExpert } = useUserStore();
+
+  const { data: serviceData, isLoading } = useGetServiceById({
+    id: params?.id,
+  });
 
   const onBillPress = () => {
     router.push("/order/payment");
@@ -40,5 +48,6 @@ export default function useOrderDetailHook() {
     foundLocationVisible,
     specialistFinishWorkVisible,
     setSpecialistFinishWorkVisible,
+    serviceData: serviceData?.serviceRequest_getById?.result,
   };
 }

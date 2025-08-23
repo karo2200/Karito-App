@@ -15,6 +15,8 @@ type AuthCacheType = {
   setIsUserLoggedIn: (isUserLoggedIn: boolean) => void;
   userId: string;
   setUserId: (userId: string) => void;
+  customerCity: string;
+  setCustomerCity: (customerCity: string) => void;
   clearAuth: () => void;
 };
 type AuthCacheStore = (
@@ -37,6 +39,8 @@ export const authCacheStore = create<AuthCacheType>(
       setIsUserLoggedIn: (isUserLoggedIn: boolean) => set({ isUserLoggedIn }),
       userId: "",
       setUserId: (userId: string) => set({ userId }),
+      customerCity: "تهران",
+      setCustomerCity: (customerCity: string) => set({ customerCity }),
       clearAuth: () =>
         set({
           accessToken: null,

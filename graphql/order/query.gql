@@ -1,10 +1,10 @@
-query serviceRequest_getMyServiceRequests(
+query serviceRequest_getMyRequests(
   $skip: Int
   $take: Int
   $where: ServiceRequestDtoFilterInput
   $order: [ServiceRequestDtoSortInput!]
 ) {
-  serviceRequest_getMyServiceRequests {
+  serviceRequest_getMyRequests {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         addressText
@@ -26,13 +26,13 @@ query serviceRequest_getMyServiceRequests(
   }
 }
 
-query serviceRequest_getMyServiceAcceptances(
+query serviceRequest_getMyAcceptances(
   $skip: Int
   $take: Int
   $where: ServiceRequestDtoFilterInput
   $order: [ServiceRequestDtoSortInput!]
 ) {
-  serviceRequest_getMyServiceAcceptances {
+  serviceRequest_getMyAcceptances {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         addressText
@@ -49,6 +49,22 @@ query serviceRequest_getMyServiceAcceptances(
         hasPreviousPage
       }
       totalCount
+    }
+    status
+  }
+}
+
+query serviceRequest_getById($id: UUID!) {
+  serviceRequest_getById(id: $id) {
+    result {
+      addressText
+      customerName
+      description
+      requestDate
+      id
+      serviceTypeName
+      specialistName
+      status
     }
     status
   }

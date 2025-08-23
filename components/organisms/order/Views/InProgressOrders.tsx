@@ -22,7 +22,7 @@ export default function InProgressOrders() {
       <OrderCard
         item={item}
         onOrderPress={() => {
-          router.push("/order/orderDetail");
+          router.push(`/order/orderDetail?id=${item?.id}`);
         }}
         key={item?.id}
       />

@@ -18,7 +18,7 @@ const images = [
   require("../../assets/images/react-logo.png"),
 ];
 
-export default function CustomCarousel() {
+export default function CustomCarousel({ data }: { data: any }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -29,14 +29,14 @@ export default function CustomCarousel() {
         height={200}
         autoPlay
         autoPlayInterval={3000}
-        data={images}
-        style={{ borderRadius: 8, backgroundColor: "red" }}
+        data={data}
+        style={{ borderRadius: 8 }}
         pagingEnabled
         onSnapToItem={(index) => setActiveIndex(index)}
         scrollAnimationDuration={800}
         renderItem={({ item }) => (
           <ImageBackground
-            source={item}
+            source={{ uri: item?.imageUrls }}
             style={styles.image}
             resizeMode="cover"
           >

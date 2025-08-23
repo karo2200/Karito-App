@@ -1,42 +1,39 @@
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
+import { CityDto } from "@/generated/graphql";
+import authCacheStore from "@/stores/authCacheStore";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { FlatList, Pressable, StyleSheet, TextInput, View } from "react-native";
 import ThemedText from "./ThemedText";
 
-const sampleData = [
-  "تهران",
-  "مشهد",
-  "تبریز",
-  "اصفهان",
-  "شیراز",
-  "رشت",
-  "اهواز",
-  "کرج",
-  "قم",
-  "زاهدان",
-];
-
-export default function SearchWithModal() {
+export default function SearchWithModal({
+  list,
+  onSelect,
+}: {
+  list: [CityDto];
+  onSelect: () => void;
+}) {
   const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState<string[]>([]);
+  const [filtered, setFiltered] = useState<CityDto[]>([]);
+
+  const { setCustomerCity, customerCity } = authCacheStore();
 
   const handleSearch = (text: string) => {
     setSearch(text);
     if (text.length > 0) {
-      const results = sampleData.filter((item) =>
-        item.toLowerCase().includes(text.toLowerCase())
-      );
+      const results = list?.filter((item) => item.name.includes(text));
       setFiltered(results);
     } else {
       setFiltered([]);
     }
   };
 
-  const handleSelect = (item: string) => {
-    setSearch(item);
+  const handleSelect = (item: CityDto) => {
+    setSearch(item?.name);
     setFiltered([]);
+    setCustomerCity(item?.name);
+    onSelect?.();
   };
 
   return (
@@ -62,13 +59,16 @@ export default function SearchWithModal() {
           <FlatList
             data={filtered}
             keyExtractor={(item, index) => `${item}-${index}`}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <Pressable
                 onPress={() => handleSelect(item)}
-                style={styles.resultItem}
+                style={[
+                  styles.resultItem,
+                  index > filtered?.length - 2 && { borderBottomWidth: 0 },
+                ]}
               >
                 <ThemedText type="text" style={styles.text}>
-                  {item}
+                  {item?.name}
                 </ThemedText>
               </Pressable>
             )}

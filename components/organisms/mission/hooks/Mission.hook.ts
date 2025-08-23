@@ -1,4 +1,4 @@
-import { ServiceRequestStatus } from "@/generated/graphql";
+import { ServiceRequestStatus, SortEnumType } from "@/generated/graphql";
 import { useRouter } from "expo-router";
 import { useGetServiceAcceptanceQuery } from "./Mission.query";
 
@@ -13,6 +13,7 @@ export default function useMissionsHook() {
     fetchNextPage,
   } = useGetServiceAcceptanceQuery({
     where: { status: { neq: ServiceRequestStatus.Completed } },
+    order: [{ requestDate: SortEnumType.Desc }],
   });
 
   const {
@@ -23,6 +24,7 @@ export default function useMissionsHook() {
     fetchNextPage: completeFetchNextPage,
   } = useGetServiceAcceptanceQuery({
     where: { status: { eq: ServiceRequestStatus.Completed } },
+    order: [{ requestDate: SortEnumType.Desc }],
   });
 
   return {

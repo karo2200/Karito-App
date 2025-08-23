@@ -1,10 +1,10 @@
-query serviceCategory_getServiceCategories(
+query serviceCategory_getAll(
   $skip: Int
   $take: Int
   $where: ServiceCategoryDtoFilterInput
   $order: [ServiceCategoryDtoSortInput!]
 ) {
-  serviceCategory_getServiceCategories {
+  serviceCategory_getAll {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         name
@@ -20,8 +20,8 @@ query serviceCategory_getServiceCategories(
   }
 }
 
-query serviceCategory_getServiceCategory($id: UUID!) {
-  serviceCategory_getServiceCategory(id: $id) {
+query serviceCategory_getById($id: UUID!) {
+  serviceCategory_getById(id: $id) {
     result {
       name
       logo

@@ -1,7 +1,7 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  ServiceRequest_GetMyServiceAcceptancesDocument,
+  ServiceRequest_GetMyAcceptancesDocument,
   ServiceRequestDtoFilterInput,
   ServiceRequestDtoSortInput,
 } from "@/generated/graphql";
@@ -19,9 +19,9 @@ export const useGetServiceAcceptanceQuery = (
   options: UseGetServiceAcceptanceOptions = {}
 ) => {
   return useInfiniteQuery({
-    queryKey: [queryKeys.serviceRequest_getMyServiceAcceptances, options],
+    queryKey: [queryKeys.serviceRequest_getMyAcceptances, options],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceRequest_GetMyServiceAcceptancesDocument, {
+      return fetcher(ServiceRequest_GetMyAcceptancesDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
@@ -30,8 +30,7 @@ export const useGetServiceAcceptanceQuery = (
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       if (
-        lastPage?.serviceRequest_getMyServiceAcceptances?.result?.pageInfo
-          ?.hasNextPage
+        lastPage?.serviceRequest_getMyAcceptances?.result?.pageInfo?.hasNextPage
       ) {
         return allPages.length;
       }
@@ -41,11 +40,10 @@ export const useGetServiceAcceptanceQuery = (
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.serviceRequest_getMyServiceAcceptances?.result?.items)
+          ?.map((a) => a?.serviceRequest_getMyAcceptances?.result?.items)
           .flat(),
         totalCount:
-          data?.pages?.[0]?.serviceRequest_getMyServiceAcceptances?.result
-            ?.totalCount,
+          data?.pages?.[0]?.serviceRequest_getMyAcceptances?.result?.totalCount,
       };
     },
   });

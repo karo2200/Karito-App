@@ -1,7 +1,7 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  ServiceRequest_GetMyServiceRequestsDocument,
+  ServiceRequest_GetMyRequestsDocument,
   ServiceRequestDtoFilterInput,
   ServiceRequestDtoSortInput,
 } from "@/generated/graphql";
@@ -19,9 +19,9 @@ export const useGetServiceRequestsQuery = (
   options: UseGetServiceRequestsOptions = {}
 ) => {
   return useInfiniteQuery({
-    queryKey: [queryKeys.serviceRequest_getMyServiceRequests, options],
+    queryKey: [queryKeys.serviceRequest_getMyRequests, options],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceRequest_GetMyServiceRequestsDocument, {
+      return fetcher(ServiceRequest_GetMyRequestsDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
@@ -30,8 +30,7 @@ export const useGetServiceRequestsQuery = (
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       if (
-        lastPage?.serviceRequest_getMyServiceRequests?.result?.pageInfo
-          ?.hasNextPage
+        lastPage?.serviceRequest_getMyRequests?.result?.pageInfo?.hasNextPage
       ) {
         return allPages.length;
       }
@@ -41,11 +40,10 @@ export const useGetServiceRequestsQuery = (
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.serviceRequest_getMyServiceRequests?.result?.items)
+          ?.map((a) => a?.serviceRequest_getMyRequests?.result?.items)
           .flat(),
         totalCount:
-          data?.pages?.[0]?.serviceRequest_getMyServiceRequests?.result
-            ?.totalCount,
+          data?.pages?.[0]?.serviceRequest_getMyRequests?.result?.totalCount,
       };
     },
   });

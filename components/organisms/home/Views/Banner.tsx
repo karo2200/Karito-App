@@ -2,22 +2,27 @@ import SearchWithModal from "@/components/atoms/SearchWithModal";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
+import { CityDto } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
 import {
   Dimensions,
   Image,
+  Pressable,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import useHomeHook from "../hooks/Home.hook";
 
 const { width, height } = Dimensions.get("screen");
 
 export default function Banner() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  const { cityData, customerCity, onCityPress, activeBanner } = useHomeHook();
 
   const openActionSheet = () => {
     actionSheetRef.current?.show();
@@ -29,10 +34,9 @@ export default function Banner() {
 
   return (
     <View>
-      <Image
-        style={styles.image}
-        source={require("../../../../assets/images/Home-Banner.png")}
-      />
+      {activeBanner && (
+        <Image style={styles.image} source={{ uri: activeBanner?.imageUrl }} />
+      )}
       <View style={styles.inputContainer}>
         <View style={styles.container}>
           <Ionicons
@@ -50,7 +54,7 @@ export default function Banner() {
           <TouchableOpacity onPress={openActionSheet} style={styles.button}>
             <Ionicons name="location-outline" size={20} color="#000" />
             <ThemedText type="text" style={styles.city}>
-              انتخاب شهر
+              {customerCity ? customerCity : "انتخاب شهر"}
             </ThemedText>
           </TouchableOpacity>
         </View>
@@ -70,21 +74,26 @@ export default function Banner() {
           />
           <ThemedText fontType="bold">کدام شهر هستید؟</ThemedText>
         </View>
-        <SearchWithModal />
+        <SearchWithModal list={cityData} onSelect={() => closeActionSheet()} />
         <View style={styles.contentView}>
           <ThemedText type="text" style={styles.title}>
             شهرهای پر بازدید
           </ThemedText>
           <View style={styles.flexWrap}>
-            {["تهران", "تهران", "تهران", "تهران"]?.map(
-              (element: string, id: number) => {
-                return (
-                  <View style={styles.cityView} key={id}>
-                    <ThemedText style={styles.text}>{element}</ThemedText>
-                  </View>
-                );
-              }
-            )}
+            {cityData?.map((element: CityDto) => {
+              return (
+                <Pressable
+                  style={styles.cityView}
+                  key={element?.id}
+                  onPress={() => {
+                    onCityPress(element?.name);
+                    closeActionSheet();
+                  }}
+                >
+                  <ThemedText style={styles.text}>{element?.name}</ThemedText>
+                </Pressable>
+              );
+            })}
           </View>
         </View>
       </ActionSheet>
