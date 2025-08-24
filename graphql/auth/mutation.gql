@@ -1,15 +1,11 @@
-mutation auth_requestOtp($phoneNumber: String!, $userType: UserType!) {
-  auth_requestOtp(phoneNumber: $phoneNumber, userType: $userType) {
+mutation auth_requestOtp($input: RequestOtpInput!) {
+  auth_requestOtp(input: $input) {
     status
   }
 }
 
-mutation auth_verifyOtp(
-  $phoneNumber: String!
-  $userType: UserType!
-  $otp: String!
-) {
-  auth_verifyOtp(phoneNumber: $phoneNumber, userType: $userType, otp: $otp) {
+mutation auth_verifyOtp($input: VerifyOtpInput!) {
+  auth_verifyOtp(input: $input) {
     status
     result {
       accessToken
@@ -18,8 +14,8 @@ mutation auth_verifyOtp(
   }
 }
 
-mutation auth_refreshToken($accessToken: String!, $refreshToken: String!) {
-  auth_refreshToken(accessToken: $accessToken, refreshToken: $refreshToken) {
+mutation auth_refreshToken($input: RefreshTokenInput!) {
+  auth_refreshToken(input: $input) {
     status
     result {
       accessToken

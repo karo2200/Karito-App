@@ -24,8 +24,6 @@ export default function useHomeHook() {
   const { data: selectedCityData, isLoading: selectedCityLoading } =
     useGetAllCityQuery({ where: { name: { eq: customerCity } } });
 
-  console.log(".......", selectedCityData);
-
   useEffect(() => {
     // if (isSelectRole) {
     //   setSelectRoleVisibe(false);

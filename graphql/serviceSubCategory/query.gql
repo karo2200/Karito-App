@@ -25,8 +25,8 @@ query serviceSubCategory_getAll(
   }
 }
 
-query serviceSubCategory_getById($id: UUID!) {
-  serviceSubCategory_getById(id: $id) {
+query serviceSubCategory_getById($input: GetServiceSubCategoryByIdInput!) {
+  serviceSubCategory_getById(input: $input) {
     result {
       id
       logo

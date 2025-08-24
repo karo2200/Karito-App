@@ -49,6 +49,10 @@ export type ActivateCityInput = {
   cityId: Scalars["UUID"]["input"];
 };
 
+export type ActivateDiscountCodeInput = {
+  id: Scalars["UUID"]["input"];
+};
+
 export type AddAddressInput = {
   customerId: Scalars["UUID"]["input"];
   latitude: Scalars["Float"]["input"];
@@ -252,13 +256,37 @@ export type CompleteServiceInput = {
   serviceRequestId: Scalars["UUID"]["input"];
 };
 
+export type CreateBannerInput = {
+  imageUrl: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+};
+
+export type CreateCancellationReasonInput = {
+  name: Scalars["String"]["input"];
+};
+
+export type CreateCarouselInput = {
+  imageUrls: Array<Scalars["String"]["input"]>;
+  title: Scalars["String"]["input"];
+};
+
 export type CreateCityInput = {
   name: Scalars["String"]["input"];
   provinceId: Scalars["UUID"]["input"];
 };
 
+export type CreateDiscountCodeInput = {
+  amount: Scalars["Decimal"]["input"];
+  expiryDate?: InputMaybe<Scalars["DateTime"]["input"]>;
+  isPercentage: Scalars["Boolean"]["input"];
+};
+
 export type CreateNeighborhoodInput = {
   cityId: Scalars["UUID"]["input"];
+  name: Scalars["String"]["input"];
+};
+
+export type CreateProvinceInput = {
   name: Scalars["String"]["input"];
 };
 
@@ -289,6 +317,14 @@ export type CreateServiceTypeInput = {
   serviceSubCategoryId: Scalars["UUID"]["input"];
 };
 
+export type CreateServiceTypeQuestionInput = {
+  isRequired: Scalars["Boolean"]["input"];
+  options: Array<Scalars["String"]["input"]>;
+  questionType: QuestionType;
+  serviceTypeId: Scalars["UUID"]["input"];
+  title: Scalars["String"]["input"];
+};
+
 export type DateTimeOperationFilterInput = {
   eq?: InputMaybe<Scalars["DateTime"]["input"]>;
   gt?: InputMaybe<Scalars["DateTime"]["input"]>;
@@ -306,6 +342,10 @@ export type DateTimeOperationFilterInput = {
 
 export type DeactivateCityInput = {
   cityId: Scalars["UUID"]["input"];
+};
+
+export type DeactivateDiscountCodeInput = {
+  id: Scalars["UUID"]["input"];
 };
 
 export type DecimalOperationFilterInput = {
@@ -327,8 +367,28 @@ export type DeleteAddressInput = {
   addressId: Scalars["UUID"]["input"];
 };
 
+export type DeleteBannerInput = {
+  bannerId: Scalars["UUID"]["input"];
+};
+
+export type DeleteCancellationReasonInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type DeleteCarouselInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type DeleteDiscountCodeInput = {
+  id: Scalars["UUID"]["input"];
+};
+
 export type DeleteNeighborhoodInput = {
   neighborhoodId: Scalars["UUID"]["input"];
+};
+
+export type DeleteProvinceInput = {
+  id: Scalars["UUID"]["input"];
 };
 
 export type DeleteServiceCategoryInput = {
@@ -340,7 +400,11 @@ export type DeleteServiceSubCategoryInput = {
 };
 
 export type DeleteServiceTypeInput = {
-  serviceTypeId: Scalars["UUID"]["input"];
+  id: Scalars["UUID"]["input"];
+};
+
+export type DeleteServiceTypeQuestionInput = {
+  id: Scalars["UUID"]["input"];
 };
 
 export type DiscountCodeDto = {
@@ -402,6 +466,74 @@ export enum Gender {
   Female = "FEMALE",
   Male = "MALE",
 }
+
+export type GetBannerByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetCancellationReasonByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetCarouselByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetCityByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetDiscountCodeByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetNearestAddressesInput = {
+  latitude: Scalars["Float"]["input"];
+  longitude: Scalars["Float"]["input"];
+};
+
+export type GetNeighborhoodByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetProvinceByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetServiceCategoryByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetServiceSubCategoryByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetServiceTypeByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetServiceTypeQuestionByIdInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type GetServiceTypeQuestionsByServiceTypeInput = {
+  serviceTypeId: Scalars["UUID"]["input"];
+};
+
+export type IntOperationFilterInput = {
+  eq?: InputMaybe<Scalars["Int"]["input"]>;
+  gt?: InputMaybe<Scalars["Int"]["input"]>;
+  gte?: InputMaybe<Scalars["Int"]["input"]>;
+  in?: InputMaybe<Array<InputMaybe<Scalars["Int"]["input"]>>>;
+  lt?: InputMaybe<Scalars["Int"]["input"]>;
+  lte?: InputMaybe<Scalars["Int"]["input"]>;
+  neq?: InputMaybe<Scalars["Int"]["input"]>;
+  ngt?: InputMaybe<Scalars["Int"]["input"]>;
+  ngte?: InputMaybe<Scalars["Int"]["input"]>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars["Int"]["input"]>>>;
+  nlt?: InputMaybe<Scalars["Int"]["input"]>;
+  nlte?: InputMaybe<Scalars["Int"]["input"]>;
+};
 
 export type ListFilterInputTypeOfServiceRequestQnADtoFilterInput = {
   all?: InputMaybe<ServiceRequestQnADtoFilterInput>;
@@ -508,6 +640,19 @@ export type ListResponseBaseOfProvinceDtoResultArgs = {
   where?: InputMaybe<ProvinceDtoFilterInput>;
 };
 
+export type ListResponseBaseOfRateAndReviewDto = {
+  __typename?: "ListResponseBaseOfRateAndReviewDto";
+  result?: Maybe<RateAndReviewDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfRateAndReviewDtoResultArgs = {
+  order?: InputMaybe<Array<RateAndReviewDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<RateAndReviewDtoFilterInput>;
+};
+
 export type ListResponseBaseOfServiceCategoryDto = {
   __typename?: "ListResponseBaseOfServiceCategoryDto";
   result?: Maybe<ServiceCategoryDtoCollectionSegment>;
@@ -596,17 +741,15 @@ export type Mutation = {
   address_create: ResponseBaseOfAddressDto;
   address_delete: ResponseBase;
   address_update: ResponseBaseOfAddressDto;
-  /** Generates a new access and refresh token pair using a valid refresh token. */
   auth_refreshToken: ResponseBaseOfAuthResult;
-  /** Requests an OTP to be sent to the provided phone number and user type. */
   auth_requestOtp: ResponseBase;
   auth_verifyOtp: ResponseBaseOfAuthResult;
   banner_create: ResponseBaseOfBannerDto;
   banner_delete: ResponseBase;
   banner_update: ResponseBaseOfBannerDto;
-  cancelationReason_create: ResponseBaseOfCancellationReasonDto;
-  cancelationReason_delete: ResponseBase;
-  cancelationReason_update: ResponseBaseOfCancellationReasonDto;
+  cancellationReason_create: ResponseBaseOfCancellationReasonDto;
+  cancellationReason_delete: ResponseBase;
+  cancellationReason_update: ResponseBaseOfCancellationReasonDto;
   carousel_create: ResponseBaseOfCarouselDto;
   carousel_delete: ResponseBase;
   carousel_update: ResponseBaseOfCarouselDto;
@@ -660,62 +803,51 @@ export type MutationAddress_UpdateArgs = {
 };
 
 export type MutationAuth_RefreshTokenArgs = {
-  accessToken: Scalars["String"]["input"];
-  refreshToken: Scalars["String"]["input"];
+  input: RefreshTokenInput;
 };
 
 export type MutationAuth_RequestOtpArgs = {
-  phoneNumber: Scalars["String"]["input"];
-  userType: UserType;
+  input: RequestOtpInput;
 };
 
 export type MutationAuth_VerifyOtpArgs = {
-  otp: Scalars["String"]["input"];
-  phoneNumber: Scalars["String"]["input"];
-  userType: UserType;
+  input: VerifyOtpInput;
 };
 
 export type MutationBanner_CreateArgs = {
-  imageUrl: Scalars["String"]["input"];
-  title: Scalars["String"]["input"];
+  input: CreateBannerInput;
 };
 
 export type MutationBanner_DeleteArgs = {
-  bannerId: Scalars["UUID"]["input"];
+  input: DeleteBannerInput;
 };
 
 export type MutationBanner_UpdateArgs = {
-  id: Scalars["UUID"]["input"];
-  imageUrl: Scalars["String"]["input"];
-  title: Scalars["String"]["input"];
+  input: UpdateBannerInput;
 };
 
-export type MutationCancelationReason_CreateArgs = {
-  name: Scalars["String"]["input"];
+export type MutationCancellationReason_CreateArgs = {
+  input: CreateCancellationReasonInput;
 };
 
-export type MutationCancelationReason_DeleteArgs = {
-  id: Scalars["UUID"]["input"];
+export type MutationCancellationReason_DeleteArgs = {
+  input: DeleteCancellationReasonInput;
 };
 
-export type MutationCancelationReason_UpdateArgs = {
-  id: Scalars["UUID"]["input"];
-  name: Scalars["String"]["input"];
+export type MutationCancellationReason_UpdateArgs = {
+  input: UpdateCancellationReasonInput;
 };
 
 export type MutationCarousel_CreateArgs = {
-  imageUrls: Array<Scalars["String"]["input"]>;
-  title: Scalars["String"]["input"];
+  input: CreateCarouselInput;
 };
 
 export type MutationCarousel_DeleteArgs = {
-  id: Scalars["UUID"]["input"];
+  input: DeleteCarouselInput;
 };
 
 export type MutationCarousel_UpdateArgs = {
-  id: Scalars["UUID"]["input"];
-  imageUrls: Array<Scalars["String"]["input"]>;
-  title: Scalars["String"]["input"];
+  input: UpdateCarouselInput;
 };
 
 export type MutationCity_ActivateArgs = {
@@ -731,13 +863,11 @@ export type MutationCity_DeactivateArgs = {
 };
 
 export type MutationCity_SetActiveBannerArgs = {
-  bannerId?: InputMaybe<Scalars["UUID"]["input"]>;
-  cityId: Scalars["UUID"]["input"];
+  input: SetActiveBannerInput;
 };
 
 export type MutationCity_SetActiveCarouselArgs = {
-  carouselId?: InputMaybe<Scalars["UUID"]["input"]>;
-  cityId: Scalars["UUID"]["input"];
+  input: SetActiveCarouselInput;
 };
 
 export type MutationCity_UpdateArgs = {
@@ -745,21 +875,19 @@ export type MutationCity_UpdateArgs = {
 };
 
 export type MutationDiscountCode_ActivateArgs = {
-  id: Scalars["UUID"]["input"];
+  input: ActivateDiscountCodeInput;
 };
 
 export type MutationDiscountCode_CreateArgs = {
-  amount: Scalars["Decimal"]["input"];
-  expiryDate?: InputMaybe<Scalars["DateTime"]["input"]>;
-  isPercentage: Scalars["Boolean"]["input"];
+  input: CreateDiscountCodeInput;
 };
 
 export type MutationDiscountCode_DeactivateArgs = {
-  id: Scalars["UUID"]["input"];
+  input: DeactivateDiscountCodeInput;
 };
 
 export type MutationDiscountCode_DeleteArgs = {
-  id: Scalars["UUID"]["input"];
+  input: DeleteDiscountCodeInput;
 };
 
 export type MutationNeighborhood_CreateArgs = {
@@ -775,16 +903,15 @@ export type MutationNeighborhood_UpdateArgs = {
 };
 
 export type MutationProvince_CreateArgs = {
-  name: Scalars["String"]["input"];
+  input: CreateProvinceInput;
 };
 
 export type MutationProvince_DeleteArgs = {
-  id: Scalars["UUID"]["input"];
+  input: DeleteProvinceInput;
 };
 
 export type MutationProvince_UpdateArgs = {
-  id: Scalars["UUID"]["input"];
-  name: Scalars["String"]["input"];
+  input: UpdateProvinceInput;
 };
 
 export type MutationServiceAcceptance_MarkAsArrivedArgs = {
@@ -832,23 +959,15 @@ export type MutationServiceSubCategory_UpdateArgs = {
 };
 
 export type MutationServiceTypeQuestion_CreateArgs = {
-  isRequired: Scalars["Boolean"]["input"];
-  options: Array<Scalars["String"]["input"]>;
-  questionType: QuestionType;
-  serviceTypeId: Scalars["UUID"]["input"];
-  title: Scalars["String"]["input"];
+  input: CreateServiceTypeQuestionInput;
 };
 
 export type MutationServiceTypeQuestion_DeleteArgs = {
-  id: Scalars["UUID"]["input"];
+  input: DeleteServiceTypeQuestionInput;
 };
 
 export type MutationServiceTypeQuestion_UpdateArgs = {
-  id: Scalars["UUID"]["input"];
-  isRequired: Scalars["Boolean"]["input"];
-  options: Array<Scalars["String"]["input"]>;
-  questionType: QuestionType;
-  title: Scalars["String"]["input"];
+  input: UpdateServiceTypeQuestionInput;
 };
 
 export type MutationServiceType_CreateArgs = {
@@ -937,8 +1056,8 @@ export type Query = {
   address_nearestAddresses: ListResponseBaseOfAddressDto;
   banner_getAll: ListResponseBaseOfBannerDto;
   banner_getById: ResponseBaseOfBannerDto;
-  cancelationReason_getAll: ListResponseBaseOfCancellationReasonDto;
-  cancelationReason_getById: ResponseBaseOfCancellationReasonDto;
+  cancellationReason_getAll: ListResponseBaseOfCancellationReasonDto;
+  cancellationReason_getById: ResponseBaseOfCancellationReasonDto;
   carousel_getAll: ResponseBaseOfListResponseBaseOfCarouselDto;
   carousel_getById: ResponseBaseOfCarouselDto;
   city_getAll: ListResponseBaseOfCityDto;
@@ -949,9 +1068,12 @@ export type Query = {
   neighborhood_getById: ResponseBaseOfNeighborhoodDto;
   province_getAll: ListResponseBaseOfProvinceDto;
   province_getById: ResponseBaseOfProvinceDto;
+  rateAndReview_getByCustomerId: ListResponseBaseOfRateAndReviewDto;
+  rateAndReview_getBySpecialistId: ListResponseBaseOfRateAndReviewDto;
   serviceCategory_getAll: ListResponseBaseOfServiceCategoryDto;
   serviceCategory_getById: ResponseBaseOfServiceCategoryDto;
   serviceRequest_getAll: ListResponseBaseOfServiceRequestDto;
+  serviceRequest_getAvailableRequests: ListResponseBaseOfServiceRequestDto;
   serviceRequest_getById: ResponseBaseOfServiceRequestDto;
   serviceRequest_getMyAcceptances: ListResponseBaseOfServiceRequestDto;
   serviceRequest_getMyRequests: ListResponseBaseOfServiceRequestDto;
@@ -966,40 +1088,47 @@ export type Query = {
 };
 
 export type QueryAddress_NearestAddressesArgs = {
-  latitude: Scalars["Float"]["input"];
-  longitude: Scalars["Float"]["input"];
+  input: GetNearestAddressesInput;
 };
 
 export type QueryBanner_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetBannerByIdInput;
 };
 
-export type QueryCancelationReason_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+export type QueryCancellationReason_GetByIdArgs = {
+  input: GetCancellationReasonByIdInput;
 };
 
 export type QueryCarousel_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetCarouselByIdInput;
 };
 
 export type QueryCity_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetCityByIdInput;
 };
 
 export type QueryDiscountCode_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetDiscountCodeByIdInput;
 };
 
 export type QueryNeighborhood_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetNeighborhoodByIdInput;
 };
 
 export type QueryProvince_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetProvinceByIdInput;
+};
+
+export type QueryRateAndReview_GetByCustomerIdArgs = {
+  customerId: Scalars["UUID"]["input"];
+};
+
+export type QueryRateAndReview_GetBySpecialistIdArgs = {
+  specialistId: Scalars["UUID"]["input"];
 };
 
 export type QueryServiceCategory_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetServiceCategoryByIdInput;
 };
 
 export type QueryServiceRequest_GetByIdArgs = {
@@ -1007,25 +1136,63 @@ export type QueryServiceRequest_GetByIdArgs = {
 };
 
 export type QueryServiceSubCategory_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetServiceSubCategoryByIdInput;
 };
 
 export type QueryServiceTypeQuestion_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetServiceTypeQuestionByIdInput;
 };
 
 export type QueryServiceTypeQuestion_GetByServiceTypeArgs = {
-  serviceTypeId: Scalars["UUID"]["input"];
+  input: GetServiceTypeQuestionsByServiceTypeInput;
 };
 
 export type QueryServiceType_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetServiceTypeByIdInput;
 };
 
 export enum QuestionType {
   CheckBox = "CHECK_BOX",
   RadioButton = "RADIO_BUTTON",
 }
+
+export type RateAndReviewDto = {
+  __typename?: "RateAndReviewDto";
+  comment: Scalars["String"]["output"];
+  rate: Scalars["Int"]["output"];
+};
+
+/** A segment of a collection. */
+export type RateAndReviewDtoCollectionSegment = {
+  __typename?: "RateAndReviewDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<RateAndReviewDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type RateAndReviewDtoFilterInput = {
+  and?: InputMaybe<Array<RateAndReviewDtoFilterInput>>;
+  comment?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<RateAndReviewDtoFilterInput>>;
+  rate?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type RateAndReviewDtoSortInput = {
+  comment?: InputMaybe<SortEnumType>;
+  rate?: InputMaybe<SortEnumType>;
+};
+
+export type RefreshTokenInput = {
+  accessToken: Scalars["String"]["input"];
+  refreshToken: Scalars["String"]["input"];
+};
+
+export type RequestOtpInput = {
+  phoneNumber: Scalars["String"]["input"];
+  userType: UserType;
+};
 
 export type ResponseBase = {
   __typename?: "ResponseBase";
@@ -1173,6 +1340,7 @@ export type ServiceRequestDto = {
   description: Scalars["String"]["output"];
   id: Scalars["UUID"]["output"];
   qnAs: Array<ServiceRequestQnADto>;
+  rateAndReview?: Maybe<RateAndReviewDto>;
   requestDate: Scalars["DateTime"]["output"];
   serviceTypeName: Scalars["String"]["output"];
   specialistName: Scalars["String"]["output"];
@@ -1197,6 +1365,7 @@ export type ServiceRequestDtoFilterInput = {
   id?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<ServiceRequestDtoFilterInput>>;
   qnAs?: InputMaybe<ListFilterInputTypeOfServiceRequestQnADtoFilterInput>;
+  rateAndReview?: InputMaybe<RateAndReviewDtoFilterInput>;
   requestDate?: InputMaybe<DateTimeOperationFilterInput>;
   serviceTypeName?: InputMaybe<StringOperationFilterInput>;
   specialistName?: InputMaybe<StringOperationFilterInput>;
@@ -1208,6 +1377,7 @@ export type ServiceRequestDtoSortInput = {
   customerName?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  rateAndReview?: InputMaybe<RateAndReviewDtoSortInput>;
   requestDate?: InputMaybe<SortEnumType>;
   serviceTypeName?: InputMaybe<SortEnumType>;
   specialistName?: InputMaybe<SortEnumType>;
@@ -1342,6 +1512,16 @@ export type ServiceTypeQuestionDtoSortInput = {
   title?: InputMaybe<SortEnumType>;
 };
 
+export type SetActiveBannerInput = {
+  bannerId?: InputMaybe<Scalars["UUID"]["input"]>;
+  cityId: Scalars["UUID"]["input"];
+};
+
+export type SetActiveCarouselInput = {
+  carouselId?: InputMaybe<Scalars["UUID"]["input"]>;
+  cityId: Scalars["UUID"]["input"];
+};
+
 export type SingleResponseBaseOfCarouselDto = {
   __typename?: "SingleResponseBaseOfCarouselDto";
   query?: Maybe<Array<CarouselDto>>;
@@ -1376,6 +1556,23 @@ export type UpdateAddressInput = {
   newText: Scalars["String"]["input"];
 };
 
+export type UpdateBannerInput = {
+  id: Scalars["UUID"]["input"];
+  imageUrl: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+};
+
+export type UpdateCancellationReasonInput = {
+  id: Scalars["UUID"]["input"];
+  name: Scalars["String"]["input"];
+};
+
+export type UpdateCarouselInput = {
+  id: Scalars["UUID"]["input"];
+  imageUrls: Array<Scalars["String"]["input"]>;
+  title: Scalars["String"]["input"];
+};
+
 export type UpdateCityInput = {
   cityId: Scalars["UUID"]["input"];
   newName: Scalars["String"]["input"];
@@ -1384,6 +1581,11 @@ export type UpdateCityInput = {
 export type UpdateNeighborhoodInput = {
   neighborhoodId: Scalars["UUID"]["input"];
   newName: Scalars["String"]["input"];
+};
+
+export type UpdateProvinceInput = {
+  id: Scalars["UUID"]["input"];
+  name: Scalars["String"]["input"];
 };
 
 export type UpdateServiceCategoryInput = {
@@ -1399,9 +1601,17 @@ export type UpdateServiceSubCategoryInput = {
 };
 
 export type UpdateServiceTypeInput = {
+  id: Scalars["UUID"]["input"];
   newLogo: Scalars["String"]["input"];
   newName: Scalars["String"]["input"];
-  serviceTypeId: Scalars["UUID"]["input"];
+};
+
+export type UpdateServiceTypeQuestionInput = {
+  id: Scalars["UUID"]["input"];
+  isRequired: Scalars["Boolean"]["input"];
+  options: Array<Scalars["String"]["input"]>;
+  questionType: QuestionType;
+  title: Scalars["String"]["input"];
 };
 
 export type UserProfileDto = {
@@ -1435,9 +1645,14 @@ export type UuidOperationFilterInput = {
   nlte?: InputMaybe<Scalars["UUID"]["input"]>;
 };
 
-export type Auth_RequestOtpMutationVariables = Exact<{
+export type VerifyOtpInput = {
+  otp: Scalars["String"]["input"];
   phoneNumber: Scalars["String"]["input"];
   userType: UserType;
+};
+
+export type Auth_RequestOtpMutationVariables = Exact<{
+  input: RequestOtpInput;
 }>;
 
 export type Auth_RequestOtpMutation = {
@@ -1446,9 +1661,7 @@ export type Auth_RequestOtpMutation = {
 };
 
 export type Auth_VerifyOtpMutationVariables = Exact<{
-  phoneNumber: Scalars["String"]["input"];
-  userType: UserType;
-  otp: Scalars["String"]["input"];
+  input: VerifyOtpInput;
 }>;
 
 export type Auth_VerifyOtpMutation = {
@@ -1465,8 +1678,7 @@ export type Auth_VerifyOtpMutation = {
 };
 
 export type Auth_RefreshTokenMutationVariables = Exact<{
-  accessToken: Scalars["String"]["input"];
-  refreshToken: Scalars["String"]["input"];
+  input: RefreshTokenInput;
 }>;
 
 export type Auth_RefreshTokenMutation = {
@@ -1654,7 +1866,7 @@ export type ServiceCategory_GetAllQuery = {
 };
 
 export type ServiceCategory_GetByIdQueryVariables = Exact<{
-  id: Scalars["UUID"]["input"];
+  input: GetServiceCategoryByIdInput;
 }>;
 
 export type ServiceCategory_GetByIdQuery = {
@@ -1704,7 +1916,7 @@ export type ServiceSubCategory_GetAllQuery = {
 };
 
 export type ServiceSubCategory_GetByIdQueryVariables = Exact<{
-  id: Scalars["UUID"]["input"];
+  input: GetServiceSubCategoryByIdInput;
 }>;
 
 export type ServiceSubCategory_GetByIdQuery = {
@@ -1799,8 +2011,8 @@ export type Address_GetMyAddressesQuery = {
 };
 
 export const Auth_RequestOtpDocument = `
-    mutation auth_requestOtp($phoneNumber: String!, $userType: UserType!) {
-  auth_requestOtp(phoneNumber: $phoneNumber, userType: $userType) {
+    mutation auth_requestOtp($input: RequestOtpInput!) {
+  auth_requestOtp(input: $input) {
     status
   }
 }
@@ -1834,8 +2046,8 @@ export const useAuth_RequestOtpMutation = <
 };
 
 export const Auth_VerifyOtpDocument = `
-    mutation auth_verifyOtp($phoneNumber: String!, $userType: UserType!, $otp: String!) {
-  auth_verifyOtp(phoneNumber: $phoneNumber, userType: $userType, otp: $otp) {
+    mutation auth_verifyOtp($input: VerifyOtpInput!) {
+  auth_verifyOtp(input: $input) {
     status
     result {
       accessToken
@@ -1870,8 +2082,8 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
 };
 
 export const Auth_RefreshTokenDocument = `
-    mutation auth_refreshToken($accessToken: String!, $refreshToken: String!) {
-  auth_refreshToken(accessToken: $accessToken, refreshToken: $refreshToken) {
+    mutation auth_refreshToken($input: RefreshTokenInput!) {
+  auth_refreshToken(input: $input) {
     status
     result {
       accessToken
@@ -2354,8 +2566,8 @@ export const useInfiniteServiceCategory_GetAllQuery = <
 };
 
 export const ServiceCategory_GetByIdDocument = `
-    query serviceCategory_getById($id: UUID!) {
-  serviceCategory_getById(id: $id) {
+    query serviceCategory_getById($input: GetServiceCategoryByIdInput!) {
+  serviceCategory_getById(input: $input) {
     result {
       name
       logo
@@ -2518,8 +2730,8 @@ export const useInfiniteServiceSubCategory_GetAllQuery = <
 };
 
 export const ServiceSubCategory_GetByIdDocument = `
-    query serviceSubCategory_getById($id: UUID!) {
-  serviceSubCategory_getById(id: $id) {
+    query serviceSubCategory_getById($input: GetServiceSubCategoryByIdInput!) {
+  serviceSubCategory_getById(input: $input) {
     result {
       id
       logo

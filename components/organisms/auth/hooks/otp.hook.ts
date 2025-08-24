@@ -30,7 +30,13 @@ export default function useOtpHook() {
   const onDoLogin = (formData: any) => {
     setIsVerifying(true);
     mutate(
-      { phoneNumber, userType: UserType.Customer, otp: formData?.otpCode },
+      {
+        input: {
+          phoneNumber,
+          userType: UserType.Customer,
+          otp: formData?.otpCode,
+        },
+      },
       {
         onSuccess: (data) => {
           setIsVerifying(false);
@@ -49,7 +55,13 @@ export default function useOtpHook() {
   const onDoExpertLogin = (formData: any) => {
     setIsVerifying(true);
     mutate(
-      { phoneNumber, userType: UserType.Specialist, otp: formData?.otpCode },
+      {
+        input: {
+          phoneNumber,
+          userType: UserType.Specialist,
+          otp: formData?.otpCode,
+        },
+      },
       {
         onSuccess: (data) => {
           setIsVerifying(false);

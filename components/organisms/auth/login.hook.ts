@@ -14,7 +14,7 @@ export default function useLoginHook() {
   const onDoLogin = (formData: any) => {
     setIsSendingCode(true);
     mutate(
-      { phoneNumber: formData?.phone, userType: UserType.Customer },
+      { input: { phoneNumber: formData?.phone, userType: UserType.Customer } },
       {
         onSuccess: (data) => {
           setIsSendingCode(false);
@@ -39,7 +39,9 @@ export default function useLoginHook() {
     setIsSendingCode(true);
     router.push(`/ExpertOtpPage?phone=${formData?.phone}`);
     mutate(
-      { phoneNumber: formData?.phone, userType: UserType.Specialist },
+      {
+        input: { phoneNumber: formData?.phone, userType: UserType.Specialist },
+      },
       {
         onSuccess: (data) => {
           setIsSendingCode(false);

@@ -20,8 +20,8 @@ query serviceCategory_getAll(
   }
 }
 
-query serviceCategory_getById($id: UUID!) {
-  serviceCategory_getById(id: $id) {
+query serviceCategory_getById($input: GetServiceCategoryByIdInput!) {
+  serviceCategory_getById(input: $input) {
     result {
       name
       logo

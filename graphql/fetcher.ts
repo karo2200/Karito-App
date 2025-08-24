@@ -1,5 +1,6 @@
 import { Auth_RefreshTokenDocument } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import graphQLClient from "./index";
 
 let count = 0;
@@ -25,9 +26,9 @@ async function refreshAccessToken() {
 
   try {
     const data = await graphqlFetcher(Auth_RefreshTokenDocument, {
-      accessToken,
-      refreshToken,
+      input: { accessToken, refreshToken },
     });
+    console.log("sss", data, accessToken, "       =>", refreshToken);
 
     const newAccessToken = data?.auth_refreshToken?.result?.accessToken;
     const newRefreshToken = data?.auth_refreshToken?.result?.refreshToken;
@@ -50,19 +51,41 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
     const accessToken = authCacheStore?.getState()?.accessToken;
     const refreshToken = authCacheStore?.getState()?.refreshToken;
 
-    if (accessToken) {
+    if (!accessToken || isTokenExpired(accessToken)) {
+      const newToken = await refreshAccessToken();
+      console.log("//////", newToken);
+
+      graphQLClient.setHeader("authorization", "Bearer " + newToken);
+    } else {
       graphQLClient.setHeader("authorization", "Bearer " + accessToken);
     }
-    try {
-      return await graphqlFetcher(query, variables);
-    } catch (err: any) {
-      if (err.response?.status === 401) {
-        const newToken = await refreshAccessToken();
-        graphQLClient.setHeader("authorization", "Bearer " + newToken);
 
-        return await graphqlFetcher(query, variables);
-      }
-      throw err;
-    }
+    return await graphqlFetcher(query, variables);
+    // try {
+
+    // } catch (err: any) {
+    //   if (err.response?.status === 401) {
+    //     const newToken = await refreshAccessToken();
+    //     graphQLClient.setHeader("authorization", "Bearer " + newToken);
+
+    //     return await graphqlFetcher(query, variables);
+    //   }
+    //   throw err;
+    // }
   };
+}
+
+function isTokenExpired(token?: string): boolean {
+  if (!token) return true;
+
+  try {
+    const decoded = jwtDecode<JwtPayload>(token);
+    if (!decoded.exp) return true;
+
+    const now = Date.now() / 1000; // seconds
+    return decoded.exp < now;
+  } catch (err) {
+    console.error("❌ Failed to decode token:", err);
+    return true;
+  }
 }
