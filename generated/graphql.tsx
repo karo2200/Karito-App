@@ -1814,6 +1814,62 @@ export type City_GetAllQuery = {
   };
 };
 
+export type Banner_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<BannerDtoFilterInput>;
+  order?: InputMaybe<Array<BannerDtoSortInput> | BannerDtoSortInput>;
+}>;
+
+export type Banner_GetAllQuery = {
+  __typename?: "Query";
+  banner_getAll: {
+    __typename?: "ListResponseBaseOfBannerDto";
+    status?: any | null;
+    result?: {
+      __typename?: "BannerDtoCollectionSegment";
+      totalCount: number;
+      items?: Array<{
+        __typename?: "BannerDto";
+        id: any;
+        imageUrl: string;
+        title: string;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
+};
+
+export type ServiceRequest_AcceptMutationVariables = Exact<{
+  input: AcceptServiceRequestInput;
+}>;
+
+export type ServiceRequest_AcceptMutation = {
+  __typename?: "Mutation";
+  serviceRequest_accept: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: { __typename?: "ServiceRequestDto"; id: any } | null;
+  };
+};
+
+export type ServiceRequest_CancelMutationVariables = Exact<{
+  input: CancelServiceRequestInput;
+}>;
+
+export type ServiceRequest_CancelMutation = {
+  __typename?: "Mutation";
+  serviceRequest_cancel: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: { __typename?: "ServiceRequestDto"; id: any } | null;
+  };
+};
+
 export type ServiceRequest_GetMyRequestsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -1885,21 +1941,41 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
         requestDate: any;
         id: any;
         status: ServiceRequestStatus;
-        address: { __typename?: "AddressDto"; text: string };
+        address: {
+          __typename?: "AddressDto";
+          text: string;
+          latitude: number;
+          longitude: number;
+          neighborhoodId: any;
+        };
+        cancellationReason?: {
+          __typename?: "CancellationReasonDto";
+          id: any;
+          name: string;
+        } | null;
         customer: {
           __typename?: "CustomerDto";
           firstName: string;
           lastName: string;
           phoneNumber: string;
           profileImageUrl: string;
+          id: any;
+          gender: Gender;
         };
-        serviceType: { __typename?: "ServiceTypeDto"; name: string; id: any };
+        serviceType: {
+          __typename?: "ServiceTypeDto";
+          name: string;
+          id: any;
+          logo: string;
+        };
         specialist?: {
           __typename?: "SpecialistDto";
           lastName: string;
           firstName: string;
           id: any;
           profileImageUrl: string;
+          rateCount: number;
+          phoneNumber: string;
         } | null;
       }> | null;
       pageInfo: {
@@ -1926,18 +2002,41 @@ export type ServiceRequest_GetByIdQuery = {
       requestDate: any;
       id: any;
       status: ServiceRequestStatus;
-      address: { __typename?: "AddressDto"; text: string };
+      address: {
+        __typename?: "AddressDto";
+        text: string;
+        latitude: number;
+        longitude: number;
+        neighborhoodId: any;
+      };
+      cancellationReason?: {
+        __typename?: "CancellationReasonDto";
+        id: any;
+        name: string;
+      } | null;
       customer: {
         __typename?: "CustomerDto";
         firstName: string;
         lastName: string;
+        phoneNumber: string;
+        profileImageUrl: string;
         id: any;
+        gender: Gender;
       };
-      serviceType: { __typename?: "ServiceTypeDto"; name: string };
+      serviceType: {
+        __typename?: "ServiceTypeDto";
+        name: string;
+        id: any;
+        logo: string;
+      };
       specialist?: {
         __typename?: "SpecialistDto";
-        firstName: string;
         lastName: string;
+        firstName: string;
+        id: any;
+        profileImageUrl: string;
+        rateCount: number;
+        phoneNumber: string;
       } | null;
     } | null;
   };
@@ -2073,6 +2172,74 @@ export type ServiceTypes_GetAllQuery = {
   };
 };
 
+export type ServiceRequest_GetAvailableRequestsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  order?: InputMaybe<
+    Array<ServiceRequestDtoSortInput> | ServiceRequestDtoSortInput
+  >;
+  where?: InputMaybe<ServiceRequestDtoFilterInput>;
+}>;
+
+export type ServiceRequest_GetAvailableRequestsQuery = {
+  __typename?: "Query";
+  serviceRequest_getAvailableRequests: {
+    __typename?: "ListResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDtoCollectionSegment";
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+      items?: Array<{
+        __typename?: "ServiceRequestDto";
+        description: string;
+        requestDate: any;
+        id: any;
+        status: ServiceRequestStatus;
+        address: {
+          __typename?: "AddressDto";
+          text: string;
+          latitude: number;
+          longitude: number;
+          neighborhoodId: any;
+        };
+        cancellationReason?: {
+          __typename?: "CancellationReasonDto";
+          id: any;
+          name: string;
+        } | null;
+        customer: {
+          __typename?: "CustomerDto";
+          firstName: string;
+          lastName: string;
+          phoneNumber: string;
+          profileImageUrl: string;
+          id: any;
+          gender: Gender;
+        };
+        serviceType: {
+          __typename?: "ServiceTypeDto";
+          name: string;
+          id: any;
+          logo: string;
+        };
+        specialist?: {
+          __typename?: "SpecialistDto";
+          lastName: string;
+          firstName: string;
+          id: any;
+          profileImageUrl: string;
+          rateCount: number;
+          phoneNumber: string;
+        } | null;
+      }> | null;
+    } | null;
+  };
+};
+
 export type User_GetMyProfileQueryVariables = Exact<{ [key: string]: never }>;
 
 export type User_GetMyProfileQuery = {
@@ -2109,6 +2276,40 @@ export type Address_GetMyAddressesQuery = {
         longitude: number;
         neighborhoodId: any;
         text: string;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
+};
+
+export type DiscountCode_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<DiscountCodeDtoFilterInput>;
+  order?: InputMaybe<
+    Array<DiscountCodeDtoSortInput> | DiscountCodeDtoSortInput
+  >;
+}>;
+
+export type DiscountCode_GetAllQuery = {
+  __typename?: "Query";
+  discountCode_getAll: {
+    __typename?: "ListResponseBaseOfDiscountCodeDto";
+    status?: any | null;
+    result?: {
+      __typename?: "DiscountCodeDtoCollectionSegment";
+      items?: Array<{
+        __typename?: "DiscountCodeDto";
+        id: any;
+        amount: any;
+        code: string;
+        expiryDate?: any | null;
+        isActive: boolean;
+        isPercentage: boolean;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -2318,6 +2519,162 @@ export const useInfiniteCity_GetAllQuery = <
   );
 };
 
+export const Banner_GetAllDocument = `
+    query banner_getAll($skip: Int, $take: Int, $where: BannerDtoFilterInput, $order: [BannerDtoSortInput!]) {
+  banner_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        imageUrl
+        title
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
+    }
+    status
+  }
+}
+    `;
+
+export const useBanner_GetAllQuery = <
+  TData = Banner_GetAllQuery,
+  TError = unknown,
+>(
+  variables?: Banner_GetAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Banner_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<Banner_GetAllQuery, TError, TData>["queryKey"];
+  },
+) => {
+  return useQuery<Banner_GetAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["banner_getAll"]
+        : ["banner_getAll", variables],
+    queryFn: fetcher<Banner_GetAllQuery, Banner_GetAllQueryVariables>(
+      Banner_GetAllDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
+
+export const useInfiniteBanner_GetAllQuery = <
+  TData = InfiniteData<Banner_GetAllQuery>,
+  TError = unknown,
+>(
+  variables: Banner_GetAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Banner_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Banner_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<Banner_GetAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["banner_getAll.infinite"]
+            : ["banner_getAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<Banner_GetAllQuery, Banner_GetAllQueryVariables>(
+            Banner_GetAllDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceRequest_AcceptDocument = `
+    mutation serviceRequest_accept($input: AcceptServiceRequestInput!) {
+  serviceRequest_accept(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_AcceptMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceRequest_AcceptMutation,
+    TError,
+    ServiceRequest_AcceptMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceRequest_AcceptMutation,
+    TError,
+    ServiceRequest_AcceptMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceRequest_accept"],
+    mutationFn: (variables?: ServiceRequest_AcceptMutationVariables) =>
+      fetcher<
+        ServiceRequest_AcceptMutation,
+        ServiceRequest_AcceptMutationVariables
+      >(ServiceRequest_AcceptDocument, variables)(),
+    ...options,
+  });
+};
+
+export const ServiceRequest_CancelDocument = `
+    mutation serviceRequest_cancel($input: CancelServiceRequestInput!) {
+  serviceRequest_cancel(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_CancelMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceRequest_CancelMutation,
+    TError,
+    ServiceRequest_CancelMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceRequest_CancelMutation,
+    TError,
+    ServiceRequest_CancelMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceRequest_cancel"],
+    mutationFn: (variables?: ServiceRequest_CancelMutationVariables) =>
+      fetcher<
+        ServiceRequest_CancelMutation,
+        ServiceRequest_CancelMutationVariables
+      >(ServiceRequest_CancelDocument, variables)(),
+    ...options,
+  });
+};
+
 export const ServiceRequest_GetMyRequestsDocument = `
     query serviceRequest_getMyRequests($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
   serviceRequest_getMyRequests {
@@ -2431,12 +2788,21 @@ export const ServiceRequest_GetMyAcceptancesDocument = `
       items {
         address {
           text
+          latitude
+          longitude
+          neighborhoodId
+        }
+        cancellationReason {
+          id
+          name
         }
         customer {
           firstName
           lastName
           phoneNumber
           profileImageUrl
+          id
+          gender
         }
         description
         requestDate
@@ -2444,12 +2810,15 @@ export const ServiceRequest_GetMyAcceptancesDocument = `
         serviceType {
           name
           id
+          logo
         }
         specialist {
           lastName
           firstName
           id
           profileImageUrl
+          rateCount
+          phoneNumber
         }
         status
       }
@@ -2541,21 +2910,37 @@ export const ServiceRequest_GetByIdDocument = `
     result {
       address {
         text
+        latitude
+        longitude
+        neighborhoodId
+      }
+      cancellationReason {
+        id
+        name
       }
       customer {
         firstName
         lastName
+        phoneNumber
+        profileImageUrl
         id
+        gender
       }
       description
       requestDate
       id
       serviceType {
         name
+        id
+        logo
       }
       specialist {
-        firstName
         lastName
+        firstName
+        id
+        profileImageUrl
+        rateCount
+        phoneNumber
       }
       status
     }
@@ -3046,6 +3431,132 @@ export const useInfiniteServiceTypes_GetAllQuery = <
   );
 };
 
+export const ServiceRequest_GetAvailableRequestsDocument = `
+    query serviceRequest_getAvailableRequests($skip: Int, $take: Int, $order: [ServiceRequestDtoSortInput!], $where: ServiceRequestDtoFilterInput) {
+  serviceRequest_getAvailableRequests {
+    result(skip: $skip, take: $take, order: $order, where: $where) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      items {
+        address {
+          text
+          latitude
+          longitude
+          neighborhoodId
+        }
+        cancellationReason {
+          id
+          name
+        }
+        customer {
+          firstName
+          lastName
+          phoneNumber
+          profileImageUrl
+          id
+          gender
+        }
+        description
+        requestDate
+        id
+        serviceType {
+          name
+          id
+          logo
+        }
+        specialist {
+          lastName
+          firstName
+          id
+          profileImageUrl
+          rateCount
+          phoneNumber
+        }
+        status
+      }
+    }
+    status
+  }
+}
+    `;
+
+export const useServiceRequest_GetAvailableRequestsQuery = <
+  TData = ServiceRequest_GetAvailableRequestsQuery,
+  TError = unknown,
+>(
+  variables?: ServiceRequest_GetAvailableRequestsQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceRequest_GetAvailableRequestsQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceRequest_GetAvailableRequestsQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceRequest_GetAvailableRequestsQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["serviceRequest_getAvailableRequests"]
+        : ["serviceRequest_getAvailableRequests", variables],
+    queryFn: fetcher<
+      ServiceRequest_GetAvailableRequestsQuery,
+      ServiceRequest_GetAvailableRequestsQueryVariables
+    >(ServiceRequest_GetAvailableRequestsDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
+  TData = InfiniteData<ServiceRequest_GetAvailableRequestsQuery>,
+  TError = unknown,
+>(
+  variables: ServiceRequest_GetAvailableRequestsQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      ServiceRequest_GetAvailableRequestsQuery,
+      TError,
+      TData
+    >,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceRequest_GetAvailableRequestsQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<
+    ServiceRequest_GetAvailableRequestsQuery,
+    TError,
+    TData
+  >(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["serviceRequest_getAvailableRequests.infinite"]
+            : ["serviceRequest_getAvailableRequests.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceRequest_GetAvailableRequestsQuery,
+            ServiceRequest_GetAvailableRequestsQueryVariables
+          >(ServiceRequest_GetAvailableRequestsDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
 export const User_GetMyProfileDocument = `
     query user_getMyProfile {
   user_getMyProfile {
@@ -3204,6 +3715,92 @@ export const useInfiniteAddress_GetMyAddressesQuery = <
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const DiscountCode_GetAllDocument = `
+    query discountCode_getAll($skip: Int, $take: Int, $where: DiscountCodeDtoFilterInput, $order: [DiscountCodeDtoSortInput!]) {
+  discountCode_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        amount
+        code
+        expiryDate
+        isActive
+        isPercentage
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    status
+  }
+}
+    `;
+
+export const useDiscountCode_GetAllQuery = <
+  TData = DiscountCode_GetAllQuery,
+  TError = unknown,
+>(
+  variables?: DiscountCode_GetAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<DiscountCode_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      DiscountCode_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<DiscountCode_GetAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["discountCode_getAll"]
+        : ["discountCode_getAll", variables],
+    queryFn: fetcher<
+      DiscountCode_GetAllQuery,
+      DiscountCode_GetAllQueryVariables
+    >(DiscountCode_GetAllDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteDiscountCode_GetAllQuery = <
+  TData = InfiniteData<DiscountCode_GetAllQuery>,
+  TError = unknown,
+>(
+  variables: DiscountCode_GetAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<DiscountCode_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      DiscountCode_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<DiscountCode_GetAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["discountCode_getAll.infinite"]
+            : ["discountCode_getAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<DiscountCode_GetAllQuery, DiscountCode_GetAllQueryVariables>(
+            DiscountCode_GetAllDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
         ...restOptions,
       };
     })(),

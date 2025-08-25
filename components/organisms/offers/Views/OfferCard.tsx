@@ -1,15 +1,16 @@
 import { ThemedText } from "@/components";
 import { useToast } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
+import { DiscountCodeDto } from "@/generated/graphql";
 import * as Clipboard from "expo-clipboard";
 import { Copy } from "iconsax-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 
-export default function OfferCard({ item }: { item: any }) {
+export default function OfferCard({ item }: { item: DiscountCodeDto }) {
   const { showToast } = useToast();
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync("این متن برای کپی شدن است");
+    await Clipboard.setStringAsync(item?.code);
     showToast({
       message: "کد تخفیف کپی شد.",
       type: "warning",
@@ -19,11 +20,11 @@ export default function OfferCard({ item }: { item: any }) {
   return (
     <Pressable onPress={copyToClipboard} style={styles.container}>
       <ThemedText fontType="medium" style={{ color: Colors.label }}>
-        ورود به کاریتو
+        {item?.amount}
       </ThemedText>
       <View style={styles.rowView}>
         <ThemedText fontType="medium" style={styles.code}>
-          CMYKHNN
+          {item?.code}
         </ThemedText>
         <Copy size={24} color={Colors.label} />
       </View>

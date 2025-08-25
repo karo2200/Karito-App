@@ -22,3 +22,57 @@ query serviceTypes_getAll(
     status
   }
 }
+
+query serviceRequest_getAvailableRequests(
+  $skip: Int
+  $take: Int
+  $order: [ServiceRequestDtoSortInput!]
+  $where: ServiceRequestDtoFilterInput
+) {
+  serviceRequest_getAvailableRequests {
+    result(skip: $skip, take: $take, order: $order, where: $where) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      items {
+        address {
+          text
+          latitude
+          longitude
+          neighborhoodId
+        }
+        cancellationReason {
+          id
+          name
+        }
+        customer {
+          firstName
+          lastName
+          phoneNumber
+          profileImageUrl
+          id
+          gender
+        }
+        description
+        requestDate
+        id
+        serviceType {
+          name
+          id
+          logo
+        }
+        specialist {
+          lastName
+          firstName
+          id
+          profileImageUrl
+          rateCount
+          phoneNumber
+        }
+        status
+      }
+    }
+    status
+  }
+}

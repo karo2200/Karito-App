@@ -1,0 +1,17 @@
+mutation serviceRequest_accept($input: AcceptServiceRequestInput!) {
+  serviceRequest_accept(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+
+mutation serviceRequest_cancel($input: CancelServiceRequestInput!) {
+  serviceRequest_cancel(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}

@@ -7,4 +7,7 @@ export const queryKeys = {
   serviceRequest_getMyAcceptances: "serviceRequest_getMyAcceptances",
   city_getAll: "city_getAll",
   serviceRequest_getById: "serviceRequest_getById",
+  banner_getAll: "banner_getAll",
+  serviceRequest_getAvailableRequests: "serviceRequest_getAvailableRequests",
+  discountCode_getAll: "discountCode_getAll",
 };

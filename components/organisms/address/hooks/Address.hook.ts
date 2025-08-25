@@ -13,9 +13,10 @@ export default function useAddressHook() {
     hasNextPage,
     fetchNextPage,
     isRefetching,
-  } = useGetUserAddressesQuery({
-    userId: userId,
-  });
+    isLoading,
+  } = useGetUserAddressesQuery();
+
+  console.log("//////=>", userAddressData);
 
   return {
     router,
@@ -24,5 +25,6 @@ export default function useAddressHook() {
     fetchNextPage,
     addressesData: userAddressData?.pages ?? [],
     isRefetching,
+    isLoading,
   };
 }
