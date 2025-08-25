@@ -6,11 +6,9 @@ export default function useServiceTypesHook() {
 
   const { data, isPending, fetchNextPage, hasNextPage } =
     useGetServiceTypesQuery({
-      where: { serviceSubCategoryId: { eq: param?.id } },
+      where: { serviceSubCategory: { id: { eq: param?.id } } },
     });
-  console.log(
-    JSON.stringify({ data, where: { serviceSubCategoryId: { eq: param?.id } } })
-  );
+
   const onLoadMore = () => {
     if (hasNextPage) fetchNextPage();
   };

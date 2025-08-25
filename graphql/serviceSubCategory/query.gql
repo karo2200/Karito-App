@@ -5,11 +5,7 @@ query serviceSubCategory_getAll(
   $where: ServiceSubCategoryDtoFilterInput
 ) {
   serviceSubCategory_getAll {
-    result(
-      skip: $skip
-      take: $take
-      order: $order #where: $where
-    ) {
+    result(skip: $skip, take: $take, order: $order, where: $where) {
       pageInfo {
         hasNextPage
         hasPreviousPage
@@ -18,7 +14,9 @@ query serviceSubCategory_getAll(
         id
         logo
         name
-        serviceCategoryId
+        serviceCategory {
+          id
+        }
       }
     }
     status
@@ -31,7 +29,9 @@ query serviceSubCategory_getById($input: GetServiceSubCategoryByIdInput!) {
       id
       logo
       name
-      serviceCategoryId
+      serviceCategory {
+        id
+      }
     }
     status
   }

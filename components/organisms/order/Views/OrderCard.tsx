@@ -17,7 +17,7 @@ const OrderCard = ({
 }) => {
   return (
     <View style={styles.container}>
-      <ThemedText fontType="bold">{item?.serviceTypeName}</ThemedText>
+      <ThemedText fontType="bold">{item?.serviceType?.name}</ThemedText>
       <View style={styles.dateView}>
         <ThemedText type="text" style={styles.date}>
           {item?.requestDate}
@@ -31,14 +31,14 @@ const OrderCard = ({
           {isCustomer ? (
             <>
               <ThemedText type="text" style={styles.user}>
-                {item?.specialistName}
+                {item?.specialist?.firstName}
               </ThemedText>
               <UserFrameIcon />
             </>
           ) : (
             <>
               <ThemedText type="text" style={styles.user}>
-                {item?.addressText}
+                {item?.address?.text}
               </ThemedText>
               <LocationIcon width={16} height={16} />
             </>
