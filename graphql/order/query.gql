@@ -7,14 +7,28 @@ query serviceRequest_getMyRequests(
   serviceRequest_getMyRequests {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
-        addressText
-        customerName
+        address {
+          text
+        }
+        customer {
+          lastName
+          firstName
+          phoneNumber
+        }
         description
         id
         requestDate
         status
-        serviceTypeName
-        specialistName
+        serviceType {
+          name
+          id
+        }
+        specialist {
+          lastName
+          firstName
+          id
+          profileImageUrl
+        }
       }
       pageInfo {
         hasNextPage
@@ -35,13 +49,28 @@ query serviceRequest_getMyAcceptances(
   serviceRequest_getMyAcceptances {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
-        addressText
-        customerName
+        address {
+          text
+        }
+        customer {
+          firstName
+          lastName
+          phoneNumber
+          profileImageUrl
+        }
         description
         requestDate
         id
-        serviceTypeName
-        specialistName
+        serviceType {
+          name
+          id
+        }
+        specialist {
+          lastName
+          firstName
+          id
+          profileImageUrl
+        }
         status
       }
       pageInfo {
@@ -57,13 +86,24 @@ query serviceRequest_getMyAcceptances(
 query serviceRequest_getById($id: UUID!) {
   serviceRequest_getById(id: $id) {
     result {
-      addressText
-      customerName
+      address {
+        text
+      }
+      customer {
+        firstName
+        lastName
+        id
+      }
       description
       requestDate
       id
-      serviceTypeName
-      specialistName
+      serviceType {
+        name
+      }
+      specialist {
+        firstName
+        lastName
+      }
       status
     }
     status

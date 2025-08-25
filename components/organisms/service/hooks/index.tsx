@@ -31,7 +31,7 @@ export const useGetServiceCategoriesQuery = (
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage?.serviceRequest_getAll?.result?.pageInfo?.hasNextPage) {
+      if (lastPage?.serviceCategory_getAll?.result?.pageInfo?.hasNextPage) {
         return allPages.length;
       }
       return undefined;
@@ -40,41 +40,37 @@ export const useGetServiceCategoriesQuery = (
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.serviceRequest_getAll?.result?.items)
+          ?.map((a) => a?.serviceCategory_getAll?.result?.items)
           .flat(),
-        totalCount: data?.pages?.[0]?.serviceRequest_getAll?.result?.totalCount,
+        totalCount:
+          data?.pages?.[0]?.serviceCategory_getAll?.result?.totalCount,
       };
     },
   });
 };
 
 export const useGetSubServiceCategoriesQuery = ({
-  //   where,
+  where,
   order,
   enabled = true,
 }: {
-  //   where?: ServiceCategoryDtoFilterInput;
+  where?: ServiceCategoryDtoFilterInput;
   order?: [ServiceSubCategoryDtoSortInput];
   enabled?: boolean;
 }) => {
   return useInfiniteQuery({
-    queryKey: [
-      queryKeys.serviceSubCategory_getAll,
-      //   where,
-      order,
-      enabled,
-    ],
+    queryKey: [queryKeys.serviceSubCategory_getAll, where, order, enabled],
     queryFn: async ({ pageParam = 0 }) => {
       return fetcher(ServiceSubCategory_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
-        where: undefined,
-        // order,
+        where,
+        order,
       })();
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage?.serviceSubCategory_getAll?.pageInfo?.hasNextPage) {
+      if (lastPage?.serviceSubCategory_getAll?.result?.pageInfo?.hasNextPage) {
         return allPages.length;
       }
       return undefined;
@@ -84,7 +80,7 @@ export const useGetSubServiceCategoriesQuery = ({
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.serviceSubCategory_getAll?.items)
+          ?.map((a) => a?.serviceSubCategory_getAll?.result?.items)
           .flat(),
       };
     },

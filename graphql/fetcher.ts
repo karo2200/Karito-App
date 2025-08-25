@@ -49,9 +49,12 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
   count = count += 1;
   return async (): Promise<any> => {
     const accessToken = authCacheStore?.getState()?.accessToken;
-    const refreshToken = authCacheStore?.getState()?.refreshToken;
 
-    if (!accessToken || isTokenExpired(accessToken)) {
+    if (
+      !query.includes("auth_requestOtp") &&
+      !query.includes("auth_verifyOtp") &&
+      (!accessToken || isTokenExpired(accessToken))
+    ) {
       const newToken = await refreshAccessToken();
       console.log("//////", newToken);
 
@@ -61,17 +64,6 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
     }
 
     return await graphqlFetcher(query, variables);
-    // try {
-
-    // } catch (err: any) {
-    //   if (err.response?.status === 401) {
-    //     const newToken = await refreshAccessToken();
-    //     graphQLClient.setHeader("authorization", "Bearer " + newToken);
-
-    //     return await graphqlFetcher(query, variables);
-    //   }
-    //   throw err;
-    // }
   };
 }
 
@@ -83,6 +75,7 @@ function isTokenExpired(token?: string): boolean {
     if (!decoded.exp) return true;
 
     const now = Date.now() / 1000; // seconds
+    console.log(JSON.stringify({ decoded, now }));
     return decoded.exp < now;
   } catch (err) {
     console.error("❌ Failed to decode token:", err);

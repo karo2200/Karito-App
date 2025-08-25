@@ -325,6 +325,36 @@ export type CreateServiceTypeQuestionInput = {
   title: Scalars["String"]["input"];
 };
 
+export type CustomerDto = {
+  __typename?: "CustomerDto";
+  firstName: Scalars["String"]["output"];
+  gender: Gender;
+  id: Scalars["UUID"]["output"];
+  lastName: Scalars["String"]["output"];
+  phoneNumber: Scalars["String"]["output"];
+  profileImageUrl: Scalars["String"]["output"];
+};
+
+export type CustomerDtoFilterInput = {
+  and?: InputMaybe<Array<CustomerDtoFilterInput>>;
+  firstName?: InputMaybe<StringOperationFilterInput>;
+  gender?: InputMaybe<GenderOperationFilterInput>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  lastName?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<CustomerDtoFilterInput>>;
+  phoneNumber?: InputMaybe<StringOperationFilterInput>;
+  profileImageUrl?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type CustomerDtoSortInput = {
+  firstName?: InputMaybe<SortEnumType>;
+  gender?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  lastName?: InputMaybe<SortEnumType>;
+  phoneNumber?: InputMaybe<SortEnumType>;
+  profileImageUrl?: InputMaybe<SortEnumType>;
+};
+
 export type DateTimeOperationFilterInput = {
   eq?: InputMaybe<Scalars["DateTime"]["input"]>;
   gt?: InputMaybe<Scalars["DateTime"]["input"]>;
@@ -466,6 +496,13 @@ export enum Gender {
   Female = "FEMALE",
   Male = "MALE",
 }
+
+export type GenderOperationFilterInput = {
+  eq?: InputMaybe<Gender>;
+  in?: InputMaybe<Array<Gender>>;
+  neq?: InputMaybe<Gender>;
+  nin?: InputMaybe<Array<Gender>>;
+};
 
 export type GetBannerByIdInput = {
   id: Scalars["UUID"]["input"];
@@ -1335,15 +1372,16 @@ export type ServiceCategoryDtoSortInput = {
 
 export type ServiceRequestDto = {
   __typename?: "ServiceRequestDto";
-  addressText: Scalars["String"]["output"];
-  customerName: Scalars["String"]["output"];
+  address: AddressDto;
+  cancellationReason?: Maybe<CancellationReasonDto>;
+  customer: CustomerDto;
   description: Scalars["String"]["output"];
   id: Scalars["UUID"]["output"];
   qnAs: Array<ServiceRequestQnADto>;
   rateAndReview?: Maybe<RateAndReviewDto>;
   requestDate: Scalars["DateTime"]["output"];
-  serviceTypeName: Scalars["String"]["output"];
-  specialistName: Scalars["String"]["output"];
+  serviceType: ServiceTypeDto;
+  specialist?: Maybe<SpecialistDto>;
   status: ServiceRequestStatus;
 };
 
@@ -1358,29 +1396,31 @@ export type ServiceRequestDtoCollectionSegment = {
 };
 
 export type ServiceRequestDtoFilterInput = {
-  addressText?: InputMaybe<StringOperationFilterInput>;
+  address?: InputMaybe<AddressDtoFilterInput>;
   and?: InputMaybe<Array<ServiceRequestDtoFilterInput>>;
-  customerName?: InputMaybe<StringOperationFilterInput>;
+  cancellationReason?: InputMaybe<CancellationReasonDtoFilterInput>;
+  customer?: InputMaybe<CustomerDtoFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<ServiceRequestDtoFilterInput>>;
   qnAs?: InputMaybe<ListFilterInputTypeOfServiceRequestQnADtoFilterInput>;
   rateAndReview?: InputMaybe<RateAndReviewDtoFilterInput>;
   requestDate?: InputMaybe<DateTimeOperationFilterInput>;
-  serviceTypeName?: InputMaybe<StringOperationFilterInput>;
-  specialistName?: InputMaybe<StringOperationFilterInput>;
+  serviceType?: InputMaybe<ServiceTypeDtoFilterInput>;
+  specialist?: InputMaybe<SpecialistDtoFilterInput>;
   status?: InputMaybe<ServiceRequestStatusOperationFilterInput>;
 };
 
 export type ServiceRequestDtoSortInput = {
-  addressText?: InputMaybe<SortEnumType>;
-  customerName?: InputMaybe<SortEnumType>;
+  address?: InputMaybe<AddressDtoSortInput>;
+  cancellationReason?: InputMaybe<CancellationReasonDtoSortInput>;
+  customer?: InputMaybe<CustomerDtoSortInput>;
   description?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   rateAndReview?: InputMaybe<RateAndReviewDtoSortInput>;
   requestDate?: InputMaybe<SortEnumType>;
-  serviceTypeName?: InputMaybe<SortEnumType>;
-  specialistName?: InputMaybe<SortEnumType>;
+  serviceType?: InputMaybe<ServiceTypeDtoSortInput>;
+  specialist?: InputMaybe<SpecialistDtoSortInput>;
   status?: InputMaybe<SortEnumType>;
 };
 
@@ -1419,7 +1459,7 @@ export type ServiceSubCategoryDto = {
   id: Scalars["UUID"]["output"];
   logo: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
-  serviceCategoryId: Scalars["UUID"]["output"];
+  serviceCategory: ServiceCategoryDto;
 };
 
 /** A segment of a collection. */
@@ -1438,14 +1478,14 @@ export type ServiceSubCategoryDtoFilterInput = {
   logo?: InputMaybe<StringOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ServiceSubCategoryDtoFilterInput>>;
-  serviceCategoryId?: InputMaybe<UuidOperationFilterInput>;
+  serviceCategory?: InputMaybe<ServiceCategoryDtoFilterInput>;
 };
 
 export type ServiceSubCategoryDtoSortInput = {
   id?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
-  serviceCategoryId?: InputMaybe<SortEnumType>;
+  serviceCategory?: InputMaybe<ServiceCategoryDtoSortInput>;
 };
 
 export type ServiceTypeDto = {
@@ -1453,7 +1493,7 @@ export type ServiceTypeDto = {
   id: Scalars["UUID"]["output"];
   logo: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
-  serviceSubCategoryId: Scalars["UUID"]["output"];
+  serviceSubCategory: ServiceSubCategoryDto;
 };
 
 /** A segment of a collection. */
@@ -1472,14 +1512,14 @@ export type ServiceTypeDtoFilterInput = {
   logo?: InputMaybe<StringOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ServiceTypeDtoFilterInput>>;
-  serviceSubCategoryId?: InputMaybe<UuidOperationFilterInput>;
+  serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoFilterInput>;
 };
 
 export type ServiceTypeDtoSortInput = {
   id?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
-  serviceSubCategoryId?: InputMaybe<SortEnumType>;
+  serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoSortInput>;
 };
 
 export type ServiceTypeQuestionDto = {
@@ -1533,6 +1573,42 @@ export enum SortEnumType {
   Asc = "ASC",
   Desc = "DESC",
 }
+
+export type SpecialistDto = {
+  __typename?: "SpecialistDto";
+  averageRating: Scalars["Float"]["output"];
+  firstName: Scalars["String"]["output"];
+  gender: Gender;
+  id: Scalars["UUID"]["output"];
+  lastName: Scalars["String"]["output"];
+  phoneNumber: Scalars["String"]["output"];
+  profileImageUrl: Scalars["String"]["output"];
+  rateCount: Scalars["Int"]["output"];
+};
+
+export type SpecialistDtoFilterInput = {
+  and?: InputMaybe<Array<SpecialistDtoFilterInput>>;
+  averageRating?: InputMaybe<FloatOperationFilterInput>;
+  firstName?: InputMaybe<StringOperationFilterInput>;
+  gender?: InputMaybe<GenderOperationFilterInput>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  lastName?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SpecialistDtoFilterInput>>;
+  phoneNumber?: InputMaybe<StringOperationFilterInput>;
+  profileImageUrl?: InputMaybe<StringOperationFilterInput>;
+  rateCount?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type SpecialistDtoSortInput = {
+  averageRating?: InputMaybe<SortEnumType>;
+  firstName?: InputMaybe<SortEnumType>;
+  gender?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  lastName?: InputMaybe<SortEnumType>;
+  phoneNumber?: InputMaybe<SortEnumType>;
+  profileImageUrl?: InputMaybe<SortEnumType>;
+  rateCount?: InputMaybe<SortEnumType>;
+};
 
 export type StringOperationFilterInput = {
   and?: InputMaybe<Array<StringOperationFilterInput>>;
@@ -1616,15 +1692,16 @@ export type UpdateServiceTypeQuestionInput = {
 
 export type UserProfileDto = {
   __typename?: "UserProfileDto";
-  createdAt: Scalars["DateTime"]["output"];
+  firstName: Scalars["String"]["output"];
+  gender: Gender;
   id: Scalars["UUID"]["output"];
+  lastName: Scalars["String"]["output"];
   phoneNumber: Scalars["String"]["output"];
-  updatedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  profileImageUrl: Scalars["String"]["output"];
 };
 
 export enum UserType {
   Admin = "ADMIN",
-  Base = "BASE",
   Customer = "CUSTOMER",
   Owner = "OWNER",
   Specialist = "SPECIALIST",
@@ -1756,14 +1833,25 @@ export type ServiceRequest_GetMyRequestsQuery = {
       totalCount: number;
       items?: Array<{
         __typename?: "ServiceRequestDto";
-        addressText: string;
-        customerName: string;
         description: string;
         id: any;
         requestDate: any;
         status: ServiceRequestStatus;
-        serviceTypeName: string;
-        specialistName: string;
+        address: { __typename?: "AddressDto"; text: string };
+        customer: {
+          __typename?: "CustomerDto";
+          lastName: string;
+          firstName: string;
+          phoneNumber: string;
+        };
+        serviceType: { __typename?: "ServiceTypeDto"; name: string; id: any };
+        specialist?: {
+          __typename?: "SpecialistDto";
+          lastName: string;
+          firstName: string;
+          id: any;
+          profileImageUrl: string;
+        } | null;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -1793,14 +1881,26 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
       totalCount: number;
       items?: Array<{
         __typename?: "ServiceRequestDto";
-        addressText: string;
-        customerName: string;
         description: string;
         requestDate: any;
         id: any;
-        serviceTypeName: string;
-        specialistName: string;
         status: ServiceRequestStatus;
+        address: { __typename?: "AddressDto"; text: string };
+        customer: {
+          __typename?: "CustomerDto";
+          firstName: string;
+          lastName: string;
+          phoneNumber: string;
+          profileImageUrl: string;
+        };
+        serviceType: { __typename?: "ServiceTypeDto"; name: string; id: any };
+        specialist?: {
+          __typename?: "SpecialistDto";
+          lastName: string;
+          firstName: string;
+          id: any;
+          profileImageUrl: string;
+        } | null;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -1822,14 +1922,23 @@ export type ServiceRequest_GetByIdQuery = {
     status?: any | null;
     result?: {
       __typename?: "ServiceRequestDto";
-      addressText: string;
-      customerName: string;
       description: string;
       requestDate: any;
       id: any;
-      serviceTypeName: string;
-      specialistName: string;
       status: ServiceRequestStatus;
+      address: { __typename?: "AddressDto"; text: string };
+      customer: {
+        __typename?: "CustomerDto";
+        firstName: string;
+        lastName: string;
+        id: any;
+      };
+      serviceType: { __typename?: "ServiceTypeDto"; name: string };
+      specialist?: {
+        __typename?: "SpecialistDto";
+        firstName: string;
+        lastName: string;
+      } | null;
     } | null;
   };
 };
@@ -1909,7 +2018,7 @@ export type ServiceSubCategory_GetAllQuery = {
         id: any;
         logo: string;
         name: string;
-        serviceCategoryId: any;
+        serviceCategory: { __typename?: "ServiceCategoryDto"; id: any };
       }> | null;
     } | null;
   };
@@ -1929,7 +2038,7 @@ export type ServiceSubCategory_GetByIdQuery = {
       id: any;
       logo: string;
       name: string;
-      serviceCategoryId: any;
+      serviceCategory: { __typename?: "ServiceCategoryDto"; id: any };
     } | null;
   };
 };
@@ -1958,7 +2067,7 @@ export type ServiceTypes_GetAllQuery = {
         name: string;
         logo: string;
         id: any;
-        serviceSubCategoryId: any;
+        serviceSubCategory: { __typename?: "ServiceSubCategoryDto"; id: any };
       }> | null;
     } | null;
   };
@@ -2214,14 +2323,28 @@ export const ServiceRequest_GetMyRequestsDocument = `
   serviceRequest_getMyRequests {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
-        addressText
-        customerName
+        address {
+          text
+        }
+        customer {
+          lastName
+          firstName
+          phoneNumber
+        }
         description
         id
         requestDate
         status
-        serviceTypeName
-        specialistName
+        serviceType {
+          name
+          id
+        }
+        specialist {
+          lastName
+          firstName
+          id
+          profileImageUrl
+        }
       }
       pageInfo {
         hasNextPage
@@ -2306,13 +2429,28 @@ export const ServiceRequest_GetMyAcceptancesDocument = `
   serviceRequest_getMyAcceptances {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
-        addressText
-        customerName
+        address {
+          text
+        }
+        customer {
+          firstName
+          lastName
+          phoneNumber
+          profileImageUrl
+        }
         description
         requestDate
         id
-        serviceTypeName
-        specialistName
+        serviceType {
+          name
+          id
+        }
+        specialist {
+          lastName
+          firstName
+          id
+          profileImageUrl
+        }
         status
       }
       pageInfo {
@@ -2401,13 +2539,24 @@ export const ServiceRequest_GetByIdDocument = `
     query serviceRequest_getById($id: UUID!) {
   serviceRequest_getById(id: $id) {
     result {
-      addressText
-      customerName
+      address {
+        text
+      }
+      customer {
+        firstName
+        lastName
+        id
+      }
       description
       requestDate
       id
-      serviceTypeName
-      specialistName
+      serviceType {
+        name
+      }
+      specialist {
+        firstName
+        lastName
+      }
       status
     }
     status
@@ -2645,7 +2794,7 @@ export const useInfiniteServiceCategory_GetByIdQuery = <
 export const ServiceSubCategory_GetAllDocument = `
     query serviceSubCategory_getAll($skip: Int, $take: Int, $order: [ServiceSubCategoryDtoSortInput!], $where: ServiceSubCategoryDtoFilterInput) {
   serviceSubCategory_getAll {
-    result(skip: $skip, take: $take, order: $order) {
+    result(skip: $skip, take: $take, order: $order, where: $where) {
       pageInfo {
         hasNextPage
         hasPreviousPage
@@ -2654,7 +2803,9 @@ export const ServiceSubCategory_GetAllDocument = `
         id
         logo
         name
-        serviceCategoryId
+        serviceCategory {
+          id
+        }
       }
     }
     status
@@ -2736,7 +2887,9 @@ export const ServiceSubCategory_GetByIdDocument = `
       id
       logo
       name
-      serviceCategoryId
+      serviceCategory {
+        id
+      }
     }
     status
   }
@@ -2819,7 +2972,9 @@ export const ServiceTypes_GetAllDocument = `
         name
         logo
         id
-        serviceSubCategoryId
+        serviceSubCategory {
+          id
+        }
       }
     }
     status

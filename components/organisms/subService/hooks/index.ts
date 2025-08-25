@@ -3,7 +3,7 @@ import { queryKeys } from "@/constants/queryKeys";
 import {
   ServiceTypeDtoFilterInput,
   ServiceTypeDtoSortInput,
-  ServiceTypes_GatAllDocument,
+  ServiceTypes_GetAllDocument,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -20,7 +20,7 @@ export const useGetServiceTypesQuery = ({
   return useInfiniteQuery({
     queryKey: [queryKeys.serviceSubCategory_getAll, where, order, enabled],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceTypes_GatAllDocument, {
+      return fetcher(ServiceTypes_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         where,
@@ -29,7 +29,7 @@ export const useGetServiceTypesQuery = ({
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage?.serviceTypes_gatAll?.pageInfo?.hasNextPage) {
+      if (lastPage?.serviceTypes_getAll?.result?.pageInfo?.hasNextPage) {
         return allPages.length;
       }
       return undefined;
@@ -37,7 +37,9 @@ export const useGetServiceTypesQuery = ({
     select: (data) => {
       return {
         ...data,
-        pages: data?.pages?.map((a) => a?.serviceTypes_gatAll?.items).flat(),
+        pages: data?.pages
+          ?.map((a) => a?.serviceTypes_getAll?.result?.items)
+          .flat(),
       };
     },
   });

@@ -14,7 +14,9 @@ query serviceTypes_getAll(
         name
         logo
         id
-        serviceSubCategoryId
+        serviceSubCategory {
+          id
+        }
       }
     }
     status
