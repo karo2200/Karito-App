@@ -2042,6 +2042,37 @@ export type ServiceRequest_GetByIdQuery = {
   };
 };
 
+export type CancellationReason_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<CancellationReasonDtoFilterInput>;
+  order?: InputMaybe<
+    Array<CancellationReasonDtoSortInput> | CancellationReasonDtoSortInput
+  >;
+}>;
+
+export type CancellationReason_GetAllQuery = {
+  __typename?: "Query";
+  cancellationReason_getAll: {
+    __typename?: "ListResponseBaseOfCancellationReasonDto";
+    status?: any | null;
+    result?: {
+      __typename?: "CancellationReasonDtoCollectionSegment";
+      totalCount: number;
+      items?: Array<{
+        __typename?: "CancellationReasonDto";
+        id: any;
+        name: string;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
+};
+
 export type ServiceCategory_GetAllQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -3004,6 +3035,92 @@ export const useInfiniteServiceRequest_GetByIdQuery = <
             ServiceRequest_GetByIdQuery,
             ServiceRequest_GetByIdQueryVariables
           >(ServiceRequest_GetByIdDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const CancellationReason_GetAllDocument = `
+    query cancellationReason_getAll($skip: Int, $take: Int, $where: CancellationReasonDtoFilterInput, $order: [CancellationReasonDtoSortInput!]) {
+  cancellationReason_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        name
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
+    }
+    status
+  }
+}
+    `;
+
+export const useCancellationReason_GetAllQuery = <
+  TData = CancellationReason_GetAllQuery,
+  TError = unknown,
+>(
+  variables?: CancellationReason_GetAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<CancellationReason_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      CancellationReason_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<CancellationReason_GetAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["cancellationReason_getAll"]
+        : ["cancellationReason_getAll", variables],
+    queryFn: fetcher<
+      CancellationReason_GetAllQuery,
+      CancellationReason_GetAllQueryVariables
+    >(CancellationReason_GetAllDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteCancellationReason_GetAllQuery = <
+  TData = InfiniteData<CancellationReason_GetAllQuery>,
+  TError = unknown,
+>(
+  variables: CancellationReason_GetAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<CancellationReason_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      CancellationReason_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<CancellationReason_GetAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["cancellationReason_getAll.infinite"]
+            : ["cancellationReason_getAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            CancellationReason_GetAllQuery,
+            CancellationReason_GetAllQueryVariables
+          >(CancellationReason_GetAllDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),

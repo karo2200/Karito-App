@@ -10,7 +10,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Linking, Platform } from "react-native";
-import { useGetServiceById } from "./OrderDetail.guery";
+import {
+  useGetCancelationRequestsQuery,
+  useGetServiceById,
+} from "./OrderDetail.guery";
 
 export default function useOrderDetailHook() {
   const router = useRouter();
@@ -25,6 +28,7 @@ export default function useOrderDetailHook() {
   const [foundLocationVisible, setFoundLocationVisible] = useState(false);
   const [specialistFinishWorkVisible, setSpecialistFinishWorkVisible] =
     useState(false);
+  const [cancelRequestVisible, setCancelRequestVisible] = useState(false);
 
   const isDone = true;
 
@@ -38,6 +42,8 @@ export default function useOrderDetailHook() {
   const { data: serviceData, isLoading } = useGetServiceById({
     id: params?.id,
   });
+
+  const { data: cancelationData } = useGetCancelationRequestsQuery();
 
   const onBillPress = () => {
     router.push("/order/payment");
@@ -77,12 +83,12 @@ export default function useOrderDetailHook() {
     );
   };
 
-  const onCancelReuest = () => {
+  const onCancelReuest = (cancelationId: number) => {
     cancelWorkMutate(
       {
         input: {
-          cancellationReasonId: 1,
-          serviceRequestId: 1,
+          cancellationReasonId: cancelationId,
+          serviceRequestId: params?.id,
         },
       },
       {
@@ -121,5 +127,8 @@ export default function useOrderDetailHook() {
     isLoading,
     onCancelReuest,
     cancelWorkPending,
+    cancelRequestVisible,
+    setCancelRequestVisible,
+    cancelationData: cancelationData?.pages ?? [],
   };
 }

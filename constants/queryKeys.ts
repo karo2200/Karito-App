@@ -10,4 +10,5 @@ export const queryKeys = {
   banner_getAll: "banner_getAll",
   serviceRequest_getAvailableRequests: "serviceRequest_getAvailableRequests",
   discountCode_getAll: "discountCode_getAll",
+  cancellationReason_getAll: "cancellationReason_getAll",
 };
