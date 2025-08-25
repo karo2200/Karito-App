@@ -51,12 +51,21 @@ query serviceRequest_getMyAcceptances(
       items {
         address {
           text
+          latitude
+          longitude
+          neighborhoodId
+        }
+        cancellationReason {
+          id
+          name
         }
         customer {
           firstName
           lastName
           phoneNumber
           profileImageUrl
+          id
+          gender
         }
         description
         requestDate
@@ -64,12 +73,15 @@ query serviceRequest_getMyAcceptances(
         serviceType {
           name
           id
+          logo
         }
         specialist {
           lastName
           firstName
           id
           profileImageUrl
+          rateCount
+          phoneNumber
         }
         status
       }
@@ -88,21 +100,37 @@ query serviceRequest_getById($id: UUID!) {
     result {
       address {
         text
+        latitude
+        longitude
+        neighborhoodId
+      }
+      cancellationReason {
+        id
+        name
       }
       customer {
         firstName
         lastName
+        phoneNumber
+        profileImageUrl
         id
+        gender
       }
       description
       requestDate
       id
       serviceType {
         name
+        id
+        logo
       }
       specialist {
-        firstName
         lastName
+        firstName
+        id
+        profileImageUrl
+        rateCount
+        phoneNumber
       }
       status
     }

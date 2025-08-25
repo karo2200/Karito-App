@@ -34,3 +34,26 @@ query city_getAll(
     status
   }
 }
+
+query banner_getAll(
+  $skip: Int
+  $take: Int
+  $where: BannerDtoFilterInput
+  $order: [BannerDtoSortInput!]
+) {
+  banner_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        imageUrl
+        title
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
+    }
+    status
+  }
+}

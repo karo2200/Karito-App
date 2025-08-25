@@ -1,7 +1,7 @@
 import { ServiceRequestStatus, SortEnumType } from "@/generated/graphql";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { useGetServiceAcceptanceQuery } from "../../mission/hooks/Mission.query";
+import { useGetAllAvailableRequestQuery } from "./WorkList.query";
 
 export default function useWorkOutHook() {
   const router = useRouter();
@@ -15,11 +15,11 @@ export default function useWorkOutHook() {
     hasNextPage,
     fetchNextPage,
     isLoading,
-  } = useGetServiceAcceptanceQuery({
+  } = useGetAllAvailableRequestQuery({
     where: {
       and: [
         { status: { eq: ServiceRequestStatus.Pending } },
-        { serviceTypeName: { eq: searchText } },
+        { serviceType: { name: { eq: searchText } } },
       ],
     },
     order: [{ requestDate: SortEnumType.Desc }],

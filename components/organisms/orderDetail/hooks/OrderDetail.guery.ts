@@ -4,7 +4,8 @@ import { fetcher } from "@/graphql/fetcher";
 import { useQuery } from "@tanstack/react-query";
 
 export function useGetServiceById(variables: { id: number }) {
-  return useQuery([queryKeys.serviceRequest_getById, variables], () =>
-    fetcher(ServiceRequest_GetByIdDocument, variables)
-  );
+  return useQuery({
+    queryKey: [queryKeys.serviceRequest_getById, variables],
+    queryFn: () => fetcher(ServiceRequest_GetByIdDocument, variables)(),
+  });
 }

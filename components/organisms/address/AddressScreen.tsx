@@ -7,15 +7,21 @@ import { Colors } from "@/constants/Colors";
 import { FontStyle } from "@/constants/Fonts";
 import { Edit } from "iconsax-react-native";
 import React, { useCallback } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import EmptyAddressState from "../CreateOrder/Views/AddressEmpty";
 import useAddressHook from "./hooks/Address.hook";
 
 export default function AddressScreen() {
   const listRef = React.useRef<FlatList>(null);
 
-  const { addressesData, refetch, hasNextPage, fetchNextPage, isRefetching } =
-    useAddressHook();
+  const {
+    addressesData,
+    refetch,
+    hasNextPage,
+    fetchNextPage,
+    isRefetching,
+    isLoading,
+  } = useAddressHook();
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
@@ -39,31 +45,35 @@ export default function AddressScreen() {
           ]}
         />
 
-        <FlatList
-          ref={listRef}
-          keyExtractor={(item) => item?.id}
-          data={addressesData}
-          refreshing={isRefetching}
-          onRefresh={refetch}
-          showsVerticalScrollIndicator={false}
-          renderItem={renderItem}
-          ListFooterComponent={
-            addressesData.length > 0 ? (
-              <ThemedButton
-                title="افزودن آدرس جدید"
-                fontType={FontStyle.bold}
-                //   style={styles.btn}
-                type="outline"
-              />
-            ) : null
-          }
-          onEndReached={() => {
-            if (hasNextPage) {
-              fetchNextPage();
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            ref={listRef}
+            keyExtractor={(item) => item?.id}
+            data={addressesData}
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            showsVerticalScrollIndicator={false}
+            renderItem={renderItem}
+            ListFooterComponent={
+              addressesData.length > 0 ? (
+                <ThemedButton
+                  title="افزودن آدرس جدید"
+                  fontType={FontStyle.bold}
+                  //   style={styles.btn}
+                  type="outline"
+                />
+              ) : null
             }
-          }}
-          ListEmptyComponent={() => <EmptyAddressState />}
-        />
+            onEndReached={() => {
+              if (hasNextPage) {
+                fetchNextPage();
+              }
+            }}
+            ListEmptyComponent={() => <EmptyAddressState />}
+          />
+        )}
       </View>
     </ThemedContainer>
   );

@@ -28,7 +28,6 @@ async function refreshAccessToken() {
     const data = await graphqlFetcher(Auth_RefreshTokenDocument, {
       input: { accessToken, refreshToken },
     });
-    console.log("sss", data, accessToken, "       =>", refreshToken);
 
     const newAccessToken = data?.auth_refreshToken?.result?.accessToken;
     const newRefreshToken = data?.auth_refreshToken?.result?.refreshToken;
@@ -40,7 +39,6 @@ async function refreshAccessToken() {
 
     return newAccessToken;
   } catch (err) {
-    console.error("Failed to refresh token:", err);
     throw err;
   }
 }
@@ -56,7 +54,6 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
       (!accessToken || isTokenExpired(accessToken))
     ) {
       const newToken = await refreshAccessToken();
-      console.log("//////", newToken);
 
       graphQLClient.setHeader("authorization", "Bearer " + newToken);
     } else {
@@ -74,11 +71,9 @@ function isTokenExpired(token?: string): boolean {
     const decoded = jwtDecode<JwtPayload>(token);
     if (!decoded.exp) return true;
 
-    const now = Date.now() / 1000; // seconds
-    console.log(JSON.stringify({ decoded, now }));
+    const now = Date.now() / 1000;
     return decoded.exp < now;
   } catch (err) {
-    console.error("❌ Failed to decode token:", err);
     return true;
   }
 }

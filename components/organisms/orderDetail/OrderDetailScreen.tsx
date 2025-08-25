@@ -10,9 +10,11 @@ import { useToast } from "@/components/atoms/Toast";
 import LocationActionSheet from "@/components/molecules/LocationActionSheet";
 import PaymentWaitingSheet from "@/components/molecules/PaymentWaitingSheet";
 import { Colors } from "@/constants/Colors";
+import { ServiceRequestStatus } from "@/generated/graphql";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
 import {
+  ActivityIndicator,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -37,6 +39,12 @@ export default function OrderDetailScreen() {
     foundLocationVisible,
     specialistFinishWorkVisible,
     setSpecialistFinishWorkVisible,
+    onAcceptWork,
+    acceptWorkPending,
+    isLoading,
+    serviceData,
+    onCancelReuest,
+    cancelWorkPending,
   } = useOrderDetailHook();
 
   const handleSuccess = () => {
@@ -58,19 +66,19 @@ export default function OrderDetailScreen() {
             items={[
               { label: "سفارش‌های من", href: "/order" },
               { label: "سفارش‌های جاری", href: "/order" },
-              { label: "تعمیر و سرویس کولر آبی" },
+              { label: serviceData?.serviceType?.name },
             ]}
           />
         ) : (
-          <ScreenNameWithBack title="سرمایش و گرمایش (تعمیر و سرویس کولر آبی)" />
+          <ScreenNameWithBack title={serviceData?.serviceType?.name} />
         )}
         {!isExpert && (
           <React.Fragment>
             <ThemedText fontType="bold" style={{ marginTop: 4 }}>
-              سرمایش و گرمایش (تعمیر و سرویس کولر آبی)
+              {serviceData?.serviceType?.name}
             </ThemedText>
             <View style={styles.label}>
-              <ThemedText type="text">ثبت شده</ThemedText>
+              <ThemedText type="text">{serviceData?.status}</ThemedText>
             </View>
           </React.Fragment>
         )}
@@ -84,7 +92,7 @@ export default function OrderDetailScreen() {
         </View>
         <View style={styles.rowView}>
           <ThemedText type="text" style={{ color: Colors.hint500 }}>
-            1404/03/15 چهارشنبه ساعت 17:00
+            {serviceData?.requestDate}
           </ThemedText>
           <ThemedText fontType="bold" style={{ color: Colors.gray500 }}>
             زمان
@@ -92,17 +100,23 @@ export default function OrderDetailScreen() {
         </View>
         {!isExpert && (
           <View style={[styles.rowView2, isDone && { paddingRight: 0 }]}>
-            <Pressable onPress={handleSuccess}>
-              <ThemedText style={{ color: Colors.darkError }}>
-                لغو سفارش
-              </ThemedText>
+            <Pressable onPress={onCancelReuest}>
+              {cancelWorkPending ? (
+                <ActivityIndicator />
+              ) : (
+                <ThemedText style={{ color: Colors.darkError }}>
+                  لغو سفارش
+                </ThemedText>
+              )}
             </Pressable>
             {isDone ? (
               <SpecialistData />
             ) : (
-              <ThemedText fontType="bold" style={{ color: "black" }}>
-                در انتظار تایید متخصص...
-              </ThemedText>
+              serviceData?.status === ServiceRequestStatus.Pending && (
+                <ThemedText fontType="bold" style={{ color: "black" }}>
+                  در انتظار تایید متخصص...
+                </ThemedText>
+              )
             )}
           </View>
         )}
@@ -112,7 +126,7 @@ export default function OrderDetailScreen() {
         </ThemedText>
         <View style={styles.rowView}>
           <ThemedText type="text" style={{ color: Colors.label }}>
-            سرویس دوره ای
+            {serviceData?.serviceType?.name}
           </ThemedText>
           <ThemedText type="text" style={{ color: Colors.gray500 }}>
             خدمت درخواستی
@@ -120,8 +134,7 @@ export default function OrderDetailScreen() {
         </View>
         <View style={styles.rowView}>
           <ThemedText type="text" style={styles.address} numberOfLines={2}>
-            تهران، خیابان ولیعصر، نرسیده به اسفندیاری، بعد از کوچه ناصری، برج
-            کیان، طبقه ۸
+            {serviceData?.address?.text}
           </ThemedText>
           <ThemedText type="text" style={{ color: Colors.gray500 }}>
             {!isExpert ? "آدرس" : "آدرس دقیق"}
@@ -140,8 +153,7 @@ export default function OrderDetailScreen() {
           ) : (
             <React.Fragment>
               <ThemedText type="text" style={styles.address}>
-                کولر مدل ال‌جی هست، صدای زیاد می‌ده و خوب خنک نمی‌کنه. واحد طبقه
-                سوم بدون آسانسوره. لطفاً ابزار کامل بیارید.
+                {serviceData?.description}
               </ThemedText>
               <ThemedText type="text" style={{ color: Colors.gray500 }}>
                 توضیحات
@@ -157,7 +169,8 @@ export default function OrderDetailScreen() {
             </ThemedText>
             <View style={styles.rowView}>
               <ThemedText type="text" style={{ color: Colors.label }}>
-                موسی علیپور
+                {serviceData?.customer?.firstName}{" "}
+                {serviceData?.customer?.lastName}
               </ThemedText>
               <ThemedText type="text" style={{ color: Colors.gray500 }}>
                 نام مشتری
@@ -171,7 +184,7 @@ export default function OrderDetailScreen() {
                   style={styles.phone}
                   onPress={() => makeCall("09192341234")}
                 >
-                  ۰۹۱۲-۳۲۶۷۸۹۸
+                  {serviceData?.customer?.phoneNumber}
                 </ThemedText>
               </View>
 
@@ -197,8 +210,9 @@ export default function OrderDetailScreen() {
           <ThemedButton
             title="قبول کار"
             style={styles.btn}
+            isLoading={acceptWorkPending}
             rightIcon={<TickIcon style={{ marginLeft: 8 }} />}
-            onPress={() => setSpecialistFinishWorkVisible(true)}
+            onPress={onAcceptWork}
           />
           <ThemedButton
             title="رد کار"

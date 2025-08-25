@@ -31,3 +31,28 @@ query address_getMyAddresses(
     status
   }
 }
+
+query discountCode_getAll(
+  $skip: Int
+  $take: Int
+  $where: DiscountCodeDtoFilterInput
+  $order: [DiscountCodeDtoSortInput!]
+) {
+  discountCode_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        amount
+        code
+        expiryDate
+        isActive
+        isPercentage
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    status
+  }
+}

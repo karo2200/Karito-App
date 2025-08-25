@@ -79,7 +79,7 @@ export default function useOtpHook() {
   const onSendOtp = (continueFunc: () => void) => {
     setIsSendingCode(true);
     requestOtpMutate(
-      { phoneNumber, userType: UserType.Customer },
+      { input: { phoneNumber, userType: UserType.Customer } },
       {
         onSuccess: (data) => {
           setIsSendingCode(false);
