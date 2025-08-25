@@ -137,3 +137,25 @@ query serviceRequest_getById($id: UUID!) {
     status
   }
 }
+
+query cancellationReason_getAll(
+  $skip: Int
+  $take: Int
+  $where: CancellationReasonDtoFilterInput
+  $order: [CancellationReasonDtoSortInput!]
+) {
+  cancellationReason_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        name
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
+    }
+    status
+  }
+}

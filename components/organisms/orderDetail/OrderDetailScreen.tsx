@@ -22,6 +22,7 @@ import {
   View,
 } from "react-native";
 import useOrderDetailHook from "./hooks/OrderDetail.hook";
+import CancelRequestSheet from "./Views/CancelRequestSheet";
 import FinishWorkSheet from "./Views/FinishWorkSheet";
 import SpecialistData from "./Views/SpecialistData";
 
@@ -45,6 +46,8 @@ export default function OrderDetailScreen() {
     serviceData,
     onCancelReuest,
     cancelWorkPending,
+    cancelRequestVisible,
+    setCancelRequestVisible,
   } = useOrderDetailHook();
 
   const handleSuccess = () => {
@@ -100,7 +103,7 @@ export default function OrderDetailScreen() {
         </View>
         {!isExpert && (
           <View style={[styles.rowView2, isDone && { paddingRight: 0 }]}>
-            <Pressable onPress={onCancelReuest}>
+            <Pressable onPress={() => setCancelRequestVisible(true)}>
               {cancelWorkPending ? (
                 <ActivityIndicator />
               ) : (
@@ -234,6 +237,10 @@ export default function OrderDetailScreen() {
       <PaymentWaitingSheet
         visible={specialistFinishWorkVisible}
         onClose={() => setSpecialistFinishWorkVisible(false)}
+      />
+      <CancelRequestSheet
+        visible={cancelRequestVisible}
+        onClose={() => setCancelRequestVisible(false)}
       />
     </ThemedContainer>
   );
