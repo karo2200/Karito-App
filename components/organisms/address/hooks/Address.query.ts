@@ -17,7 +17,7 @@ type UseGetUserAddressesOptions = {
 };
 
 export const useGetUserAddressesQuery = (
-  options: UseGetUserAddressesOptions
+  options?: UseGetUserAddressesOptions
 ) => {
   return useInfiniteQuery({
     queryKey: [queryKeys.address_getMyAddresses, options],

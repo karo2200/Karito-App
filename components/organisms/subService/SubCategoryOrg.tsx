@@ -15,7 +15,7 @@ import useServiceTypesHook from "./serviceTypes.hook";
 export default function SubCategoryOrg() {
   const { item, items } = useServiceTypesHook();
 
-  const renderITEM = useCallback(
+  const renderItem = useCallback(
     ({ item, index }) => <SubServiceItem {...{ item, index }} />,
     []
   );
@@ -44,7 +44,7 @@ export default function SubCategoryOrg() {
       <CustomFlatList
         data={items}
         ItemSeparatorComponent={() => <Divider height={16} />}
-        renderItem={renderITEM}
+        renderItem={renderItem}
         style={styles.flex1}
         keyExtractor={(item, index) => `${index}`}
       />

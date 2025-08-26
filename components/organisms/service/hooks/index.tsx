@@ -4,6 +4,7 @@ import {
   ServiceCategoryDtoFilterInput,
   ServiceCategoryDtoSortInput,
   ServiceCategory_GetAllDocument,
+  ServiceSubCategoryDtoFilterInput,
   ServiceSubCategoryDtoSortInput,
   ServiceSubCategory_GetAllDocument,
 } from "@/generated/graphql";
@@ -54,7 +55,7 @@ export const useGetSubServiceCategoriesQuery = ({
   order,
   enabled = true,
 }: {
-  where?: ServiceCategoryDtoFilterInput;
+  where?: ServiceSubCategoryDtoFilterInput;
   order?: [ServiceSubCategoryDtoSortInput];
   enabled?: boolean;
 }) => {
@@ -76,7 +77,6 @@ export const useGetSubServiceCategoriesQuery = ({
       return undefined;
     },
     select: (data) => {
-      console.log({ datass: data });
       return {
         ...data,
         pages: data?.pages

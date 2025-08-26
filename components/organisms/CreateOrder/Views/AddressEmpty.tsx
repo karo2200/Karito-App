@@ -2,9 +2,16 @@ import EmptyAddressSvg from "@/assets/icons/EmptyAddress";
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import { DeviceHeight } from "@/constants/Dimension";
 import { FontStyle } from "@/constants/Fonts";
+import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 
 export default function EmptyAddressState() {
+  const router = useRouter();
+
+  const onPress = () => {
+    router?.push("/(tabs)/CreateAddress");
+  };
+
   return (
     <ThemedView style={styles.main}>
       <ThemedView style={styles.container}>
@@ -16,6 +23,7 @@ export default function EmptyAddressState() {
         title="افزودن آدرس جدید"
         fontType={FontStyle.bold}
         style={styles.btn}
+        onPress={onPress}
         type="outline"
       />
     </ThemedView>
