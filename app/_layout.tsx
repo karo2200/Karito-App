@@ -1,6 +1,7 @@
 import { ToastProvider } from "@/components/atoms/Toast";
 import AuthProvider from "@/graphql/AuthProvider";
 import useNetworkStatus from "@/hooks/useNetworkStatus";
+import authCacheStore from "@/stores/authCacheStore";
 import useUserStore from "@/stores/loginStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
@@ -13,7 +14,8 @@ import "../sheets.tsx";
 import { RightIcon } from "./(tabs)/_layout";
 
 export default function RootLayout() {
-  const { isLoggedIn, isExpert, isSelectRole } = useUserStore();
+  const { isLoggedIn, isExpert } = useUserStore();
+  const { accessToken } = authCacheStore();
 
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
@@ -30,7 +32,7 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    console.log("......", isSelectRole);
+    console.log("....../", isConnected);
   }, [isConnected]);
 
   const MyTheme = {
@@ -62,13 +64,14 @@ export default function RootLayout() {
                 <Stack.Protected guard={isLoggedIn && isExpert}>
                   <Stack.Screen name="(expertTabs)" />
                 </Stack.Protected>
+                <Stack.Protected guard={!isLoggedIn}>
+                  <Stack.Screen name="(tabs)" />
+                </Stack.Protected>
                 <Stack.Protected guard={isLoggedIn && !isExpert}>
                   <Stack.Screen name="(tabs)" />
                 </Stack.Protected>
 
-                <Stack.Protected
-                  guard={!isLoggedIn && !isExpert && !isSelectRole}
-                >
+                <Stack.Protected guard={!isLoggedIn && !isExpert}>
                   <Stack.Screen name="LoginPage" />
                   <Stack.Screen name="OTPScreen" />
                 </Stack.Protected>
