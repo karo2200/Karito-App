@@ -3,6 +3,7 @@ import { queryKeys } from "@/constants/queryKeys";
 import {
   useServiceRequest_AcceptMutation,
   useServiceRequest_CancelMutation,
+  useServiceRequest_RejectMutation,
 } from "@/generated/graphql";
 import useUserStore from "@/stores/loginStore";
 import { useRoute } from "@react-navigation/native";
@@ -38,6 +39,8 @@ export default function useOrderDetailHook() {
     useServiceRequest_AcceptMutation();
   const { mutate: cancelWorkMutate, isPending: cancelWorkPending } =
     useServiceRequest_CancelMutation();
+  const { mutate: rejectMutate, isPending: rejectPending } =
+    useServiceRequest_RejectMutation();
 
   const { data: serviceData, isLoading } = useGetServiceById({
     id: params?.id,
@@ -110,6 +113,32 @@ export default function useOrderDetailHook() {
     );
   };
 
+  const onRejectPress = () => {
+    rejectMutate(
+      {
+        input: {
+          serviceRequestId: params?.id,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.serviceRequest_reject.status?.code === 1) {
+            showToast({ message: "ماموریت رد شد.", type: "success" });
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.serviceRequest_getAvailableRequests],
+            });
+            router.push("/(expertTabs)/workList");
+          } else {
+            showToast({
+              message: data?.serviceRequest_reject.status,
+              type: "error",
+            });
+          }
+        },
+      }
+    );
+  };
+
   return {
     finishWorkVisible,
     setFinishWorkVisible,
@@ -130,5 +159,7 @@ export default function useOrderDetailHook() {
     cancelRequestVisible,
     setCancelRequestVisible,
     cancelationData: cancelationData?.pages ?? [],
+    rejectPending,
+    onRejectPress,
   };
 }

@@ -48,6 +48,8 @@ export default function OrderDetailScreen() {
     cancelWorkPending,
     cancelRequestVisible,
     setCancelRequestVisible,
+    rejectPending,
+    onRejectPress,
   } = useOrderDetailHook();
 
   const handleSuccess = () => {
@@ -221,8 +223,9 @@ export default function OrderDetailScreen() {
             title="رد کار"
             type="outline"
             style={styles.btn}
+            isLoading={rejectPending}
             rightIcon={<CloseIcon style={{ marginLeft: 8 }} />}
-            onPress={() => setFoundLocationVisible(true)}
+            onPress={onRejectPress}
           />
         </View>
       )}

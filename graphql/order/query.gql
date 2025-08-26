@@ -53,7 +53,14 @@ query serviceRequest_getMyAcceptances(
           text
           latitude
           longitude
-          neighborhoodId
+          neighborhood {
+            id
+            city {
+              name
+              id
+            }
+            name
+          }
         }
         cancellationReason {
           id
@@ -102,7 +109,14 @@ query serviceRequest_getById($id: UUID!) {
         text
         latitude
         longitude
-        neighborhoodId
+        neighborhood {
+          id
+          city {
+            name
+            id
+          }
+          name
+        }
       }
       cancellationReason {
         id

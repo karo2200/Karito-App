@@ -63,10 +63,11 @@ export type AddAddressInput = {
 
 export type AddressDto = {
   __typename?: "AddressDto";
+  customer: CustomerDto;
   id: Scalars["UUID"]["output"];
   latitude: Scalars["Float"]["output"];
   longitude: Scalars["Float"]["output"];
-  neighborhoodId: Scalars["UUID"]["output"];
+  neighborhood: NeighborhoodDto;
   text: Scalars["String"]["output"];
 };
 
@@ -82,19 +83,21 @@ export type AddressDtoCollectionSegment = {
 
 export type AddressDtoFilterInput = {
   and?: InputMaybe<Array<AddressDtoFilterInput>>;
+  customer?: InputMaybe<CustomerDtoFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   latitude?: InputMaybe<FloatOperationFilterInput>;
   longitude?: InputMaybe<FloatOperationFilterInput>;
-  neighborhoodId?: InputMaybe<UuidOperationFilterInput>;
+  neighborhood?: InputMaybe<NeighborhoodDtoFilterInput>;
   or?: InputMaybe<Array<AddressDtoFilterInput>>;
   text?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type AddressDtoSortInput = {
+  customer?: InputMaybe<CustomerDtoSortInput>;
   id?: InputMaybe<SortEnumType>;
   latitude?: InputMaybe<SortEnumType>;
   longitude?: InputMaybe<SortEnumType>;
-  neighborhoodId?: InputMaybe<SortEnumType>;
+  neighborhood?: InputMaybe<NeighborhoodDtoSortInput>;
   text?: InputMaybe<SortEnumType>;
 };
 
@@ -814,6 +817,7 @@ export type Mutation = {
   serviceRequest_cancel: ResponseBaseOfServiceRequestDto;
   serviceRequest_completeService: ResponseBaseOfServiceRequestDto;
   serviceRequest_create: ResponseBaseOfServiceRequestDto;
+  serviceRequest_reject: ResponseBaseOfRejectedServiceRequestDto;
   serviceSubCategory_create: ResponseBaseOfServiceSubCategoryDto;
   serviceSubCategory_delete: ResponseBase;
   serviceSubCategory_update: ResponseBaseOfServiceSubCategoryDto;
@@ -983,6 +987,10 @@ export type MutationServiceRequest_CreateArgs = {
   input: CreateServiceRequestInput;
 };
 
+export type MutationServiceRequest_RejectArgs = {
+  input: RejectServiceRequestInput;
+};
+
 export type MutationServiceSubCategory_CreateArgs = {
   input: CreateServiceSubCategoryInput;
 };
@@ -1025,7 +1033,7 @@ export type MutationUser_CreateAdminArgs = {
 
 export type NeighborhoodDto = {
   __typename?: "NeighborhoodDto";
-  cityId: Scalars["UUID"]["output"];
+  city: CityDto;
   id: Scalars["UUID"]["output"];
   name: Scalars["String"]["output"];
 };
@@ -1042,14 +1050,14 @@ export type NeighborhoodDtoCollectionSegment = {
 
 export type NeighborhoodDtoFilterInput = {
   and?: InputMaybe<Array<NeighborhoodDtoFilterInput>>;
-  cityId?: InputMaybe<UuidOperationFilterInput>;
+  city?: InputMaybe<CityDtoFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<NeighborhoodDtoFilterInput>>;
 };
 
 export type NeighborhoodDtoSortInput = {
-  cityId?: InputMaybe<SortEnumType>;
+  city?: InputMaybe<CityDtoSortInput>;
   id?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
 };
@@ -1226,6 +1234,16 @@ export type RefreshTokenInput = {
   refreshToken: Scalars["String"]["input"];
 };
 
+export type RejectServiceRequestInput = {
+  serviceRequestId: Scalars["UUID"]["input"];
+};
+
+export type RejectedServiceRequestDto = {
+  __typename?: "RejectedServiceRequestDto";
+  serviceRequest: ServiceRequestDto;
+  specialist: SpecialistDto;
+};
+
 export type RequestOtpInput = {
   phoneNumber: Scalars["String"]["input"];
   userType: UserType;
@@ -1293,6 +1311,12 @@ export type ResponseBaseOfNeighborhoodDto = {
 export type ResponseBaseOfProvinceDto = {
   __typename?: "ResponseBaseOfProvinceDto";
   result?: Maybe<ProvinceDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfRejectedServiceRequestDto = {
+  __typename?: "ResponseBaseOfRejectedServiceRequestDto";
+  result?: Maybe<RejectedServiceRequestDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -1870,6 +1894,22 @@ export type ServiceRequest_CancelMutation = {
   };
 };
 
+export type ServiceRequest_RejectMutationVariables = Exact<{
+  input: RejectServiceRequestInput;
+}>;
+
+export type ServiceRequest_RejectMutation = {
+  __typename?: "Mutation";
+  serviceRequest_reject: {
+    __typename?: "ResponseBaseOfRejectedServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "RejectedServiceRequestDto";
+      serviceRequest: { __typename?: "ServiceRequestDto"; id: any };
+    } | null;
+  };
+};
+
 export type ServiceRequest_GetMyRequestsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -1946,7 +1986,12 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
           text: string;
           latitude: number;
           longitude: number;
-          neighborhoodId: any;
+          neighborhood: {
+            __typename?: "NeighborhoodDto";
+            id: any;
+            name: string;
+            city: { __typename?: "CityDto"; name: string; id: any };
+          };
         };
         cancellationReason?: {
           __typename?: "CancellationReasonDto";
@@ -2007,7 +2052,12 @@ export type ServiceRequest_GetByIdQuery = {
         text: string;
         latitude: number;
         longitude: number;
-        neighborhoodId: any;
+        neighborhood: {
+          __typename?: "NeighborhoodDto";
+          id: any;
+          name: string;
+          city: { __typename?: "CityDto"; name: string; id: any };
+        };
       };
       cancellationReason?: {
         __typename?: "CancellationReasonDto";
@@ -2235,7 +2285,12 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
           text: string;
           latitude: number;
           longitude: number;
-          neighborhoodId: any;
+          neighborhood: {
+            __typename?: "NeighborhoodDto";
+            id: any;
+            name: string;
+            city: { __typename?: "CityDto"; name: string; id: any };
+          };
         };
         cancellationReason?: {
           __typename?: "CancellationReasonDto";
@@ -2305,8 +2360,13 @@ export type Address_GetMyAddressesQuery = {
         id: any;
         latitude: number;
         longitude: number;
-        neighborhoodId: any;
         text: string;
+        neighborhood: {
+          __typename?: "NeighborhoodDto";
+          id: any;
+          name: string;
+          city: { __typename?: "CityDto"; name: string; id: any };
+        };
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -2706,6 +2766,46 @@ export const useServiceRequest_CancelMutation = <
   });
 };
 
+export const ServiceRequest_RejectDocument = `
+    mutation serviceRequest_reject($input: RejectServiceRequestInput!) {
+  serviceRequest_reject(input: $input) {
+    status
+    result {
+      serviceRequest {
+        id
+      }
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_RejectMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceRequest_RejectMutation,
+    TError,
+    ServiceRequest_RejectMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceRequest_RejectMutation,
+    TError,
+    ServiceRequest_RejectMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceRequest_reject"],
+    mutationFn: (variables?: ServiceRequest_RejectMutationVariables) =>
+      fetcher<
+        ServiceRequest_RejectMutation,
+        ServiceRequest_RejectMutationVariables
+      >(ServiceRequest_RejectDocument, variables)(),
+    ...options,
+  });
+};
+
 export const ServiceRequest_GetMyRequestsDocument = `
     query serviceRequest_getMyRequests($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
   serviceRequest_getMyRequests {
@@ -2821,7 +2921,14 @@ export const ServiceRequest_GetMyAcceptancesDocument = `
           text
           latitude
           longitude
-          neighborhoodId
+          neighborhood {
+            id
+            city {
+              name
+              id
+            }
+            name
+          }
         }
         cancellationReason {
           id
@@ -2943,7 +3050,14 @@ export const ServiceRequest_GetByIdDocument = `
         text
         latitude
         longitude
-        neighborhoodId
+        neighborhood {
+          id
+          city {
+            name
+            id
+          }
+          name
+        }
       }
       cancellationReason {
         id
@@ -3561,7 +3675,14 @@ export const ServiceRequest_GetAvailableRequestsDocument = `
           text
           latitude
           longitude
-          neighborhoodId
+          neighborhood {
+            id
+            city {
+              name
+              id
+            }
+            name
+          }
         }
         cancellationReason {
           id
@@ -3758,7 +3879,14 @@ export const Address_GetMyAddressesDocument = `
         id
         latitude
         longitude
-        neighborhoodId
+        neighborhood {
+          id
+          city {
+            name
+            id
+          }
+          name
+        }
         text
       }
       pageInfo {

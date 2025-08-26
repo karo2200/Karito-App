@@ -15,3 +15,14 @@ mutation serviceRequest_cancel($input: CancelServiceRequestInput!) {
     }
   }
 }
+
+mutation serviceRequest_reject($input: RejectServiceRequestInput!) {
+  serviceRequest_reject(input: $input) {
+    status
+    result {
+      serviceRequest {
+        id
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import CustomCarousel from "@/components/atoms/CustomCarousel";
+import { memo } from "react";
 import { ScrollView } from "react-native";
 import Banner from "./Views/Banner";
 import Categories from "./Views/Categories";
@@ -6,7 +7,7 @@ import HorizontalServiceList from "./Views/HorizontalServiceList";
 import HorizontalSpeciaLists from "./Views/HorizontalSpeciaLists";
 import useHomeHook from "./hooks/Home.hook";
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   const { activeBanner } = useHomeHook();
 
   return (
@@ -27,4 +28,6 @@ export default function HomeScreen() {
       <HorizontalSpeciaLists data={[{ id: 1 }, { id: 2 }]} />
     </ScrollView>
   );
-}
+};
+
+export default memo(HomeScreen);

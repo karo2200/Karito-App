@@ -16,8 +16,6 @@ export default function useAddressHook() {
     isLoading,
   } = useGetUserAddressesQuery();
 
-  console.log("//////=>", userAddressData);
-
   return {
     router,
     refetch,

@@ -40,7 +40,14 @@ query serviceRequest_getAvailableRequests(
           text
           latitude
           longitude
-          neighborhoodId
+          neighborhood {
+            id
+            city {
+              name
+              id
+            }
+            name
+          }
         }
         cancellationReason {
           id

@@ -5,6 +5,7 @@ import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedView from "@/components/atoms/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { FontStyle } from "@/constants/Fonts";
+import { AddressDto } from "@/generated/graphql";
 import { Edit } from "iconsax-react-native";
 import React, { useCallback } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
@@ -94,7 +95,7 @@ const AddressCard = ({
   isChecked,
   onChange,
 }: {
-  item: any;
+  item: AddressDto;
   isChecked: boolean;
   onChange: () => void;
 }) => {
@@ -103,9 +104,7 @@ const AddressCard = ({
       <Edit size={24} color={Colors.gray500} />
       <CustomRadioButton
         checked={isChecked}
-        label={
-          "تهران، خیابان ولیعصر، نرسیده به اسفندیاری، بعد از کوچه ناصری، برج کیان، طبقه ۸ "
-        }
+        label={item?.text}
         onPress={() => {
           onChange();
         }}

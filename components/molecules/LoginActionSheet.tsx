@@ -9,15 +9,15 @@ import {
   View,
 } from "react-native";
 
+import { hideSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
+import { memo } from "react";
 import { SheetProps } from "react-native-actions-sheet";
 import ActionSheetContainer from "../atoms/ActionSheetContainer";
 
 const { height, width } = Dimensions.get("screen");
 
-export default function LoginActionSheet(
-  props: SheetProps<"confirmation-action">
-) {
+const LoginActionSheet = (props: SheetProps<"confirmation-action">) => {
   const {
     title,
     description,
@@ -37,23 +37,24 @@ export default function LoginActionSheet(
     positiveBackgroundColor,
     id = "confirmation-action",
   } = props?.payload ?? {};
-  const { setIsExpert, isExpert, setIsSelectRole, setIsLoggedIn } =
-    useUserStore();
+  const { setIsExpert, isExpert, setIsLoggedIn } = useUserStore();
 
   const { clearAuth } = authCacheStore();
 
   const loginAsExpert = () => {
     onClose();
     setIsExpert(true);
-    setIsSelectRole(true);
     setIsLoggedIn(false);
+    hideSheet("confirmation-action");
     clearAuth();
   };
 
   const loginAsCustomer = () => {
     onClose();
     setIsExpert(false);
-    setIsSelectRole(true);
+    setIsLoggedIn(false);
+    hideSheet("confirmation-action");
+    clearAuth();
   };
 
   return (
@@ -100,7 +101,9 @@ export default function LoginActionSheet(
       </View>
     </ActionSheetContainer>
   );
-}
+};
+
+export default memo(LoginActionSheet);
 
 const styles = StyleSheet.create({
   header: {
@@ -149,7 +152,7 @@ const styles = StyleSheet.create({
     width: "48%",
   },
   container: {
-    minHeight: height / 3.5,
+    minHeight: height / 5.5,
     width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
     backgroundColor: "white",
     borderTopRightRadius: 12,
