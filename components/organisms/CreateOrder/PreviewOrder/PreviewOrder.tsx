@@ -2,20 +2,20 @@ import { Divider, ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet } from "react-native";
 
-export default function PreviewOrder() {
+export default function PreviewOrder(props: any) {
   const data = [
     { label: "هزینه برآورد شده", value: "۱۲۰۰۰ تومان" },
     { label: "زمان", value: "1404/03/15  چهارشنبه ساعت 17:00 " },
   ];
+
   const data2 = [
-    { label: "خدمات درخواستی", value: "سرویس دوره‌ای" },
+    { label: "خدمات درخواستی", value: props?.getValues()?.serviceType },
     {
       label: "آدرس",
-      value:
-        "تهران، خیابان ولیعصر، نرسیده به اسفندیاری، بعد از کوچه ناصری، برج کیان، طبقه ۸ ",
+      value: props?.getValues()?.addressLabel,
     },
-    { label: "تعداد سرویس", value: "۱" },
   ];
+
   return (
     <ThemedView style={styles.flex1}>
       <ThemedText fontType="bold" type="title">

@@ -1,29 +1,24 @@
+import CustomGroupCheckBox from "@/components/atoms/CustomGroupCheckBox";
 import CustomRadioGroup from "@/components/atoms/CustomRadioGroup";
-import { FormProvider, useForm } from "react-hook-form";
+import { QuestionType } from "@/generated/graphql";
 
-export default function OrderQuestions() {
-  const { ...methods } = useForm<Record<string, any>, object>({
-    mode: "onChange",
-  });
-
-  return (
-    <FormProvider {...methods}>
+export default function OrderQuestions(props: any) {
+  if (props?.questionType === QuestionType.RadioButton)
+    return (
       <CustomRadioGroup
-        label="فضای مد نظر شما برای دریافت سفارش چگونه است؟"
-        data={[
-          {
-            label: "فضای مسکونی",
-            value: 12,
-            index: 0,
-          },
-          {
-            label: "فضای تجاری",
-            value: 124,
-            index: 1,
-          },
-        ]}
-        name={"mm"}
+        key={props?.name}
+        label={props?.title}
+        data={props?.data}
+        name={props?.name}
       />
-    </FormProvider>
-  );
+    );
+  else
+    return (
+      <CustomGroupCheckBox
+        key={props?.name}
+        label={props?.title}
+        data={props?.data}
+        name={props?.name}
+      />
+    );
 }

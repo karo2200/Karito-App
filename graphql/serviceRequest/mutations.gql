@@ -1,0 +1,5 @@
+mutation createRequest($input: CreateServiceRequestInput!) {
+  serviceRequest_create(input: $input) {
+    status
+  }
+}

@@ -6,16 +6,21 @@ import {
 } from "./hooks";
 
 export default function useServiceTabHook() {
+  const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
+  const [selectedService, setSelectedService] = useState(serviceItem0);
+
   const { data, hasNextPage, fetchNextPage } = useGetServiceCategoriesQuery({});
 
   const {
     data: subServiceData,
     hasNextPage: subServiceHasNextPage,
     fetchNextPage: subServiceFetchNextPage,
-  } = useGetSubServiceCategoriesQuery({});
-
-  const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
-  const [selectedService, setSelectedService] = useState(serviceItem0);
+  } = useGetSubServiceCategoriesQuery({
+    where:
+      selectedService?.id === -1
+        ? undefined
+        : { serviceCategory: { id: { eq: selectedService?.id } } },
+  });
 
   const onServiceItemPress = (item: any) => {
     setSelectedService(item);
@@ -38,6 +43,7 @@ export default function useServiceTabHook() {
     subServiceItems: subServiceData?.pages ?? [],
 
     onFetchNextServices,
+    onFetchNextSubServices,
     onServiceItemPress,
   };
 }
