@@ -9,4 +9,8 @@ export const queryKeys = {
   serviceRequest_getById: "serviceRequest_getById",
   neighborhood_getAll: "neighborhood_getAll",
   serviceTypeQuestion_getByServiceType: "serviceTypeQuestion_getByServiceType",
+  banner_getAll: "banner_getAll",
+  serviceRequest_getAvailableRequests: "serviceRequest_getAvailableRequests",
+  discountCode_getAll: "discountCode_getAll",
+  cancellationReason_getAll: "cancellationReason_getAll",
 };

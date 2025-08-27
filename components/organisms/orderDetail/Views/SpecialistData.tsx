@@ -2,7 +2,7 @@ import StarRating from "@/components/atoms/StartRating";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Fragment, useRef } from "react";
+import { Fragment, memo, useRef } from "react";
 import {
   Dimensions,
   Image,
@@ -11,11 +11,14 @@ import {
   View,
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import useOrderDetailHook from "../hooks/OrderDetail.hook";
 
 const { height } = Dimensions.get("screen");
 
-export default function SpecialistData() {
+const SpecialistData = () => {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  const { serviceData } = useOrderDetailHook();
 
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
@@ -30,14 +33,15 @@ export default function SpecialistData() {
       <View style={styles.rowView}>
         <View>
           <ThemedText fontType="bold" onPress={openActionSheet}>
-            موسی مرادیان
+            {serviceData?.specialist?.firstName}{" "}
+            {serviceData?.specialist?.lastName}
           </ThemedText>
           <ThemedText fontType="bold" style={styles.works}>
             ۹۰۳ سرویس موفق
           </ThemedText>
         </View>
         <Image
-          source={require("../../../../assets/images/Home-Banner.png")}
+          source={{ uri: serviceData?.specialist?.profileImageUrl }}
           style={styles.image2}
         />
       </View>
@@ -62,11 +66,12 @@ export default function SpecialistData() {
             لطفا امتیاز خود را نسبت به متخصص خود انتخاب کنید.
           </ThemedText>
           <ThemedText fontType="bold" style={styles.userNamee}>
-            موسی مرادیان
+            {serviceData?.specialist?.firstName}{" "}
+            {serviceData?.specialist?.lastName}
           </ThemedText>
           <Image
             style={styles.image}
-            source={require("../../../../assets/images/Home-Banner.png")}
+            source={{ uri: serviceData?.specialist?.profileImageUrl }}
           />
           <StarRating />
           <TouchableOpacity
@@ -82,7 +87,9 @@ export default function SpecialistData() {
       </ActionSheet>
     </Fragment>
   );
-}
+};
+
+export default memo(SpecialistData);
 
 const styles = StyleSheet.create({
   header: {

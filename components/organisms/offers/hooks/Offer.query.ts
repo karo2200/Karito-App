@@ -1,27 +1,25 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  Address_GetMyAddressesDocument,
-  AddressDtoFilterInput,
-  AddressDtoSortInput,
+  DiscountCodeDtoFilterInput,
+  DiscountCodeDtoSortInput,
+  DiscountCode_GetAllDocument,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-type UseGetUserAddressesOptions = {
+type DiscountCodeOptions = {
   skip?: number;
   take?: number;
-  where?: AddressDtoFilterInput;
-  order?: [AddressDtoSortInput];
+  where?: DiscountCodeDtoFilterInput;
+  order?: [DiscountCodeDtoSortInput];
 };
 
-export const useGetUserAddressesQuery = (
-  options: UseGetUserAddressesOptions = {}
-) => {
+export const useGetDiscountCodesQuery = (options: DiscountCodeOptions = {}) => {
   return useInfiniteQuery({
-    queryKey: [queryKeys.address_getMyAddresses, options],
+    queryKey: [queryKeys.discountCode_getAll],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(Address_GetMyAddressesDocument, {
+      return fetcher(DiscountCode_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
@@ -29,7 +27,7 @@ export const useGetUserAddressesQuery = (
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage?.address_getMyAddresses?.result?.pageInfo?.hasNextPage) {
+      if (lastPage?.discountCode_getAll?.result?.pageInfo?.hasNextPage) {
         return allPages.length;
       }
       return undefined;
@@ -38,10 +36,9 @@ export const useGetUserAddressesQuery = (
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.address_getMyAddresses?.result?.items)
+          ?.map((a) => a?.discountCode_getAll?.result?.items)
           .flat(),
-        totalCount:
-          data?.pages?.[0]?.address_getMyAddresses?.result?.totalCount,
+        totalCount: data?.pages?.[0]?.discountCode_getAll?.result?.totalCount,
       };
     },
   });

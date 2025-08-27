@@ -1,0 +1,46 @@
+mutation serviceRequest_accept($input: AcceptServiceRequestInput!) {
+  serviceRequest_accept(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+
+mutation serviceRequest_cancel($input: CancelServiceRequestInput!) {
+  serviceRequest_cancel(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+
+mutation serviceRequest_reject($input: RejectServiceRequestInput!) {
+  serviceRequest_reject(input: $input) {
+    status
+    result {
+      serviceRequest {
+        id
+      }
+    }
+  }
+}
+
+mutation serviceAcceptance_markAsArrived($input: MarkAsArrivedInput!) {
+  serviceAcceptance_markAsArrived(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+
+mutation serviceRequest_completeService($input: CompleteServiceInput!) {
+  serviceRequest_completeService(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}

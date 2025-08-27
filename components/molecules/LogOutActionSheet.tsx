@@ -1,5 +1,6 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import authCacheStore from "@/stores/authCacheStore";
 import useUserStore from "@/stores/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
@@ -18,7 +19,8 @@ export default function LogOutActionSheet({
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { setIsLoggedIn, setIsExpert, setIsSelectRole } = useUserStore();
+  const { setIsLoggedIn, setIsExpert } = useUserStore();
+  const { clearAuth } = authCacheStore();
 
   useEffect(() => {
     if (visible) {
@@ -52,7 +54,7 @@ export default function LogOutActionSheet({
           onPress={() => {
             setIsLoggedIn(false);
             setIsExpert(false);
-            setIsSelectRole(false);
+            clearAuth();
           }}
         />
         <ThemedButton
