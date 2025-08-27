@@ -1,8 +1,10 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  useServiceAcceptance_MarkAsArrivedMutation,
   useServiceRequest_AcceptMutation,
   useServiceRequest_CancelMutation,
+  useServiceRequest_CompleteServiceMutation,
   useServiceRequest_RejectMutation,
 } from "@/generated/graphql";
 import useUserStore from "@/stores/loginStore";
@@ -31,8 +33,6 @@ export default function useOrderDetailHook() {
     useState(false);
   const [cancelRequestVisible, setCancelRequestVisible] = useState(false);
 
-  const isDone = true;
-
   const { isExpert, setIsExpert } = useUserStore();
 
   const { mutate: acceptWorkMutate, isPending: acceptWorkPending } =
@@ -41,6 +41,11 @@ export default function useOrderDetailHook() {
     useServiceRequest_CancelMutation();
   const { mutate: rejectMutate, isPending: rejectPending } =
     useServiceRequest_RejectMutation();
+  const { mutate: completeMutate, isPending: completePending } =
+    useServiceRequest_CompleteServiceMutation();
+
+  const { mutate: arriveMutate, isPending: arrivePending } =
+    useServiceAcceptance_MarkAsArrivedMutation();
 
   const { data: serviceData, isLoading } = useGetServiceById({
     id: params?.id,
@@ -97,7 +102,7 @@ export default function useOrderDetailHook() {
       {
         onSuccess: (data) => {
           if (data?.serviceRequest_cancel.status?.code === 1) {
-            showToast({ message: "ماموریت لغو شد.", type: "success" });
+            showToast({ message: "سفارش با موفقیت لغو شد.", type: "success" });
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getMyAcceptances],
             });
@@ -139,11 +144,58 @@ export default function useOrderDetailHook() {
     );
   };
 
+  const onArrivePress = () => {
+    arriveMutate(
+      {
+        input: {
+          serviceRequestId: params?.id,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.serviceAcceptance_markAsArrived.status?.code === 1) {
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.serviceRequest_getById],
+            });
+          } else {
+            showToast({
+              message: data?.serviceAcceptance_markAsArrived.status,
+              type: "error",
+            });
+          }
+        },
+      }
+    );
+  };
+
+  const onCompletePress = () => {
+    completeMutate(
+      {
+        input: {
+          serviceRequestId: params?.id,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.serviceRequest_completeService.status?.code === 1) {
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.serviceRequest_getById],
+            });
+          } else {
+            showToast({
+              message: data?.serviceRequest_completeService.status,
+              type: "error",
+            });
+          }
+        },
+      }
+    );
+  };
+
   return {
     finishWorkVisible,
     setFinishWorkVisible,
     onBillPress,
-    isDone,
     isExpert,
     makeCall,
     setFoundLocationVisible,
@@ -161,5 +213,9 @@ export default function useOrderDetailHook() {
     cancelationData: cancelationData?.pages ?? [],
     rejectPending,
     onRejectPress,
+    arrivePending,
+    onArrivePress,
+    completePending,
+    onCompletePress,
   };
 }

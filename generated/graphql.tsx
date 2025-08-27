@@ -1910,6 +1910,32 @@ export type ServiceRequest_RejectMutation = {
   };
 };
 
+export type ServiceAcceptance_MarkAsArrivedMutationVariables = Exact<{
+  input: MarkAsArrivedInput;
+}>;
+
+export type ServiceAcceptance_MarkAsArrivedMutation = {
+  __typename?: "Mutation";
+  serviceAcceptance_markAsArrived: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: { __typename?: "ServiceRequestDto"; id: any } | null;
+  };
+};
+
+export type ServiceRequest_CompleteServiceMutationVariables = Exact<{
+  input: CompleteServiceInput;
+}>;
+
+export type ServiceRequest_CompleteServiceMutation = {
+  __typename?: "Mutation";
+  serviceRequest_completeService: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: { __typename?: "ServiceRequestDto"; id: any } | null;
+  };
+};
+
 export type ServiceRequest_GetMyRequestsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -2802,6 +2828,84 @@ export const useServiceRequest_RejectMutation = <
         ServiceRequest_RejectMutation,
         ServiceRequest_RejectMutationVariables
       >(ServiceRequest_RejectDocument, variables)(),
+    ...options,
+  });
+};
+
+export const ServiceAcceptance_MarkAsArrivedDocument = `
+    mutation serviceAcceptance_markAsArrived($input: MarkAsArrivedInput!) {
+  serviceAcceptance_markAsArrived(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+    `;
+
+export const useServiceAcceptance_MarkAsArrivedMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceAcceptance_MarkAsArrivedMutation,
+    TError,
+    ServiceAcceptance_MarkAsArrivedMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceAcceptance_MarkAsArrivedMutation,
+    TError,
+    ServiceAcceptance_MarkAsArrivedMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceAcceptance_markAsArrived"],
+    mutationFn: (
+      variables?: ServiceAcceptance_MarkAsArrivedMutationVariables,
+    ) =>
+      fetcher<
+        ServiceAcceptance_MarkAsArrivedMutation,
+        ServiceAcceptance_MarkAsArrivedMutationVariables
+      >(ServiceAcceptance_MarkAsArrivedDocument, variables)(),
+    ...options,
+  });
+};
+
+export const ServiceRequest_CompleteServiceDocument = `
+    mutation serviceRequest_completeService($input: CompleteServiceInput!) {
+  serviceRequest_completeService(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_CompleteServiceMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceRequest_CompleteServiceMutation,
+    TError,
+    ServiceRequest_CompleteServiceMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceRequest_CompleteServiceMutation,
+    TError,
+    ServiceRequest_CompleteServiceMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceRequest_completeService"],
+    mutationFn: (variables?: ServiceRequest_CompleteServiceMutationVariables) =>
+      fetcher<
+        ServiceRequest_CompleteServiceMutation,
+        ServiceRequest_CompleteServiceMutationVariables
+      >(ServiceRequest_CompleteServiceDocument, variables)(),
     ...options,
   });
 };

@@ -1,11 +1,13 @@
 import CoopratoinIcon from "@/assets/icons/Coopretion";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import useUserStore from "@/stores/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "../atoms/ThemedButton";
+import useOrderDetailHook from "../organisms/orderDetail/hooks/OrderDetail.hook";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -18,7 +20,8 @@ export default function PaymentWaitingSheet({
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const [isDone, setIsDone] = useState(false);
+  const { onCompletePress, completePending } = useOrderDetailHook();
+  const { isExpert } = useUserStore();
 
   useEffect(() => {
     if (visible) {
@@ -46,27 +49,28 @@ export default function PaymentWaitingSheet({
       </View>
       <View style={styles.content}>
         <ThemedText style={styles.title} type="defaultSemiBold">
-          {isDone
+          {isExpert
             ? "متخصص عزیز خسته نباشید!\nلطفا در انتظار پرداخت مشتری بمانید."
             : "آیا کار خود را به طور کامل به اتمام رسانده اید؟"}
         </ThemedText>
-        {isDone && (
+        {isExpert && (
           <CoopratoinIcon width={180} height={180} style={styles.icon} />
         )}
 
-        {!isDone && (
+        {!isExpert && (
           <ThemedButton
             title="اتمام کار"
             fontType="medium"
-            onPress={() => setIsDone(true)}
+            onPress={onCompletePress}
             style={{ marginBottom: 24 }}
+            isLoading={completePending}
           />
         )}
 
         <ThemedButton
           title="متوجه شدم"
           fontType="medium"
-          type={!isDone ? "outline" : "filled"}
+          type={!isExpert ? "outline" : "filled"}
           onPress={() => closeActionSheet()}
         />
       </View>

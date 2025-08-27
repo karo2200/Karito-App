@@ -33,7 +33,6 @@ export default function OrderDetailScreen() {
     onBillPress,
     setFinishWorkVisible,
     finishWorkVisible,
-    isDone,
     isExpert,
     makeCall,
     setFoundLocationVisible,
@@ -44,12 +43,12 @@ export default function OrderDetailScreen() {
     acceptWorkPending,
     isLoading,
     serviceData,
-    onCancelReuest,
     cancelWorkPending,
     cancelRequestVisible,
     setCancelRequestVisible,
     rejectPending,
     onRejectPress,
+    onArrivePress,
   } = useOrderDetailHook();
 
   const handleSuccess = () => {
@@ -104,7 +103,15 @@ export default function OrderDetailScreen() {
           </ThemedText>
         </View>
         {!isExpert && (
-          <View style={[styles.rowView2, isDone && { paddingRight: 0 }]}>
+          <View
+            style={[
+              styles.rowView2,
+              serviceData?.status ===
+                ServiceRequestStatus.AcceptedBySpecialist && {
+                paddingRight: 0,
+              },
+            ]}
+          >
             <Pressable onPress={() => setCancelRequestVisible(true)}>
               {cancelWorkPending ? (
                 <ActivityIndicator />
@@ -114,7 +121,8 @@ export default function OrderDetailScreen() {
                 </ThemedText>
               )}
             </Pressable>
-            {isDone ? (
+            {serviceData?.status ===
+            ServiceRequestStatus.AcceptedBySpecialist ? (
               <SpecialistData />
             ) : (
               serviceData?.status === ServiceRequestStatus.Pending && (
@@ -210,24 +218,44 @@ export default function OrderDetailScreen() {
             مشاهده صورت حساب
           </ThemedText>
         </TouchableOpacity>
+      ) : serviceData?.status === ServiceRequestStatus.AcceptedBySpecialist ? (
+        <ThemedButton
+          title="به مقصد رسیدم"
+          style={styles.btn}
+          isLoading={acceptWorkPending}
+          rightIcon={<TickIcon style={{ marginLeft: 8 }} />}
+          onPress={onArrivePress}
+        />
+      ) : serviceData?.status ===
+        ServiceRequestStatus.SpecialistArrivedToLocation ? (
+        <ThemedButton
+          title="اتمام کار"
+          style={styles.btn}
+          isLoading={acceptWorkPending}
+          rightIcon={<TickIcon style={{ marginLeft: 8 }} />}
+          onPress={() => setSpecialistFinishWorkVisible(true)}
+        />
       ) : (
-        <View style={styles.actionFooter}>
-          <ThemedButton
-            title="قبول کار"
-            style={styles.btn}
-            isLoading={acceptWorkPending}
-            rightIcon={<TickIcon style={{ marginLeft: 8 }} />}
-            onPress={onAcceptWork}
-          />
-          <ThemedButton
-            title="رد کار"
-            type="outline"
-            style={styles.btn}
-            isLoading={rejectPending}
-            rightIcon={<CloseIcon style={{ marginLeft: 8 }} />}
-            onPress={onRejectPress}
-          />
-        </View>
+        serviceData?.status === ServiceRequestStatus.Pending &&
+        isExpert && (
+          <View style={styles.actionFooter}>
+            <ThemedButton
+              title="قبول کار"
+              style={styles.btn}
+              isLoading={acceptWorkPending}
+              rightIcon={<TickIcon style={{ marginLeft: 8 }} />}
+              onPress={onAcceptWork}
+            />
+            <ThemedButton
+              title="رد کار"
+              type="outline"
+              style={styles.btn}
+              isLoading={rejectPending}
+              rightIcon={<CloseIcon style={{ marginLeft: 8 }} />}
+              onPress={onRejectPress}
+            />
+          </View>
+        )
       )}
       <FinishWorkSheet
         visible={finishWorkVisible}

@@ -26,3 +26,21 @@ mutation serviceRequest_reject($input: RejectServiceRequestInput!) {
     }
   }
 }
+
+mutation serviceAcceptance_markAsArrived($input: MarkAsArrivedInput!) {
+  serviceAcceptance_markAsArrived(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+
+mutation serviceRequest_completeService($input: CompleteServiceInput!) {
+  serviceRequest_completeService(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
