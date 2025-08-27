@@ -9,7 +9,7 @@ export default function EmptyAddressState() {
   const router = useRouter();
 
   const onPress = () => {
-    router?.push("/(tabs)/CreateAddress");
+    router?.push("/CreateAddress");
   };
 
   return (

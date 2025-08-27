@@ -8,7 +8,7 @@ import { FontStyle } from "@/constants/Fonts";
 import { Edit } from "iconsax-react-native";
 import React, { useCallback } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import EmptyAddressState from "../CreateOrder/Views/AddressEmpty";
+import EmptyAddressState from "../CreateOrder/SelectAddress/AddressEmpty";
 import useAddressHook from "./hooks/Address.hook";
 
 export default function AddressScreen() {

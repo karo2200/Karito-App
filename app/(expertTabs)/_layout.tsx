@@ -15,17 +15,9 @@ type TabBarIconProps = {
 };
 
 export default function RootLayout() {
-  // useEffect(() => {
-  //   if (I18nManager.isRTL) {
-  //     I18nManager.allowRTL(false);
-  //     I18nManager.forceRTL(false);
-  //   }
-  // }, []);
-
   const segments = useSegments();
 
   const hideTabBar =
-    // segments.toString().includes("CreateOrderPage") ||
     segments[1] === "order" &&
     (segments[2] === "payment" || segments[2] === "paymentStatus");
 

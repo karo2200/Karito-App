@@ -11,7 +11,11 @@ export default function SubServiceItem({ item, index }) {
     <ThemedView style={styles.container}>
       <ThemedText
         style={styles.label}
-        onPress={() => router.push(`/service/CreateOrderPage?sub=${item?.id}`)}
+        onPress={() =>
+          router.push(
+            `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}`
+          )
+        }
       >
         {item?.name}
       </ThemedText>

@@ -1,10 +1,10 @@
 import { ThemedView } from "@/components";
 import { ActivityIndicator, StyleSheet } from "react-native";
-import { useGetUserAddressesQuery } from "../address/hooks/Address.query";
-import EmptyAddressState from "./Views/AddressEmpty";
-import AddressList from "./Views/AddressList";
+import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
+import EmptyAddressState from "./AddressEmpty";
+import AddressList from "./AddressList";
 
-export default function AddressOrg() {
+export default function AddressOrg(props: any) {
   const { data, isLoading } = useGetUserAddressesQuery();
   const addressList = data?.pages ?? [];
 
@@ -15,7 +15,12 @@ export default function AddressOrg() {
           <ActivityIndicator size="large" />
         </ThemedView>
       ) : addressList.length > 0 ? (
-        <AddressList />
+        <AddressList
+          setValue={props?.setValue}
+          onChange={(item: any) => {
+            props?.setValue("addressLabel", item?.label);
+          }}
+        />
       ) : (
         <EmptyAddressState />
       )}

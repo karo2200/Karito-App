@@ -1,0 +1,21 @@
+query serviceTypeQuestion_getByServiceType(
+  $input: GetServiceTypeQuestionsByServiceTypeInput!
+  $skip: Int
+  $take: Int
+) {
+  serviceTypeQuestion_getByServiceType(input: $input) {
+    result(take: $take, skip: $skip) {
+      items {
+        id
+        text
+        options
+        questionType
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    status
+  }
+}

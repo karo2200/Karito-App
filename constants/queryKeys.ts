@@ -7,4 +7,6 @@ export const queryKeys = {
   serviceRequest_getMyAcceptances: "serviceRequest_getMyAcceptances",
   city_getAll: "city_getAll",
   serviceRequest_getById: "serviceRequest_getById",
+  neighborhood_getAll: "neighborhood_getAll",
+  serviceTypeQuestion_getByServiceType: "serviceTypeQuestion_getByServiceType",
 };

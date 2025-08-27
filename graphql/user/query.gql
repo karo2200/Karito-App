@@ -20,7 +20,9 @@ query address_getMyAddresses(
         id
         latitude
         longitude
-        neighborhoodId
+        neighborhood {
+          id
+        }
         text
       }
       pageInfo {

@@ -1,34 +1,160 @@
-import { useState } from "react";
+import {
+  LocationType,
+  QnAInput,
+  QuestionType,
+  useCreateRequestMutation,
+} from "@/generated/graphql";
+import { useRoute } from "@react-navigation/native";
+import dayjs from "dayjs";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useGetServiceTypeQuestionsQuery } from "./hooks";
 
-const configDatas = [
+const baseData = [
   { type: "address" },
   { type: "selectDate" },
   { type: "gender" },
-  { type: "question" },
+  {
+    type: "question",
+    title: "فضای مد نظر شما برای دریافت سفارش چگونه است؟",
+    name: "locationType",
+    questionType: QuestionType.RadioButton,
+    data: [
+      {
+        label: "فضای مسکونی",
+        value: LocationType.Residential,
+        id: 0,
+      },
+      {
+        label: "فضای تجاری",
+        value: LocationType.Commercial,
+        id: 1,
+      },
+      {
+        label: "فضای اداری",
+        value: LocationType.Office,
+        id: 2,
+      },
+      {
+        label: "فضای تخلیه شده",
+        value: LocationType.Vacant,
+        id: 3,
+      },
+    ],
+  },
   { type: "previewOrder" },
   { type: "orderSubmitting" },
 ];
 
 export default function useCreateOrder() {
-  const steps = configDatas.length - 1;
+  const methods = useForm<Record<string, any>, object>({
+    mode: "onChange",
+  });
+  const { getValues, setValue } = methods;
+
+  const params = useRoute().params;
+  const { mutate, isPending } = useCreateRequestMutation();
+
   const [stage, setStage] = useState<number>(0);
+  setValue("serviceType", params?.name);
 
+  const { data, isLoading } = useGetServiceTypeQuestionsQuery({
+    input: { serviceTypeId: params?.sub },
+  });
+  const questions = data?.pages?.[0] ? data?.pages : [];
+
+  const configDatas = useMemo(() => {
+    let configDatas = [...baseData];
+    setValue("locationType", LocationType.Residential);
+    if (questions?.length > 0) {
+      let insertIndex = 4;
+      questions?.forEach((question, index) => {
+        setValue(
+          question?.id?.toString(),
+          question?.questionType === QuestionType.RadioButton
+            ? question?.options?.[0]
+            : [question?.options?.[0]]
+        );
+        configDatas.splice(index + insertIndex, 0, {
+          type: "question",
+          title: question?.text,
+          questionType: question?.questionType,
+          name: question?.id?.toString(),
+          data: question?.options?.map((option, index) => {
+            return { label: option, value: option, id: index };
+          }),
+        });
+      });
+      return configDatas;
+    } else if (!isLoading) {
+      return configDatas;
+    }
+  }, [isLoading, questions]);
+
+  const steps = (configDatas?.length ?? 0) - 1;
   const nextDisabled = stage === steps;
+  const nextDay = dayjs().add(1, "day");
+  const onNextPress = () => {
+    if (stage === steps - 1) {
+      const values = getValues();
+      let qnAs: QnAInput[] = [];
 
-  const onNextPress = () => setStage((prev) => prev + 1);
+      questions?.forEach((item, index) => {
+        qnAs?.push({
+          questionId: item?.id,
+          answers:
+            item?.questionType == QuestionType.RadioButton
+              ? [values?.[item?.id]]
+              : [],
+        });
+      });
+
+      mutate(
+        {
+          input: {
+            addressId: values?.addressId,
+            description: "تست",
+            locationType: values?.locationType,
+            qnAs,
+            requestDate: nextDay.toISOString(),
+            serviceTypeId: params?.sub,
+            gender: values?.gender,
+          },
+        },
+        {
+          onSuccess(data, variables, context) {
+            console.log(JSON.stringify({ data }));
+            if (data?.serviceRequest_create?.status?.code === 1) {
+              setStage((prev) => prev + 1);
+            }
+          },
+          onError(error, variables, context) {
+            // console.log(JSON.stringify({ error }));
+          },
+        }
+      );
+    } else setStage((prev) => prev + 1);
+  };
   const onBackPress = () => {
     if (stage > 0) setStage((prev) => prev - 1);
   };
 
+  const isLast = stage === steps;
+
   return {
-    progressPersent: ((stage + 1) / (steps + 1)) * 100,
+    progressPersent: !isLoading ? ((stage + 1) / steps) * 100 : 0,
     setStage,
     stage,
     nextDisabled,
+    isLast,
 
-    configDatas,
+    configDatas: !configDatas ? [] : configDatas,
 
     onNextPress,
     onBackPress,
+
+    methods,
+    setValue,
+    getValues,
   };
 }
