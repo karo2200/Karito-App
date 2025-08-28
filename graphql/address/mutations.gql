@@ -1,0 +1,5 @@
+mutation address_create($input: AddAddressInput!) {
+  address_create(input: $input) {
+    status
+  }
+}

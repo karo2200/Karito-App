@@ -11,9 +11,13 @@ export default function SubServiceItem({ item, index }) {
     <ThemedView style={styles.container}>
       <ThemedText
         style={styles.label}
-        onPress={() => router.push("/service/CreateOrderPage")}
+        onPress={() =>
+          router.push(
+            `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}`
+          )
+        }
       >
-        محاسبه قیمت بعد از انتخاب خدمت
+        {item?.name}
       </ThemedText>
     </ThemedView>
   );

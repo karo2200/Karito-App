@@ -19,17 +19,9 @@ export enum RoleType {
 }
 
 export default function RootLayout() {
-  // useEffect(() => {
-  //   if (!I18nManager.isRTL) {
-  //     I18nManager.allowRTL(true);
-  //     I18nManager.forceRTL(true);
-  //   }
-  // }, []);
-
   const segments = useSegments();
 
   const hideTabBar =
-    // segments.toString().includes("CreateOrderPage") ||
     segments[1] === "order" &&
     (segments[2] === "payment" || segments[2] === "paymentStatus");
 

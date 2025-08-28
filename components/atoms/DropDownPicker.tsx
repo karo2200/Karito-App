@@ -7,12 +7,14 @@ import {
   FlatList,
   Modal,
   Platform,
+  StyleProp,
   StyleSheet,
   TouchableOpacity,
-  useWindowDimensions,
   View,
+  ViewStyle,
+  useWindowDimensions,
 } from "react-native";
-import ThemedText from "./ThemedText";
+import ThemedText, { ThemedTextProps } from "./ThemedText";
 
 interface DropDownProps {
   name: string;
@@ -43,6 +45,11 @@ interface DropDownProps {
   isHorizontal?: boolean;
   disabled?: boolean;
   onChangeValue?: (value: any) => void;
+  arrowBGColor?: string;
+  arrowColor?: string;
+  titleStyle?: ThemedTextProps;
+  containerViewStyle: StyleProp<ViewStyle>;
+  arrowSize?: number;
 }
 
 interface dropDownPositionType {
@@ -75,6 +82,11 @@ const Dropdown = React.forwardRef<any, DropDownProps>(
       isHorizontal,
       disabled,
       onChangeValue,
+      arrowBGColor,
+      arrowColor,
+      titleStyle,
+      containerViewStyle,
+      arrowSize = 24,
     },
     ref
   ) => {
@@ -162,7 +174,7 @@ const Dropdown = React.forwardRef<any, DropDownProps>(
     return (
       <View style={{ marginBottom: isHorizontal ? 16 : 0, width }}>
         {title && (
-          <ThemedText style={{ fontWeight: "500", marginBottom: 4 }}>
+          <ThemedText style={styles.title} {...titleStyle}>
             {title}{" "}
             {unit && <ThemedText style={{ color: "gray" }}>{unit}</ThemedText>}
             {required && <ThemedText style={{ color: "red" }}> *</ThemedText>}
@@ -181,9 +193,10 @@ const Dropdown = React.forwardRef<any, DropDownProps>(
               borderColor: fieldState.error
                 ? Colors.darkError
                 : isDirty
-                ? Colors.hint500
-                : Colors.gray300,
+                  ? Colors.hint500
+                  : Colors.gray300,
             },
+            containerViewStyle,
           ]}
         >
           <ThemedText
@@ -203,21 +216,15 @@ const Dropdown = React.forwardRef<any, DropDownProps>(
               : label || placeholder}
           </ThemedText>
           <View
-            style={{
-              backgroundColor: Colors.hint500,
-              borderTopLeftRadius: 4,
-              borderBottomLeftRadius: 4,
-              marginRight: 8,
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-              paddingHorizontal: 8,
-            }}
+            style={[
+              styles.arrowContainer,
+              { backgroundColor: arrowBGColor ?? Colors?.hint500 },
+            ]}
           >
             {visible ? (
-              <ArrowUp2 size={24} color="white" />
+              <ArrowUp2 size={arrowSize} color={arrowColor ?? "white"} />
             ) : (
-              <ArrowDown2 size={24} color="white" />
+              <ArrowDown2 size={arrowSize} color={arrowColor ?? "white"} />
             )}
           </View>
         </TouchableOpacity>
@@ -273,7 +280,6 @@ const styles = StyleSheet.create({
   inputBox: {
     borderWidth: 1,
     borderRadius: 4,
-    // paddingHorizontal: 12,
     flexDirection: "row-reverse",
     alignItems: "center",
     backgroundColor: "white",
@@ -294,4 +300,17 @@ const styles = StyleSheet.create({
   item: {
     padding: 12,
   },
+
+  arrowContainer: {
+    backgroundColor: Colors.hint500,
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
+    marginRight: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    paddingHorizontal: 8,
+  },
+
+  title: { fontWeight: "500", marginBottom: 4 },
 });

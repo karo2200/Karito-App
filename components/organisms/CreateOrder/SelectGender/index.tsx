@@ -1,18 +1,19 @@
 import { ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { DeviceWidth } from "@/constants/Dimension";
+import { Gender } from "@/generated/graphql";
 import { Man, Woman } from "iconsax-react-native";
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 const genderOptions = [
-  { title: "زن", value: "WOMAN", Icon: Woman },
-  { title: "مرد", value: "MAN", Icon: Man },
-  { title: "مهم نیست", value: "np" },
+  { title: "زن", value: Gender.Female, Icon: Woman },
+  { title: "مرد", value: Gender.Male, Icon: Man },
+  { title: "مهم نیست", value: undefined },
 ];
 
 export default function SelectGender(props: any) {
-  const [seleted, setSelected] = useState("np");
+  const [seleted, setSelected] = useState<Gender | undefined>(undefined);
 
   return (
     <ThemedView>
@@ -22,8 +23,11 @@ export default function SelectGender(props: any) {
       <ThemedView style={styles.listContainer}>
         {genderOptions?.map(({ value, Icon, title }, index) => (
           <TouchableOpacity
-            key={value}
-            onPress={() => setSelected(value)}
+            key={`${value}_${index}`}
+            onPress={() => {
+              props?.setValue("gender", value);
+              setSelected(value);
+            }}
             style={[
               value === seleted
                 ? styles.selectedContainer

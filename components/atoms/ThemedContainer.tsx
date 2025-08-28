@@ -26,9 +26,6 @@ export default function ThemedContainer({
     return {
       flex: 1,
       backgroundColor,
-      // paddingHorizontal: 15,
-      // marginHorizontal: Platform.OS === "ios" ? 15 : 0,
-      // paddingTop: 15,
     };
   }, []);
 

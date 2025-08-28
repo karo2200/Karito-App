@@ -1,13 +1,13 @@
-import {
-  useMutation,
-  useQuery,
-  useInfiniteQuery,
-  UseMutationOptions,
-  UseQueryOptions,
-  UseInfiniteQueryOptions,
-  InfiniteData,
-} from "@tanstack/react-query";
 import { fetcher } from "@/graphql/fetcher";
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  UseInfiniteQueryOptions,
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -855,15 +855,9 @@ export type Mutation = {
   serviceType_create: ResponseBaseOfServiceTypeDto;
   serviceType_delete: ResponseBase;
   serviceType_update: ResponseBaseOfServiceTypeDto;
-  specialist_setCity: ResponseBase;
-  specialist_setServiceSubCategory: ResponseBase;
-  specialist_setServiceTypes: ResponseBase;
   specialist_updateIDCard: ResponseBase;
   specialist_updateIdentityVerificationVideo: ResponseBase;
   specialist_updateSpecializedDocuments: ResponseBase;
-  specialist_verifyIDCard: ResponseBase;
-  specialist_verifyIdentityVerificationVideo: ResponseBase;
-  specialist_verifySpecializedDocuments: ResponseBase;
   /** Allows an owner to create a new admin user. */
   user_createAdmin: ResponseBase;
   user_updateProfile: ResponseBaseOfUserProfileDto;
@@ -1069,40 +1063,16 @@ export type MutationServiceType_UpdateArgs = {
   input: UpdateServiceTypeInput;
 };
 
-export type MutationSpecialist_SetCityArgs = {
-  input: SetCityInput;
-};
-
-export type MutationSpecialist_SetServiceSubCategoryArgs = {
-  input: SetServiceSubCategoryInput;
-};
-
-export type MutationSpecialist_SetServiceTypesArgs = {
-  input: SetServiceTypesInput;
-};
-
 export type MutationSpecialist_UpdateIdCardArgs = {
-  input: UpdateIdCardInput;
+  newIDCardUrl: Scalars["String"]["input"];
 };
 
 export type MutationSpecialist_UpdateIdentityVerificationVideoArgs = {
-  input: UpdateIdentityVerificationVideoInput;
+  newVideoUrl: Scalars["String"]["input"];
 };
 
 export type MutationSpecialist_UpdateSpecializedDocumentsArgs = {
-  input: UpdateSpecializedDocumentsInput;
-};
-
-export type MutationSpecialist_VerifyIdCardArgs = {
-  input: VerifyIdCardInput;
-};
-
-export type MutationSpecialist_VerifyIdentityVerificationVideoArgs = {
-  input: VerifyIdentityVerificationVideoInput;
-};
-
-export type MutationSpecialist_VerifySpecializedDocumentsArgs = {
-  input: VerifySpecializedDocumentsInput;
+  newDocumentUrls: Array<Scalars["String"]["input"]>;
 };
 
 export type MutationUser_CreateAdminArgs = {
@@ -1694,20 +1664,8 @@ export type SetActiveCarouselInput = {
   cityId: Scalars["UUID"]["input"];
 };
 
-export type SetCityInput = {
-  cityId: Scalars["UUID"]["input"];
-};
-
 export type SetPrimaryAddressInput = {
   addressId: Scalars["UUID"]["input"];
-};
-
-export type SetServiceSubCategoryInput = {
-  serviceSubCategoryId: Scalars["UUID"]["input"];
-};
-
-export type SetServiceTypesInput = {
-  serviceTypeIds: Array<Scalars["UUID"]["input"]>;
 };
 
 export type SingleResponseBaseOfCarouselDto = {
@@ -1760,7 +1718,6 @@ export type SpecialistDtoSortInput = {
 
 export type SpecialistProfileDto = {
   __typename?: "SpecialistProfileDto";
-  city?: Maybe<CityDto>;
   firstName: Scalars["String"]["output"];
   id: Scalars["String"]["output"];
   idCardImageUrl?: Maybe<Scalars["String"]["output"]>;
@@ -1768,8 +1725,6 @@ export type SpecialistProfileDto = {
   identityVerificationVideoStatus: VerificationStatus;
   identityVerificationVideoUrl?: Maybe<Scalars["String"]["output"]>;
   lastName: Scalars["String"]["output"];
-  serviceSubCategoryDto?: Maybe<ServiceSubCategoryDto>;
-  serviceTypes: Array<ServiceTypeDto>;
   specializedDocumentUrls: Array<Scalars["String"]["output"]>;
   specializedDocumentsVerificationStatus: VerificationStatus;
 };
@@ -1786,7 +1741,6 @@ export type SpecialistProfileDtoCollectionSegment = {
 
 export type SpecialistProfileDtoFilterInput = {
   and?: InputMaybe<Array<SpecialistProfileDtoFilterInput>>;
-  city?: InputMaybe<CityDtoFilterInput>;
   firstName?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<StringOperationFilterInput>;
   idCardImageUrl?: InputMaybe<StringOperationFilterInput>;
@@ -1795,14 +1749,11 @@ export type SpecialistProfileDtoFilterInput = {
   identityVerificationVideoUrl?: InputMaybe<StringOperationFilterInput>;
   lastName?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<SpecialistProfileDtoFilterInput>>;
-  serviceSubCategoryDto?: InputMaybe<ServiceSubCategoryDtoFilterInput>;
-  serviceTypes?: InputMaybe<ListFilterInputTypeOfServiceTypeDtoFilterInput>;
   specializedDocumentUrls?: InputMaybe<ListStringOperationFilterInput>;
   specializedDocumentsVerificationStatus?: InputMaybe<VerificationStatusOperationFilterInput>;
 };
 
 export type SpecialistProfileDtoSortInput = {
-  city?: InputMaybe<CityDtoSortInput>;
   firstName?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   idCardImageUrl?: InputMaybe<SortEnumType>;
@@ -1810,7 +1761,6 @@ export type SpecialistProfileDtoSortInput = {
   identityVerificationVideoStatus?: InputMaybe<SortEnumType>;
   identityVerificationVideoUrl?: InputMaybe<SortEnumType>;
   lastName?: InputMaybe<SortEnumType>;
-  serviceSubCategoryDto?: InputMaybe<ServiceSubCategoryDtoSortInput>;
   specializedDocumentsVerificationStatus?: InputMaybe<SortEnumType>;
 };
 
@@ -1902,10 +1852,6 @@ export type UpdateServiceTypeQuestionInput = {
   title: Scalars["String"]["input"];
 };
 
-export type UpdateSpecializedDocumentsInput = {
-  newDocumentUrls: Array<Scalars["String"]["input"]>;
-};
-
 export type UpdateUserProfileInput = {
   firstName: Scalars["String"]["input"];
   gender: Gender;
@@ -1959,25 +1905,22 @@ export type VerificationStatusOperationFilterInput = {
   nin?: InputMaybe<Array<VerificationStatus>>;
 };
 
-export type VerifyIdCardInput = {
-  specialistId: Scalars["String"]["input"];
-  status: VerificationStatus;
-};
-
-export type VerifyIdentityVerificationVideoInput = {
-  specialistId: Scalars["String"]["input"];
-  status: VerificationStatus;
-};
-
 export type VerifyOtpInput = {
   otp: Scalars["String"]["input"];
   phoneNumber: Scalars["String"]["input"];
   userType: UserType;
 };
 
-export type VerifySpecializedDocumentsInput = {
-  specialistId: Scalars["String"]["input"];
-  status: VerificationStatus;
+export type Address_CreateMutationVariables = Exact<{
+  input: AddAddressInput;
+}>;
+
+export type Address_CreateMutation = {
+  __typename?: "Mutation";
+  address_create: {
+    __typename?: "ResponseBaseOfAddressDto";
+    status?: any | null;
+  };
 };
 
 export type Auth_RequestOtpMutationVariables = Exact<{
@@ -2086,6 +2029,36 @@ export type Banner_GetAllQuery = {
         id: any;
         imageUrl: string;
         title: string;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
+};
+
+export type Neighborhood_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<NeighborhoodDtoFilterInput>;
+  order?: InputMaybe<
+    Array<NeighborhoodDtoSortInput> | NeighborhoodDtoSortInput
+  >;
+}>;
+
+export type Neighborhood_GetAllQuery = {
+  __typename?: "Query";
+  neighborhood_getAll: {
+    __typename?: "ListResponseBaseOfNeighborhoodDto";
+    result?: {
+      __typename?: "NeighborhoodDtoCollectionSegment";
+      totalCount: number;
+      items?: Array<{
+        __typename?: "NeighborhoodDto";
+        name: string;
+        id: any;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -2426,6 +2399,18 @@ export type ServiceCategory_GetByIdQuery = {
   };
 };
 
+export type CreateRequestMutationVariables = Exact<{
+  input: CreateServiceRequestInput;
+}>;
+
+export type CreateRequestMutation = {
+  __typename?: "Mutation";
+  serviceRequest_create: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+  };
+};
+
 export type ServiceSubCategory_GetAllQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -2473,6 +2458,35 @@ export type ServiceSubCategory_GetByIdQuery = {
       logo: string;
       name: string;
       serviceCategory: { __typename?: "ServiceCategoryDto"; id: any };
+    } | null;
+  };
+};
+
+export type ServiceTypeQuestion_GetByServiceTypeQueryVariables = Exact<{
+  input: GetServiceTypeQuestionsByServiceTypeInput;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type ServiceTypeQuestion_GetByServiceTypeQuery = {
+  __typename?: "Query";
+  serviceTypeQuestion_getByServiceType: {
+    __typename?: "ListResponseBaseOfServiceTypeQuestionDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceTypeQuestionDtoCollectionSegment";
+      items?: Array<{
+        __typename?: "ServiceTypeQuestionDto";
+        id: any;
+        text: string;
+        options: Array<string>;
+        questionType: QuestionType;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
     } | null;
   };
 };
@@ -2749,52 +2763,36 @@ export type DiscountCode_GetAllQuery = {
   };
 };
 
-export type Specialist_GetMyProfileQueryVariables = Exact<{
-  [key: string]: never;
-}>;
+export const Address_CreateDocument = `
+    mutation address_create($input: AddAddressInput!) {
+  address_create(input: $input) {
+    status
+  }
+}
+    `;
 
-export type Specialist_GetMyProfileQuery = {
-  __typename?: "Query";
-  specialist_getMyProfile: {
-    __typename?: "ResponseBaseOfSpecialistProfileDto";
-    status?: any | null;
-    result?: {
-      __typename?: "SpecialistProfileDto";
-      id: string;
-      firstName: string;
-      lastName: string;
-      idCardImageUrl?: string | null;
-      idCardVerificationStatus: VerificationStatus;
-      identityVerificationVideoStatus: VerificationStatus;
-      identityVerificationVideoUrl?: string | null;
-      specializedDocumentsVerificationStatus: VerificationStatus;
-      specializedDocumentUrls: Array<string>;
-      city?: {
-        __typename?: "CityDto";
-        id: any;
-        name: string;
-        province: { __typename?: "ProvinceDto"; id: any; name: string };
-      } | null;
-      serviceSubCategoryDto?: {
-        __typename?: "ServiceSubCategoryDto";
-        id: any;
-        logo: string;
-        name: string;
-        serviceCategory: {
-          __typename?: "ServiceCategoryDto";
-          id: any;
-          logo: string;
-          name: string;
-        };
-      } | null;
-      serviceTypes: Array<{
-        __typename?: "ServiceTypeDto";
-        id: any;
-        logo: string;
-        name: string;
-      }>;
-    } | null;
-  };
+export const useAddress_CreateMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    Address_CreateMutation,
+    TError,
+    Address_CreateMutationVariables,
+    TContext
+  >
+) => {
+  return useMutation<
+    Address_CreateMutation,
+    TError,
+    Address_CreateMutationVariables,
+    TContext
+  >({
+    mutationKey: ["address_create"],
+    mutationFn: (variables?: Address_CreateMutationVariables) =>
+      fetcher<Address_CreateMutation, Address_CreateMutationVariables>(
+        Address_CreateDocument,
+        variables
+      )(),
+    ...options,
+  });
 };
 
 export const Auth_RequestOtpDocument = `
@@ -2814,7 +2812,7 @@ export const useAuth_RequestOtpMutation = <
     TError,
     Auth_RequestOtpMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Auth_RequestOtpMutation,
@@ -2826,7 +2824,7 @@ export const useAuth_RequestOtpMutation = <
     mutationFn: (variables?: Auth_RequestOtpMutationVariables) =>
       fetcher<Auth_RequestOtpMutation, Auth_RequestOtpMutationVariables>(
         Auth_RequestOtpDocument,
-        variables,
+        variables
       )(),
     ...options,
   });
@@ -2850,7 +2848,7 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
     TError,
     Auth_VerifyOtpMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Auth_VerifyOtpMutation,
@@ -2862,7 +2860,7 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
     mutationFn: (variables?: Auth_VerifyOtpMutationVariables) =>
       fetcher<Auth_VerifyOtpMutation, Auth_VerifyOtpMutationVariables>(
         Auth_VerifyOtpDocument,
-        variables,
+        variables
       )(),
     ...options,
   });
@@ -2889,7 +2887,7 @@ export const useAuth_RefreshTokenMutation = <
     TError,
     Auth_RefreshTokenMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Auth_RefreshTokenMutation,
@@ -2901,7 +2899,7 @@ export const useAuth_RefreshTokenMutation = <
     mutationFn: (variables?: Auth_RefreshTokenMutationVariables) =>
       fetcher<Auth_RefreshTokenMutation, Auth_RefreshTokenMutationVariables>(
         Auth_RefreshTokenDocument,
-        variables,
+        variables
       )(),
     ...options,
   });
@@ -2948,14 +2946,14 @@ export const useCity_GetAllQuery = <TData = City_GetAllQuery, TError = unknown>(
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<City_GetAllQuery, TError, TData>["queryKey"];
-  },
+  }
 ) => {
   return useQuery<City_GetAllQuery, TError, TData>({
     queryKey:
       variables === undefined ? ["city_getAll"] : ["city_getAll", variables],
     queryFn: fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
       City_GetAllDocument,
-      variables,
+      variables
     ),
     ...options,
   });
@@ -2975,7 +2973,7 @@ export const useInfiniteCity_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<City_GetAllQuery, TError, TData>(
     (() => {
@@ -2988,11 +2986,11 @@ export const useInfiniteCity_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
             City_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) },
+            { ...variables, ...(metaData.pageParam ?? {}) }
           )(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -3026,7 +3024,7 @@ export const useBanner_GetAllQuery = <
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<Banner_GetAllQuery, TError, TData>["queryKey"];
-  },
+  }
 ) => {
   return useQuery<Banner_GetAllQuery, TError, TData>({
     queryKey:
@@ -3035,7 +3033,7 @@ export const useBanner_GetAllQuery = <
         : ["banner_getAll", variables],
     queryFn: fetcher<Banner_GetAllQuery, Banner_GetAllQueryVariables>(
       Banner_GetAllDocument,
-      variables,
+      variables
     ),
     ...options,
   });
@@ -3055,7 +3053,7 @@ export const useInfiniteBanner_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<Banner_GetAllQuery, TError, TData>(
     (() => {
@@ -3068,11 +3066,93 @@ export const useInfiniteBanner_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<Banner_GetAllQuery, Banner_GetAllQueryVariables>(
             Banner_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) },
+            { ...variables, ...(metaData.pageParam ?? {}) }
           )(),
         ...restOptions,
       };
-    })(),
+    })()
+  );
+};
+
+export const Neighborhood_GetAllDocument = `
+    query neighborhood_getAll($skip: Int, $take: Int, $where: NeighborhoodDtoFilterInput, $order: [NeighborhoodDtoSortInput!]) {
+  neighborhood_getAll {
+    result(order: $order, skip: $skip, take: $take, where: $where) {
+      items {
+        name
+        id
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
+    }
+  }
+}
+    `;
+
+export const useNeighborhood_GetAllQuery = <
+  TData = Neighborhood_GetAllQuery,
+  TError = unknown,
+>(
+  variables?: Neighborhood_GetAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Neighborhood_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      Neighborhood_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  }
+) => {
+  return useQuery<Neighborhood_GetAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["neighborhood_getAll"]
+        : ["neighborhood_getAll", variables],
+    queryFn: fetcher<
+      Neighborhood_GetAllQuery,
+      Neighborhood_GetAllQueryVariables
+    >(Neighborhood_GetAllDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteNeighborhood_GetAllQuery = <
+  TData = InfiniteData<Neighborhood_GetAllQuery>,
+  TError = unknown,
+>(
+  variables: Neighborhood_GetAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Neighborhood_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Neighborhood_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  }
+) => {
+  return useInfiniteQuery<Neighborhood_GetAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["neighborhood_getAll.infinite"]
+            : ["neighborhood_getAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<Neighborhood_GetAllQuery, Neighborhood_GetAllQueryVariables>(
+            Neighborhood_GetAllDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) }
+          )(),
+        ...restOptions,
+      };
+    })()
   );
 };
 
@@ -3096,7 +3176,7 @@ export const useServiceRequest_AcceptMutation = <
     TError,
     ServiceRequest_AcceptMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     ServiceRequest_AcceptMutation,
@@ -3134,7 +3214,7 @@ export const useServiceRequest_CancelMutation = <
     TError,
     ServiceRequest_CancelMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     ServiceRequest_CancelMutation,
@@ -3174,7 +3254,7 @@ export const useServiceRequest_RejectMutation = <
     TError,
     ServiceRequest_RejectMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     ServiceRequest_RejectMutation,
@@ -3212,7 +3292,7 @@ export const useServiceAcceptance_MarkAsArrivedMutation = <
     TError,
     ServiceAcceptance_MarkAsArrivedMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     ServiceAcceptance_MarkAsArrivedMutation,
@@ -3222,7 +3302,7 @@ export const useServiceAcceptance_MarkAsArrivedMutation = <
   >({
     mutationKey: ["serviceAcceptance_markAsArrived"],
     mutationFn: (
-      variables?: ServiceAcceptance_MarkAsArrivedMutationVariables,
+      variables?: ServiceAcceptance_MarkAsArrivedMutationVariables
     ) =>
       fetcher<
         ServiceAcceptance_MarkAsArrivedMutation,
@@ -3252,7 +3332,7 @@ export const useServiceRequest_CompleteServiceMutation = <
     TError,
     ServiceRequest_CompleteServiceMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     ServiceRequest_CompleteServiceMutation,
@@ -3323,7 +3403,7 @@ export const useServiceRequest_GetMyRequestsQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceRequest_GetMyRequestsQuery, TError, TData>({
     queryKey:
@@ -3352,7 +3432,7 @@ export const useInfiniteServiceRequest_GetMyRequestsQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<ServiceRequest_GetMyRequestsQuery, TError, TData>(
     (() => {
@@ -3372,7 +3452,7 @@ export const useInfiniteServiceRequest_GetMyRequestsQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -3449,7 +3529,7 @@ export const useServiceRequest_GetMyAcceptancesQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceRequest_GetMyAcceptancesQuery, TError, TData>({
     queryKey:
@@ -3482,7 +3562,7 @@ export const useInfiniteServiceRequest_GetMyAcceptancesQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<ServiceRequest_GetMyAcceptancesQuery, TError, TData>(
     (() => {
@@ -3502,7 +3582,7 @@ export const useInfiniteServiceRequest_GetMyAcceptancesQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -3572,7 +3652,7 @@ export const useServiceRequest_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceRequest_GetByIdQuery, TError, TData>({
     queryKey: ["serviceRequest_getById", variables],
@@ -3598,7 +3678,7 @@ export const useInfiniteServiceRequest_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<ServiceRequest_GetByIdQuery, TError, TData>(
     (() => {
@@ -3618,7 +3698,7 @@ export const useInfiniteServiceRequest_GetByIdQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -3655,7 +3735,7 @@ export const useCancellationReason_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<CancellationReason_GetAllQuery, TError, TData>({
     queryKey:
@@ -3684,7 +3764,7 @@ export const useInfiniteCancellationReason_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<CancellationReason_GetAllQuery, TError, TData>(
     (() => {
@@ -3704,7 +3784,7 @@ export const useInfiniteCancellationReason_GetAllQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -3741,7 +3821,7 @@ export const useServiceCategory_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceCategory_GetAllQuery, TError, TData>({
     queryKey:
@@ -3770,7 +3850,7 @@ export const useInfiniteServiceCategory_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<ServiceCategory_GetAllQuery, TError, TData>(
     (() => {
@@ -3790,7 +3870,7 @@ export const useInfiniteServiceCategory_GetAllQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -3821,7 +3901,7 @@ export const useServiceCategory_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceCategory_GetByIdQuery, TError, TData>({
     queryKey: ["serviceCategory_getById", variables],
@@ -3847,7 +3927,7 @@ export const useInfiniteServiceCategory_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<ServiceCategory_GetByIdQuery, TError, TData>(
     (() => {
@@ -3867,8 +3947,40 @@ export const useInfiniteServiceCategory_GetByIdQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
+};
+
+export const CreateRequestDocument = `
+    mutation createRequest($input: CreateServiceRequestInput!) {
+  serviceRequest_create(input: $input) {
+    status
+  }
+}
+    `;
+
+export const useCreateRequestMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    CreateRequestMutation,
+    TError,
+    CreateRequestMutationVariables,
+    TContext
+  >
+) => {
+  return useMutation<
+    CreateRequestMutation,
+    TError,
+    CreateRequestMutationVariables,
+    TContext
+  >({
+    mutationKey: ["createRequest"],
+    mutationFn: (variables?: CreateRequestMutationVariables) =>
+      fetcher<CreateRequestMutation, CreateRequestMutationVariables>(
+        CreateRequestDocument,
+        variables
+      )(),
+    ...options,
+  });
 };
 
 export const ServiceSubCategory_GetAllDocument = `
@@ -3907,7 +4019,7 @@ export const useServiceSubCategory_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceSubCategory_GetAllQuery, TError, TData>({
     queryKey:
@@ -3936,7 +4048,7 @@ export const useInfiniteServiceSubCategory_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<ServiceSubCategory_GetAllQuery, TError, TData>(
     (() => {
@@ -3956,7 +4068,7 @@ export const useInfiniteServiceSubCategory_GetAllQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -3990,7 +4102,7 @@ export const useServiceSubCategory_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceSubCategory_GetByIdQuery, TError, TData>({
     queryKey: ["serviceSubCategory_getById", variables],
@@ -4016,7 +4128,7 @@ export const useInfiniteServiceSubCategory_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<ServiceSubCategory_GetByIdQuery, TError, TData>(
     (() => {
@@ -4036,7 +4148,99 @@ export const useInfiniteServiceSubCategory_GetByIdQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
+  );
+};
+
+export const ServiceTypeQuestion_GetByServiceTypeDocument = `
+    query serviceTypeQuestion_getByServiceType($input: GetServiceTypeQuestionsByServiceTypeInput!, $skip: Int, $take: Int) {
+  serviceTypeQuestion_getByServiceType(input: $input) {
+    result(take: $take, skip: $skip) {
+      items {
+        id
+        text
+        options
+        questionType
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    status
+  }
+}
+    `;
+
+export const useServiceTypeQuestion_GetByServiceTypeQuery = <
+  TData = ServiceTypeQuestion_GetByServiceTypeQuery,
+  TError = unknown,
+>(
+  variables: ServiceTypeQuestion_GetByServiceTypeQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceTypeQuestion_GetByServiceTypeQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceTypeQuestion_GetByServiceTypeQuery,
+      TError,
+      TData
+    >["queryKey"];
+  }
+) => {
+  return useQuery<ServiceTypeQuestion_GetByServiceTypeQuery, TError, TData>({
+    queryKey: ["serviceTypeQuestion_getByServiceType", variables],
+    queryFn: fetcher<
+      ServiceTypeQuestion_GetByServiceTypeQuery,
+      ServiceTypeQuestion_GetByServiceTypeQueryVariables
+    >(ServiceTypeQuestion_GetByServiceTypeDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceTypeQuestion_GetByServiceTypeQuery = <
+  TData = InfiniteData<ServiceTypeQuestion_GetByServiceTypeQuery>,
+  TError = unknown,
+>(
+  variables: ServiceTypeQuestion_GetByServiceTypeQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      ServiceTypeQuestion_GetByServiceTypeQuery,
+      TError,
+      TData
+    >,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceTypeQuestion_GetByServiceTypeQuery,
+      TError,
+      TData
+    >["queryKey"];
+  }
+) => {
+  return useInfiniteQuery<
+    ServiceTypeQuestion_GetByServiceTypeQuery,
+    TError,
+    TData
+  >(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "serviceTypeQuestion_getByServiceType.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceTypeQuestion_GetByServiceTypeQuery,
+            ServiceTypeQuestion_GetByServiceTypeQueryVariables
+          >(ServiceTypeQuestion_GetByServiceTypeDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })()
   );
 };
 
@@ -4076,7 +4280,7 @@ export const useServiceTypes_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceTypes_GetAllQuery, TError, TData>({
     queryKey:
@@ -4105,7 +4309,7 @@ export const useInfiniteServiceTypes_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<ServiceTypes_GetAllQuery, TError, TData>(
     (() => {
@@ -4118,11 +4322,11 @@ export const useInfiniteServiceTypes_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<ServiceTypes_GetAllQuery, ServiceTypes_GetAllQueryVariables>(
             ServiceTypes_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) },
+            { ...variables, ...(metaData.pageParam ?? {}) }
           )(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -4198,7 +4402,7 @@ export const useServiceRequest_GetAvailableRequestsQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<ServiceRequest_GetAvailableRequestsQuery, TError, TData>({
     queryKey:
@@ -4231,7 +4435,7 @@ export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<
     ServiceRequest_GetAvailableRequestsQuery,
@@ -4255,7 +4459,7 @@ export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -4279,7 +4483,7 @@ export const useUser_UpdateProfileMutation = <
     TError,
     User_UpdateProfileMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     User_UpdateProfileMutation,
@@ -4291,7 +4495,7 @@ export const useUser_UpdateProfileMutation = <
     mutationFn: (variables?: User_UpdateProfileMutationVariables) =>
       fetcher<User_UpdateProfileMutation, User_UpdateProfileMutationVariables>(
         User_UpdateProfileDocument,
-        variables,
+        variables
       )(),
     ...options,
   });
@@ -4314,7 +4518,7 @@ export const useSpecialist_UpdateIdCardMutation = <
     TError,
     Specialist_UpdateIdCardMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Specialist_UpdateIdCardMutation,
@@ -4349,7 +4553,7 @@ export const useSpecialist_UpdateSpecializedDocumentsMutation = <
     TError,
     Specialist_UpdateSpecializedDocumentsMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Specialist_UpdateSpecializedDocumentsMutation,
@@ -4359,7 +4563,7 @@ export const useSpecialist_UpdateSpecializedDocumentsMutation = <
   >({
     mutationKey: ["specialist_updateSpecializedDocuments"],
     mutationFn: (
-      variables?: Specialist_UpdateSpecializedDocumentsMutationVariables,
+      variables?: Specialist_UpdateSpecializedDocumentsMutationVariables
     ) =>
       fetcher<
         Specialist_UpdateSpecializedDocumentsMutation,
@@ -4386,7 +4590,7 @@ export const useSpecialist_UpdateIdentityVerificationVideoMutation = <
     TError,
     Specialist_UpdateIdentityVerificationVideoMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Specialist_UpdateIdentityVerificationVideoMutation,
@@ -4396,7 +4600,7 @@ export const useSpecialist_UpdateIdentityVerificationVideoMutation = <
   >({
     mutationKey: ["specialist_updateIdentityVerificationVideo"],
     mutationFn: (
-      variables?: Specialist_UpdateIdentityVerificationVideoMutationVariables,
+      variables?: Specialist_UpdateIdentityVerificationVideoMutationVariables
     ) =>
       fetcher<
         Specialist_UpdateIdentityVerificationVideoMutation,
@@ -4423,7 +4627,7 @@ export const useSpecialist_SetCityMutation = <
     TError,
     Specialist_SetCityMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Specialist_SetCityMutation,
@@ -4435,7 +4639,7 @@ export const useSpecialist_SetCityMutation = <
     mutationFn: (variables?: Specialist_SetCityMutationVariables) =>
       fetcher<Specialist_SetCityMutation, Specialist_SetCityMutationVariables>(
         Specialist_SetCityDocument,
-        variables,
+        variables
       )(),
     ...options,
   });
@@ -4458,7 +4662,7 @@ export const useSpecialist_SetServiceSubCategoryMutation = <
     TError,
     Specialist_SetServiceSubCategoryMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Specialist_SetServiceSubCategoryMutation,
@@ -4468,7 +4672,7 @@ export const useSpecialist_SetServiceSubCategoryMutation = <
   >({
     mutationKey: ["specialist_setServiceSubCategory"],
     mutationFn: (
-      variables?: Specialist_SetServiceSubCategoryMutationVariables,
+      variables?: Specialist_SetServiceSubCategoryMutationVariables
     ) =>
       fetcher<
         Specialist_SetServiceSubCategoryMutation,
@@ -4495,7 +4699,7 @@ export const useSpecialist_SetServiceTypesMutation = <
     TError,
     Specialist_SetServiceTypesMutationVariables,
     TContext
-  >,
+  >
 ) => {
   return useMutation<
     Specialist_SetServiceTypesMutation,
@@ -4543,7 +4747,7 @@ export const useUser_GetMyProfileQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<User_GetMyProfileQuery, TError, TData>({
     queryKey:
@@ -4552,7 +4756,7 @@ export const useUser_GetMyProfileQuery = <
         : ["user_getMyProfile", variables],
     queryFn: fetcher<User_GetMyProfileQuery, User_GetMyProfileQueryVariables>(
       User_GetMyProfileDocument,
-      variables,
+      variables
     ),
     ...options,
   });
@@ -4572,7 +4776,7 @@ export const useInfiniteUser_GetMyProfileQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<User_GetMyProfileQuery, TError, TData>(
     (() => {
@@ -4585,11 +4789,11 @@ export const useInfiniteUser_GetMyProfileQuery = <
         queryFn: (metaData) =>
           fetcher<User_GetMyProfileQuery, User_GetMyProfileQueryVariables>(
             User_GetMyProfileDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) },
+            { ...variables, ...(metaData.pageParam ?? {}) }
           )(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -4635,7 +4839,7 @@ export const useAddress_GetMyAddressesQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<Address_GetMyAddressesQuery, TError, TData>({
     queryKey:
@@ -4664,7 +4868,7 @@ export const useInfiniteAddress_GetMyAddressesQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<Address_GetMyAddressesQuery, TError, TData>(
     (() => {
@@ -4684,7 +4888,7 @@ export const useInfiniteAddress_GetMyAddressesQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -4724,7 +4928,7 @@ export const useDiscountCode_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<DiscountCode_GetAllQuery, TError, TData>({
     queryKey:
@@ -4753,7 +4957,7 @@ export const useInfiniteDiscountCode_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<DiscountCode_GetAllQuery, TError, TData>(
     (() => {
@@ -4766,11 +4970,11 @@ export const useInfiniteDiscountCode_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<DiscountCode_GetAllQuery, DiscountCode_GetAllQueryVariables>(
             DiscountCode_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) },
+            { ...variables, ...(metaData.pageParam ?? {}) }
           )(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };
 
@@ -4830,7 +5034,7 @@ export const useSpecialist_GetMyProfileQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useQuery<Specialist_GetMyProfileQuery, TError, TData>({
     queryKey:
@@ -4859,7 +5063,7 @@ export const useInfiniteSpecialist_GetMyProfileQuery = <
       TError,
       TData
     >["queryKey"];
-  },
+  }
 ) => {
   return useInfiniteQuery<Specialist_GetMyProfileQuery, TError, TData>(
     (() => {
@@ -4879,6 +5083,6 @@ export const useInfiniteSpecialist_GetMyProfileQuery = <
           })(),
         ...restOptions,
       };
-    })(),
+    })()
   );
 };

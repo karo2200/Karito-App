@@ -1,34 +1,35 @@
 import { Divider, ThemedText, ThemedView } from "@/components";
-import React, { JSX } from "react";
+import React from "react";
 import { useController } from "react-hook-form";
 import { StyleSheet } from "react-native";
-import CustomRadioButton from "./CustomRadioButton";
+import CustomCheckbox from "./CustomCheckBox";
 
-type RadioGroupProps = {
+type CheckboxGroupProps = {
   name: string;
   data: any[];
   label?: string;
-  RightIcon?: JSX.Element;
   dividerHeight?: number;
-  onChange?: (item: any) => void;
+  onChange?: (items: any[]) => void;
 };
 
 export default React.forwardRef(
   (
-    {
-      name,
-      data,
-      label,
-      RightIcon,
-      dividerHeight = 24,
-      onChange,
-    }: RadioGroupProps,
+    { name, data, label, dividerHeight = 24, onChange }: CheckboxGroupProps,
     ref: any
   ) => {
-    const { field, fieldState } = useController({ name });
-    const onChangeItem = async (item: any) => {
-      field.onChange(item?.value);
-      onChange?.(item);
+    const { field } = useController({ name });
+
+    const onToggleItem = (item: any) => {
+      let newValues: any[];
+      const selectedValues = [...field?.value];
+      if (selectedValues.includes(item?.value)) {
+        newValues = selectedValues.filter((v) => v !== item?.value);
+      } else {
+        newValues = [...selectedValues, item?.value];
+      }
+
+      field.onChange(newValues);
+      onChange?.(newValues);
     };
 
     return (
@@ -40,20 +41,17 @@ export default React.forwardRef(
         )}
         <ThemedView>
           {data?.map((item: any, index: number) => {
-            const isChecked = field?.value === item?.value;
+            const isChecked = field?.value.includes(item?.value);
             return (
               <ThemedView key={`${index}_${item?.value}`}>
                 <ThemedView style={styles.groupView}>
-                  {RightIcon && RightIcon}
-                  <CustomRadioButton
+                  <CustomCheckbox
                     checked={isChecked}
                     label={item?.label}
-                    onPress={() => {
-                      onChangeItem(item);
-                    }}
+                    onPress={() => onToggleItem(item)}
                   />
                 </ThemedView>
-                {index != data?.length - 1 && (
+                {index !== data?.length - 1 && (
                   <Divider height={dividerHeight} />
                 )}
               </ThemedView>

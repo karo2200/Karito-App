@@ -18,14 +18,12 @@ export default React.forwardRef(
     {
       name,
       placeholder,
-      type,
       keyboardType,
       label,
       required = false,
       color = Colors.black,
       textArea = false,
       disabled,
-      mode = "input",
       width = "100%",
       height,
       maxLength,
@@ -37,6 +35,7 @@ export default React.forwardRef(
       control,
       readOnly = false,
       style,
+      labelStyle = "normal",
     }: {
       name: any;
       placeholder?: string;
@@ -79,6 +78,7 @@ export default React.forwardRef(
       onChangeText?: (value?: string) => void;
       onSetHeight?: (value: number) => void;
       control?: any;
+      labelStyle?: "normal" | "sm";
     },
 
     ref: any
@@ -101,14 +101,14 @@ export default React.forwardRef(
         style={[{ width }, style]}
       >
         {label && (
-          <Text style={styles.label}>
+          <Text style={labelStyle === "normal" ? styles.label : styles.smLabel}>
             {label}
             {required && (
               <Text style={{ color: Colors.darkError }}>{" *"}</Text>
             )}
           </Text>
         )}
-        <View style={styles.inputView}>
+        <View style={[styles.inputView, textArea && { height: 100 }]}>
           {leftIcon && leftIcon}
           <TextInput
             editable={!disabled}
@@ -125,11 +125,13 @@ export default React.forwardRef(
             onChangeText={onChange}
             onBlur={field.onBlur}
             style={[
+              styles.inputStyle,
               {
                 textAlignVertical: textArea ? "top" : "center",
                 color: color,
+                textAlign: textArea ? "right" : "left",
+                fontSize: labelStyle == "sm" ? 12 : 16,
               },
-              styles.inputStyle,
             ]}
           />
           {clearIcon && <CloseCircle color={Colors.gray300} variant="Bold" />}
@@ -146,8 +148,6 @@ const styles = StyleSheet.create({
   inputStyle: {
     flex: 1,
     fontSize: 16,
-    height: "100%",
-    textAlign: "left",
     width: "100%",
     fontFamily: FontType.YekanBakhRegular,
     color: Colors.black,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: Colors.gray300,
+    borderColor: Colors.strokeGray,
     backgroundColor: Colors.background,
   },
 
@@ -173,6 +173,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
 
+  smLabel: {
+    color: Colors.black,
+    fontSize: 12,
+    fontFamily: FontType.YekanBakhRegular,
+    textAlign: "right",
+    marginBottom: 4,
+  },
   errorTxt: {
     color: Colors.darkError,
     fontSize: 12,
