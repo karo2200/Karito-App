@@ -13,9 +13,10 @@ import {
   View,
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
 
-type Option = { label: string; value: string };
+type Option = { name: string; id: string };
 
 type Props = {
   name: string;
@@ -38,8 +39,10 @@ const SearchMultiSelect = forwardRef<any, Props>(
 
     const [tempSelected, setTempSelected] = useState<string[]>(selectedValues);
 
-    const filtered = options.filter((opt) =>
-      opt.label.toLowerCase().includes(search.toLowerCase())
+    const safeOptions = Array.isArray(options) ? options : [];
+
+    const filtered = safeOptions.filter((opt) =>
+      opt?.name?.toLowerCase()?.includes(search?.toLowerCase())
     );
 
     const toggleSelect = (value: string) => {
@@ -74,8 +77,8 @@ const SearchMultiSelect = forwardRef<any, Props>(
           <ThemedText style={[styles.label, { flex: 1 }]}>
             {selectedValues.length > 0
               ? options
-                  .filter((o) => selectedValues.includes(o.value))
-                  .map((o) => o.label)
+                  .filter((o) => selectedValues.includes(o.id))
+                  .map((o) => o.name)
                   .join(" ، ")
               : placeholder}
           </ThemedText>
@@ -97,9 +100,6 @@ const SearchMultiSelect = forwardRef<any, Props>(
               onPress={() => actionSheetRef.current?.hide()}
             />
             <ThemedText fontType="bold">{sheetTitle}</ThemedText>
-            <TouchableOpacity onPress={onConfirm}>
-              <ThemedText style={{ color: Colors.hint500 }}>تأیید</ThemedText>
-            </TouchableOpacity>
           </View>
 
           <View style={{ padding: 12 }}>
@@ -113,16 +113,19 @@ const SearchMultiSelect = forwardRef<any, Props>(
 
             <FlatList
               data={filtered}
-              keyExtractor={(item) => item.value}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={{ paddingBottom: 50 }}
               renderItem={({ item }) => {
-                const checked = tempSelected.includes(item.value);
+                const checked = tempSelected.includes(item.id);
                 return (
                   <TouchableOpacity
-                    onPress={() => toggleSelect(item.value)}
+                    onPress={() => toggleSelect(item.id)}
                     style={styles.selectBtn}
                   >
                     <View style={styles.row}>
-                      <ThemedText>{item.label}</ThemedText>
+                      <ThemedText style={{ marginRight: 8 }}>
+                        {item.name}
+                      </ThemedText>
                       <Ionicons
                         name={checked ? "checkbox" : "square-outline"}
                         size={22}
@@ -132,6 +135,12 @@ const SearchMultiSelect = forwardRef<any, Props>(
                   </TouchableOpacity>
                 );
               }}
+            />
+            <ThemedButton
+              title="انتخاب"
+              fontType="bold"
+              onPress={onConfirm}
+              style={{ marginBottom: 40 }}
             />
           </View>
         </ActionSheet>
@@ -174,13 +183,14 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 12,
     fontFamily: FontType.YekanBakhRegular,
+    textAlign: "right",
   },
   selectBtn: {
     paddingVertical: 12,
   },
   row: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "flex-end",
   },
 });

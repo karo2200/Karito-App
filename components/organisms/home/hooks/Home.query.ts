@@ -7,6 +7,9 @@ import {
   City_GetAllDocument,
   CityDtoFilterInput,
   CityDtoSortInput,
+  Province_GetAllDocument,
+  ProvinceDtoFilterInput,
+  ProvinceDtoSortInput,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -16,6 +19,7 @@ type UseGetAllCityOptions = {
   take?: number;
   where?: CityDtoFilterInput;
   order?: [CityDtoSortInput];
+  enabled?: boolean;
 };
 
 type UseGetAllBannerOptions = {
@@ -23,6 +27,14 @@ type UseGetAllBannerOptions = {
   take?: number;
   where?: BannerDtoFilterInput;
   order?: [BannerDtoSortInput];
+};
+
+type UseGetAllProvinceOptions = {
+  skip?: number;
+  take?: number;
+  where?: ProvinceDtoFilterInput;
+  order?: [ProvinceDtoSortInput];
+  enabled?: boolean;
 };
 
 export const useGetAllCityQuery = (options: UseGetAllCityOptions = {}) => {
@@ -74,6 +86,37 @@ export const useGetAllBannerQuery = (options: UseGetAllBannerOptions = {}) => {
         ...data,
         pages: data?.pages?.map((a) => a?.banner_getAll?.result?.items).flat(),
         totalCount: data?.pages?.[0]?.banner_getAll?.result?.totalCount,
+      };
+    },
+  });
+};
+
+export const useGetAllprovinceQuery = (
+  options: UseGetAllProvinceOptions = {}
+) => {
+  return useInfiniteQuery({
+    queryKey: [queryKeys.city_getAll, options],
+    queryFn: async ({ pageParam = 0 }) => {
+      return fetcher(Province_GetAllDocument, {
+        skip: pageParam * PAGE_SIZE,
+        take: PAGE_SIZE,
+        ...options,
+      })();
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.province_getAll?.result?.pageInfo?.hasNextPage) {
+        return allPages.length;
+      }
+      return undefined;
+    },
+    select: (data) => {
+      return {
+        ...data,
+        pages: data?.pages
+          ?.map((a) => a?.province_getAll?.result?.items)
+          .flat(),
+        totalCount: data?.pages?.[0]?.province_getAll?.result?.totalCount,
       };
     },
   });

@@ -30,7 +30,6 @@ export default function useLoginHook() {
   };
 
   const onDoExpertLogin = (formData: any) => {
-    router.push(`/ExpertOtpPage?phone=${formData?.phone}`);
     mutate(
       {
         input: { phoneNumber: formData?.phone, userType: UserType.Specialist },

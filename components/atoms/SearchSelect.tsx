@@ -17,7 +17,7 @@ import CustomRadioButton from "./CustomRadioButton";
 import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
 
-type Option = { label: string; value: string };
+type Option = { name: string; id: string };
 
 type Props = {
   name: string;
@@ -34,8 +34,10 @@ const SearchSelect = forwardRef<any, Props>(
     const [search, setSearch] = useState("");
     const actionSheetRef = useRef<ActionSheetRef>(null);
 
-    const filtered = options.filter((opt) =>
-      opt.label.toLowerCase().includes(search.toLowerCase())
+    const safeOptions = Array.isArray(options) ? options : [];
+
+    const filtered = safeOptions.filter((opt) =>
+      opt?.name?.toLowerCase()?.includes(search?.toLowerCase())
     );
 
     return (
@@ -45,10 +47,11 @@ const SearchSelect = forwardRef<any, Props>(
         <TouchableOpacity
           onPress={() => actionSheetRef.current?.show()}
           style={styles.container}
+          activeOpacity={1}
         >
           <ThemedText style={[styles.label, { flex: 1 }]}>
-            {field.value
-              ? options.find((o) => o.value === field.value)?.label
+            {field?.value
+              ? options.find((o) => o?.id === field?.value)?.name
               : placeholder}
           </ThemedText>
           <SearchNormal1 size={24} color={Colors.mediumGray} />
@@ -81,20 +84,20 @@ const SearchSelect = forwardRef<any, Props>(
 
             <FlatList
               data={filtered}
-              keyExtractor={(item) => item.value}
+              keyExtractor={(item) => item.id}
               contentContainerStyle={{ paddingBottom: 50 }}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => {
-                    field.onChange(item.value);
+                    field?.onChange(item?.id);
                   }}
                   style={styles.selectBtn}
                 >
                   <CustomRadioButton
-                    label={item.label}
-                    checked={item.value === field.value}
+                    label={item?.name}
+                    checked={item?.id === field?.value}
                     onPress={() => {
-                      field.onChange(item.value);
+                      field?.onChange(item?.id);
                     }}
                   />
                 </TouchableOpacity>
@@ -150,6 +153,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 12,
     fontFamily: FontType.YekanBakhRegular,
+    textAlign: "right",
   },
 
   selectBtn: {

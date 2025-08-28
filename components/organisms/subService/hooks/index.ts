@@ -12,17 +12,19 @@ export const useGetServiceTypesQuery = ({
   where,
   order,
   enabled = true,
+  take,
 }: {
   where?: ServiceTypeDtoFilterInput;
   order?: [ServiceTypeDtoSortInput];
   enabled?: boolean;
+  take?: number;
 }) => {
   return useInfiniteQuery({
     queryKey: [queryKeys.serviceSubCategory_getAll, where, order, enabled],
     queryFn: async ({ pageParam = 0 }) => {
       return fetcher(ServiceTypes_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
-        take: PAGE_SIZE,
+        take: take ?? PAGE_SIZE,
         where,
         order,
       })();

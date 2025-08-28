@@ -5,10 +5,10 @@ import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRoute } from "@react-navigation/native";
 import { FormProvider, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import * as yup from "yup";
+import useExpertHook from "../hooks/Expert.hook";
 
 const schema = yup.object().shape({
   phone: yup
@@ -28,12 +28,12 @@ const NationalCodeStep = ({
   onNextPress: () => void;
   onPrevPress: () => void;
 }) => {
-  const { params } = useRoute();
+  const { phoneNumber, onRegistrationPress, isPending } = useExpertHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { phone: params?.phone },
+    defaultValues: { phone: phoneNumber },
   });
   const {
     handleSubmit,
@@ -42,6 +42,7 @@ const NationalCodeStep = ({
   } = methods;
 
   const onPress = (formData: any) => {
+    onRegistrationPress(formData);
     onNextPress?.();
   };
 
@@ -56,7 +57,7 @@ const NationalCodeStep = ({
             placeholder="۰۹۱۲۳۴۵۶۷۸۹"
             keyboardType="numeric"
             maxLength={11}
-            readOnly={true}
+            // readOnly={true}
           />
           <ThemedInput
             label="کد ملی *"
@@ -71,6 +72,7 @@ const NationalCodeStep = ({
         <ThemedButton
           title="ثبت و ادامه"
           style={styles.button}
+          isLoading={isPending}
           onPress={handleSubmit(onPress)}
         />
       </FormProvider>

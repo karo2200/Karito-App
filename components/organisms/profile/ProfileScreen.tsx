@@ -35,7 +35,9 @@ export default function ProfileScreen() {
                 fontType="bold"
                 style={{ color: Colors.semiBlack, fontWeight: "600" }}
               >
-                {userData?.phoneNumber}
+                {userData?.firstName
+                  ? `${userData?.firstName} ${userData?.lastName}`
+                  : "کاربر کاریتو"}
               </ThemedText>
               <ThemedText fontType="bold" style={styles.number}>
                 {userData?.phoneNumber}

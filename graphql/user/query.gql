@@ -4,6 +4,10 @@ query user_getMyProfile {
     result {
       id
       phoneNumber
+      firstName
+      gender
+      lastName
+      profileImageUrl
     }
   }
 }
@@ -54,6 +58,67 @@ query discountCode_getAll(
         expiryDate
         isActive
         isPercentage
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    status
+  }
+}
+
+query specialist_getMyProfile {
+  specialist_getMyProfile {
+    status
+    result {
+      city {
+        id
+        name
+        province {
+          id
+          name
+        }
+      }
+      id
+      firstName
+      lastName
+      idCardImageUrl
+      idCardVerificationStatus
+      identityVerificationVideoStatus
+      identityVerificationVideoUrl
+      serviceSubCategoryDto {
+        id
+        logo
+        name
+        serviceCategory {
+          id
+          logo
+          name
+        }
+      }
+      serviceTypes {
+        id
+        logo
+        name
+      }
+      specializedDocumentsVerificationStatus
+      specializedDocumentUrls
+    }
+  }
+}
+
+query province_getAll(
+  $skip: Int
+  $take: Int
+  $where: ProvinceDtoFilterInput
+  $order: [ProvinceDtoSortInput!]
+) {
+  province_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        name
       }
       pageInfo {
         hasNextPage

@@ -1,0 +1,48 @@
+mutation user_updateProfile($input: UpdateUserProfileInput!) {
+  user_updateProfile(input: $input) {
+    status
+    result {
+      id
+    }
+  }
+}
+
+mutation specialist_updateIDCard($input: UpdateIDCardInput!) {
+  specialist_updateIDCard(input: $input) {
+    status
+  }
+}
+
+mutation specialist_updateSpecializedDocuments(
+  $input: UpdateSpecializedDocumentsInput!
+) {
+  specialist_updateSpecializedDocuments(input: $input) {
+    status
+  }
+}
+
+mutation specialist_updateIdentityVerificationVideo(
+  $input: UpdateIdentityVerificationVideoInput!
+) {
+  specialist_updateIdentityVerificationVideo(input: $input) {
+    status
+  }
+}
+
+mutation specialist_setCity($input: SetCityInput!) {
+  specialist_setCity(input: $input) {
+    status
+  }
+}
+
+mutation specialist_setServiceSubCategory($input: SetServiceSubCategoryInput!) {
+  specialist_setServiceSubCategory(input: $input) {
+    status
+  }
+}
+
+mutation specialist_setServiceTypes($input: SetServiceTypesInput!) {
+  specialist_setServiceTypes(input: $input) {
+    status
+  }
+}

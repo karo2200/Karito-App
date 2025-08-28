@@ -4,28 +4,19 @@ import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import UploadImage from "@/components/atoms/UploadImage";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRoute } from "@react-navigation/native";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
+import useCertificateInfoHook from "./hooks/CertificateInfo.hook";
 
 const schema = yup.object().shape({
-  name: yup
-    .string()
-    .length(50, "تعداد کارکترها بیش از حد مجاز است.")
-    .required(""),
-  family: yup
-    .string()
-    .length(50, "تعداد کارکترها بیش از حد مجاز است.")
-    .required(""),
-  code: yup
-    .string()
-    .length(10, "کد ملی بدرستی وارد نشده است")
-    .required("لطفا کد ملی خود را وارد کنید"),
+  doc1: yup.string().required(""),
+  doc2: yup.string(),
+  doc3: yup.string(),
 });
 
 const CertificateInfo = () => {
-  const { params } = useRoute();
+  const { documentPending, onRegistrationPress } = useCertificateInfoHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
@@ -38,8 +29,6 @@ const CertificateInfo = () => {
     control,
   } = methods;
 
-  const onPress = (formData: any) => {};
-
   return (
     <FormProvider {...methods}>
       <ScreenNameWithBack title="مدارک" />
@@ -50,19 +39,19 @@ const CertificateInfo = () => {
           nestedScrollEnabled
         >
           <UploadImage
-            name="profilePhoto"
+            name="doc1"
             control={control}
             label="عکس مدرک"
             description="مدرک مرتبط با تخصص خود را بارگذاری کنید."
           />
           <UploadImage
-            name="profilePhoto"
+            name="doc2"
             control={control}
             label="عکس مدرک"
             description="مدرک مرتبط با تخصص خود را بارگذاری کنید."
           />
           <UploadImage
-            name="profilePhoto"
+            name="doc3"
             control={control}
             label="عکس مدرک"
             description="مدرک مرتبط با تخصص خود را بارگذاری کنید."
@@ -71,7 +60,8 @@ const CertificateInfo = () => {
         <View style={styles.button}>
           <ThemedButton
             title="ثبت"
-            onPress={handleSubmit(onPress)}
+            isLoading={documentPending}
+            onPress={handleSubmit(onRegistrationPress)}
             fontType="bold"
           />
         </View>

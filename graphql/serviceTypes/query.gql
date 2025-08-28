@@ -16,6 +16,7 @@ query serviceTypes_getAll(
         id
         serviceSubCategory {
           id
+          name
         }
       }
     }
