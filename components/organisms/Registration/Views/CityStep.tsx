@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
+import SearchMultiSelect from "@/components/atoms/SearchMultiSelect";
 import SearchSelect from "@/components/atoms/SearchSelect";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import * as yup from "yup";
+import useExpertHook from "../hooks/Expert.hook";
 
 const schema = yup.object().shape({
   state: yup.string().required(""),
   city: yup.string().required(""),
   profession: yup.string().required(""),
+  serviceTypes: yup.array(yup.string()).required(""),
 });
 
 const CityStep = ({
@@ -22,62 +25,98 @@ const CityStep = ({
   onNextPress: () => void;
   onPrevPress: () => void;
 }) => {
+  const {
+    provincePending,
+    provinceData,
+    setProvince,
+    cityData,
+    serviceTypeData,
+    subCategoriesData,
+    setCategory,
+    onRegisterCity,
+    cityPneding,
+    categoryPending,
+    servicePending,
+    profileData,
+  } = useExpertHook();
+
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: {
+      state: profileData?.city?.province?.id,
+      city: profileData?.city?.id,
+      profession: profileData?.serviceSubCategoryDto?.id,
+      serviceTypes: profileData?.serviceTypes?.map((opt) => opt?.id),
+    },
   });
   const {
     handleSubmit,
     formState: { errors },
     control,
+    getValues,
   } = methods;
 
   const onPress = (formData: any) => {
-    onNextPress?.();
+    onRegisterCity(formData, onNextPress);
   };
 
-  const options = [
-    { label: "تهران", value: "tehran" },
-    { label: "اصفهان", value: "isfahan" },
-    { label: "مشهد", value: "mashhad" },
-  ];
+  useEffect(() => {
+    setProvince(getValues("state"));
+    setCategory(getValues("profession"));
+  }, [getValues("state"), getValues("profession")]);
 
   return (
     <KeyboardAutoHide>
       <FormProvider {...methods}>
         <ScreenNameWithBack title="ثبت‌نام" onBackPress={onPrevPress} />
-        <View style={styles.form}>
-          <SearchSelect
-            name="state"
-            control={control}
-            label="استان *"
-            placeholder="انتخاب کنید"
-            options={options}
-            sheetTitle="انتخاب استان"
-          />
-          <SearchSelect
-            name="city"
-            control={control}
-            label="شهر *"
-            placeholder="انتخاب کنید"
-            options={options}
-            sheetTitle="انتخاب شهر"
-          />
+        {provincePending ? (
+          <ActivityIndicator />
+        ) : (
+          <View style={styles.form}>
+            <SearchSelect
+              name="state"
+              control={control}
+              label="استان *"
+              placeholder="انتخاب کنید"
+              options={provinceData}
+              sheetTitle="انتخاب استان"
+            />
 
-          <SearchSelect
-            label="تخصص *"
-            name="profession"
-            control={control}
-            placeholder="انتخاب کنید"
-            options={options}
-            sheetTitle="انتخاب تخصص"
-          />
-        </View>
+            <SearchSelect
+              name="city"
+              control={control}
+              label="شهر *"
+              placeholder="انتخاب کنید"
+              options={cityData}
+              sheetTitle="انتخاب شهر"
+            />
+
+            <SearchSelect
+              label="تخصص *"
+              name="profession"
+              control={control}
+              placeholder="انتخاب کنید"
+              options={subCategoriesData}
+              sheetTitle="انتخاب تخصص"
+            />
+
+            <SearchMultiSelect
+              label="ماموریت *"
+              name="serviceTypes"
+              control={control}
+              placeholder="انتخاب کنید"
+              options={serviceTypeData}
+              sheetTitle={`انتخاب ماموریت در ${serviceTypeData?.[0]?.serviceSubCategory?.name}`}
+            />
+          </View>
+        )}
 
         <ThemedButton
           title="ثبت و ادامه"
           style={styles.button}
           onPress={handleSubmit(onPress)}
+          isLoading={cityPneding || categoryPending || servicePending}
         />
       </FormProvider>
     </KeyboardAutoHide>

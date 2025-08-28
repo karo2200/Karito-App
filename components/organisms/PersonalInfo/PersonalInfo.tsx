@@ -25,10 +25,12 @@ const schema = yup.object().shape({
   month: yup.string(),
   day: yup.string(),
   profilePhoto: yup.string(),
+  backCodeImage: yup.string(),
 });
 
 const PersonalInfo = () => {
-  const { uploadCardPending, onRegistrationPress } = usePersonalInfoHook();
+  const { uploadCardPending, onRegistrationPress, profilePending } =
+    usePersonalInfoHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
@@ -108,7 +110,7 @@ const PersonalInfo = () => {
           <UploadImage name="codeImage" control={control} />
 
           <UploadImage
-            name="profilePhoto"
+            name="backCodeImage"
             control={control}
             label="عکس کارت ملی"
             description="عکس کارت ملی خود را بارگذاری کنید."
@@ -117,7 +119,7 @@ const PersonalInfo = () => {
         <View style={styles.button}>
           <ThemedButton
             title="ثبت"
-            isLoading={uploadCardPending}
+            isLoading={uploadCardPending || profilePending}
             onPress={handleSubmit(onRegistrationPress)}
             fontType="bold"
           />

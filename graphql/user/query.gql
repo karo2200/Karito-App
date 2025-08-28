@@ -107,3 +107,24 @@ query specialist_getMyProfile {
     }
   }
 }
+
+query province_getAll(
+  $skip: Int
+  $take: Int
+  $where: ProvinceDtoFilterInput
+  $order: [ProvinceDtoSortInput!]
+) {
+  province_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        name
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    status
+  }
+}

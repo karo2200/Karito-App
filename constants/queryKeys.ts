@@ -13,4 +13,6 @@ export const queryKeys = {
   serviceRequest_getAvailableRequests: "serviceRequest_getAvailableRequests",
   discountCode_getAll: "discountCode_getAll",
   cancellationReason_getAll: "cancellationReason_getAll",
+  province_getAll: "province_getAll",
+  specialist_getMyProfile: "specialist_getMyProfile",
 };

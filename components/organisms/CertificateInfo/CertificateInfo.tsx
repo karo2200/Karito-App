@@ -10,18 +10,9 @@ import * as yup from "yup";
 import useCertificateInfoHook from "./hooks/CertificateInfo.hook";
 
 const schema = yup.object().shape({
-  name: yup
-    .string()
-    .length(50, "تعداد کارکترها بیش از حد مجاز است.")
-    .required(""),
-  family: yup
-    .string()
-    .length(50, "تعداد کارکترها بیش از حد مجاز است.")
-    .required(""),
-  code: yup
-    .string()
-    .length(10, "کد ملی بدرستی وارد نشده است")
-    .required("لطفا کد ملی خود را وارد کنید"),
+  doc1: yup.string().required(""),
+  doc2: yup.string(),
+  doc3: yup.string(),
 });
 
 const CertificateInfo = () => {
@@ -48,19 +39,19 @@ const CertificateInfo = () => {
           nestedScrollEnabled
         >
           <UploadImage
-            name="profilePhoto"
+            name="doc1"
             control={control}
             label="عکس مدرک"
             description="مدرک مرتبط با تخصص خود را بارگذاری کنید."
           />
           <UploadImage
-            name="profilePhoto"
+            name="doc2"
             control={control}
             label="عکس مدرک"
             description="مدرک مرتبط با تخصص خود را بارگذاری کنید."
           />
           <UploadImage
-            name="profilePhoto"
+            name="doc3"
             control={control}
             label="عکس مدرک"
             description="مدرک مرتبط با تخصص خود را بارگذاری کنید."

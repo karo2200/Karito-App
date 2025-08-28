@@ -57,7 +57,7 @@ const NationalCodeStep = ({
             placeholder="۰۹۱۲۳۴۵۶۷۸۹"
             keyboardType="numeric"
             maxLength={11}
-            readOnly={true}
+            // readOnly={true}
           />
           <ThemedInput
             label="کد ملی *"

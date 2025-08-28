@@ -53,10 +53,12 @@ export const useGetServiceCategoriesQuery = (
 export const useGetSubServiceCategoriesQuery = ({
   where,
   order,
+  take,
   enabled = true,
 }: {
   where?: ServiceSubCategoryDtoFilterInput;
   order?: [ServiceSubCategoryDtoSortInput];
+  take?: number;
   enabled?: boolean;
 }) => {
   return useInfiniteQuery({
@@ -64,7 +66,7 @@ export const useGetSubServiceCategoriesQuery = ({
     queryFn: async ({ pageParam = 0 }) => {
       return fetcher(ServiceSubCategory_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
-        take: PAGE_SIZE,
+        take: take ?? PAGE_SIZE,
         where,
         order,
       })();

@@ -48,7 +48,7 @@ interface DropDownProps {
   arrowBGColor?: string;
   arrowColor?: string;
   titleStyle?: ThemedTextProps;
-  containerViewStyle: StyleProp<ViewStyle>;
+  containerViewStyle?: StyleProp<ViewStyle>;
   arrowSize?: number;
 }
 
