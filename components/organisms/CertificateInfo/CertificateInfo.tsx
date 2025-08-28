@@ -4,10 +4,10 @@ import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import UploadImage from "@/components/atoms/UploadImage";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRoute } from "@react-navigation/native";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
+import useCertificateInfoHook from "./hooks/CertificateInfo.hook";
 
 const schema = yup.object().shape({
   name: yup
@@ -25,7 +25,7 @@ const schema = yup.object().shape({
 });
 
 const CertificateInfo = () => {
-  const { params } = useRoute();
+  const { documentPending, onRegistrationPress } = useCertificateInfoHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
@@ -37,8 +37,6 @@ const CertificateInfo = () => {
     formState: { errors },
     control,
   } = methods;
-
-  const onPress = (formData: any) => {};
 
   return (
     <FormProvider {...methods}>
@@ -71,7 +69,8 @@ const CertificateInfo = () => {
         <View style={styles.button}>
           <ThemedButton
             title="ثبت"
-            onPress={handleSubmit(onPress)}
+            isLoading={documentPending}
+            onPress={handleSubmit(onRegistrationPress)}
             fontType="bold"
           />
         </View>

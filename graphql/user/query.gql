@@ -4,6 +4,10 @@ query user_getMyProfile {
     result {
       id
       phoneNumber
+      firstName
+      gender
+      lastName
+      profileImageUrl
     }
   }
 }
@@ -61,5 +65,45 @@ query discountCode_getAll(
       }
     }
     status
+  }
+}
+
+query specialist_getMyProfile {
+  specialist_getMyProfile {
+    status
+    result {
+      city {
+        id
+        name
+        province {
+          id
+          name
+        }
+      }
+      id
+      firstName
+      lastName
+      idCardImageUrl
+      idCardVerificationStatus
+      identityVerificationVideoStatus
+      identityVerificationVideoUrl
+      serviceSubCategoryDto {
+        id
+        logo
+        name
+        serviceCategory {
+          id
+          logo
+          name
+        }
+      }
+      serviceTypes {
+        id
+        logo
+        name
+      }
+      specializedDocumentsVerificationStatus
+      specializedDocumentUrls
+    }
   }
 }

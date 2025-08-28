@@ -7,22 +7,15 @@ import ThemedInput from "@/components/atoms/ThemedInput";
 import ThemedText from "@/components/atoms/ThemedText";
 import UploadImage from "@/components/atoms/UploadImage";
 import { days, monthsName } from "@/constants/StaticData";
-import useUserStore from "@/stores/loginStore";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRoute } from "@react-navigation/native";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
+import usePersonalInfoHook from "./hooks/PersonalInfo.hook";
 
 const schema = yup.object().shape({
-  name: yup
-    .string()
-    // .length(50, "تعداد کارکترها بیش از حد مجاز است.")
-    .required("نام خود را وارد کنید."),
-  family: yup
-    .string()
-    // .length(50, "تعداد کارکترها بیش از حد مجاز است.")
-    .required("نام خانوادگی خود را وارد کنید."),
+  name: yup.string().required("نام خود را وارد کنید."),
+  family: yup.string().required("نام خانوادگی خود را وارد کنید."),
   code: yup
     .string()
     .length(10, "کد ملی بدرستی وارد نشده است")
@@ -35,9 +28,7 @@ const schema = yup.object().shape({
 });
 
 const PersonalInfo = () => {
-  const { params } = useRoute();
-
-  const { setIsLoggedIn } = useUserStore();
+  const { uploadCardPending, onRegistrationPress } = usePersonalInfoHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
@@ -50,10 +41,6 @@ const PersonalInfo = () => {
     formState: { errors },
     control,
   } = methods;
-
-  const onPress = (formData: any) => {
-    setIsLoggedIn(true);
-  };
 
   return (
     <FormProvider {...methods}>
@@ -130,7 +117,8 @@ const PersonalInfo = () => {
         <View style={styles.button}>
           <ThemedButton
             title="ثبت"
-            onPress={handleSubmit(onPress)}
+            isLoading={uploadCardPending}
+            onPress={handleSubmit(onRegistrationPress)}
             fontType="bold"
           />
         </View>
