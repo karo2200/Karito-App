@@ -29,7 +29,7 @@ const CustomerEditProfileSheet = ({
 }) => {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { updatePending, updateMutate } = useProfileHook();
+  const { updatePending, updateMutate, userData } = useProfileHook();
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -47,8 +47,8 @@ const CustomerEditProfileSheet = ({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
-      // name: profileData?.firstName as string,
-      // family: profileData?.lastName as string,
+      name: userData?.firstName as string,
+      family: userData?.lastName as string,
     },
   });
   const {

@@ -1,4 +1,5 @@
 import {
+  useSpecialist_GetMyProfileQuery,
   useUser_GetMyProfileQuery,
   useUser_UpdateProfileMutation,
 } from "@/generated/graphql";
@@ -20,6 +21,10 @@ export default function useProfileHook() {
   const { setUserId } = authCacheStore();
 
   const { data } = useUser_GetMyProfileQuery();
+
+  const { data: specialist } = useSpecialist_GetMyProfileQuery();
+
+  const specialistData = specialist?.specialist_getMyProfile?.result;
 
   const { mutate: updateMutate, isPending: updatePending } =
     useUser_UpdateProfileMutation();
@@ -45,7 +50,7 @@ export default function useProfileHook() {
     isExpert,
     onCallPress,
     setIsExpert,
-    userData: data?.user_getMyProfile?.result,
+    userData: isExpert ? specialistData : data?.user_getMyProfile?.result,
     isUserLoggedIn,
     updatePending,
     updateMutate,

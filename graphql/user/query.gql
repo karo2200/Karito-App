@@ -87,6 +87,9 @@ query specialist_getMyProfile {
       firstName
       lastName
       idCardImageUrl
+      daysRegistered
+      phoneNumber
+      successfulMissions
       idCardVerificationStatus
       identityVerificationVideoStatus
       identityVerificationVideoUrl

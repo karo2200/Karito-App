@@ -1,6 +1,6 @@
 import EmptyAddressSvg from "@/assets/icons/EmptyAddress";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
-import React from "react";
+import React, { memo } from "react";
 import { StyleSheet, View } from "react-native";
 import ThemedButton from "../atoms/ThemedButton";
 import ThemedText from "../atoms/ThemedText";
@@ -35,7 +35,7 @@ const GuestMode = () => {
   );
 };
 
-export default GuestMode;
+export default memo(GuestMode);
 
 const styles = StyleSheet.create({
   text: {

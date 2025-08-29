@@ -272,6 +272,11 @@ export type CompleteServiceInput = {
   serviceRequestId: Scalars["UUID"]["input"];
 };
 
+export type CoordinatesInput = {
+  latitude: Scalars["Float"]["input"];
+  longitude: Scalars["Float"]["input"];
+};
+
 export type CreateBannerInput = {
   imageUrl: Scalars["String"]["input"];
   title: Scalars["String"]["input"];
@@ -818,6 +823,7 @@ export enum LocationType {
 }
 
 export type MarkAsArrivedInput = {
+  location: CoordinatesInput;
   serviceRequestId: Scalars["UUID"]["input"];
 };
 
@@ -1767,18 +1773,22 @@ export type SpecialistProfileDto = {
   averageRating: Scalars["Float"]["output"];
   birthDate: Scalars["DateTime"]["output"];
   city?: Maybe<CityDto>;
+  daysRegistered: Scalars["Int"]["output"];
   firstName?: Maybe<Scalars["String"]["output"]>;
+  gender: Gender;
   id: Scalars["UUID"]["output"];
   idCardImageUrl?: Maybe<Scalars["String"]["output"]>;
   idCardVerificationStatus: VerificationStatus;
   identityVerificationVideoStatus: VerificationStatus;
   identityVerificationVideoUrl?: Maybe<Scalars["String"]["output"]>;
   lastName?: Maybe<Scalars["String"]["output"]>;
+  phoneNumber: Scalars["String"]["output"];
   rateCount: Scalars["Int"]["output"];
   serviceSubCategory?: Maybe<ServiceSubCategoryDto>;
   serviceTypes: Array<ServiceTypeDto>;
   specializedDocumentUrls: Array<Scalars["String"]["output"]>;
   specializedDocumentsVerificationStatus: VerificationStatus;
+  successfulMissions: Scalars["Int"]["output"];
 };
 
 /** A segment of a collection. */
@@ -1796,7 +1806,9 @@ export type SpecialistProfileDtoFilterInput = {
   averageRating?: InputMaybe<FloatOperationFilterInput>;
   birthDate?: InputMaybe<DateTimeOperationFilterInput>;
   city?: InputMaybe<CityDtoFilterInput>;
+  daysRegistered?: InputMaybe<IntOperationFilterInput>;
   firstName?: InputMaybe<StringOperationFilterInput>;
+  gender?: InputMaybe<GenderOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   idCardImageUrl?: InputMaybe<StringOperationFilterInput>;
   idCardVerificationStatus?: InputMaybe<VerificationStatusOperationFilterInput>;
@@ -1804,27 +1816,33 @@ export type SpecialistProfileDtoFilterInput = {
   identityVerificationVideoUrl?: InputMaybe<StringOperationFilterInput>;
   lastName?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<SpecialistProfileDtoFilterInput>>;
+  phoneNumber?: InputMaybe<StringOperationFilterInput>;
   rateCount?: InputMaybe<IntOperationFilterInput>;
   serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoFilterInput>;
   serviceTypes?: InputMaybe<ListFilterInputTypeOfServiceTypeDtoFilterInput>;
   specializedDocumentUrls?: InputMaybe<ListStringOperationFilterInput>;
   specializedDocumentsVerificationStatus?: InputMaybe<VerificationStatusOperationFilterInput>;
+  successfulMissions?: InputMaybe<IntOperationFilterInput>;
 };
 
 export type SpecialistProfileDtoSortInput = {
   averageRating?: InputMaybe<SortEnumType>;
   birthDate?: InputMaybe<SortEnumType>;
   city?: InputMaybe<CityDtoSortInput>;
+  daysRegistered?: InputMaybe<SortEnumType>;
   firstName?: InputMaybe<SortEnumType>;
+  gender?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   idCardImageUrl?: InputMaybe<SortEnumType>;
   idCardVerificationStatus?: InputMaybe<SortEnumType>;
   identityVerificationVideoStatus?: InputMaybe<SortEnumType>;
   identityVerificationVideoUrl?: InputMaybe<SortEnumType>;
   lastName?: InputMaybe<SortEnumType>;
+  phoneNumber?: InputMaybe<SortEnumType>;
   rateCount?: InputMaybe<SortEnumType>;
   serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoSortInput>;
   specializedDocumentsVerificationStatus?: InputMaybe<SortEnumType>;
+  successfulMissions?: InputMaybe<SortEnumType>;
 };
 
 export type StringOperationFilterInput = {
@@ -2847,6 +2865,9 @@ export type Specialist_GetMyProfileQuery = {
       firstName?: string | null;
       lastName?: string | null;
       idCardImageUrl?: string | null;
+      daysRegistered: number;
+      phoneNumber: string;
+      successfulMissions: number;
       idCardVerificationStatus: VerificationStatus;
       identityVerificationVideoStatus: VerificationStatus;
       identityVerificationVideoUrl?: string | null;
@@ -5079,6 +5100,9 @@ export const Specialist_GetMyProfileDocument = `
       firstName
       lastName
       idCardImageUrl
+      daysRegistered
+      phoneNumber
+      successfulMissions
       idCardVerificationStatus
       identityVerificationVideoStatus
       identityVerificationVideoUrl

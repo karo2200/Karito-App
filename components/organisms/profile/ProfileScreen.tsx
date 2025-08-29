@@ -64,7 +64,7 @@ export default function ProfileScreen() {
                   ماموریت موفق
                 </ThemedText>
                 <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
-                  ۳۵
+                  {userData?.successfulMissions}
                 </ThemedText>
               </View>
               <View style={styles.labelContainer}>
@@ -72,7 +72,7 @@ export default function ProfileScreen() {
                   روز در کاریتو
                 </ThemedText>
                 <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
-                  ۳۵
+                  {userData?.daysRegistered}
                 </ThemedText>
               </View>
             </View>
