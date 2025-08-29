@@ -77,9 +77,9 @@ const SearchMultiSelect = forwardRef<any, Props>(
           <ThemedText style={[styles.label, { flex: 1 }]}>
             {selectedValues.length > 0
               ? options
-                  .filter((o) => selectedValues.includes(o.id))
-                  .map((o) => o.name)
-                  .join(" ، ")
+                  ?.filter((o) => selectedValues.includes(o.id))
+                  ?.map((o) => o.name)
+                  ?.join(" ، ")
               : placeholder}
           </ThemedText>
           <SearchNormal1 size={24} color={Colors.mediumGray} />

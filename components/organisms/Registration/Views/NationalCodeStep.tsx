@@ -28,12 +28,12 @@ const NationalCodeStep = ({
   onNextPress: () => void;
   onPrevPress: () => void;
 }) => {
-  const { phoneNumber, onRegistrationPress, isPending } = useExpertHook();
+  const { phoneNumber, onRegistrationPress, nationalCode } = useExpertHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { phone: phoneNumber },
+    defaultValues: { phone: phoneNumber, code: nationalCode },
   });
   const {
     handleSubmit,
@@ -42,8 +42,7 @@ const NationalCodeStep = ({
   } = methods;
 
   const onPress = (formData: any) => {
-    onRegistrationPress(formData);
-    onNextPress?.();
+    onRegistrationPress(formData, onNextPress);
   };
 
   return (
@@ -57,7 +56,7 @@ const NationalCodeStep = ({
             placeholder="۰۹۱۲۳۴۵۶۷۸۹"
             keyboardType="numeric"
             maxLength={11}
-            // readOnly={true}
+            readOnly={true}
           />
           <ThemedInput
             label="کد ملی *"
@@ -72,7 +71,6 @@ const NationalCodeStep = ({
         <ThemedButton
           title="ثبت و ادامه"
           style={styles.button}
-          isLoading={isPending}
           onPress={handleSubmit(onPress)}
         />
       </FormProvider>

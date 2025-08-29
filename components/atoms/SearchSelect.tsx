@@ -51,7 +51,7 @@ const SearchSelect = forwardRef<any, Props>(
         >
           <ThemedText style={[styles.label, { flex: 1 }]}>
             {field?.value
-              ? options.find((o) => o?.id === field?.value)?.name
+              ? options?.find((o) => o?.id === field?.value)?.name
               : placeholder}
           </ThemedText>
           <SearchNormal1 size={24} color={Colors.mediumGray} />

@@ -19,7 +19,7 @@ export default function LogOutActionSheet({
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { setIsLoggedIn, setIsExpert } = useUserStore();
+  const { clearAuth: clearUserData } = useUserStore();
   const { clearAuth } = authCacheStore();
 
   useEffect(() => {
@@ -52,8 +52,7 @@ export default function LogOutActionSheet({
           title="خروج"
           fontType="medium"
           onPress={() => {
-            setIsLoggedIn(false);
-            setIsExpert(false);
+            clearUserData();
             clearAuth();
           }}
         />

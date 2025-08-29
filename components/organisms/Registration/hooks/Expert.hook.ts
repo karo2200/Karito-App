@@ -1,14 +1,15 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  useSpecialist_SetCityMutation,
-  useSpecialist_SetServiceSubCategoryMutation,
-  useSpecialist_SetServiceTypesMutation,
+  SpecialistProfileDto,
+  useSpecialist_SetLocationAndSpecialtyMutation,
+  VerificationStatus,
 } from "@/generated/graphql";
+import useUserStore from "@/stores/loginStore";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetAllCityQuery,
   useGetAllprovinceQuery,
@@ -26,23 +27,40 @@ export default function useExpertHook() {
 
   const { showToast } = useToast();
 
+  const { setNationalCode, nationalCode, setPhone, phone, setIsLoggedIn } =
+    useUserStore();
+
   const [page, setPage] = useState<number>(1);
   const [exitVisible, setExitVisible] = useState<boolean>(false);
   const [province, setProvince] = useState<string>("");
   const [category, setCategory] = useState<string>("");
 
-  const { mutate: cityMutate, isPending: cityPneding } =
-    useSpecialist_SetCityMutation();
-  const { mutate: categoryMutate, isPending: categoryPending } =
-    useSpecialist_SetServiceSubCategoryMutation();
-  const { mutate: serviceMutate, isPending: servicePending } =
-    useSpecialist_SetServiceTypesMutation();
+  const { mutate: cityMutate, isPending: stepPending } =
+    useSpecialist_SetLocationAndSpecialtyMutation();
 
   const { data: expertData } = useGetSpecialistProfile();
 
-  const profileData = expertData?.specialist_getMyProfile?.result;
+  const profileData: SpecialistProfileDto =
+    expertData?.specialist_getMyProfile?.result;
 
-  console.log("=====>>>", expertData);
+  useEffect(() => {
+    if (
+      profileData?.specializedDocumentsVerificationStatus ===
+        VerificationStatus.Approved &&
+      profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
+      profileData?.identityVerificationVideoStatus ===
+        VerificationStatus.Approved
+    ) {
+      setIsLoggedIn(true);
+    } else if (
+      profileData?.specializedDocumentUrls?.length > 0 &&
+      profileData?.lastName
+    ) {
+      setPage(3);
+    } else {
+      setIsLoggedIn(true);
+    }
+  }, [profileData]);
 
   const { data: provinceData, isPending: provincePending } =
     useGetAllprovinceQuery({ take: 50 });
@@ -60,33 +78,35 @@ export default function useExpertHook() {
     where: { serviceSubCategory: { id: { eq: category } } },
   });
 
-  const onRegistrationPress = (formData: any) => {
-    console.log("fffffff", formData);
+  const onRegistrationPress = (formData: any, onNextPress?: () => void) => {
+    setNationalCode(formData?.code);
+    setPhone(formData?.phone);
+    onNextPress?.();
   };
 
   const onRegisterCity = (formData: any, onNextPress?: () => void) => {
     cityMutate(
-      { input: { cityId: formData?.city } },
       {
-        onSuccess: () => {
-          categoryMutate(
-            { input: { serviceSubCategoryId: formData?.profession } },
-            {
-              onSuccess: () => {
-                serviceMutate(
-                  { input: { serviceTypeIds: formData?.serviceTypes } },
-                  {
-                    onSuccess: () => {
-                      queryClient.invalidateQueries({
-                        queryKey: [queryKeys.specialist_getMyProfile],
-                      });
-                      onNextPress?.();
-                    },
-                  }
-                );
-              },
-            }
-          );
+        input: {
+          cityId: formData?.city,
+          serviceSubCategoryId: formData?.profession,
+          serviceTypeIds: formData?.serviceTypes,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.specialist_setLocationAndSpecialty?.status?.code === 1) {
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.specialist_getMyProfile],
+            });
+            onNextPress?.();
+          } else {
+            showToast({
+              message:
+                data?.specialist_setLocationAndSpecialty?.status?.message,
+              type: "error",
+            });
+          }
         },
       }
     );
@@ -98,7 +118,7 @@ export default function useExpertHook() {
     setPage,
     exitVisible,
     setExitVisible,
-    phoneNumber: params?.phone,
+    phoneNumber: params?.phone ?? phone,
     onRegistrationPress,
     provincePending,
     provinceData: provinceData?.pages as [{ name: string; id: string }],
@@ -108,12 +128,11 @@ export default function useExpertHook() {
     subCategoriesData: subCategoriesData?.pages as [
       { name: string; id: string },
     ],
-    cityPneding,
+    stepPending,
     serviceTypeData: serviceTypeData?.pages as [{ name: string; id: string }],
     onRegisterCity,
     setCategory,
-    categoryPending,
-    servicePending,
     profileData,
+    nationalCode,
   };
 }

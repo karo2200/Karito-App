@@ -5,11 +5,12 @@ import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { VerificationStatus } from "@/generated/graphql";
 import { StyleSheet, View } from "react-native";
 import useExpertHook from "../hooks/Expert.hook";
 
 const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
-  const { router } = useExpertHook();
+  const { router, profileData } = useExpertHook();
 
   return (
     <View>
@@ -21,14 +22,41 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
           onPress={() => {
             router.push("/PersonalInfoPage");
           }}
+          isVerified={
+            profileData?.idCardVerificationStatus ===
+            VerificationStatus.Approved
+          }
+          isReject={
+            profileData?.idCardVerificationStatus ===
+            VerificationStatus.Rejected
+          }
         />
         <InfoList
           title={"مدارک"}
           onPress={() => {
             router.push("/CertificateInfoPage");
           }}
+          isVerified={
+            profileData?.specializedDocumentsVerificationStatus ===
+            VerificationStatus.Approved
+          }
+          isReject={
+            profileData?.specializedDocumentsVerificationStatus ===
+            VerificationStatus.Rejected
+          }
         />
-        <InfoList title={"احراز هویت"} onPress={() => {}} />
+        <InfoList
+          title={"احراز هویت"}
+          onPress={() => {}}
+          isVerified={
+            profileData?.identityVerificationVideoStatus ===
+            VerificationStatus.Approved
+          }
+          isReject={
+            profileData?.identityVerificationVideoStatus ===
+            VerificationStatus.Rejected
+          }
+        />
       </View>
     </View>
   );
@@ -81,7 +109,11 @@ const styles = StyleSheet.create({
 const InfoList = ({
   title,
   onPress,
+  isVerified,
+  isReject,
 }: {
+  isVerified: boolean;
+  isReject: boolean;
   title: string;
   onPress: () => void;
 }) => {
@@ -93,9 +125,24 @@ const InfoList = ({
 
       <View style={styles.rowView}>
         <ThemedButton title="تکمیل" style={styles.btn} onPress={onPress} />
-        <View style={styles.label}>
-          <ThemedText type="text" style={{ color: Colors.darkGray }}>
-            در انتظار تایید
+        <View
+          style={[
+            styles.label,
+            isVerified && { borderColor: Colors.borderGreen },
+            isReject && { borderColor: Colors.danger600 },
+          ]}
+        >
+          <ThemedText
+            type="text"
+            style={{
+              color: isVerified
+                ? Colors.titleGreen
+                : isReject
+                  ? Colors.danger500
+                  : Colors.darkGray,
+            }}
+          >
+            {isVerified ? "تایید شده" : isReject ? "رد شده" : "در انتظار تایید"}
           </ThemedText>
         </View>
       </View>
