@@ -1,3 +1,4 @@
+import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
@@ -10,7 +11,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import * as yup from "yup";
-import ThemedButton from "../atoms/ThemedButton";
 import useProfileHook from "../hooks/Profile.hook";
 
 const { height, width } = Dimensions.get("screen");
@@ -47,10 +47,8 @@ const CustomerEditProfileSheet = ({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
-      // code: nationalCode,
       // name: profileData?.firstName as string,
       // family: profileData?.lastName as string,
-      // codeImage: profileData?.idCardImageUrl as string,
     },
   });
   const {
