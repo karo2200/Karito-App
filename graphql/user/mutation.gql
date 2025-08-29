@@ -7,12 +7,6 @@ mutation user_updateProfile($input: UpdateUserProfileInput!) {
   }
 }
 
-mutation specialist_updateIDCard($input: UpdateIDCardInput!) {
-  specialist_updateIDCard(input: $input) {
-    status
-  }
-}
-
 mutation specialist_updateSpecializedDocuments(
   $input: UpdateSpecializedDocumentsInput!
 ) {
@@ -29,20 +23,29 @@ mutation specialist_updateIdentityVerificationVideo(
   }
 }
 
-mutation specialist_setCity($input: SetCityInput!) {
-  specialist_setCity(input: $input) {
+mutation specialist_updateSpecializedDocuments(
+  $input: UpdateSpecializedDocumentsInput!
+) {
+  specialist_updateSpecializedDocuments(input: $input) {
     status
   }
 }
 
-mutation specialist_setServiceSubCategory($input: SetServiceSubCategoryInput!) {
-  specialist_setServiceSubCategory(input: $input) {
+mutation specialist_setPersonalInformation(
+  $input: SetPersonalInformationInput!
+) {
+  specialist_setPersonalInformation(input: $input) {
     status
   }
 }
 
-mutation specialist_setServiceTypes($input: SetServiceTypesInput!) {
-  specialist_setServiceTypes(input: $input) {
+mutation specialist_setLocationAndSpecialty(
+  $input: SetLocationAndSpecialtyInput!
+) {
+  specialist_setLocationAndSpecialty(input: $input) {
+    result {
+      id
+    }
     status
   }
 }

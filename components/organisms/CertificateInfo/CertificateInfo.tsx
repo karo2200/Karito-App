@@ -16,15 +16,20 @@ const schema = yup.object().shape({
 });
 
 const CertificateInfo = () => {
-  const { documentPending, onRegistrationPress } = useCertificateInfoHook();
+  const { documentPending, onRegistrationPress, profileData } =
+    useCertificateInfoHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: {
+      doc1: profileData?.specializedDocumentUrls[0],
+      doc2: profileData?.specializedDocumentUrls[1],
+      doc3: profileData?.specializedDocumentUrls[2],
+    },
   });
   const {
     handleSubmit,
-    register,
     formState: { errors },
     control,
   } = methods;

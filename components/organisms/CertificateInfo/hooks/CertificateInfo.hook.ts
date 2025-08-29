@@ -1,14 +1,12 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import { useSpecialist_UpdateSpecializedDocumentsMutation } from "@/generated/graphql";
-import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
+import { useGetSpecialistProfile } from "../../PersonalInfo/hooks/personalInfo.query";
 
 export default function useCertificateInfoHook() {
   const router = useRouter();
-
-  const { params } = useRoute();
 
   const { showToast } = useToast();
 
@@ -17,8 +15,11 @@ export default function useCertificateInfoHook() {
   const { mutate: documentsMutate, isPending: documentPending } =
     useSpecialist_UpdateSpecializedDocumentsMutation();
 
+  const { data: expertData } = useGetSpecialistProfile();
+
+  const profileData = expertData?.specialist_getMyProfile?.result;
+
   const onRegistrationPress = (formData: any) => {
-    console.log("fffffff", formData);
     documentsMutate(
       {
         input: {
@@ -28,6 +29,10 @@ export default function useCertificateInfoHook() {
       {
         onSuccess: (data) => {
           if (data?.specialist_updateSpecializedDocuments?.status?.code === 1) {
+            showToast({
+              message: "اطلاعات با موفقیت ثبت شد.",
+              type: "success",
+            });
             queryClient.invalidateQueries({
               queryKey: [queryKeys.specialist_getMyProfile],
             });
@@ -36,6 +41,7 @@ export default function useCertificateInfoHook() {
             showToast({
               message:
                 data?.specialist_updateSpecializedDocuments?.status?.message,
+              type: "error",
             });
           }
         },
@@ -47,5 +53,6 @@ export default function useCertificateInfoHook() {
     router,
     onRegistrationPress,
     documentPending,
+    profileData,
   };
 }

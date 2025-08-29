@@ -1,4 +1,7 @@
-import { useUser_GetMyProfileQuery } from "@/generated/graphql";
+import {
+  useUser_GetMyProfileQuery,
+  useUser_UpdateProfileMutation,
+} from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
 import useUserStore from "@/stores/loginStore";
 import { useRouter } from "expo-router";
@@ -9,12 +12,17 @@ export default function useProfileHook() {
   const router = useRouter();
 
   const [exitVisible, setExitVisible] = useState(false);
+  const [editVisible, setEditVisible] = useState(false);
 
-  const { isExpert, setIsExpert, isLoggedIn } = useUserStore();
+  const { isExpert, setIsExpert } = useUserStore();
+  const { isUserLoggedIn } = authCacheStore();
 
   const { setUserId } = authCacheStore();
 
   const { data } = useUser_GetMyProfileQuery();
+
+  const { mutate: updateMutate, isPending: updatePending } =
+    useUser_UpdateProfileMutation();
 
   useEffect(() => {
     if (data?.user_getMyProfile?.result) {
@@ -38,6 +46,10 @@ export default function useProfileHook() {
     onCallPress,
     setIsExpert,
     userData: data?.user_getMyProfile?.result,
-    isLoggedIn,
+    isUserLoggedIn,
+    updatePending,
+    updateMutate,
+    editVisible,
+    setEditVisible,
   };
 }

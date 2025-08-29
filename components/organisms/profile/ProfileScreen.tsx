@@ -11,6 +11,7 @@ import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import useProfileHook from "./hooks/Profile.hook";
+import CustomerEditProfileSheet from "./Views/CustomerEditProfileSheet";
 
 export default function ProfileScreen() {
   const {
@@ -21,12 +22,14 @@ export default function ProfileScreen() {
     setIsExpert,
     router,
     userData,
-    isLoggedIn,
+    isUserLoggedIn,
+    editVisible,
+    setEditVisible,
   } = useProfileHook();
 
   return (
     <View style={styles.container}>
-      {isLoggedIn ? (
+      {isUserLoggedIn ? (
         <View style={styles.flex1}>
           <View style={styles.headerContainer}>
             <EmptyProfileIcon />
@@ -43,7 +46,15 @@ export default function ProfileScreen() {
                 {userData?.phoneNumber}
               </ThemedText>
             </View>
-            <EditIcon onPress={() => router.push("/profile/editProfile")} />
+            <EditIcon
+              onPress={() => {
+                if (isExpert) {
+                  router.push("/profile/editProfile");
+                } else {
+                  setEditVisible(true);
+                }
+              }}
+            />
           </View>
 
           {isExpert && (
@@ -112,7 +123,7 @@ export default function ProfileScreen() {
       ) : (
         <GuestMode />
       )}
-      {!isExpert && isLoggedIn && (
+      {!isExpert && isUserLoggedIn && (
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.payment}
@@ -127,6 +138,10 @@ export default function ProfileScreen() {
       <LogOutActionSheet
         visible={exitVisible}
         onClose={() => setExitVisible(false)}
+      />
+      <CustomerEditProfileSheet
+        visible={editVisible}
+        onClose={() => setEditVisible(false)}
       />
     </View>
   );

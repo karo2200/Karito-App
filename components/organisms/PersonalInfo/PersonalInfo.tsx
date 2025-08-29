@@ -25,17 +25,25 @@ const schema = yup.object().shape({
   month: yup.string(),
   day: yup.string(),
   profilePhoto: yup.string(),
-  backCodeImage: yup.string(),
 });
 
 const PersonalInfo = () => {
-  const { uploadCardPending, onRegistrationPress, profilePending } =
-    usePersonalInfoHook();
+  const {
+    personalInfoPending,
+    onRegistrationPress,
+    nationalCode,
+    profileData,
+  } = usePersonalInfoHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: { code: "1232222222" },
+    defaultValues: {
+      code: nationalCode,
+      name: profileData?.firstName as string,
+      family: profileData?.lastName as string,
+      codeImage: profileData?.idCardImageUrl as string,
+    },
   });
   const {
     handleSubmit,
@@ -107,10 +115,9 @@ const PersonalInfo = () => {
             maxLength={10}
             readOnly={true}
           />
-          <UploadImage name="codeImage" control={control} />
 
           <UploadImage
-            name="backCodeImage"
+            name="codeImage"
             control={control}
             label="عکس کارت ملی"
             description="عکس کارت ملی خود را بارگذاری کنید."
@@ -119,7 +126,7 @@ const PersonalInfo = () => {
         <View style={styles.button}>
           <ThemedButton
             title="ثبت"
-            isLoading={uploadCardPending || profilePending}
+            isLoading={personalInfoPending}
             onPress={handleSubmit(onRegistrationPress)}
             fontType="bold"
           />

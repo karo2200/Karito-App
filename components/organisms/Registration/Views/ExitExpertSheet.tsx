@@ -1,6 +1,8 @@
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import authCacheStore from "@/stores/authCacheStore";
+import useUserStore from "@/stores/loginStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
@@ -16,6 +18,9 @@ export default function ExitExpertSheet({
   onClose: () => void;
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  const { clearAuth } = useUserStore();
+  const { clearAuth: clear } = authCacheStore();
 
   useEffect(() => {
     if (visible) {
@@ -58,6 +63,8 @@ export default function ExitExpertSheet({
           type="outline"
           title="انصراف"
           onPress={() => {
+            clearAuth();
+            clear();
             closeActionSheet();
           }}
           style={styles.btn}

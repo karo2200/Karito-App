@@ -34,10 +34,8 @@ const CityStep = ({
     subCategoriesData,
     setCategory,
     onRegisterCity,
-    cityPneding,
-    categoryPending,
-    servicePending,
     profileData,
+    stepPending,
   } = useExpertHook();
 
   const { ...methods } = useForm({
@@ -46,15 +44,16 @@ const CityStep = ({
     defaultValues: {
       state: profileData?.city?.province?.id,
       city: profileData?.city?.id,
-      profession: profileData?.serviceSubCategoryDto?.id,
-      serviceTypes: profileData?.serviceTypes?.map((opt) => opt?.id),
+      profession: profileData?.serviceSubCategory?.id,
+      serviceTypes: profileData?.serviceTypes?.map((opt: any) => opt?.id),
     },
   });
+
   const {
     handleSubmit,
     formState: { errors },
     control,
-    getValues,
+    watch,
   } = methods;
 
   const onPress = (formData: any) => {
@@ -62,9 +61,9 @@ const CityStep = ({
   };
 
   useEffect(() => {
-    setProvince(getValues("state"));
-    setCategory(getValues("profession"));
-  }, [getValues("state"), getValues("profession")]);
+    setProvince(watch("state"));
+    setCategory(watch("profession"));
+  }, [watch("state"), watch("profession")]);
 
   return (
     <KeyboardAutoHide>
@@ -115,8 +114,8 @@ const CityStep = ({
         <ThemedButton
           title="ثبت و ادامه"
           style={styles.button}
+          isLoading={stepPending}
           onPress={handleSubmit(onPress)}
-          isLoading={cityPneding || categoryPending || servicePending}
         />
       </FormProvider>
     </KeyboardAutoHide>

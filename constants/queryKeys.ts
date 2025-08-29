@@ -15,4 +15,5 @@ export const queryKeys = {
   cancellationReason_getAll: "cancellationReason_getAll",
   province_getAll: "province_getAll",
   specialist_getMyProfile: "specialist_getMyProfile",
+  user_updateProfile: "user_updateProfile",
 };

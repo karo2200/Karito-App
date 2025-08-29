@@ -80,6 +80,9 @@ query specialist_getMyProfile {
           name
         }
       }
+      averageRating
+      rateCount
+      birthDate
       id
       firstName
       lastName
@@ -87,7 +90,7 @@ query specialist_getMyProfile {
       idCardVerificationStatus
       identityVerificationVideoStatus
       identityVerificationVideoUrl
-      serviceSubCategoryDto {
+      serviceSubCategory {
         id
         logo
         name
