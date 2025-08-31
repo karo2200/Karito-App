@@ -22,6 +22,7 @@ export default function AddressScreen() {
     fetchNextPage,
     isRefetching,
     isLoading,
+    router,
   } = useAddressHook();
 
   const renderItem = useCallback(
@@ -62,8 +63,8 @@ export default function AddressScreen() {
                 <ThemedButton
                   title="افزودن آدرس جدید"
                   fontType={FontStyle.bold}
-                  //   style={styles.btn}
                   type="outline"
+                  onPress={() => router.push("/CreateAddress")}
                 />
               ) : null
             }

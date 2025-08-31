@@ -1,5 +1,6 @@
 import UploadIcon from "@/assets/icons/Upload";
 import { Colors } from "@/constants/Colors";
+import { useUploadFile } from "@/graphql/upload";
 import * as ImagePicker from "expo-image-picker";
 import { Camera, Gallery } from "iconsax-react-native";
 import React, { useRef } from "react";
@@ -8,6 +9,7 @@ import { Image, Pressable, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
+import { useToast } from "./Toast";
 
 type UploadImageFieldProps = {
   name: string;
@@ -24,6 +26,10 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
 }) => {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
+  const { mutate: upload, isPending } = useUploadFile();
+
+  const { showToast } = useToast();
+
   const { field } = useController({
     control,
     name,
@@ -39,9 +45,23 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
       quality: 0.7,
     });
     if (!result.canceled) {
-      field.onChange(result.assets[0].uri);
+      const file = {
+        uri: result.assets[0].uri,
+        name: `${Date.now()}-image.jpg`,
+        type: result.assets[0]?.mimeType,
+        size: result.assets[0]?.fileSize,
+      };
+
+      actionSheetRef.current?.hide();
+      upload(file, {
+        onSuccess: (url) => {
+          field.onChange(url);
+        },
+        onError: () => {
+          onShowToast();
+        },
+      });
     }
-    actionSheetRef.current?.hide();
   };
 
   const pickFromGallery = async () => {
@@ -50,9 +70,26 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
       quality: 0.7,
     });
     if (!result.canceled) {
-      field.onChange(result.assets[0].uri);
+      const file = {
+        uri: result.assets[0].uri,
+        name: `${Date.now()}-image.jpg`,
+        type: result.assets[0]?.mimeType,
+        size: result.assets[0]?.fileSize,
+      };
+      actionSheetRef.current?.hide();
+      upload(file, {
+        onSuccess: (url) => {
+          field.onChange(url);
+        },
+        onError: () => {
+          onShowToast();
+        },
+      });
     }
-    actionSheetRef.current?.hide();
+  };
+
+  const onShowToast = () => {
+    showToast({ type: "error", message: "لطفا دوباره تلاش کنید" });
   };
 
   return (
@@ -90,6 +127,7 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
               type="outline"
               fontType="bold"
               onPress={openSheet}
+              isLoading={isPending}
               style={styles.button}
             />
           </>

@@ -1,15 +1,10 @@
 import StarRating from "@/components/atoms/StartRating";
+import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Fragment, memo, useRef } from "react";
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import useOrderDetailHook from "../hooks/OrderDetail.hook";
 
@@ -18,7 +13,8 @@ const { height } = Dimensions.get("screen");
 const SpecialistData = () => {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { serviceData } = useOrderDetailHook();
+  const { serviceData, onRatePress, ratePending, setRate } =
+    useOrderDetailHook();
 
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
@@ -73,16 +69,12 @@ const SpecialistData = () => {
             style={styles.image}
             source={{ uri: serviceData?.specialist?.profileImageUrl }}
           />
-          <StarRating />
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.payment}
-            onPress={() => closeActionSheet()}
-          >
-            <ThemedText type="defaultSemiBold" style={styles.textBtn}>
-              ثبت امتیاز
-            </ThemedText>
-          </TouchableOpacity>
+          <StarRating onChange={(r) => setRate(r)} />
+          <ThemedButton
+            isLoading={ratePending}
+            onPress={() => onRatePress(closeActionSheet)}
+            title="ثبت امتیاز"
+          />
         </View>
       </ActionSheet>
     </Fragment>
@@ -111,18 +103,6 @@ const styles = StyleSheet.create({
   textBtn: {
     fontWeight: "400",
     color: "white",
-  },
-
-  payment: {
-    backgroundColor: Colors.hint500,
-    paddingVertical: 10,
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
-    bottom: 24,
-    borderRadius: 4,
-    marginTop: 24,
   },
 
   userNamee: {

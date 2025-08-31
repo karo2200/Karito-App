@@ -49,7 +49,9 @@ export default function ThemedButton({
     >
       {isLoading ? (
         <View style={styles.flex1}>
-          <ActivityIndicator color={Colors.white} />
+          <ActivityIndicator
+            color={type === "outline" ? Colors.hint500 : Colors.white}
+          />
         </View>
       ) : (
         <>

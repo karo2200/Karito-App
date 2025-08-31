@@ -24,8 +24,8 @@ type AuthCacheType = {
   setNationalCode: (value: string) => void;
   setPhone: (value: string) => void;
   phone: string;
-  seeTabs: boolean;
-  setSeeTabs: (value: boolean) => void;
+  isSelectRole: boolean;
+  setIsSelectRole: (value: boolean) => void;
 };
 type AuthCacheStore = (
   config: StateCreator<AuthCacheType>,
@@ -55,8 +55,8 @@ export const authCacheStore = create<AuthCacheType>(
       setUserId: (userId: string) => set({ userId }),
       customerCity: "تهران",
       setCustomerCity: (customerCity: string) => set({ customerCity }),
-      seeTabs: true,
-      setSeeTabs: (value: boolean) => set({ seeTabs: value }),
+      isSelectRole: false,
+      setIsSelectRole: (value: boolean) => set({ isSelectRole: value }),
       clearAuth: () =>
         set({
           accessToken: null,
@@ -66,6 +66,7 @@ export const authCacheStore = create<AuthCacheType>(
           isExpert: undefined,
           nationalCode: "",
           phone: "",
+          isSelectRole: false,
         }),
     }),
     {
