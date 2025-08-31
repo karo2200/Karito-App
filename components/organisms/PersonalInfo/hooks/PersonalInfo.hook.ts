@@ -58,7 +58,8 @@ export default function usePersonalInfoHook() {
               message: "اطلاعات با موفقیت ثبت شد.",
               type: "success",
             });
-            router.back();
+            setIsLoggedIn(true);
+            // router.back();
           } else {
             showToast({
               message: data?.specialist_setPersonalInformation?.status?.message,

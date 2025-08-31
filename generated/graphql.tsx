@@ -518,6 +518,7 @@ export type FloatOperationFilterInput = {
 export enum Gender {
   Female = "FEMALE",
   Male = "MALE",
+  NotSet = "NOT_SET",
 }
 
 export type GenderOperationFilterInput = {
@@ -1939,7 +1940,6 @@ export type UpdateUserProfileInput = {
   gender: Gender;
   lastName: Scalars["String"]["input"];
   profileImageUrl?: InputMaybe<Scalars["String"]["input"]>;
-  userId: Scalars["UUID"]["input"];
 };
 
 export type UserProfileDto = {
