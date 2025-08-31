@@ -11,13 +11,21 @@ type AuthCacheType = {
   setValidTo: (validTo: string) => void;
   isOnBoarded?: boolean;
   setIsOnBoarded: (isOnBoarded: boolean) => void;
-  isUserLoggedIn?: boolean;
-  setIsUserLoggedIn: (isUserLoggedIn: boolean) => void;
   userId: string;
   setUserId: (userId: string) => void;
   customerCity: string;
   setCustomerCity: (customerCity: string) => void;
   clearAuth: () => void;
+  isLoggedIn: boolean;
+  isExpert: boolean;
+  setIsLoggedIn: (value: boolean) => void;
+  setIsExpert: (value: boolean) => void;
+  nationalCode: string;
+  setNationalCode: (value: string) => void;
+  setPhone: (value: string) => void;
+  phone: string;
+  seeTabs: boolean;
+  setSeeTabs: (value: boolean) => void;
 };
 type AuthCacheStore = (
   config: StateCreator<AuthCacheType>,
@@ -35,18 +43,29 @@ export const authCacheStore = create<AuthCacheType>(
       setValidTo: (validTo: string) => set({ validTo }),
       isOnBoarded: false,
       setIsOnBoarded: (isOnBoarded: boolean) => set({ isOnBoarded }),
-      isUserLoggedIn: false,
-      setIsUserLoggedIn: (isUserLoggedIn: boolean) => set({ isUserLoggedIn }),
       userId: "",
+      isLoggedIn: false,
+      isExpert: false,
+      setIsLoggedIn: (isLoggedIn: boolean) => set({ isLoggedIn }),
+      setIsExpert: (isExpert: boolean) => set({ isExpert }),
+      nationalCode: "",
+      setNationalCode: (nationalCode: string) => set({ nationalCode }),
+      phone: "",
+      setPhone: (phone: string) => set({ phone }),
       setUserId: (userId: string) => set({ userId }),
       customerCity: "تهران",
       setCustomerCity: (customerCity: string) => set({ customerCity }),
+      seeTabs: true,
+      setSeeTabs: (value: boolean) => set({ seeTabs: value }),
       clearAuth: () =>
         set({
           accessToken: null,
           refreshToken: null,
           validTo: null,
-          isUserLoggedIn: false,
+          isLoggedIn: false,
+          isExpert: undefined,
+          nationalCode: "",
+          phone: "",
         }),
     }),
     {

@@ -8,8 +8,13 @@ import ServiceHeaderSection from "./Views/ServiceHeaderSection";
 import useServiceTabHook from "./serviceHook";
 
 export default function ServiceOrg() {
-  const { selectedService, onServiceItemPress, serviceItems, subServiceItems } =
-    useServiceTabHook();
+  const {
+    selectedService,
+    onServiceItemPress,
+    serviceItems,
+    subServiceItems,
+    setSearchText,
+  } = useServiceTabHook();
 
   return (
     <ScrollView style={styles.flex1}>
@@ -21,6 +26,7 @@ export default function ServiceOrg() {
           textAlign="right"
           textAlignVertical="center"
           placeholderTextColor={Colors.unfilledText}
+          onChangeText={setSearchText}
         />
       </ThemedView>
       <ServiceHeaderSection

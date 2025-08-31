@@ -5,7 +5,7 @@ import {
   SpecialistProfileDto,
   useSpecialist_SetPersonalInformationMutation,
 } from "@/generated/graphql";
-import useUserStore from "@/stores/loginStore";
+import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
@@ -18,7 +18,7 @@ export default function usePersonalInfoHook() {
 
   const { showToast } = useToast();
 
-  const { setIsLoggedIn, nationalCode } = useUserStore();
+  const { nationalCode } = authCacheStore();
 
   const queryClient = useQueryClient();
 

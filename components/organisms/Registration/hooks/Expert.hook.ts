@@ -5,7 +5,7 @@ import {
   useSpecialist_SetLocationAndSpecialtyMutation,
   VerificationStatus,
 } from "@/generated/graphql";
-import useUserStore from "@/stores/loginStore";
+import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
@@ -28,7 +28,7 @@ export default function useExpertHook() {
   const { showToast } = useToast();
 
   const { setNationalCode, nationalCode, setPhone, phone, setIsLoggedIn } =
-    useUserStore();
+    authCacheStore();
 
   const [page, setPage] = useState<number>(1);
   const [exitVisible, setExitVisible] = useState<boolean>(false);
