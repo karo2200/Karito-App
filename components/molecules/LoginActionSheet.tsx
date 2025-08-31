@@ -1,6 +1,5 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
-import useUserStore from "@/stores/loginStore";
 import {
   Dimensions,
   Platform,
@@ -37,7 +36,7 @@ const LoginActionSheet = (props: SheetProps<"confirmation-action">) => {
     positiveBackgroundColor,
     id = "confirmation-action",
   } = props?.payload ?? {};
-  const { setIsExpert, isExpert, setIsLoggedIn } = useUserStore();
+  const { setIsExpert, isExpert, setIsLoggedIn } = authCacheStore();
 
   const { clearAuth } = authCacheStore();
 

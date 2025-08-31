@@ -2,7 +2,6 @@ import { ToastProvider } from "@/components/atoms/Toast";
 import AuthProvider from "@/graphql/AuthProvider";
 import useNetworkStatus from "@/hooks/useNetworkStatus";
 import authCacheStore from "@/stores/authCacheStore";
-import useUserStore from "@/stores/loginStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -14,7 +13,7 @@ import "../sheets.tsx";
 import { RightIcon } from "./(tabs)/_layout";
 
 export default function RootLayout() {
-  const { isLoggedIn, isExpert } = useUserStore();
+  const { isLoggedIn, isExpert } = authCacheStore();
   const { accessToken } = authCacheStore();
 
   const [loaded] = useFonts({
@@ -53,7 +52,7 @@ export default function RootLayout() {
     headerRight: () => <RightIcon />,
     headerLeft: () => <></>,
   };
-
+  console.log({ isLoggedIn, isExpert });
   return (
     <AuthProvider>
       <SafeAreaProvider>
@@ -64,10 +63,7 @@ export default function RootLayout() {
                 <Stack.Protected guard={isLoggedIn && isExpert}>
                   <Stack.Screen name="(expertTabs)" />
                 </Stack.Protected>
-                <Stack.Protected guard={!isLoggedIn}>
-                  <Stack.Screen name="(tabs)" />
-                </Stack.Protected>
-                <Stack.Protected guard={isLoggedIn && !isExpert}>
+                <Stack.Protected guard={isLoggedIn}>
                   <Stack.Screen name="(tabs)" />
                 </Stack.Protected>
 

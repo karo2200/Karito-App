@@ -23,7 +23,8 @@ const schema = yup.object().shape({
 });
 
 const OTPSection = () => {
-  const { isVerifying, onDoLogin, phoneNumber, onRetryPress } = useOtpHook();
+  const { isVerifying, onDoLogin, phoneNumber, onSendOtp, isSendingCode } =
+    useOtpHook();
 
   const [isTimerActive, setIsTimerActive] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(60);
@@ -80,7 +81,7 @@ const OTPSection = () => {
                 style={styles.timerTxt}
               >{`${formatTime(secondsLeft)}`}</ThemedText>
             ) : (
-              <ThemedText style={styles.retryTxt} onPress={onRetryPress}>
+              <ThemedText style={styles.retryTxt} onPress={() => onSendOtp()}>
                 تلاش مجدد
               </ThemedText>
             )}
@@ -94,7 +95,7 @@ const OTPSection = () => {
         </View>
         <Footer
           onPress={handleSubmit(onDoLogin)}
-          isNextLoading={isVerifying}
+          isNextLoading={isVerifying || isSendingCode}
           hasError={
             errors?.["otpCode"]?.message?.length > 0 ||
             !getValues("otpCode") ||

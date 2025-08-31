@@ -10,8 +10,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
 import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
-import useProfileHook from "./hooks/Profile.hook";
 import CustomerEditProfileSheet from "./Views/CustomerEditProfileSheet";
+import useProfileHook from "./hooks/Profile.hook";
 
 export default function ProfileScreen() {
   const {
@@ -22,14 +22,15 @@ export default function ProfileScreen() {
     setIsExpert,
     router,
     userData,
-    isUserLoggedIn,
+    isLoggedIn,
+    setIsLoggedIn,
     editVisible,
     setEditVisible,
   } = useProfileHook();
 
   return (
     <View style={styles.container}>
-      {isUserLoggedIn ? (
+      {isLoggedIn ? (
         <View style={styles.flex1}>
           <View style={styles.headerContainer}>
             <EmptyProfileIcon />
@@ -123,11 +124,14 @@ export default function ProfileScreen() {
       ) : (
         <GuestMode />
       )}
-      {!isExpert && isUserLoggedIn && (
+      {!isExpert && isLoggedIn && (
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.payment}
-          onPress={() => setIsExpert(true)}
+          onPress={() => {
+            setIsExpert(true);
+            setIsLoggedIn(false);
+          }}
         >
           <ThemedText fontType="bold" style={styles.textBtn}>
             ورود به عنوان متخصص

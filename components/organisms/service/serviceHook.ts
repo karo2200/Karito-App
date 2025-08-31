@@ -8,8 +8,10 @@ import {
 export default function useServiceTabHook() {
   const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
   const [selectedService, setSelectedService] = useState(serviceItem0);
-
+  const [searchText, setSearchText] = useState<string | undefined>("");
   const { data, hasNextPage, fetchNextPage } = useGetServiceCategoriesQuery({});
+
+  const searchQuery = { name: { contains: searchText } };
 
   const {
     data: subServiceData,
@@ -18,10 +20,35 @@ export default function useServiceTabHook() {
   } = useGetSubServiceCategoriesQuery({
     where:
       selectedService?.id === -1
-        ? undefined
-        : { serviceCategory: { id: { eq: selectedService?.id } } },
+        ? searchText && searchText?.length > 0
+          ? searchQuery
+          : undefined
+        : searchText && searchText?.length > 0
+          ? {
+              and: [
+                { serviceCategory: { id: { eq: selectedService?.id } } },
+                searchQuery,
+              ],
+            }
+          : { serviceCategory: { id: { eq: selectedService?.id } } },
   });
-
+  console.log(
+    JSON.stringify({
+      where:
+        selectedService?.id === -1
+          ? searchText && searchText?.length > 0
+            ? searchQuery
+            : undefined
+          : searchText && searchText?.length > 0
+            ? {
+                and: [
+                  { serviceCategory: { id: { eq: selectedService?.id } } },
+                  searchQuery,
+                ],
+              }
+            : { serviceCategory: { id: { eq: selectedService?.id } } },
+    })
+  );
   const onServiceItemPress = (item: any) => {
     setSelectedService(item);
   };
@@ -45,5 +72,6 @@ export default function useServiceTabHook() {
     onFetchNextServices,
     onFetchNextSubServices,
     onServiceItemPress,
+    setSearchText,
   };
 }

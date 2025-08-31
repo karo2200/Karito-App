@@ -8,7 +8,7 @@ import { useGetAllCityQuery } from "./Home.query";
 export default function useHomeHook() {
   const router = useRouter();
 
-  const { isUserLoggedIn } = authCacheStore();
+  const { isLoggedIn } = authCacheStore();
 
   const { customerCity, setCustomerCity } = authCacheStore();
 
@@ -21,9 +21,9 @@ export default function useHomeHook() {
   const { data: selectedCityData, isLoading: selectedCityLoading } =
     useGetAllCityQuery({ where: { name: { eq: customerCity } } });
 
+  console.log({ isLoggedIn });
   useEffect(() => {
-    if (isUserLoggedIn) return;
-
+    if (isLoggedIn) return;
     const timeout = setTimeout(() => {
       onShow();
     }, 5000);
@@ -36,7 +36,7 @@ export default function useHomeHook() {
       clearTimeout(timeout);
       clearInterval(interval);
     };
-  }, [isUserLoggedIn]);
+  }, [isLoggedIn]);
 
   const onShow = () => {
     showSheet("confirmation-action", {
@@ -50,7 +50,7 @@ export default function useHomeHook() {
     });
   };
 
-  const { handleClose } = useShowSheetTimer(isUserLoggedIn, onShow, () =>
+  const { handleClose } = useShowSheetTimer(isLoggedIn, onShow, () =>
     hideSheet("confirmation-action")
   );
 
