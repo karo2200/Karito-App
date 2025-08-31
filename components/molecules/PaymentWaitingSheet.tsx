@@ -1,7 +1,7 @@
 import CoopratoinIcon from "@/assets/icons/Coopretion";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
-import useUserStore from "@/stores/loginStore";
+import authCacheStore from "@/stores/authCacheStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
@@ -21,7 +21,7 @@ export default function PaymentWaitingSheet({
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const { onCompletePress, completePending } = useOrderDetailHook();
-  const { isExpert } = useUserStore();
+  const { isExpert } = authCacheStore();
 
   useEffect(() => {
     if (visible) {

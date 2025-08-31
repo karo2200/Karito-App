@@ -5,22 +5,18 @@ import {
   useAuth_VerifyOtpMutation,
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
-import useUserStore from "@/stores/loginStore";
 import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 
 export default function useOtpHook() {
-  const { mutate } = useAuth_VerifyOtpMutation();
-  const { mutate: requestOtpMutate } = useAuth_RequestOtpMutation();
-
-  const [isVerifying, setIsVerifying] = useState<boolean>(false);
-  const [isSendingCode, setIsSendingCode] = useState<boolean>(false);
+  const { mutate, isPending: isVerifying } = useAuth_VerifyOtpMutation();
+  const { mutate: requestOtpMutate, isPending: isSendingCode } =
+    useAuth_RequestOtpMutation();
 
   const toast = useToast();
   const router = useRouter();
 
-  const { setIsExpert, setIsLoggedIn } = useUserStore();
+  const { setIsExpert, setIsLoggedIn } = authCacheStore();
   const { setAccessToken, setRefreshToken } = authCacheStore();
 
   const { params } = useRoute();
@@ -28,7 +24,6 @@ export default function useOtpHook() {
   const phoneNumber = params?.phone;
 
   const onDoLogin = (formData: any) => {
-    setIsVerifying(true);
     mutate(
       {
         input: {
@@ -39,8 +34,7 @@ export default function useOtpHook() {
       },
       {
         onSuccess: (data) => {
-          setIsVerifying(false);
-
+          console.log(JSON.stringify({ data }));
           if (data?.auth_verifyOtp.status?.code === 1) {
             setAccessToken(data?.auth_verifyOtp?.result?.accessToken ?? "");
             setRefreshToken(data?.auth_verifyOtp?.result?.refreshToken ?? "");
@@ -48,12 +42,14 @@ export default function useOtpHook() {
             setIsLoggedIn(true);
           }
         },
+        onError: (error) => {
+          console.log(JSON.stringify({ error }));
+        },
       }
     );
   };
 
   const onDoExpertLogin = (formData: any) => {
-    setIsVerifying(true);
     mutate(
       {
         input: {
@@ -64,34 +60,30 @@ export default function useOtpHook() {
       },
       {
         onSuccess: (data) => {
-          setIsVerifying(false);
           if (data?.auth_verifyOtp.status?.code === 1) {
             setAccessToken(data?.auth_verifyOtp?.result?.accessToken ?? "");
             setRefreshToken(data?.auth_verifyOtp?.result?.refreshToken ?? "");
 
             router.push(`/ExpertRegisterPage?phone=${phoneNumber}`);
+            setIsExpert(true);
           }
         },
       }
     );
   };
 
-  const onSendOtp = (continueFunc: () => void) => {
-    setIsSendingCode(true);
+  const onSendOtp = (continueFunc?: () => void) => {
     requestOtpMutate(
       { input: { phoneNumber, userType: UserType.Customer } },
       {
         onSuccess: (data) => {
-          setIsSendingCode(false);
           if (data?.auth_requestOtp?.status?.code === 1) {
-            setIsSendingCode(false);
             continueFunc?.();
           } else {
             toast.showToast({ message: data?.auth_requestOtp?.status?.value });
           }
         },
         onError: (errorData: any) => {
-          setIsSendingCode(false);
           toast.showToast({
             message: "خطایی پیش آمده است. لطفا بعدا تلاش کنید",
           });

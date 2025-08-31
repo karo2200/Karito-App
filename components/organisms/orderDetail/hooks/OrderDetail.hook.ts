@@ -7,7 +7,7 @@ import {
   useServiceRequest_CompleteServiceMutation,
   useServiceRequest_RejectMutation,
 } from "@/generated/graphql";
-import useUserStore from "@/stores/loginStore";
+import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
@@ -33,7 +33,7 @@ export default function useOrderDetailHook() {
     useState(false);
   const [cancelRequestVisible, setCancelRequestVisible] = useState(false);
 
-  const { isExpert, setIsExpert } = useUserStore();
+  const { isExpert } = authCacheStore();
 
   const { mutate: acceptWorkMutate, isPending: acceptWorkPending } =
     useServiceRequest_AcceptMutation();
