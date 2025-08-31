@@ -1,6 +1,7 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  useRateAndReview_CreateMutation,
   useServiceAcceptance_MarkAsArrivedMutation,
   useServiceRequest_AcceptMutation,
   useServiceRequest_CancelMutation,
@@ -33,6 +34,8 @@ export default function useOrderDetailHook() {
     useState(false);
   const [cancelRequestVisible, setCancelRequestVisible] = useState(false);
 
+  const [rate, setRate] = useState(0);
+
   const { isExpert } = authCacheStore();
 
   const { mutate: acceptWorkMutate, isPending: acceptWorkPending } =
@@ -43,6 +46,9 @@ export default function useOrderDetailHook() {
     useServiceRequest_RejectMutation();
   const { mutate: completeMutate, isPending: completePending } =
     useServiceRequest_CompleteServiceMutation();
+
+  const { mutate: rateMutate, isPending: ratePending } =
+    useRateAndReview_CreateMutation();
 
   const { mutate: arriveMutate, isPending: arrivePending } =
     useServiceAcceptance_MarkAsArrivedMutation();
@@ -192,6 +198,31 @@ export default function useOrderDetailHook() {
     );
   };
 
+  const onRatePress = (closeActionSheet: () => void) => {
+    rateMutate(
+      {
+        input: {
+          rate: rate,
+          serviceRequestId: params?.id,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          if (data?.rateAndReview_create?.status?.code === 1) {
+            showToast({
+              message: "امتیاز شما با موفقیت ثبت شد.",
+              type: "success",
+            });
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.serviceRequest_getById],
+            });
+            closeActionSheet?.();
+          }
+        },
+      }
+    );
+  };
+
   return {
     finishWorkVisible,
     setFinishWorkVisible,
@@ -217,5 +248,8 @@ export default function useOrderDetailHook() {
     onArrivePress,
     completePending,
     onCompletePress,
+    onRatePress,
+    ratePending,
+    setRate,
   };
 }

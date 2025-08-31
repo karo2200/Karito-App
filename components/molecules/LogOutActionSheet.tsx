@@ -51,6 +51,7 @@ export default function LogOutActionSheet({
           fontType="medium"
           onPress={() => {
             clearAuth();
+            closeActionSheet();
           }}
         />
         <ThemedButton

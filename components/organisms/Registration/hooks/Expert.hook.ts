@@ -3,13 +3,12 @@ import { queryKeys } from "@/constants/queryKeys";
 import {
   SpecialistProfileDto,
   useSpecialist_SetLocationAndSpecialtyMutation,
-  VerificationStatus,
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   useGetAllCityQuery,
   useGetAllprovinceQuery,
@@ -43,24 +42,24 @@ export default function useExpertHook() {
   const profileData: SpecialistProfileDto =
     expertData?.specialist_getMyProfile?.result;
 
-  useEffect(() => {
-    if (
-      profileData?.specializedDocumentsVerificationStatus ===
-        VerificationStatus.Approved &&
-      profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
-      profileData?.identityVerificationVideoStatus ===
-        VerificationStatus.Approved
-    ) {
-      setIsLoggedIn(true);
-    } else if (
-      profileData?.specializedDocumentUrls?.length > 0 &&
-      profileData?.lastName
-    ) {
-      setPage(3);
-    } else {
-      setIsLoggedIn(true);
-    }
-  }, [profileData]);
+  // useEffect(() => {
+  //   if (
+  //     profileData?.specializedDocumentsVerificationStatus ===
+  //       VerificationStatus.Approved &&
+  //     profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
+  //     profileData?.identityVerificationVideoStatus ===
+  //       VerificationStatus.Approved
+  //   ) {
+  //     setIsLoggedIn(true);
+  //   } else if (
+  //     profileData?.specializedDocumentUrls?.length > 0 &&
+  //     profileData?.lastName
+  //   ) {
+  //     setPage(3);
+  //   } else {
+  //     setIsLoggedIn(true);
+  //   }
+  // }, [profileData]);
 
   const { data: provinceData, isPending: provincePending } =
     useGetAllprovinceQuery({ take: 50 });

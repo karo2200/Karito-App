@@ -16,4 +16,5 @@ export const queryKeys = {
   province_getAll: "province_getAll",
   specialist_getMyProfile: "specialist_getMyProfile",
   user_updateProfile: "user_updateProfile",
+  user_getMyProfile: "user_getMyProfile",
 };
