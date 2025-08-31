@@ -13,8 +13,7 @@ import "../sheets.tsx";
 import { RightIcon } from "./(tabs)/_layout";
 
 export default function RootLayout() {
-  const { isLoggedIn, isExpert } = authCacheStore();
-  const { accessToken } = authCacheStore();
+  const { isLoggedIn, isExpert, isSelectRole } = authCacheStore();
 
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
@@ -52,7 +51,7 @@ export default function RootLayout() {
     headerRight: () => <RightIcon />,
     headerLeft: () => <></>,
   };
-  console.log({ isLoggedIn, isExpert });
+
   return (
     <AuthProvider>
       <SafeAreaProvider>
@@ -63,7 +62,9 @@ export default function RootLayout() {
                 <Stack.Protected guard={isLoggedIn && isExpert}>
                   <Stack.Screen name="(expertTabs)" />
                 </Stack.Protected>
-                <Stack.Protected guard={isLoggedIn}>
+                <Stack.Protected
+                  guard={(isLoggedIn && !isExpert) || !isSelectRole}
+                >
                   <Stack.Screen name="(tabs)" />
                 </Stack.Protected>
 

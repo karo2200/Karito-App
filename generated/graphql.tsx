@@ -38,6 +38,7 @@ export type Scalars = {
   Any: { input: any; output: any };
   DateTime: { input: any; output: any };
   Decimal: { input: any; output: any };
+  Long: { input: any; output: any };
   UUID: { input: any; output: any };
 };
 
@@ -268,6 +269,11 @@ export type CollectionSegmentInfo = {
   hasPreviousPage: Scalars["Boolean"]["output"];
 };
 
+export type CompleteMultipartUploadInput = {
+  objectKey: Scalars["String"]["input"];
+  uploadId: Scalars["String"]["input"];
+};
+
 export type CompleteServiceInput = {
   serviceRequestId: Scalars["UUID"]["input"];
 };
@@ -310,6 +316,12 @@ export type CreateNeighborhoodInput = {
 
 export type CreateProvinceInput = {
   name: Scalars["String"]["input"];
+};
+
+export type CreateRateAndReviewInput = {
+  comment: Scalars["String"]["input"];
+  rate: Scalars["Int"]["input"];
+  serviceRequestId: Scalars["UUID"]["input"];
 };
 
 export type CreateServiceCategoryInput = {
@@ -526,6 +538,16 @@ export type GenderOperationFilterInput = {
   in?: InputMaybe<Array<Gender>>;
   neq?: InputMaybe<Gender>;
   nin?: InputMaybe<Array<Gender>>;
+};
+
+export type GenerateMultipartPresignedUrlsInput = {
+  fileSize: Scalars["Long"]["input"];
+  objectKey: Scalars["String"]["input"];
+  partSize?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type GeneratePresignedUrlInput = {
+  objectKey: Scalars["String"]["input"];
 };
 
 export type GetBannerByIdInput = {
@@ -862,6 +884,10 @@ export type Mutation = {
   province_create: ResponseBaseOfProvinceDto;
   province_delete: ResponseBase;
   province_update: ResponseBaseOfProvinceDto;
+  rateAndReview_create: ResponseBaseOfRateAndReviewDto;
+  s3_completeMultipartUpload: ResponseBase;
+  s3_generatePresignedUrl: ResponseBaseOfS3SinglepartUploadUrlsResultDto;
+  s3_generatePresignedUrls: ResponseBaseOfS3MultipartUploadUrlsResultDto;
   serviceAcceptance_markAsArrived: ResponseBaseOfServiceRequestDto;
   serviceCategory_create: ResponseBaseOfServiceCategoryDto;
   serviceCategory_delete: ResponseBase;
@@ -1018,6 +1044,22 @@ export type MutationProvince_DeleteArgs = {
 
 export type MutationProvince_UpdateArgs = {
   input: UpdateProvinceInput;
+};
+
+export type MutationRateAndReview_CreateArgs = {
+  input: CreateRateAndReviewInput;
+};
+
+export type MutationS3_CompleteMultipartUploadArgs = {
+  input: CompleteMultipartUploadInput;
+};
+
+export type MutationS3_GeneratePresignedUrlArgs = {
+  input: GeneratePresignedUrlInput;
+};
+
+export type MutationS3_GeneratePresignedUrlsArgs = {
+  input: GenerateMultipartPresignedUrlsInput;
 };
 
 export type MutationServiceAcceptance_MarkAsArrivedArgs = {
@@ -1422,9 +1464,27 @@ export type ResponseBaseOfProvinceDto = {
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
+export type ResponseBaseOfRateAndReviewDto = {
+  __typename?: "ResponseBaseOfRateAndReviewDto";
+  result?: Maybe<RateAndReviewDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
 export type ResponseBaseOfRejectedServiceRequestDto = {
   __typename?: "ResponseBaseOfRejectedServiceRequestDto";
   result?: Maybe<RejectedServiceRequestDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfS3MultipartUploadUrlsResultDto = {
+  __typename?: "ResponseBaseOfS3MultipartUploadUrlsResultDto";
+  result?: Maybe<S3MultipartUploadUrlsResultDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfS3SinglepartUploadUrlsResultDto = {
+  __typename?: "ResponseBaseOfS3SinglepartUploadUrlsResultDto";
+  result?: Maybe<S3SinglepartUploadUrlsResultDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -1468,6 +1528,19 @@ export type ResponseBaseOfUserProfileDto = {
   __typename?: "ResponseBaseOfUserProfileDto";
   result?: Maybe<UserProfileDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type S3MultipartUploadUrlsResultDto = {
+  __typename?: "S3MultipartUploadUrlsResultDto";
+  objectUrl: Scalars["String"]["output"];
+  presignedUrls: Array<Scalars["String"]["output"]>;
+  uploadId: Scalars["String"]["output"];
+};
+
+export type S3SinglepartUploadUrlsResultDto = {
+  __typename?: "S3SinglepartUploadUrlsResultDto";
+  objectUrl: Scalars["String"]["output"];
+  presignedUrl: Scalars["String"]["output"];
 };
 
 export type ServiceCategoryDto = {
@@ -2755,6 +2828,18 @@ export type Specialist_SetLocationAndSpecialtyMutation = {
     __typename?: "ResponseBaseOfSpecialistProfileDto";
     status?: any | null;
     result?: { __typename?: "SpecialistProfileDto"; id: any } | null;
+  };
+};
+
+export type RateAndReview_CreateMutationVariables = Exact<{
+  input: CreateRateAndReviewInput;
+}>;
+
+export type RateAndReview_CreateMutation = {
+  __typename?: "Mutation";
+  rateAndReview_create: {
+    __typename?: "ResponseBaseOfRateAndReviewDto";
+    status?: any | null;
   };
 };
 
@@ -4815,6 +4900,41 @@ export const useSpecialist_SetLocationAndSpecialtyMutation = <
         Specialist_SetLocationAndSpecialtyMutation,
         Specialist_SetLocationAndSpecialtyMutationVariables
       >(Specialist_SetLocationAndSpecialtyDocument, variables)(),
+    ...options,
+  });
+};
+
+export const RateAndReview_CreateDocument = `
+    mutation rateAndReview_create($input: CreateRateAndReviewInput!) {
+  rateAndReview_create(input: $input) {
+    status
+  }
+}
+    `;
+
+export const useRateAndReview_CreateMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    RateAndReview_CreateMutation,
+    TError,
+    RateAndReview_CreateMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    RateAndReview_CreateMutation,
+    TError,
+    RateAndReview_CreateMutationVariables,
+    TContext
+  >({
+    mutationKey: ["rateAndReview_create"],
+    mutationFn: (variables?: RateAndReview_CreateMutationVariables) =>
+      fetcher<
+        RateAndReview_CreateMutation,
+        RateAndReview_CreateMutationVariables
+      >(RateAndReview_CreateDocument, variables)(),
     ...options,
   });
 };

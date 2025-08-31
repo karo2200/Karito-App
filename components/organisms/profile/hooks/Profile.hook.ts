@@ -5,7 +5,7 @@ import {
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Linking, Platform } from "react-native";
 
 export default function useProfileHook() {
@@ -14,8 +14,14 @@ export default function useProfileHook() {
   const [exitVisible, setExitVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
 
-  const { isExpert, setIsExpert, setUserId, isLoggedIn, setIsLoggedIn } =
-    authCacheStore();
+  const {
+    isExpert,
+    setIsExpert,
+    isLoggedIn,
+    setIsLoggedIn,
+    setAccessToken,
+    setRefreshToken,
+  } = authCacheStore();
 
   const { data } = useUser_GetMyProfileQuery();
 
@@ -25,12 +31,6 @@ export default function useProfileHook() {
 
   const { mutate: updateMutate, isPending: updatePending } =
     useUser_UpdateProfileMutation();
-
-  useEffect(() => {
-    if (data?.user_getMyProfile?.result) {
-      setUserId(data?.user_getMyProfile?.result?.id);
-    }
-  }, [data]);
 
   const onCallPress = () => {
     if (Platform.OS === "web") {
@@ -54,5 +54,7 @@ export default function useProfileHook() {
     editVisible,
     setEditVisible,
     setIsLoggedIn,
+    setAccessToken,
+    setRefreshToken,
   };
 }

@@ -36,24 +36,23 @@ const LoginActionSheet = (props: SheetProps<"confirmation-action">) => {
     positiveBackgroundColor,
     id = "confirmation-action",
   } = props?.payload ?? {};
-  const { setIsExpert, isExpert, setIsLoggedIn } = authCacheStore();
-
-  const { clearAuth } = authCacheStore();
+  const { setIsExpert, isExpert, setIsLoggedIn, setIsSelectRole } =
+    authCacheStore();
 
   const loginAsExpert = () => {
-    onClose();
+    setIsSelectRole(true);
     setIsExpert(true);
     setIsLoggedIn(false);
     hideSheet("confirmation-action");
-    clearAuth();
+    onClose();
   };
 
   const loginAsCustomer = () => {
-    onClose();
+    setIsSelectRole(true);
     setIsExpert(false);
     setIsLoggedIn(false);
     hideSheet("confirmation-action");
-    clearAuth();
+    onClose();
   };
 
   return (

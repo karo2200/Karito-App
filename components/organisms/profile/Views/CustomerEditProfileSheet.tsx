@@ -1,8 +1,10 @@
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import ThemedText from "@/components/atoms/ThemedText";
+import { useToast } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
 import { queryKeys } from "@/constants/queryKeys";
+import { Gender } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQueryClient } from "@tanstack/react-query";
@@ -28,6 +30,8 @@ const CustomerEditProfileSheet = ({
   onClose: () => void;
 }) => {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  const { showToast } = useToast();
 
   const { updatePending, updateMutate, userData } = useProfileHook();
   const queryClient = useQueryClient();
@@ -55,19 +59,28 @@ const CustomerEditProfileSheet = ({
     handleSubmit,
     register,
     formState: { errors },
-    control,
   } = methods;
 
   const onRegistrationPress = (formData: any) => {
     updateMutate(
-      { input: { firstName: formData?.name, lastName: formData?.family } },
+      {
+        input: {
+          firstName: formData?.name,
+          lastName: formData?.family,
+          gender: Gender.NotSet,
+        },
+      },
       {
         onSuccess: (data) => {
           if (data?.user_updateProfile?.status?.code === 1) {
             queryClient.invalidateQueries({
-              queryKey: [queryKeys.user_updateProfile],
+              queryKey: [queryKeys.user_getMyProfile],
             });
-            closeActionSheet;
+            showToast({
+              type: "success",
+              message: "اطلاعات با موفقیت بروز شد.",
+            });
+            closeActionSheet();
           }
         },
       }

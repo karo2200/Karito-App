@@ -49,3 +49,9 @@ mutation specialist_setLocationAndSpecialty(
     status
   }
 }
+
+mutation rateAndReview_create($input: CreateRateAndReviewInput!) {
+  rateAndReview_create(input: $input) {
+    status
+  }
+}

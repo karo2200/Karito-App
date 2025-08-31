@@ -26,6 +26,8 @@ export default function ProfileScreen() {
     setIsLoggedIn,
     editVisible,
     setEditVisible,
+    setAccessToken,
+    setRefreshToken,
   } = useProfileHook();
 
   return (
@@ -131,6 +133,8 @@ export default function ProfileScreen() {
           onPress={() => {
             setIsExpert(true);
             setIsLoggedIn(false);
+            setAccessToken("");
+            setRefreshToken("");
           }}
         >
           <ThemedText fontType="bold" style={styles.textBtn}>
