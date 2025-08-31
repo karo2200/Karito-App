@@ -51,8 +51,10 @@ query serviceRequest_getMyAcceptances(
       items {
         address {
           text
-          latitude
-          longitude
+          location {
+            latitude
+            longitude
+          }
           neighborhood {
             id
             city {
@@ -107,8 +109,10 @@ query serviceRequest_getById($id: UUID!) {
     result {
       address {
         text
-        latitude
-        longitude
+        location {
+          latitude
+          longitude
+        }
         neighborhood {
           id
           city {

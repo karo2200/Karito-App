@@ -22,8 +22,10 @@ query address_getMyAddresses(
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         id
-        latitude
-        longitude
+        location {
+          latitude
+          longitude
+        }
         neighborhood {
           id
           city {

@@ -3,3 +3,9 @@ mutation address_create($input: AddAddressInput!) {
     status
   }
 }
+
+mutation address_update($input: UpdateAddressInput!) {
+  address_update(input: $input) {
+    status
+  }
+}
