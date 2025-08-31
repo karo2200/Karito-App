@@ -9,6 +9,9 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "ios": {
+      "config": {
+        "googleMapsApiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
+      },
       "supportsTablet": true
     },
     "android": {
@@ -17,7 +20,12 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": ["ACCESS_NETWORK_STATE", "INTERNET"],
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "config": {
+        "googleMaps": {
+          "apiKey": "process.env.AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
@@ -40,6 +48,14 @@
         {
           "requestLocationPermission": true,
           "locationPermission": "Allow KartioApp to use your location"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Karito to access your camera",
+          "microphonePermission": "Allow Karito to access your microphone",
+          "recordAudioAndroid": true
         }
       ]
     ],

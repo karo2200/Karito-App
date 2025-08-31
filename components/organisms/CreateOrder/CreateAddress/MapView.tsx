@@ -1,7 +1,8 @@
 import { StyleSheet } from "react-native";
 
 import { ThemedView } from "@/components";
-import { WebView } from "react-native-webview";
+// import { WebView } from "react-native-webview";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 const html = `<!DOCTYPE html>
 <html lang="fa">
@@ -84,21 +85,22 @@ const html = `<!DOCTYPE html>
 </body>
 </html>`;
 
-export default function MapView({
+export default function MapViewS({
   onLocationSelected,
 }: {
   onLocationSelected?: (event: any) => void;
 }) {
   return (
     <ThemedView style={styles.mapContainer}>
-      <WebView
+      {/* <WebView
         originWhitelist={["*"]}
         source={{ html }}
         javaScriptEnabled
         onMessage={(event) => {
           onLocationSelected?.(event?.nativeEvent?.data);
         }}
-      />
+      /> */}
+      <MapView provider={PROVIDER_GOOGLE} style={{ flex: 1 }} />
     </ThemedView>
   );
 }
