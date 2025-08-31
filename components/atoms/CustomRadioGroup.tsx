@@ -1,7 +1,7 @@
 import { Divider, ThemedText, ThemedView } from "@/components";
 import React, { JSX } from "react";
 import { useController } from "react-hook-form";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import CustomRadioButton from "./CustomRadioButton";
 
 type RadioGroupProps = {
@@ -11,6 +11,7 @@ type RadioGroupProps = {
   RightIcon?: JSX.Element;
   dividerHeight?: number;
   onChange?: (item: any) => void;
+  onRightIconPress?: (item: any) => void;
 };
 
 export default React.forwardRef(
@@ -22,6 +23,7 @@ export default React.forwardRef(
       RightIcon,
       dividerHeight = 24,
       onChange,
+      onRightIconPress,
     }: RadioGroupProps,
     ref: any
   ) => {
@@ -44,7 +46,14 @@ export default React.forwardRef(
             return (
               <ThemedView key={`${index}_${item?.value}`}>
                 <ThemedView style={styles.groupView}>
-                  {RightIcon && RightIcon}
+                  {RightIcon && (
+                    <TouchableOpacity
+                      disabled={!onRightIconPress}
+                      onPress={() => onRightIconPress?.(item)}
+                    >
+                      {RightIcon}
+                    </TouchableOpacity>
+                  )}
                   <CustomRadioButton
                     checked={isChecked}
                     label={item?.label}
