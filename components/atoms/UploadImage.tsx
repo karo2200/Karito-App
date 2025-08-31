@@ -5,10 +5,11 @@ import * as ImagePicker from "expo-image-picker";
 import { Camera, Gallery } from "iconsax-react-native";
 import React, { useRef } from "react";
 import { Control, useController } from "react-hook-form";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
+import { useToast } from "./Toast";
 
 type UploadImageFieldProps = {
   name: string;
@@ -26,6 +27,8 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const { mutate: upload, isPending } = useUploadFile();
+
+  const { showToast } = useToast();
 
   const { field } = useController({
     control,
@@ -45,16 +48,17 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
       const file = {
         uri: result.assets[0].uri,
         name: `${Date.now()}-image.jpg`,
-        type: "image/jpeg",
+        type: result.assets[0]?.mimeType,
+        size: result.assets[0]?.fileSize,
       };
+
       actionSheetRef.current?.hide();
       upload(file, {
         onSuccess: (url) => {
-          console.log("ffffff", url);
           field.onChange(url);
         },
-        onError: (err) => {
-          console.error("Upload error:", err);
+        onError: () => {
+          onShowToast();
         },
       });
     }
@@ -69,15 +73,23 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
       const file = {
         uri: result.assets[0].uri,
         name: `${Date.now()}-image.jpg`,
-        type: "image/jpeg",
+        type: result.assets[0]?.mimeType,
+        size: result.assets[0]?.fileSize,
       };
       actionSheetRef.current?.hide();
       upload(file, {
         onSuccess: (url) => {
           field.onChange(url);
         },
+        onError: () => {
+          onShowToast();
+        },
       });
     }
+  };
+
+  const onShowToast = () => {
+    showToast({ type: "error", message: "لطفا دوباره تلاش کنید" });
   };
 
   return (
@@ -92,11 +104,11 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
       <View style={styles.imageContainer}>
         {field.value ? (
           <>
-            {/* <Image
-              src={{ uri: field.value }}
+            <Image
+              source={{ uri: field.value }}
               style={styles.image}
               resizeMode="cover"
-            /> */}
+            />
             <ThemedButton
               title="تغییر"
               type="outline"

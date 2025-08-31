@@ -1809,12 +1809,12 @@ export enum SortEnumType {
 export type SpecialistDto = {
   __typename?: "SpecialistDto";
   averageRating: Scalars["Float"]["output"];
-  firstName: Scalars["String"]["output"];
+  firstName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
-  lastName: Scalars["String"]["output"];
+  lastName?: Maybe<Scalars["String"]["output"]>;
   phoneNumber: Scalars["String"]["output"];
-  profileImageUrl: Scalars["String"]["output"];
+  profileImageUrl?: Maybe<Scalars["String"]["output"]>;
   rateCount: Scalars["Int"]["output"];
 };
 
@@ -2017,12 +2017,12 @@ export type UpdateUserProfileInput = {
 
 export type UserProfileDto = {
   __typename?: "UserProfileDto";
-  firstName: Scalars["String"]["output"];
+  firstName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
-  lastName: Scalars["String"]["output"];
+  lastName?: Maybe<Scalars["String"]["output"]>;
   phoneNumber: Scalars["String"]["output"];
-  profileImageUrl: Scalars["String"]["output"];
+  profileImageUrl?: Maybe<Scalars["String"]["output"]>;
 };
 
 export enum UserType {
@@ -2340,10 +2340,10 @@ export type ServiceRequest_GetMyRequestsQuery = {
         serviceType: { __typename?: "ServiceTypeDto"; name: string; id: any };
         specialist?: {
           __typename?: "SpecialistDto";
-          lastName: string;
-          firstName: string;
+          lastName?: string | null;
+          firstName?: string | null;
           id: any;
-          profileImageUrl: string;
+          profileImageUrl?: string | null;
         } | null;
       }> | null;
       pageInfo: {
@@ -2412,10 +2412,10 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
         };
         specialist?: {
           __typename?: "SpecialistDto";
-          lastName: string;
-          firstName: string;
+          lastName?: string | null;
+          firstName?: string | null;
           id: any;
-          profileImageUrl: string;
+          profileImageUrl?: string | null;
           rateCount: number;
           phoneNumber: string;
         } | null;
@@ -2478,10 +2478,10 @@ export type ServiceRequest_GetByIdQuery = {
       };
       specialist?: {
         __typename?: "SpecialistDto";
-        lastName: string;
-        firstName: string;
+        lastName?: string | null;
+        firstName?: string | null;
         id: any;
-        profileImageUrl: string;
+        profileImageUrl?: string | null;
         rateCount: number;
         phoneNumber: string;
       } | null;
@@ -2756,14 +2756,61 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
         };
         specialist?: {
           __typename?: "SpecialistDto";
-          lastName: string;
-          firstName: string;
+          lastName?: string | null;
+          firstName?: string | null;
           id: any;
-          profileImageUrl: string;
+          profileImageUrl?: string | null;
           rateCount: number;
           phoneNumber: string;
         } | null;
       }> | null;
+    } | null;
+  };
+};
+
+export type S3_CompleteMultipartUploadMutationVariables = Exact<{
+  input: CompleteMultipartUploadInput;
+}>;
+
+export type S3_CompleteMultipartUploadMutation = {
+  __typename?: "Mutation";
+  s3_completeMultipartUpload: {
+    __typename?: "ResponseBase";
+    status?: any | null;
+  };
+};
+
+export type S3_GeneratePresignedUrlMutationVariables = Exact<{
+  input: GeneratePresignedUrlInput;
+}>;
+
+export type S3_GeneratePresignedUrlMutation = {
+  __typename?: "Mutation";
+  s3_generatePresignedUrl: {
+    __typename?: "ResponseBaseOfS3SinglepartUploadUrlsResultDto";
+    status?: any | null;
+    result?: {
+      __typename?: "S3SinglepartUploadUrlsResultDto";
+      objectUrl: string;
+      presignedUrl: string;
+    } | null;
+  };
+};
+
+export type S3_GeneratePresignedUrlsMutationVariables = Exact<{
+  input: GenerateMultipartPresignedUrlsInput;
+}>;
+
+export type S3_GeneratePresignedUrlsMutation = {
+  __typename?: "Mutation";
+  s3_generatePresignedUrls: {
+    __typename?: "ResponseBaseOfS3MultipartUploadUrlsResultDto";
+    status?: any | null;
+    result?: {
+      __typename?: "S3MultipartUploadUrlsResultDto";
+      objectUrl: string;
+      presignedUrls: Array<string>;
+      uploadId: string;
     } | null;
   };
 };
@@ -2854,10 +2901,10 @@ export type User_GetMyProfileQuery = {
       __typename?: "UserProfileDto";
       id: any;
       phoneNumber: string;
-      firstName: string;
+      firstName?: string | null;
       gender: Gender;
-      lastName: string;
-      profileImageUrl: string;
+      lastName?: string | null;
+      profileImageUrl?: string | null;
     } | null;
   };
 };
@@ -4713,6 +4760,120 @@ export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
       };
     })(),
   );
+};
+
+export const S3_CompleteMultipartUploadDocument = `
+    mutation s3_completeMultipartUpload($input: CompleteMultipartUploadInput!) {
+  s3_completeMultipartUpload(input: $input) {
+    status
+  }
+}
+    `;
+
+export const useS3_CompleteMultipartUploadMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    S3_CompleteMultipartUploadMutation,
+    TError,
+    S3_CompleteMultipartUploadMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    S3_CompleteMultipartUploadMutation,
+    TError,
+    S3_CompleteMultipartUploadMutationVariables,
+    TContext
+  >({
+    mutationKey: ["s3_completeMultipartUpload"],
+    mutationFn: (variables?: S3_CompleteMultipartUploadMutationVariables) =>
+      fetcher<
+        S3_CompleteMultipartUploadMutation,
+        S3_CompleteMultipartUploadMutationVariables
+      >(S3_CompleteMultipartUploadDocument, variables)(),
+    ...options,
+  });
+};
+
+export const S3_GeneratePresignedUrlDocument = `
+    mutation s3_generatePresignedUrl($input: GeneratePresignedUrlInput!) {
+  s3_generatePresignedUrl(input: $input) {
+    result {
+      objectUrl
+      presignedUrl
+    }
+    status
+  }
+}
+    `;
+
+export const useS3_GeneratePresignedUrlMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    S3_GeneratePresignedUrlMutation,
+    TError,
+    S3_GeneratePresignedUrlMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    S3_GeneratePresignedUrlMutation,
+    TError,
+    S3_GeneratePresignedUrlMutationVariables,
+    TContext
+  >({
+    mutationKey: ["s3_generatePresignedUrl"],
+    mutationFn: (variables?: S3_GeneratePresignedUrlMutationVariables) =>
+      fetcher<
+        S3_GeneratePresignedUrlMutation,
+        S3_GeneratePresignedUrlMutationVariables
+      >(S3_GeneratePresignedUrlDocument, variables)(),
+    ...options,
+  });
+};
+
+export const S3_GeneratePresignedUrlsDocument = `
+    mutation s3_generatePresignedUrls($input: GenerateMultipartPresignedUrlsInput!) {
+  s3_generatePresignedUrls(input: $input) {
+    result {
+      objectUrl
+      presignedUrls
+      uploadId
+    }
+    status
+  }
+}
+    `;
+
+export const useS3_GeneratePresignedUrlsMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    S3_GeneratePresignedUrlsMutation,
+    TError,
+    S3_GeneratePresignedUrlsMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    S3_GeneratePresignedUrlsMutation,
+    TError,
+    S3_GeneratePresignedUrlsMutationVariables,
+    TContext
+  >({
+    mutationKey: ["s3_generatePresignedUrls"],
+    mutationFn: (variables?: S3_GeneratePresignedUrlsMutationVariables) =>
+      fetcher<
+        S3_GeneratePresignedUrlsMutation,
+        S3_GeneratePresignedUrlsMutationVariables
+      >(S3_GeneratePresignedUrlsDocument, variables)(),
+    ...options,
+  });
 };
 
 export const User_UpdateProfileDocument = `

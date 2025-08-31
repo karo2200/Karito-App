@@ -10,7 +10,7 @@ type QueryType = {
   args: any;
 };
 
-async function graphqlFetcher<T extends QueryType>(
+export async function graphqlFetcher<T extends QueryType>(
   GQL: string,
   args?: T["args"]
 ) {
