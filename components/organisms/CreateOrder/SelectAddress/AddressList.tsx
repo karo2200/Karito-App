@@ -26,7 +26,7 @@ export default function AddressList({
     }
     return data?.pages?.[0]
       ? data?.pages?.map?.((item, index) => {
-          return { label: item?.text, value: item?.id };
+          return { label: item?.text, value: item?.id, ...item };
         })
       : [];
   }, [data]);
@@ -35,19 +35,22 @@ export default function AddressList({
     router.push("/CreateAddress");
   };
 
+  const onEditPress = (item: any) => {
+    router.push(
+      `/CreateAddress?nid=${item?.neighborhood?.id}&txt=${item?.text}&lat=${item?.latitude}&lng=${item?.longitude}&id=${item?.id}`
+    );
+  };
+
   return (
     <ThemedView style={styles.container}>
       <CustomRadioGroup
         label="آدرس سفارش خود را انتخاب کنید:"
         data={myAddresses}
         name={"addressId"}
+        onRightIconPress={onEditPress}
         onChange={(item) => onChange?.(item)}
         RightIcon={
-          <Edit
-            size={24}
-            color={Colors.gray500}
-            style={{ backgroundColor: Colors.background }}
-          />
+          <Edit size={24} color={Colors.gray500} style={styles.editIcon} />
         }
       />
       <ThemedButton
@@ -65,4 +68,6 @@ const styles = StyleSheet.create({
   btn: { width: "100%", marginTop: 70 },
 
   container: { width: "100%" },
+
+  editIcon: { backgroundColor: Colors.background },
 });

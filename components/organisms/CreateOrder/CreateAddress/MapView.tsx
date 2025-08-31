@@ -84,7 +84,7 @@ const html = `<!DOCTYPE html>
 </body>
 </html>`;
 
-export default function MapView({
+export default function MapViewS({
   onLocationSelected,
 }: {
   onLocationSelected?: (event: any) => void;

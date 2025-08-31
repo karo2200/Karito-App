@@ -16,11 +16,12 @@ export default function useLoginHook() {
           if (data?.auth_requestOtp?.status?.code === 1) {
             router.push(`/OTPScreen?phone=${formData?.phone}`);
           } else {
-            toast.showToast({ message: data?.auth_requestOtp?.status?.value });
+            toast.showToast({
+              message: data?.auth_requestOtp?.status?.message,
+            });
           }
         },
         onError: (errorData: any) => {
-          console.log(JSON.stringify({ errorData }));
           toast.showToast({
             message: "خطایی پیش آمده است. لطفا بعدا تلاش کنید",
           });

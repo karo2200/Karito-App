@@ -39,8 +39,10 @@ query serviceRequest_getAvailableRequests(
       items {
         address {
           text
-          latitude
-          longitude
+          location {
+            latitude
+            longitude
+          }
           neighborhood {
             id
             city {

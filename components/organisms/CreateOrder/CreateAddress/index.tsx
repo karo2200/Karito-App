@@ -5,9 +5,11 @@ import { Colors } from "@/constants/Colors";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useAddress_CreateMutation,
+  useAddress_UpdateMutation,
   useUser_GetMyProfileQuery,
 } from "@/generated/graphql";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -25,6 +27,8 @@ const schema = yup.object().shape({
 });
 
 export default function AddressMap() {
+  const editItem = useRoute().params;
+
   const { data } = useGetNeighborhoodsQuery({});
   const neighborHoods = data?.pages?.[0] ? data?.pages : [];
 
@@ -35,6 +39,12 @@ export default function AddressMap() {
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
+    defaultValues: {
+      address: editItem?.txt,
+      area: editItem?.nid,
+      lat: parseFloat(editItem?.lat),
+      lng: parseFloat(editItem?.lng),
+    },
   });
   const { handleSubmit, register, setValue } = methods;
 
@@ -68,33 +78,60 @@ export default function AddressMap() {
   };
 
   const { mutate, isPending } = useAddress_CreateMutation();
+  const { mutate: editMutate, isPending: isUpdating } =
+    useAddress_UpdateMutation();
+
   const queryClient = useQueryClient();
   const onPress = (formData) => {
-    mutate(
-      {
-        input: {
-          neighborhoodId: formData?.area,
-          latitude: formData?.lat,
-          longitude: formData?.lng,
-          customerId: user?.id,
-          text: formData?.address,
+    const input = {
+      neighborhoodId: formData?.area,
+      latitude: formData?.lat,
+      longitude: formData?.lng,
+      customerId: user?.id,
+      text: formData?.address,
+    };
+
+    if (editItem?.id) {
+      editMutate(
+        {
+          input: {
+            addressId: editItem?.id,
+            newLatitude: formData?.lat,
+            newLongitude: formData?.lng,
+            newText: formData?.address,
+          },
         },
-      },
-      {
-        onSuccess: (data) => {
-          if (data?.address_create?.status?.code === 1) {
-            queryClient.invalidateQueries({
-              queryKey: [queryKeys.address_getMyAddresses],
-              exact: false,
-            });
-            router?.back();
-          }
+        {
+          onSuccess: (data) => {
+            if (data?.address_update?.status?.code === 1) {
+              queryClient.invalidateQueries({
+                queryKey: [queryKeys.address_getMyAddresses],
+                exact: false,
+              });
+              router?.back();
+            }
+          },
+          onError: (edata) => {},
+        }
+      );
+    } else
+      mutate(
+        {
+          input,
         },
-        onError: (edata) => {
-          console?.log(edata);
-        },
-      }
-    );
+        {
+          onSuccess: (data) => {
+            if (data?.address_create?.status?.code === 1) {
+              queryClient.invalidateQueries({
+                queryKey: [queryKeys.address_getMyAddresses],
+                exact: false,
+              });
+              router?.back();
+            }
+          },
+          onError: (edata) => {},
+        }
+      );
   };
 
   return (
@@ -136,7 +173,7 @@ export default function AddressMap() {
         <ThemedButton
           title="ذخیره"
           onPress={handleSubmit(onPress)}
-          isLoading={isPending}
+          isLoading={isPending || isUpdating}
         />
       </FormProvider>
     </View>

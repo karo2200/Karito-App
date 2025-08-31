@@ -67,8 +67,7 @@ export type AddressDto = {
   customer: CustomerDto;
   id: Scalars["UUID"]["output"];
   isPrimary: Scalars["Boolean"]["output"];
-  latitude: Scalars["Float"]["output"];
-  longitude: Scalars["Float"]["output"];
+  location: Coordinates;
   neighborhood: NeighborhoodDto;
   text: Scalars["String"]["output"];
 };
@@ -88,8 +87,7 @@ export type AddressDtoFilterInput = {
   customer?: InputMaybe<CustomerDtoFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isPrimary?: InputMaybe<BooleanOperationFilterInput>;
-  latitude?: InputMaybe<FloatOperationFilterInput>;
-  longitude?: InputMaybe<FloatOperationFilterInput>;
+  location?: InputMaybe<CoordinatesFilterInput>;
   neighborhood?: InputMaybe<NeighborhoodDtoFilterInput>;
   or?: InputMaybe<Array<AddressDtoFilterInput>>;
   text?: InputMaybe<StringOperationFilterInput>;
@@ -99,8 +97,7 @@ export type AddressDtoSortInput = {
   customer?: InputMaybe<CustomerDtoSortInput>;
   id?: InputMaybe<SortEnumType>;
   isPrimary?: InputMaybe<SortEnumType>;
-  latitude?: InputMaybe<SortEnumType>;
-  longitude?: InputMaybe<SortEnumType>;
+  location?: InputMaybe<CoordinatesSortInput>;
   neighborhood?: InputMaybe<NeighborhoodDtoSortInput>;
   text?: InputMaybe<SortEnumType>;
 };
@@ -278,9 +275,27 @@ export type CompleteServiceInput = {
   serviceRequestId: Scalars["UUID"]["input"];
 };
 
+export type Coordinates = {
+  __typename?: "Coordinates";
+  latitude: Scalars["Float"]["output"];
+  longitude: Scalars["Float"]["output"];
+};
+
+export type CoordinatesFilterInput = {
+  and?: InputMaybe<Array<CoordinatesFilterInput>>;
+  latitude?: InputMaybe<FloatOperationFilterInput>;
+  longitude?: InputMaybe<FloatOperationFilterInput>;
+  or?: InputMaybe<Array<CoordinatesFilterInput>>;
+};
+
 export type CoordinatesInput = {
   latitude: Scalars["Float"]["input"];
   longitude: Scalars["Float"]["input"];
+};
+
+export type CoordinatesSortInput = {
+  latitude?: InputMaybe<SortEnumType>;
+  longitude?: InputMaybe<SortEnumType>;
 };
 
 export type CreateBannerInput = {
@@ -307,6 +322,7 @@ export type CreateDiscountCodeInput = {
   customerId: Scalars["UUID"]["input"];
   expiryDate?: InputMaybe<Scalars["DateTime"]["input"]>;
   isPercentage: Scalars["Boolean"]["input"];
+  title: Scalars["String"]["input"];
 };
 
 export type CreateNeighborhoodInput = {
@@ -319,7 +335,7 @@ export type CreateProvinceInput = {
 };
 
 export type CreateRateAndReviewInput = {
-  comment: Scalars["String"]["input"];
+  comment?: InputMaybe<Scalars["String"]["input"]>;
   rate: Scalars["Int"]["input"];
   serviceRequestId: Scalars["UUID"]["input"];
 };
@@ -362,12 +378,12 @@ export type CreateServiceTypeQuestionInput = {
 
 export type CustomerDto = {
   __typename?: "CustomerDto";
-  firstName: Scalars["String"]["output"];
+  firstName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
-  lastName: Scalars["String"]["output"];
+  lastName?: Maybe<Scalars["String"]["output"]>;
   phoneNumber: Scalars["String"]["output"];
-  profileImageUrl: Scalars["String"]["output"];
+  profileImageUrl?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type CustomerDtoFilterInput = {
@@ -476,10 +492,12 @@ export type DiscountCodeDto = {
   __typename?: "DiscountCodeDto";
   amount: Scalars["Decimal"]["output"];
   code: Scalars["String"]["output"];
+  customerDto: CustomerDto;
   expiryDate?: Maybe<Scalars["DateTime"]["output"]>;
   id: Scalars["UUID"]["output"];
   isActive: Scalars["Boolean"]["output"];
   isPercentage: Scalars["Boolean"]["output"];
+  title: Scalars["String"]["output"];
 };
 
 /** A segment of a collection. */
@@ -496,20 +514,24 @@ export type DiscountCodeDtoFilterInput = {
   amount?: InputMaybe<DecimalOperationFilterInput>;
   and?: InputMaybe<Array<DiscountCodeDtoFilterInput>>;
   code?: InputMaybe<StringOperationFilterInput>;
+  customerDto?: InputMaybe<CustomerDtoFilterInput>;
   expiryDate?: InputMaybe<DateTimeOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isActive?: InputMaybe<BooleanOperationFilterInput>;
   isPercentage?: InputMaybe<BooleanOperationFilterInput>;
   or?: InputMaybe<Array<DiscountCodeDtoFilterInput>>;
+  title?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type DiscountCodeDtoSortInput = {
   amount?: InputMaybe<SortEnumType>;
   code?: InputMaybe<SortEnumType>;
+  customerDto?: InputMaybe<CustomerDtoSortInput>;
   expiryDate?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   isActive?: InputMaybe<SortEnumType>;
   isPercentage?: InputMaybe<SortEnumType>;
+  title?: InputMaybe<SortEnumType>;
 };
 
 export type FloatOperationFilterInput = {
@@ -548,6 +570,10 @@ export type GenerateMultipartPresignedUrlsInput = {
 
 export type GeneratePresignedUrlInput = {
   objectKey: Scalars["String"]["input"];
+};
+
+export type GetAddressByIdInput = {
+  addressId: Scalars["UUID"]["input"];
 };
 
 export type GetBannerByIdInput = {
@@ -1236,6 +1262,7 @@ export type QnAInput = {
 
 export type Query = {
   __typename?: "Query";
+  address_getAddressById: ResponseBaseOfAddressDto;
   address_getMyAddresses: ListResponseBaseOfAddressDto;
   address_nearestAddresses: ListResponseBaseOfAddressDto;
   banner_getAll: ListResponseBaseOfBannerDto;
@@ -1248,6 +1275,7 @@ export type Query = {
   city_getById: ResponseBaseOfCityDto;
   discountCode_getAll: ListResponseBaseOfDiscountCodeDto;
   discountCode_getById: ResponseBaseOfDiscountCodeDto;
+  discountCode_getMyCodes: ListResponseBaseOfDiscountCodeDto;
   neighborhood_getAll: ListResponseBaseOfNeighborhoodDto;
   neighborhood_getById: ResponseBaseOfNeighborhoodDto;
   province_getAll: ListResponseBaseOfProvinceDto;
@@ -1275,6 +1303,10 @@ export type Query = {
   specialist_getMyProfile: ResponseBaseOfSpecialistProfileDto;
   /** Gets the profile of the currently authenticated user. */
   user_getMyProfile: ResponseBaseOfUserProfileDto;
+};
+
+export type QueryAddress_GetAddressByIdArgs = {
+  input: GetAddressByIdInput;
 };
 
 export type QueryAddress_NearestAddressesArgs = {
@@ -2093,6 +2125,18 @@ export type Address_CreateMutation = {
   };
 };
 
+export type Address_UpdateMutationVariables = Exact<{
+  input: UpdateAddressInput;
+}>;
+
+export type Address_UpdateMutation = {
+  __typename?: "Mutation";
+  address_update: {
+    __typename?: "ResponseBaseOfAddressDto";
+    status?: any | null;
+  };
+};
+
 export type Auth_RequestOtpMutationVariables = Exact<{
   input: RequestOtpInput;
 }>;
@@ -2333,8 +2377,8 @@ export type ServiceRequest_GetMyRequestsQuery = {
         address: { __typename?: "AddressDto"; text: string };
         customer: {
           __typename?: "CustomerDto";
-          lastName: string;
-          firstName: string;
+          lastName?: string | null;
+          firstName?: string | null;
           phoneNumber: string;
         };
         serviceType: { __typename?: "ServiceTypeDto"; name: string; id: any };
@@ -2381,8 +2425,11 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
         address: {
           __typename?: "AddressDto";
           text: string;
-          latitude: number;
-          longitude: number;
+          location: {
+            __typename?: "Coordinates";
+            latitude: number;
+            longitude: number;
+          };
           neighborhood: {
             __typename?: "NeighborhoodDto";
             id: any;
@@ -2397,10 +2444,10 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
         } | null;
         customer: {
           __typename?: "CustomerDto";
-          firstName: string;
-          lastName: string;
+          firstName?: string | null;
+          lastName?: string | null;
           phoneNumber: string;
-          profileImageUrl: string;
+          profileImageUrl?: string | null;
           id: any;
           gender: Gender;
         };
@@ -2447,8 +2494,11 @@ export type ServiceRequest_GetByIdQuery = {
       address: {
         __typename?: "AddressDto";
         text: string;
-        latitude: number;
-        longitude: number;
+        location: {
+          __typename?: "Coordinates";
+          latitude: number;
+          longitude: number;
+        };
         neighborhood: {
           __typename?: "NeighborhoodDto";
           id: any;
@@ -2463,10 +2513,10 @@ export type ServiceRequest_GetByIdQuery = {
       } | null;
       customer: {
         __typename?: "CustomerDto";
-        firstName: string;
-        lastName: string;
+        firstName?: string | null;
+        lastName?: string | null;
         phoneNumber: string;
-        profileImageUrl: string;
+        profileImageUrl?: string | null;
         id: any;
         gender: Gender;
       };
@@ -2725,8 +2775,11 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
         address: {
           __typename?: "AddressDto";
           text: string;
-          latitude: number;
-          longitude: number;
+          location: {
+            __typename?: "Coordinates";
+            latitude: number;
+            longitude: number;
+          };
           neighborhood: {
             __typename?: "NeighborhoodDto";
             id: any;
@@ -2741,10 +2794,10 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
         } | null;
         customer: {
           __typename?: "CustomerDto";
-          firstName: string;
-          lastName: string;
+          firstName?: string | null;
+          lastName?: string | null;
           phoneNumber: string;
-          profileImageUrl: string;
+          profileImageUrl?: string | null;
           id: any;
           gender: Gender;
         };
@@ -2926,9 +2979,12 @@ export type Address_GetMyAddressesQuery = {
       items?: Array<{
         __typename?: "AddressDto";
         id: any;
-        latitude: number;
-        longitude: number;
         text: string;
+        location: {
+          __typename?: "Coordinates";
+          latitude: number;
+          longitude: number;
+        };
         neighborhood: {
           __typename?: "NeighborhoodDto";
           id: any;
@@ -3087,6 +3143,38 @@ export const useAddress_CreateMutation = <TError = unknown, TContext = unknown>(
     mutationFn: (variables?: Address_CreateMutationVariables) =>
       fetcher<Address_CreateMutation, Address_CreateMutationVariables>(
         Address_CreateDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
+
+export const Address_UpdateDocument = `
+    mutation address_update($input: UpdateAddressInput!) {
+  address_update(input: $input) {
+    status
+  }
+}
+    `;
+
+export const useAddress_UpdateMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    Address_UpdateMutation,
+    TError,
+    Address_UpdateMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Address_UpdateMutation,
+    TError,
+    Address_UpdateMutationVariables,
+    TContext
+  >({
+    mutationKey: ["address_update"],
+    mutationFn: (variables?: Address_UpdateMutationVariables) =>
+      fetcher<Address_UpdateMutation, Address_UpdateMutationVariables>(
+        Address_UpdateDocument,
         variables,
       )(),
     ...options,
@@ -3761,8 +3849,10 @@ export const ServiceRequest_GetMyAcceptancesDocument = `
       items {
         address {
           text
-          latitude
-          longitude
+          location {
+            latitude
+            longitude
+          }
           neighborhood {
             id
             city {
@@ -3890,8 +3980,10 @@ export const ServiceRequest_GetByIdDocument = `
     result {
       address {
         text
-        latitude
-        longitude
+        location {
+          latitude
+          longitude
+        }
         neighborhood {
           id
           city {
@@ -4640,8 +4732,10 @@ export const ServiceRequest_GetAvailableRequestsDocument = `
       items {
         address {
           text
-          latitude
-          longitude
+          location {
+            latitude
+            longitude
+          }
           neighborhood {
             id
             city {
@@ -5186,8 +5280,10 @@ export const Address_GetMyAddressesDocument = `
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         id
-        latitude
-        longitude
+        location {
+          latitude
+          longitude
+        }
         neighborhood {
           id
           city {
