@@ -1,8 +1,17 @@
 import OrderSubmittingSvg from "@/assets/icons/OrderSubmitting";
 import { Divider, ThemedText, ThemedView } from "@/components";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 
 export default function OrderSubmittingOrg() {
+  const router = useRouter();
+  useEffect(() => {
+    setTimeout(() => {
+      router?.push("/(tabs)/order");
+    }, 2000);
+  }, []);
+
   return (
     <ThemedView style={styles.container}>
       <OrderSubmittingSvg />
