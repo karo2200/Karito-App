@@ -20,10 +20,14 @@ export default function useCertificateInfoHook() {
   const profileData = expertData?.specialist_getMyProfile?.result;
 
   const onRegistrationPress = (formData: any) => {
+    const arr = [formData?.doc1, formData?.doc2, formData?.doc3].filter(
+      (item): item is string => item !== undefined
+    );
+
     documentsMutate(
       {
         input: {
-          newDocumentUrls: [formData?.doc1, formData?.doc2, formData?.doc3],
+          newDocumentUrls: arr,
         },
       },
       {

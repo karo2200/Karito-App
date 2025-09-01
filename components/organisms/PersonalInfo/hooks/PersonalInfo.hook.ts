@@ -18,7 +18,7 @@ export default function usePersonalInfoHook() {
 
   const { showToast } = useToast();
 
-  const { nationalCode } = authCacheStore();
+  const { nationalCode, setIsLoggedIn } = authCacheStore();
 
   const queryClient = useQueryClient();
 
@@ -41,7 +41,7 @@ export default function usePersonalInfoHook() {
         input: {
           lastName: formData?.family,
           firstName: formData?.name,
-          gender: Gender.Female,
+          gender: Gender.NotSet,
           profileImageUrl: formData?.profilePhoto,
           idCardImageUrl: formData?.codeImage,
           nationalCode: nationalCode,
@@ -59,7 +59,7 @@ export default function usePersonalInfoHook() {
               type: "success",
             });
             setIsLoggedIn(true);
-            // router.back();
+            router.back();
           } else {
             showToast({
               message: data?.specialist_setPersonalInformation?.status?.message,

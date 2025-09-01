@@ -47,7 +47,9 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
         />
         <InfoList
           title={"احراز هویت"}
-          onPress={() => {}}
+          onPress={() => {
+            router.push("/VerificationStepPage");
+          }}
           isVerified={
             profileData?.identityVerificationVideoStatus ===
             VerificationStatus.Approved

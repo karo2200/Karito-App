@@ -19,7 +19,7 @@ export default function useOrderHook() {
         { status: { neq: ServiceRequestStatus.Completed } },
       ],
     },
-    order: [{ requestDate: SortEnumType.Desc }],
+    // order: [{ requestDate: SortEnumType.Desc }],
   });
 
   const {

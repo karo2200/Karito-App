@@ -3,6 +3,8 @@ import UserFrameIcon from "@/assets/icons/UserFrameIcon";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { ServiceRequestDto } from "@/generated/graphql";
+import { getStatusFa } from "@/services/helper";
+import { formatToJalali } from "@/services/ParseData";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -20,7 +22,7 @@ const OrderCard = ({
       <ThemedText fontType="bold">{item?.serviceType?.name}</ThemedText>
       <View style={styles.dateView}>
         <ThemedText type="text" style={styles.date}>
-          {item?.requestDate}
+          {formatToJalali(item?.requestDate)}
         </ThemedText>
       </View>
       <View style={styles.rowView}>
@@ -48,7 +50,7 @@ const OrderCard = ({
       <View style={styles.rowView}>
         {isCustomer ? (
           <View style={styles.label}>
-            <ThemedText type="text">{item?.status}</ThemedText>
+            <ThemedText type="text">{getStatusFa(item?.status)}</ThemedText>
           </View>
         ) : (
           <View />

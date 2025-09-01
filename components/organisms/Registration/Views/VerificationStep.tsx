@@ -1,8 +1,10 @@
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
 import { Colors } from "@/constants/Colors";
-import { CameraView, useCameraPermissions } from "expo-camera";
-import { useRef, useState } from "react";
+import { DeviceHeight } from "@/constants/Dimension";
+import { Camera, CameraView, useCameraPermissions } from "expo-camera";
+import { CameraType } from "expo-image-picker";
+import { useEffect, useRef, useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 
 export default function VerificationStep() {
@@ -11,6 +13,13 @@ export default function VerificationStep() {
 
   const [video, setVideo] = useState<any>();
   const cameraRef = useRef<any>(null);
+
+  useEffect(() => {
+    (async () => {
+      const cameraStatus = await Camera.requestCameraPermissionsAsync();
+      const soundStatus = await Camera.requestMicrophonePermissionsAsync();
+    })();
+  }, []);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -37,21 +46,40 @@ export default function VerificationStep() {
   ];
 
   const recordVideo = async () => {
-    console.log("mmmm");
-    setIsRecording(true);
-    let options = {
-      quality: "480p",
-      maxDuration: 120,
-      mute: false,
-    };
-    console.log("nnn");
-    try {
-      cameraRef?.current?.recordAsync(options)?.then((ss: any) => {
-        setVideo(ss);
-      });
-    } catch (error) {
-      console.log({ error });
+    if (cameraRef.current) {
+      if (isRecording) {
+        cameraRef.current.stopRecording();
+        setIsRecording(false);
+      } else {
+        try {
+          const video = await cameraRef.current.recordAsync();
+          setVideo(video.uri);
+          console.log("Video grabado", `URI: ${video.uri}`);
+
+          setIsRecording(false);
+        } catch (error) {
+          console.error("Error al grabar video:", error);
+        }
+      }
     }
+
+    // console.log("mmmm");
+    // setIsRecording(true);
+    // let options = {
+    //   quality: "480p",
+    //   maxDuration: 120,
+    //   mute: false,
+    // };
+    // console.log("nnn");
+    // try {
+    //   cameraRef?.current?.recordAsync(options)?.then((ss: any) => {
+    //     console.log("ssssss", ss);
+
+    //     setVideo(ss);
+    //   });
+    // } catch (error) {
+    //   console.log({ error });
+    // }
   };
 
   const stopRecording = () => {
@@ -64,27 +92,31 @@ export default function VerificationStep() {
   return (
     <View style={styles.container}>
       <ScreenNameWithBack title="مدارک" />
-      <CameraView
-        style={styles.camera}
-        mode="video"
-        ref={cameraRef}
-        onCameraReady={() => console.log("ready")}
-      />
-      <Divider height={20} />
-      <ThemedButton
-        title={isRecording ? "Stop Recording" : "Record Video"}
-        onPress={isRecording ? stopRecording : recordVideo}
-      />
-      <View style={styles.marginTop}>
-        {textList?.map((item, index) => (
-          <ThemedView key={`${index}`} style={styles.rowView}>
-            <ThemedText style={styles.flex1}>
-              {" "}
-              {index != textList?.length - 1 && <View style={styles.bullet} />}
-              {`   ${item}`}
-            </ThemedText>
-          </ThemedView>
-        ))}
+      <View style={{ flex: 1 }}>
+        <CameraView
+          style={styles.camera}
+          mode="video"
+          facing={CameraType.front}
+          ref={cameraRef}
+          onCameraReady={() => console.log("ready")}
+        />
+        <Divider height={20} />
+        <ThemedButton
+          title={isRecording ? "توقف ویدیو" : "ضبط ویدیو"}
+          onPress={isRecording ? stopRecording : recordVideo}
+        />
+        <View style={styles.marginTop}>
+          {textList?.map((item, index) => (
+            <ThemedView key={`${index}`} style={styles.rowView}>
+              <ThemedText style={styles.flex1}>
+                {index != textList?.length - 1 && (
+                  <View style={styles.bullet} />
+                )}
+                {`   ${item}`}
+              </ThemedText>
+            </ThemedView>
+          ))}
+        </View>
       </View>
     </View>
   );
@@ -100,7 +132,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   camera: {
-    flex: 1,
+    width: "100%",
+    height: DeviceHeight / 3,
   },
   buttonContainer: {
     position: "absolute",

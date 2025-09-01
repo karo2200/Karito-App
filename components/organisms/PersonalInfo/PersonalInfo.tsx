@@ -7,6 +7,7 @@ import ThemedInput from "@/components/atoms/ThemedInput";
 import ThemedText from "@/components/atoms/ThemedText";
 import UploadImage from "@/components/atoms/UploadImage";
 import { days, monthsName } from "@/constants/StaticData";
+import { parseDate } from "@/services/ParseData";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -20,7 +21,7 @@ const schema = yup.object().shape({
     .string()
     .length(10, "کد ملی بدرستی وارد نشده است")
     .required("لطفا کد ملی خود را وارد کنید"),
-  codeImage: yup.string(),
+  codeImage: yup.string().required(""),
   year: yup.string(),
   month: yup.string(),
   day: yup.string(),
@@ -43,6 +44,9 @@ const PersonalInfo = () => {
       name: profileData?.firstName as string,
       family: profileData?.lastName as string,
       codeImage: profileData?.idCardImageUrl as string,
+      year: parseDate(profileData?.birthDate)?.year,
+      day: parseDate(profileData?.birthDate)?.day,
+      month: parseDate(profileData?.birthDate)?.month,
     },
   });
   const {
