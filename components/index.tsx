@@ -8,6 +8,7 @@ export { default as ThemedButton } from "./atoms/ThemedButton";
 export { default as ThemedContainer } from "./atoms/ThemedContainer";
 export { default as ThemedText } from "./atoms/ThemedText";
 export { default as ThemedView } from "./atoms/ThemedView";
+export { default as VideoPlayer } from "./atoms/VideoPlayer";
 
 // molecules
 
@@ -21,4 +22,5 @@ export { default as SubServiceItem } from "./molecules/SubServiceItem";
 // organisms
 
 export { default as AddressOrg } from "./organisms/CreateOrder/SelectAddress/AddressOrg";
+export { default as VerificationStep } from "./organisms/VerificationStep";
 export { default as SubServiceOrg } from "./organisms/subService/SubCategoryOrg";

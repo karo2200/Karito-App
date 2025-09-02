@@ -1,7 +1,6 @@
 import React from "react";
 
-import { ThemedContainer } from "@/components";
-import VerificationStep from "@/components/organisms/Registration/Views/VerificationStep";
+import { ThemedContainer, VerificationStep } from "@/components";
 import { StyleSheet } from "react-native";
 
 const VerificationStepPage = () => {
