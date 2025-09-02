@@ -25,6 +25,7 @@ export default function VerificationStep() {
     video,
     isRecording,
     cameraRef,
+    isPending,
   } = useVerificationVideoHook();
   const [permission, requestPermission] = useCameraPermissions();
 
@@ -79,25 +80,26 @@ export default function VerificationStep() {
             </ThemedView>
           ))}
         </View>
-        <View style={styles.flex1} />
-        <ThemedView style={styles.buttonContainer}>
-          {video && (
+        <View style={styles.flex1}>
+          <ThemedView style={styles.buttonContainer}>
+            {video && (
+              <ThemedButton
+                title="ارسال ویدیو"
+                style={styles.buttonHalf}
+                isLoading={isSendingVideo || isPending}
+                onPress={sendVideo}
+              />
+            )}
             <ThemedButton
-              title="ارسال ویدیو"
-              style={styles.buttonHalf}
-              isLoading={isSendingVideo}
-              onPress={sendVideo}
+              title={
+                isRecording ? "توقف ویدیو" : video ? "ضبط مجدد" : "ضبط ویدیو"
+              }
+              style={video ? styles.buttonHalf : styles.fullButton}
+              onPress={isRecording ? stopRecording : recordVideo}
+              type="outline"
             />
-          )}
-          <ThemedButton
-            title={
-              isRecording ? "توقف ویدیو" : video ? "ضبط مجدد" : "ضبط ویدیو"
-            }
-            style={video ? styles.buttonHalf : styles.fullButton}
-            onPress={isRecording ? stopRecording : recordVideo}
-            type="outline"
-          />
-        </ThemedView>
+          </ThemedView>
+        </View>
       </View>
     </View>
   );

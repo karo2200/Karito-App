@@ -104,8 +104,8 @@ query serviceRequest_getMyAcceptances(
   }
 }
 
-query serviceRequest_getById($id: UUID!) {
-  serviceRequest_getById(id: $id) {
+query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
+  serviceRequest_getById(input: $input) {
     result {
       address {
         text

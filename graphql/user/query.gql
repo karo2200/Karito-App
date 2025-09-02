@@ -88,6 +88,8 @@ query specialist_getMyProfile {
       id
       firstName
       lastName
+      gender
+      profileImageUrl
       idCardImageUrl
       daysRegistered
       phoneNumber

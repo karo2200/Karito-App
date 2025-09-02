@@ -613,6 +613,10 @@ export type GetServiceCategoryByIdInput = {
   id: Scalars["UUID"]["input"];
 };
 
+export type GetServiceRequestByIdInput = {
+  serviceRequestId: Scalars["UUID"]["input"];
+};
+
 export type GetServiceSubCategoryByIdInput = {
   id: Scalars["UUID"]["input"];
 };
@@ -1354,7 +1358,7 @@ export type QueryServiceCategory_GetByIdArgs = {
 };
 
 export type QueryServiceRequest_GetByIdArgs = {
-  id: Scalars["UUID"]["input"];
+  input: GetServiceRequestByIdInput;
 };
 
 export type QueryServiceSubCategory_GetByIdArgs = {
@@ -1612,7 +1616,7 @@ export type ServiceRequestDto = {
   basePrice: Scalars["Decimal"]["output"];
   cancellationReason?: Maybe<CancellationReasonDto>;
   customer: CustomerDto;
-  description: Scalars["String"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   discountAmount: Scalars["Decimal"]["output"];
   finalPrice: Scalars["Decimal"]["output"];
   id: Scalars["UUID"]["output"];
@@ -1889,10 +1893,11 @@ export type SpecialistProfileDto = {
   identityVerificationVideoUrl?: Maybe<Scalars["String"]["output"]>;
   lastName?: Maybe<Scalars["String"]["output"]>;
   phoneNumber: Scalars["String"]["output"];
+  profileImageUrl?: Maybe<Scalars["String"]["output"]>;
   rateCount: Scalars["Int"]["output"];
   serviceSubCategory?: Maybe<ServiceSubCategoryDto>;
   serviceTypes: Array<ServiceTypeDto>;
-  specializedDocumentUrls: Array<Scalars["String"]["output"]>;
+  specializedDocumentUrls?: Maybe<Array<Scalars["String"]["output"]>>;
   specializedDocumentsVerificationStatus: VerificationStatus;
   successfulMissions: Scalars["Int"]["output"];
 };
@@ -1923,6 +1928,7 @@ export type SpecialistProfileDtoFilterInput = {
   lastName?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<SpecialistProfileDtoFilterInput>>;
   phoneNumber?: InputMaybe<StringOperationFilterInput>;
+  profileImageUrl?: InputMaybe<StringOperationFilterInput>;
   rateCount?: InputMaybe<IntOperationFilterInput>;
   serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoFilterInput>;
   serviceTypes?: InputMaybe<ListFilterInputTypeOfServiceTypeDtoFilterInput>;
@@ -1945,6 +1951,7 @@ export type SpecialistProfileDtoSortInput = {
   identityVerificationVideoUrl?: InputMaybe<SortEnumType>;
   lastName?: InputMaybe<SortEnumType>;
   phoneNumber?: InputMaybe<SortEnumType>;
+  profileImageUrl?: InputMaybe<SortEnumType>;
   rateCount?: InputMaybe<SortEnumType>;
   serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoSortInput>;
   specializedDocumentsVerificationStatus?: InputMaybe<SortEnumType>;
@@ -2093,12 +2100,12 @@ export type VerificationStatusOperationFilterInput = {
 };
 
 export type VerifyIdCardInput = {
-  specialistId: Scalars["String"]["input"];
+  specialistId: Scalars["UUID"]["input"];
   status: VerificationStatus;
 };
 
 export type VerifyIdentityVerificationVideoInput = {
-  specialistId: Scalars["String"]["input"];
+  specialistId: Scalars["UUID"]["input"];
   status: VerificationStatus;
 };
 
@@ -2109,7 +2116,7 @@ export type VerifyOtpInput = {
 };
 
 export type VerifySpecializedDocumentsInput = {
-  specialistId: Scalars["String"]["input"];
+  specialistId: Scalars["UUID"]["input"];
   status: VerificationStatus;
 };
 
@@ -2370,7 +2377,7 @@ export type ServiceRequest_GetMyRequestsQuery = {
       totalCount: number;
       items?: Array<{
         __typename?: "ServiceRequestDto";
-        description: string;
+        description?: string | null;
         id: any;
         requestDate: any;
         status: ServiceRequestStatus;
@@ -2418,7 +2425,7 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
       totalCount: number;
       items?: Array<{
         __typename?: "ServiceRequestDto";
-        description: string;
+        description?: string | null;
         requestDate: any;
         id: any;
         status: ServiceRequestStatus;
@@ -2477,7 +2484,7 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
 };
 
 export type ServiceRequest_GetByIdQueryVariables = Exact<{
-  id: Scalars["UUID"]["input"];
+  input: GetServiceRequestByIdInput;
 }>;
 
 export type ServiceRequest_GetByIdQuery = {
@@ -2487,7 +2494,7 @@ export type ServiceRequest_GetByIdQuery = {
     status?: any | null;
     result?: {
       __typename?: "ServiceRequestDto";
-      description: string;
+      description?: string | null;
       requestDate: any;
       id: any;
       status: ServiceRequestStatus;
@@ -2768,7 +2775,7 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
       };
       items?: Array<{
         __typename?: "ServiceRequestDto";
-        description: string;
+        description?: string | null;
         requestDate: any;
         id: any;
         status: ServiceRequestStatus;
@@ -3052,6 +3059,8 @@ export type Specialist_GetMyProfileQuery = {
       id: any;
       firstName?: string | null;
       lastName?: string | null;
+      gender: Gender;
+      profileImageUrl?: string | null;
       idCardImageUrl?: string | null;
       daysRegistered: number;
       phoneNumber: string;
@@ -3060,7 +3069,7 @@ export type Specialist_GetMyProfileQuery = {
       identityVerificationVideoStatus: VerificationStatus;
       identityVerificationVideoUrl?: string | null;
       specializedDocumentsVerificationStatus: VerificationStatus;
-      specializedDocumentUrls: Array<string>;
+      specializedDocumentUrls?: Array<string> | null;
       city?: {
         __typename?: "CityDto";
         id: any;
@@ -3975,8 +3984,8 @@ export const useInfiniteServiceRequest_GetMyAcceptancesQuery = <
 };
 
 export const ServiceRequest_GetByIdDocument = `
-    query serviceRequest_getById($id: UUID!) {
-  serviceRequest_getById(id: $id) {
+    query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
+  serviceRequest_getById(input: $input) {
     result {
       address {
         text
@@ -5476,6 +5485,8 @@ export const Specialist_GetMyProfileDocument = `
       id
       firstName
       lastName
+      gender
+      profileImageUrl
       idCardImageUrl
       daysRegistered
       phoneNumber

@@ -11,6 +11,8 @@ import LocationActionSheet from "@/components/molecules/LocationActionSheet";
 import PaymentWaitingSheet from "@/components/molecules/PaymentWaitingSheet";
 import { Colors } from "@/constants/Colors";
 import { ServiceRequestStatus } from "@/generated/graphql";
+import { getStatusFa } from "@/services/helper";
+import { formatToJalali } from "@/services/ParseData";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
 import {
@@ -82,7 +84,9 @@ export default function OrderDetailScreen() {
               {serviceData?.serviceType?.name}
             </ThemedText>
             <View style={styles.label}>
-              <ThemedText type="text">{serviceData?.status}</ThemedText>
+              <ThemedText type="text">
+                {getStatusFa(serviceData?.status)}
+              </ThemedText>
             </View>
           </React.Fragment>
         )}
@@ -96,7 +100,7 @@ export default function OrderDetailScreen() {
         </View>
         <View style={styles.rowView}>
           <ThemedText type="text" style={{ color: Colors.hint500 }}>
-            {serviceData?.requestDate}
+            {formatToJalali(serviceData?.requestDate)}
           </ThemedText>
           <ThemedText fontType="bold" style={{ color: Colors.gray500 }}>
             زمان
@@ -195,7 +199,7 @@ export default function OrderDetailScreen() {
                 <ThemedText
                   type="text"
                   style={styles.phone}
-                  onPress={() => makeCall("09192341234")}
+                  onPress={() => makeCall(serviceData?.customer?.phoneNumber)}
                 >
                   {serviceData?.customer?.phoneNumber}
                 </ThemedText>
@@ -208,7 +212,8 @@ export default function OrderDetailScreen() {
           </View>
         )}
       </ScrollView>
-      {!isExpert ? (
+      {!isExpert &&
+      serviceData?.status === ServiceRequestStatus.PendingPayment ? (
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.payment}
@@ -306,7 +311,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
 
-  address: { color: Colors.label, width: "80%" },
+  address: { color: Colors.label, width: "80%", textAlign: "left" },
 
   textBtn: {
     fontWeight: "400",

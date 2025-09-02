@@ -54,7 +54,7 @@ export default function useOrderDetailHook() {
     useServiceAcceptance_MarkAsArrivedMutation();
 
   const { data: serviceData, isLoading } = useGetServiceById({
-    id: params?.id,
+    input: { serviceRequestId: params?.id },
   });
 
   const { data: cancelationData } = useGetCancelationRequestsQuery();

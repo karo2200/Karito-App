@@ -3,12 +3,15 @@ import {
   CancellationReason_GetAllDocument,
   CancellationReasonDtoFilterInput,
   CancellationReasonDtoSortInput,
+  GetServiceRequestByIdInput,
   ServiceRequest_GetByIdDocument,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-export function useGetServiceById(variables: { id: number }) {
+export function useGetServiceById(variables: {
+  input: GetServiceRequestByIdInput;
+}) {
   return useQuery({
     queryKey: [queryKeys.serviceRequest_getById, variables],
     queryFn: () => fetcher(ServiceRequest_GetByIdDocument, variables)(),

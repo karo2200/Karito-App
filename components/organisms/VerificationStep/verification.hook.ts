@@ -1,6 +1,8 @@
 import { useToast } from "@/components/atoms/Toast";
+import { queryKeys } from "@/constants/queryKeys";
 import { useSpecialist_UpdateIdentityVerificationVideoMutation } from "@/generated/graphql";
 import { useUploadFile } from "@/graphql/upload";
+import { useQueryClient } from "@tanstack/react-query";
 import * as FileSystem from "expo-file-system";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
@@ -19,6 +21,8 @@ export default function useVerificationVideoHook() {
   const [isSendingVideo, setIsSendingVideo] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const cameraRef = useRef<any>(null);
   const router = useRouter();
   const { showToast } = useToast();
@@ -33,6 +37,9 @@ export default function useVerificationVideoHook() {
           if (
             data?.specialist_updateIdentityVerificationVideo?.status?.code === 1
           ) {
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.specialist_getMyProfile],
+            });
             router?.back();
           } else {
             showToast({
@@ -54,6 +61,7 @@ export default function useVerificationVideoHook() {
   const sendVideo = async () => {
     setIsSendingVideo(true);
     const fileInfo = await FileSystem.getInfoAsync(video);
+
     upload(
       {
         uri: video,
@@ -112,7 +120,7 @@ export default function useVerificationVideoHook() {
     cameraRef,
     video,
     isRecording,
-
+    isPending,
     stopRecording,
     recordVideo,
   };
