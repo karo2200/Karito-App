@@ -45,13 +45,13 @@ query address_getMyAddresses(
   }
 }
 
-query discountCode_getAll(
+query discountCode_getMyCodes(
   $skip: Int
   $take: Int
   $where: DiscountCodeDtoFilterInput
   $order: [DiscountCodeDtoSortInput!]
 ) {
-  discountCode_getAll {
+  discountCode_getMyCodes {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         id
@@ -60,6 +60,7 @@ query discountCode_getAll(
         expiryDate
         isActive
         isPercentage
+        title
       }
       pageInfo {
         hasNextPage
@@ -89,6 +90,7 @@ query specialist_getMyProfile {
       firstName
       lastName
       gender
+      nationalCode
       profileImageUrl
       idCardImageUrl
       daysRegistered

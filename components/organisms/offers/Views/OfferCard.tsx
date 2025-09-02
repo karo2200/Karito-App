@@ -20,7 +20,7 @@ export default function OfferCard({ item }: { item: DiscountCodeDto }) {
   return (
     <Pressable onPress={copyToClipboard} style={styles.container}>
       <ThemedText fontType="medium" style={{ color: Colors.label }}>
-        {item?.amount}
+        {item?.title}
       </ThemedText>
       <View style={styles.rowView}>
         <ThemedText fontType="medium" style={styles.code}>

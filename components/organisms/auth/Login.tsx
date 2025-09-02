@@ -50,6 +50,7 @@ const LoginSection = () => {
             placeholder="۰۹۱۲۳۴۵۶۷۸۹"
             keyboardType="numeric"
             maxLength={11}
+            forcePersianNumbers
           />
         </View>
         <Footer

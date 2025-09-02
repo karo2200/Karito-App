@@ -11,7 +11,7 @@ export const queryKeys = {
   serviceTypeQuestion_getByServiceType: "serviceTypeQuestion_getByServiceType",
   banner_getAll: "banner_getAll",
   serviceRequest_getAvailableRequests: "serviceRequest_getAvailableRequests",
-  discountCode_getAll: "discountCode_getAll",
+  discountCode_getMyCodes: "discountCode_getMyCodes",
   cancellationReason_getAll: "cancellationReason_getAll",
   province_getAll: "province_getAll",
   specialist_getMyProfile: "specialist_getMyProfile",

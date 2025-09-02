@@ -42,6 +42,8 @@ export default function useExpertHook() {
   const profileData: SpecialistProfileDto =
     expertData?.specialist_getMyProfile?.result;
 
+  console.log("pppppppp", profileData);
+
   // useEffect(() => {
   //   if (
   //     profileData?.specializedDocumentsVerificationStatus ===
@@ -132,6 +134,6 @@ export default function useExpertHook() {
     onRegisterCity,
     setCategory,
     profileData,
-    nationalCode,
+    nationalCode: nationalCode ?? profileData?.nationalCode,
   };
 }

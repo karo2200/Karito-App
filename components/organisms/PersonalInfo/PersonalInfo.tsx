@@ -86,6 +86,7 @@ const PersonalInfo = () => {
               keyboardType="numeric"
               maxLength={4}
               style={{ width: "40%" }}
+              forcePersianNumbers
             />
 
             <DropDownPicker
@@ -118,6 +119,7 @@ const PersonalInfo = () => {
             keyboardType="numeric"
             maxLength={10}
             readOnly={true}
+            forcePersianNumbers
           />
 
           <UploadImage

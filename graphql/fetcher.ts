@@ -18,7 +18,7 @@ export async function graphqlFetcher<T extends QueryType>(
 }
 
 async function refreshAccessToken() {
-  const { accessToken, refreshToken } = authCacheStore.getState() ?? {};
+  const { accessToken, refreshToken } = authCacheStore.getState();
 
   if (!accessToken || !refreshToken) {
     throw new Error("No tokens available for refresh");
@@ -72,7 +72,7 @@ function isTokenExpired(token?: string): boolean {
     const decoded = jwtDecode<JwtPayload>(token);
     if (!decoded.exp) return true;
 
-    const now = Date.now() / 1000;
+    const now = Date.now() / 998;
     return decoded.exp < now;
   } catch (err) {
     return true;

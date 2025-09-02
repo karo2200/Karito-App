@@ -57,6 +57,7 @@ const NationalCodeStep = ({
             keyboardType="numeric"
             maxLength={11}
             readOnly={true}
+            forcePersianNumbers
           />
           <ThemedInput
             label="کد ملی *"
@@ -64,6 +65,7 @@ const NationalCodeStep = ({
             placeholder="۰۹۱۲۳۴۵۶۷۸"
             keyboardType="numeric"
             maxLength={10}
+            forcePersianNumbers
             style={styles.margin}
           />
         </View>

@@ -3,7 +3,7 @@ import { queryKeys } from "@/constants/queryKeys";
 import {
   DiscountCodeDtoFilterInput,
   DiscountCodeDtoSortInput,
-  DiscountCode_GetAllDocument,
+  DiscountCode_GetMyCodesDocument,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -17,9 +17,9 @@ type DiscountCodeOptions = {
 
 export const useGetDiscountCodesQuery = (options: DiscountCodeOptions = {}) => {
   return useInfiniteQuery({
-    queryKey: [queryKeys.discountCode_getAll],
+    queryKey: [queryKeys.discountCode_getMyCodes],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(DiscountCode_GetAllDocument, {
+      return fetcher(DiscountCode_GetMyCodesDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
@@ -27,7 +27,7 @@ export const useGetDiscountCodesQuery = (options: DiscountCodeOptions = {}) => {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage?.discountCode_getAll?.result?.pageInfo?.hasNextPage) {
+      if (lastPage?.discountCode_getMyCodes?.result?.pageInfo?.hasNextPage) {
         return allPages.length;
       }
       return undefined;
@@ -36,9 +36,10 @@ export const useGetDiscountCodesQuery = (options: DiscountCodeOptions = {}) => {
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.discountCode_getAll?.result?.items)
+          ?.map((a) => a?.discountCode_getMyCodes?.result?.items)
           .flat(),
-        totalCount: data?.pages?.[0]?.discountCode_getAll?.result?.totalCount,
+        totalCount:
+          data?.pages?.[0]?.discountCode_getMyCodes?.result?.totalCount,
       };
     },
   });

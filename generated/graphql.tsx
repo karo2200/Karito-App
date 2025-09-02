@@ -1892,6 +1892,7 @@ export type SpecialistProfileDto = {
   identityVerificationVideoStatus: VerificationStatus;
   identityVerificationVideoUrl?: Maybe<Scalars["String"]["output"]>;
   lastName?: Maybe<Scalars["String"]["output"]>;
+  nationalCode?: Maybe<Scalars["String"]["output"]>;
   phoneNumber: Scalars["String"]["output"];
   profileImageUrl?: Maybe<Scalars["String"]["output"]>;
   rateCount: Scalars["Int"]["output"];
@@ -1926,6 +1927,7 @@ export type SpecialistProfileDtoFilterInput = {
   identityVerificationVideoStatus?: InputMaybe<VerificationStatusOperationFilterInput>;
   identityVerificationVideoUrl?: InputMaybe<StringOperationFilterInput>;
   lastName?: InputMaybe<StringOperationFilterInput>;
+  nationalCode?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<SpecialistProfileDtoFilterInput>>;
   phoneNumber?: InputMaybe<StringOperationFilterInput>;
   profileImageUrl?: InputMaybe<StringOperationFilterInput>;
@@ -1950,6 +1952,7 @@ export type SpecialistProfileDtoSortInput = {
   identityVerificationVideoStatus?: InputMaybe<SortEnumType>;
   identityVerificationVideoUrl?: InputMaybe<SortEnumType>;
   lastName?: InputMaybe<SortEnumType>;
+  nationalCode?: InputMaybe<SortEnumType>;
   phoneNumber?: InputMaybe<SortEnumType>;
   profileImageUrl?: InputMaybe<SortEnumType>;
   rateCount?: InputMaybe<SortEnumType>;
@@ -3008,7 +3011,7 @@ export type Address_GetMyAddressesQuery = {
   };
 };
 
-export type DiscountCode_GetAllQueryVariables = Exact<{
+export type DiscountCode_GetMyCodesQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<DiscountCodeDtoFilterInput>;
@@ -3017,9 +3020,9 @@ export type DiscountCode_GetAllQueryVariables = Exact<{
   >;
 }>;
 
-export type DiscountCode_GetAllQuery = {
+export type DiscountCode_GetMyCodesQuery = {
   __typename?: "Query";
-  discountCode_getAll: {
+  discountCode_getMyCodes: {
     __typename?: "ListResponseBaseOfDiscountCodeDto";
     status?: any | null;
     result?: {
@@ -3032,6 +3035,7 @@ export type DiscountCode_GetAllQuery = {
         expiryDate?: any | null;
         isActive: boolean;
         isPercentage: boolean;
+        title: string;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -3060,6 +3064,7 @@ export type Specialist_GetMyProfileQuery = {
       firstName?: string | null;
       lastName?: string | null;
       gender: Gender;
+      nationalCode?: string | null;
       profileImageUrl?: string | null;
       idCardImageUrl?: string | null;
       daysRegistered: number;
@@ -5380,9 +5385,9 @@ export const useInfiniteAddress_GetMyAddressesQuery = <
   );
 };
 
-export const DiscountCode_GetAllDocument = `
-    query discountCode_getAll($skip: Int, $take: Int, $where: DiscountCodeDtoFilterInput, $order: [DiscountCodeDtoSortInput!]) {
-  discountCode_getAll {
+export const DiscountCode_GetMyCodesDocument = `
+    query discountCode_getMyCodes($skip: Int, $take: Int, $where: DiscountCodeDtoFilterInput, $order: [DiscountCodeDtoSortInput!]) {
+  discountCode_getMyCodes {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         id
@@ -5391,6 +5396,7 @@ export const DiscountCode_GetAllDocument = `
         expiryDate
         isActive
         isPercentage
+        title
       }
       pageInfo {
         hasNextPage
@@ -5402,64 +5408,67 @@ export const DiscountCode_GetAllDocument = `
 }
     `;
 
-export const useDiscountCode_GetAllQuery = <
-  TData = DiscountCode_GetAllQuery,
+export const useDiscountCode_GetMyCodesQuery = <
+  TData = DiscountCode_GetMyCodesQuery,
   TError = unknown,
 >(
-  variables?: DiscountCode_GetAllQueryVariables,
+  variables?: DiscountCode_GetMyCodesQueryVariables,
   options?: Omit<
-    UseQueryOptions<DiscountCode_GetAllQuery, TError, TData>,
+    UseQueryOptions<DiscountCode_GetMyCodesQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<
-      DiscountCode_GetAllQuery,
+      DiscountCode_GetMyCodesQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useQuery<DiscountCode_GetAllQuery, TError, TData>({
+  return useQuery<DiscountCode_GetMyCodesQuery, TError, TData>({
     queryKey:
       variables === undefined
-        ? ["discountCode_getAll"]
-        : ["discountCode_getAll", variables],
+        ? ["discountCode_getMyCodes"]
+        : ["discountCode_getMyCodes", variables],
     queryFn: fetcher<
-      DiscountCode_GetAllQuery,
-      DiscountCode_GetAllQueryVariables
-    >(DiscountCode_GetAllDocument, variables),
+      DiscountCode_GetMyCodesQuery,
+      DiscountCode_GetMyCodesQueryVariables
+    >(DiscountCode_GetMyCodesDocument, variables),
     ...options,
   });
 };
 
-export const useInfiniteDiscountCode_GetAllQuery = <
-  TData = InfiniteData<DiscountCode_GetAllQuery>,
+export const useInfiniteDiscountCode_GetMyCodesQuery = <
+  TData = InfiniteData<DiscountCode_GetMyCodesQuery>,
   TError = unknown,
 >(
-  variables: DiscountCode_GetAllQueryVariables,
+  variables: DiscountCode_GetMyCodesQueryVariables,
   options: Omit<
-    UseInfiniteQueryOptions<DiscountCode_GetAllQuery, TError, TData>,
+    UseInfiniteQueryOptions<DiscountCode_GetMyCodesQuery, TError, TData>,
     "queryKey"
   > & {
     queryKey?: UseInfiniteQueryOptions<
-      DiscountCode_GetAllQuery,
+      DiscountCode_GetMyCodesQuery,
       TError,
       TData
     >["queryKey"];
   },
 ) => {
-  return useInfiniteQuery<DiscountCode_GetAllQuery, TError, TData>(
+  return useInfiniteQuery<DiscountCode_GetMyCodesQuery, TError, TData>(
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
         queryKey:
           (optionsQueryKey ?? variables === undefined)
-            ? ["discountCode_getAll.infinite"]
-            : ["discountCode_getAll.infinite", variables],
+            ? ["discountCode_getMyCodes.infinite"]
+            : ["discountCode_getMyCodes.infinite", variables],
         queryFn: (metaData) =>
-          fetcher<DiscountCode_GetAllQuery, DiscountCode_GetAllQueryVariables>(
-            DiscountCode_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) },
-          )(),
+          fetcher<
+            DiscountCode_GetMyCodesQuery,
+            DiscountCode_GetMyCodesQueryVariables
+          >(DiscountCode_GetMyCodesDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
         ...restOptions,
       };
     })(),
@@ -5486,6 +5495,7 @@ export const Specialist_GetMyProfileDocument = `
       firstName
       lastName
       gender
+      nationalCode
       profileImageUrl
       idCardImageUrl
       daysRegistered

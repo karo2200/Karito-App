@@ -62,6 +62,7 @@ const ExpertLogin = () => {
               placeholder="۰۹۱۲۳۴۵۶۷۸۹"
               keyboardType="numeric"
               maxLength={11}
+              forcePersianNumbers
             />
             <Footer
               title="ثبت نام"

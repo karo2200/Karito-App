@@ -1,7 +1,6 @@
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import CustomRadioButton from "@/components/atoms/CustomRadioButton";
 import ThemedButton from "@/components/atoms/ThemedButton";
-import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedView from "@/components/atoms/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { FontStyle } from "@/constants/Fonts";
@@ -38,46 +37,44 @@ export default function AddressScreen() {
   );
 
   return (
-    <ThemedContainer>
-      <View>
-        <Breadcrumb
-          items={[
-            { label: "پروفایل", href: "/profile" },
-            { label: "مدیریت آدرس‌ها" },
-          ]}
-        />
+    <View>
+      <Breadcrumb
+        items={[
+          { label: "پروفایل", href: "/profile" },
+          { label: "مدیریت آدرس‌ها" },
+        ]}
+      />
 
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <FlatList
-            ref={listRef}
-            keyExtractor={(item) => item?.id}
-            data={addressesData}
-            refreshing={isRefetching}
-            onRefresh={refetch}
-            showsVerticalScrollIndicator={false}
-            renderItem={renderItem}
-            ListFooterComponent={
-              addressesData.length > 0 ? (
-                <ThemedButton
-                  title="افزودن آدرس جدید"
-                  fontType={FontStyle.bold}
-                  type="outline"
-                  onPress={() => router.push("/CreateAddress")}
-                />
-              ) : null
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          ref={listRef}
+          keyExtractor={(item) => item?.id}
+          data={addressesData}
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          showsVerticalScrollIndicator={false}
+          renderItem={renderItem}
+          ListFooterComponent={
+            addressesData.length > 0 ? (
+              <ThemedButton
+                title="افزودن آدرس جدید"
+                fontType={FontStyle.bold}
+                type="outline"
+                onPress={() => router.push("/CreateAddress")}
+              />
+            ) : null
+          }
+          onEndReached={() => {
+            if (hasNextPage) {
+              fetchNextPage();
             }
-            onEndReached={() => {
-              if (hasNextPage) {
-                fetchNextPage();
-              }
-            }}
-            ListEmptyComponent={() => <EmptyAddressState />}
-          />
-        )}
-      </View>
-    </ThemedContainer>
+          }}
+          ListEmptyComponent={() => <EmptyAddressState />}
+        />
+      )}
+    </View>
   );
 }
 

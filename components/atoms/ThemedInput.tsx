@@ -13,7 +13,7 @@ import {
   ViewStyle,
 } from "react-native";
 
-export default React.forwardRef(
+const CustomInput = React.forwardRef(
   (
     {
       name,
@@ -36,6 +36,7 @@ export default React.forwardRef(
       readOnly = false,
       style,
       labelStyle = "normal",
+      forcePersianNumbers,
     }: {
       name: any;
       placeholder?: string;
@@ -79,6 +80,7 @@ export default React.forwardRef(
       onSetHeight?: (value: number) => void;
       control?: any;
       labelStyle?: "normal" | "sm";
+      forcePersianNumbers?: boolean;
     },
 
     ref: any
@@ -89,6 +91,7 @@ export default React.forwardRef(
       field?.onChange(value);
       onChangeText?.(value);
     };
+
     const onLayout = (event: LayoutChangeEvent) => {
       onSetHeight?.(
         event.nativeEvent.layout.height + event.nativeEvent.layout.y
@@ -129,7 +132,7 @@ export default React.forwardRef(
               {
                 textAlignVertical: textArea ? "top" : "center",
                 color: color,
-                textAlign: textArea ? "right" : "left",
+                textAlign: forcePersianNumbers ? "left" : "right",
                 fontSize: labelStyle == "sm" ? 12 : 16,
               },
             ]}
@@ -143,6 +146,10 @@ export default React.forwardRef(
     );
   }
 );
+
+CustomInput.displayName = "ThemedText";
+
+export default CustomInput;
 
 const styles = StyleSheet.create({
   inputStyle: {
