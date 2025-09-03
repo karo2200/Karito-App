@@ -23,8 +23,6 @@ const GuestMode = () => {
               title: "ورود",
 
               onClose: () => {
-                console.log("2222");
-
                 hideSheet("confirmation-action");
               },
             },

@@ -19,6 +19,8 @@ import {
   useGetServiceById,
 } from "./OrderDetail.guery";
 
+import * as Location from "expo-location";
+
 export default function useOrderDetailHook() {
   const router = useRouter();
 
@@ -150,28 +152,50 @@ export default function useOrderDetailHook() {
     );
   };
 
+  async function getCurrentLocation() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      showToast({
+        message: "اجازه دسترسی به مکان شما داده نشده است.",
+        type: "error",
+      });
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+
+    if (location.coords) {
+      arriveMutate(
+        {
+          input: {
+            serviceRequestId: params?.id,
+            location: {
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            },
+          },
+        },
+        {
+          onSuccess: (data) => {
+            console.log("ddddd", data);
+
+            if (data?.serviceAcceptance_markAsArrived.status?.code === 1) {
+              queryClient.invalidateQueries({
+                queryKey: [queryKeys.serviceRequest_getById],
+              });
+            } else {
+              setFoundLocationVisible(true);
+            }
+          },
+        }
+      );
+    } else {
+      showToast({ message: "عدم دریافت موقعیت مکانی" });
+    }
+  }
+
   const onArrivePress = () => {
-    arriveMutate(
-      {
-        input: {
-          serviceRequestId: params?.id,
-        },
-      },
-      {
-        onSuccess: (data) => {
-          if (data?.serviceAcceptance_markAsArrived.status?.code === 1) {
-            queryClient.invalidateQueries({
-              queryKey: [queryKeys.serviceRequest_getById],
-            });
-          } else {
-            showToast({
-              message: data?.serviceAcceptance_markAsArrived.status,
-              type: "error",
-            });
-          }
-        },
-      }
-    );
+    getCurrentLocation();
   };
 
   const onCompletePress = () => {

@@ -42,8 +42,6 @@ export default function useExpertHook() {
   const profileData: SpecialistProfileDto =
     expertData?.specialist_getMyProfile?.result;
 
-  console.log("pppppppp", profileData);
-
   // useEffect(() => {
   //   if (
   //     profileData?.specializedDocumentsVerificationStatus ===
@@ -69,7 +67,7 @@ export default function useExpertHook() {
   const { data: cityData, isPending: cityPending } = useGetAllCityQuery({
     where: { province: { id: { eq: province } } },
   });
-
+  console.log("/", cityData);
   const { data: subCategoriesData } = useGetSubServiceCategoriesQuery({
     take: 50,
   });
@@ -134,6 +132,6 @@ export default function useExpertHook() {
     onRegisterCity,
     setCategory,
     profileData,
-    nationalCode: nationalCode ?? profileData?.nationalCode,
+    nationalCode: profileData?.nationalCode ?? nationalCode,
   };
 }

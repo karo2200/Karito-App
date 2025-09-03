@@ -7,6 +7,7 @@ import ThemedInput from "@/components/atoms/ThemedInput";
 import ThemedText from "@/components/atoms/ThemedText";
 import UploadImage from "@/components/atoms/UploadImage";
 import { days, monthsName } from "@/constants/StaticData";
+import { VerificationStatus } from "@/generated/graphql";
 import { parseDate } from "@/services/ParseData";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
@@ -47,6 +48,7 @@ const PersonalInfo = () => {
       year: parseDate(profileData?.birthDate)?.year,
       day: parseDate(profileData?.birthDate)?.day,
       month: parseDate(profileData?.birthDate)?.month,
+      profilePhoto: profileData?.profileImageUrl as string,
     },
   });
   const {
@@ -122,12 +124,15 @@ const PersonalInfo = () => {
             forcePersianNumbers
           />
 
-          <UploadImage
-            name="codeImage"
-            control={control}
-            label="عکس کارت ملی"
-            description="عکس کارت ملی خود را بارگذاری کنید."
-          />
+          {profileData?.idCardVerificationStatus !==
+            VerificationStatus.Approved && (
+            <UploadImage
+              name="codeImage"
+              control={control}
+              label="عکس کارت ملی"
+              description="عکس کارت ملی خود را بارگذاری کنید."
+            />
+          )}
         </ScrollView>
         <View style={styles.button}>
           <ThemedButton

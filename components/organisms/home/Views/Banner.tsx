@@ -34,8 +34,13 @@ export default function Banner() {
 
   return (
     <View>
-      {activeBanner && (
+      {activeBanner ? (
         <Image style={styles.image} source={{ uri: activeBanner?.imageUrl }} />
+      ) : (
+        <Image
+          style={styles.image}
+          source={require("@/assets/images/Home-Banner.png")}
+        />
       )}
       <View style={styles.inputContainer}>
         <View style={styles.container}>

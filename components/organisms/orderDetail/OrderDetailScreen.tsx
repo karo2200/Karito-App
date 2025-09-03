@@ -51,6 +51,7 @@ export default function OrderDetailScreen() {
     rejectPending,
     onRejectPress,
     onArrivePress,
+    arrivePending,
   } = useOrderDetailHook();
 
   const handleSuccess = () => {
@@ -226,8 +227,8 @@ export default function OrderDetailScreen() {
       ) : serviceData?.status === ServiceRequestStatus.AcceptedBySpecialist ? (
         <ThemedButton
           title="به مقصد رسیدم"
-          style={styles.btn}
-          isLoading={acceptWorkPending}
+          style={styles.fullbtn}
+          isLoading={arrivePending}
           rightIcon={<TickIcon style={{ marginLeft: 8 }} />}
           onPress={onArrivePress}
         />
@@ -235,7 +236,7 @@ export default function OrderDetailScreen() {
         ServiceRequestStatus.SpecialistArrivedToLocation ? (
         <ThemedButton
           title="اتمام کار"
-          style={styles.btn}
+          style={styles.fullbtn}
           isLoading={acceptWorkPending}
           rightIcon={<TickIcon style={{ marginLeft: 8 }} />}
           onPress={() => setSpecialistFinishWorkVisible(true)}
@@ -344,4 +345,9 @@ const styles = StyleSheet.create({
   },
 
   btn: { width: "48%" },
+
+  fullbtn: {
+    width: "100%",
+    marginBottom: 16,
+  },
 });
