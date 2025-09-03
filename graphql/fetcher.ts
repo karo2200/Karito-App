@@ -28,14 +28,16 @@ async function refreshAccessToken() {
     const data = await graphqlFetcher(Auth_RefreshTokenDocument, {
       input: { accessToken, refreshToken },
     });
+    const result = data?.auth_refreshToken?.result;
 
-    const newAccessToken = data?.auth_refreshToken?.result?.accessToken;
-    const newRefreshToken = data?.auth_refreshToken?.result?.refreshToken;
+    const newAccessToken = result?.accessToken;
+    const newRefreshToken = result?.refreshToken;
 
-    authCacheStore.setState({
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
-    });
+    if (newAccessToken && newRefreshToken)
+      authCacheStore.setState({
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      });
 
     return newAccessToken;
   } catch (err) {
@@ -47,7 +49,6 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
   count = count += 1;
   return async (): Promise<any> => {
     const accessToken = authCacheStore?.getState()?.accessToken;
-    console.log({ accessToken });
     if (
       !query.includes("auth_requestOtp") &&
       !query.includes("auth_verifyOtp") &&
@@ -57,11 +58,11 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
       const newToken = await refreshAccessToken();
 
       graphQLClient.setHeader("authorization", "Bearer " + newToken);
+      return await graphqlFetcher(query, variables);
     } else {
       graphQLClient.setHeader("authorization", "Bearer " + accessToken);
+      return await graphqlFetcher(query, variables);
     }
-
-    return await graphqlFetcher(query, variables);
   };
 }
 
@@ -72,8 +73,9 @@ function isTokenExpired(token?: string): boolean {
     const decoded = jwtDecode<JwtPayload>(token);
     if (!decoded.exp) return true;
 
-    const now = Date.now() / 998;
-    return decoded.exp < now;
+    const now = new Date().getTime();
+
+    return decoded.exp < now / 1000;
   } catch (err) {
     return true;
   }
