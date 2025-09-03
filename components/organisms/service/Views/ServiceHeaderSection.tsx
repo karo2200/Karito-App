@@ -1,4 +1,4 @@
-import { ThemedText, ThemedView } from "@/components";
+import { CustomFlatList, ThemedText, ThemedView } from "@/components";
 import HeaderItem from "@/components/molecules/ServiceHeaderItem";
 import { StyleSheet } from "react-native";
 
@@ -13,21 +13,29 @@ export default function ServiceHeaderSection({
   onServiceItemPress,
   serviceItems,
 }: ServiceHeaderSectionProps) {
+  const renderItem = ({ item, index }) => (
+    <HeaderItem
+      imagePath={item?.logo}
+      Icon={item?.svg}
+      title={item?.name}
+      key={`${index}`}
+      id={item?.id}
+      onItemPress={() => onServiceItemPress?.(item)}
+      selectedItem={selectedService}
+    />
+  );
   return (
     <ThemedView>
       <ThemedText fontType="bold">خدمات</ThemedText>
       <ThemedView style={styles.listContainer}>
-        {serviceItems?.map((item, index) => (
-          <HeaderItem
-            imagePath={item?.logo}
-            Icon={item?.svg}
-            title={item?.name}
-            key={`${index}`}
-            id={item?.id}
-            onItemPress={() => onServiceItemPress?.(item)}
-            selectedItem={selectedService}
-          />
-        ))}
+        <CustomFlatList
+          data={serviceItems}
+          renderItem={renderItem}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          inverted
+          keyExtractor={(item, index) => `${item?.id}_${index}`}
+        />
       </ThemedView>
     </ThemedView>
   );

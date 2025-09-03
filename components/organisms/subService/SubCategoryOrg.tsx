@@ -7,6 +7,7 @@ import {
   ThemedView,
 } from "@/components";
 import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router";
 import { InfoCircle } from "iconsax-react-native";
 import { useCallback } from "react";
 import { StyleSheet } from "react-native";
@@ -15,16 +16,23 @@ import useServiceTypesHook from "./serviceTypes.hook";
 export default function SubCategoryOrg() {
   const { item, items } = useServiceTypesHook();
 
+  const router = useRouter();
+
   const renderItem = useCallback(
-    ({ item, index }) => <SubServiceItem {...{ item, index }} />,
+    ({ item, index }: { item: any; index: number }) => (
+      <SubServiceItem {...{ item, index }} />
+    ),
     []
   );
 
   return (
     <ThemedView style={styles.flex1}>
       <ThemedText style={{ color: Colors.title }}>
-        کاریتو / {item?.service} /{" "}
-        <ThemedText fontType="bold">{item?.subService}</ThemedText>
+        کاریتو /{" "}
+        <ThemedText onPress={() => router.push("/(tabs)/service")}>
+          {item?.service}
+        </ThemedText>{" "}
+        / <ThemedText fontType="bold">{item?.subService}</ThemedText>
       </ThemedText>
       <ThemedView style={styles.rowView}>
         <CustomImage src={item?.logo} style={styles.image} resizeMode="cover" />
