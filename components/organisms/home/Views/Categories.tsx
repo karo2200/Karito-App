@@ -75,8 +75,16 @@ function HeaderItem({
   title: string;
   style?: ViewStyle;
 }) {
+  const { router } = useHomeHook();
   return (
-    <Pressable style={{ alignItems: "center" }}>
+    <Pressable
+      style={{ alignItems: "center" }}
+      onPress={() =>
+        router.push(
+          `/(tabs)/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${""}`
+        )
+      }
+    >
       <ThemedView style={[styles.imageContainer, style]}>
         {/* <Icon /> */}
         <Image
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
   },
 
   flexRow: {
-    flexDirection: "row",
+    flexDirection: "row-reverse",
     marginBottom: 12,
     alignItems: "center",
     justifyContent: "space-between",
