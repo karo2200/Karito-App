@@ -918,7 +918,6 @@ export type Mutation = {
   s3_completeMultipartUpload: ResponseBase;
   s3_generatePresignedUrl: ResponseBaseOfS3SinglepartUploadUrlsResultDto;
   s3_generatePresignedUrls: ResponseBaseOfS3MultipartUploadUrlsResultDto;
-  serviceAcceptance_markAsArrived: ResponseBaseOfServiceRequestDto;
   serviceCategory_create: ResponseBaseOfServiceCategoryDto;
   serviceCategory_delete: ResponseBase;
   serviceCategory_update: ResponseBaseOfServiceCategoryDto;
@@ -926,6 +925,7 @@ export type Mutation = {
   serviceRequest_cancel: ResponseBaseOfServiceRequestDto;
   serviceRequest_completeService: ResponseBaseOfServiceRequestDto;
   serviceRequest_create: ResponseBaseOfServiceRequestDto;
+  serviceRequest_markAsArrived: ResponseBaseOfServiceRequestDto;
   serviceRequest_reject: ResponseBaseOfRejectedServiceRequestDto;
   serviceSubCategory_create: ResponseBaseOfServiceSubCategoryDto;
   serviceSubCategory_delete: ResponseBase;
@@ -1092,10 +1092,6 @@ export type MutationS3_GeneratePresignedUrlsArgs = {
   input: GenerateMultipartPresignedUrlsInput;
 };
 
-export type MutationServiceAcceptance_MarkAsArrivedArgs = {
-  input: MarkAsArrivedInput;
-};
-
 export type MutationServiceCategory_CreateArgs = {
   input: CreateServiceCategoryInput;
 };
@@ -1122,6 +1118,10 @@ export type MutationServiceRequest_CompleteServiceArgs = {
 
 export type MutationServiceRequest_CreateArgs = {
   input: CreateServiceRequestInput;
+};
+
+export type MutationServiceRequest_MarkAsArrivedArgs = {
+  input: MarkAsArrivedInput;
 };
 
 export type MutationServiceRequest_RejectArgs = {
@@ -2335,13 +2335,13 @@ export type ServiceRequest_RejectMutation = {
   };
 };
 
-export type ServiceAcceptance_MarkAsArrivedMutationVariables = Exact<{
+export type ServiceRequest_MarkAsArrivedMutationVariables = Exact<{
   input: MarkAsArrivedInput;
 }>;
 
-export type ServiceAcceptance_MarkAsArrivedMutation = {
+export type ServiceRequest_MarkAsArrivedMutation = {
   __typename?: "Mutation";
-  serviceAcceptance_markAsArrived: {
+  serviceRequest_markAsArrived: {
     __typename?: "ResponseBaseOfServiceRequestDto";
     status?: any | null;
     result?: { __typename?: "ServiceRequestDto"; id: any } | null;
@@ -3672,9 +3672,9 @@ export const useServiceRequest_RejectMutation = <
   });
 };
 
-export const ServiceAcceptance_MarkAsArrivedDocument = `
-    mutation serviceAcceptance_markAsArrived($input: MarkAsArrivedInput!) {
-  serviceAcceptance_markAsArrived(input: $input) {
+export const ServiceRequest_MarkAsArrivedDocument = `
+    mutation serviceRequest_markAsArrived($input: MarkAsArrivedInput!) {
+  serviceRequest_markAsArrived(input: $input) {
     status
     result {
       id
@@ -3683,31 +3683,29 @@ export const ServiceAcceptance_MarkAsArrivedDocument = `
 }
     `;
 
-export const useServiceAcceptance_MarkAsArrivedMutation = <
+export const useServiceRequest_MarkAsArrivedMutation = <
   TError = unknown,
   TContext = unknown,
 >(
   options?: UseMutationOptions<
-    ServiceAcceptance_MarkAsArrivedMutation,
+    ServiceRequest_MarkAsArrivedMutation,
     TError,
-    ServiceAcceptance_MarkAsArrivedMutationVariables,
+    ServiceRequest_MarkAsArrivedMutationVariables,
     TContext
   >,
 ) => {
   return useMutation<
-    ServiceAcceptance_MarkAsArrivedMutation,
+    ServiceRequest_MarkAsArrivedMutation,
     TError,
-    ServiceAcceptance_MarkAsArrivedMutationVariables,
+    ServiceRequest_MarkAsArrivedMutationVariables,
     TContext
   >({
-    mutationKey: ["serviceAcceptance_markAsArrived"],
-    mutationFn: (
-      variables?: ServiceAcceptance_MarkAsArrivedMutationVariables,
-    ) =>
+    mutationKey: ["serviceRequest_markAsArrived"],
+    mutationFn: (variables?: ServiceRequest_MarkAsArrivedMutationVariables) =>
       fetcher<
-        ServiceAcceptance_MarkAsArrivedMutation,
-        ServiceAcceptance_MarkAsArrivedMutationVariables
-      >(ServiceAcceptance_MarkAsArrivedDocument, variables)(),
+        ServiceRequest_MarkAsArrivedMutation,
+        ServiceRequest_MarkAsArrivedMutationVariables
+      >(ServiceRequest_MarkAsArrivedDocument, variables)(),
     ...options,
   });
 };

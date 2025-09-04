@@ -27,8 +27,8 @@ mutation serviceRequest_reject($input: RejectServiceRequestInput!) {
   }
 }
 
-mutation serviceAcceptance_markAsArrived($input: MarkAsArrivedInput!) {
-  serviceAcceptance_markAsArrived(input: $input) {
+mutation serviceRequest_markAsArrived($input: MarkAsArrivedInput!) {
+  serviceRequest_markAsArrived(input: $input) {
     status
     result {
       id

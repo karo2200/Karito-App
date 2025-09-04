@@ -58,7 +58,6 @@ export default function usePersonalInfoHook() {
               message: "اطلاعات با موفقیت ثبت شد.",
               type: "success",
             });
-            setIsLoggedIn(true);
             router.back();
           } else {
             showToast({

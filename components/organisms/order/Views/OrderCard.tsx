@@ -38,12 +38,12 @@ const OrderCard = ({
               <UserFrameIcon />
             </>
           ) : (
-            <>
+            <View style={styles.addressView}>
               <ThemedText type="text" style={styles.user}>
                 {item?.address?.text}
               </ThemedText>
               <LocationIcon width={16} height={16} />
-            </>
+            </View>
           )}
         </View>
       </View>
@@ -118,5 +118,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.hint500,
 
     borderRadius: 6,
+  },
+
+  addressView: {
+    flexDirection: "row",
+    width: "81%",
+    justifyContent: "flex-end",
+    marginLeft: 16,
   },
 });

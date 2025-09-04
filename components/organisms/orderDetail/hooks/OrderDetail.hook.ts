@@ -2,10 +2,10 @@ import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useRateAndReview_CreateMutation,
-  useServiceAcceptance_MarkAsArrivedMutation,
   useServiceRequest_AcceptMutation,
   useServiceRequest_CancelMutation,
   useServiceRequest_CompleteServiceMutation,
+  useServiceRequest_MarkAsArrivedMutation,
   useServiceRequest_RejectMutation,
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
@@ -53,7 +53,7 @@ export default function useOrderDetailHook() {
     useRateAndReview_CreateMutation();
 
   const { mutate: arriveMutate, isPending: arrivePending } =
-    useServiceAcceptance_MarkAsArrivedMutation();
+    useServiceRequest_MarkAsArrivedMutation();
 
   const { data: serviceData, isLoading } = useGetServiceById({
     input: { serviceRequestId: params?.id },
@@ -177,9 +177,7 @@ export default function useOrderDetailHook() {
         },
         {
           onSuccess: (data) => {
-            console.log("ddddd", data);
-
-            if (data?.serviceAcceptance_markAsArrived.status?.code === 1) {
+            if (data?.serviceRequest_markAsArrived.status?.code === 1) {
               queryClient.invalidateQueries({
                 queryKey: [queryKeys.serviceRequest_getById],
               });

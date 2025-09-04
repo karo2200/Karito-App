@@ -3,12 +3,13 @@ import { queryKeys } from "@/constants/queryKeys";
 import {
   SpecialistProfileDto,
   useSpecialist_SetLocationAndSpecialtyMutation,
+  VerificationStatus,
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetAllCityQuery,
   useGetAllprovinceQuery,
@@ -26,8 +27,14 @@ export default function useExpertHook() {
 
   const { showToast } = useToast();
 
-  const { setNationalCode, nationalCode, setPhone, phone, setIsLoggedIn } =
-    authCacheStore();
+  const {
+    setNationalCode,
+    nationalCode,
+    setPhone,
+    phone,
+    setIsLoggedIn,
+    setIsExpert,
+  } = authCacheStore();
 
   const [page, setPage] = useState<number>(1);
   const [exitVisible, setExitVisible] = useState<boolean>(false);
@@ -42,24 +49,23 @@ export default function useExpertHook() {
   const profileData: SpecialistProfileDto =
     expertData?.specialist_getMyProfile?.result;
 
-  // useEffect(() => {
-  //   if (
-  //     profileData?.specializedDocumentsVerificationStatus ===
-  //       VerificationStatus.Approved &&
-  //     profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
-  //     profileData?.identityVerificationVideoStatus ===
-  //       VerificationStatus.Approved
-  //   ) {
-  //     setIsLoggedIn(true);
-  //   } else if (
-  //     profileData?.specializedDocumentUrls?.length > 0 &&
-  //     profileData?.lastName
-  //   ) {
-  //     setPage(3);
-  //   } else {
-  //     setIsLoggedIn(true);
-  //   }
-  // }, [profileData]);
+  useEffect(() => {
+    if (
+      profileData?.specializedDocumentsVerificationStatus ===
+        VerificationStatus.Approved &&
+      profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
+      profileData?.identityVerificationVideoStatus ===
+        VerificationStatus.Approved
+    ) {
+      setIsExpert(true);
+      setIsLoggedIn(true);
+    } else if (
+      profileData?.specializedDocumentUrls?.length > 0 &&
+      profileData?.lastName
+    ) {
+      setPage(3);
+    }
+  }, [profileData, page]);
 
   const { data: provinceData, isPending: provincePending } =
     useGetAllprovinceQuery({ take: 50 });
@@ -67,7 +73,7 @@ export default function useExpertHook() {
   const { data: cityData, isPending: cityPending } = useGetAllCityQuery({
     where: { province: { id: { eq: province } } },
   });
-  console.log("/", cityData);
+
   const { data: subCategoriesData } = useGetSubServiceCategoriesQuery({
     take: 50,
   });

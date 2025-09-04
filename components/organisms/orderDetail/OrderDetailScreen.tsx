@@ -224,7 +224,8 @@ export default function OrderDetailScreen() {
             مشاهده صورت حساب
           </ThemedText>
         </TouchableOpacity>
-      ) : serviceData?.status === ServiceRequestStatus.AcceptedBySpecialist ? (
+      ) : serviceData?.status === ServiceRequestStatus.AcceptedBySpecialist &&
+        isExpert ? (
         <ThemedButton
           title="به مقصد رسیدم"
           style={styles.fullbtn}
@@ -233,7 +234,7 @@ export default function OrderDetailScreen() {
           onPress={onArrivePress}
         />
       ) : serviceData?.status ===
-        ServiceRequestStatus.SpecialistArrivedToLocation ? (
+          ServiceRequestStatus.SpecialistArrivedToLocation && isExpert ? (
         <ThemedButton
           title="اتمام کار"
           style={styles.fullbtn}
