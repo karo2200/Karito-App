@@ -2,6 +2,7 @@ import StarRating from "@/components/atoms/StartRating";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { ServiceRequestStatus } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Fragment, memo, useRef } from "react";
 import { Dimensions, Image, StyleSheet, View } from "react-native";
@@ -28,7 +29,14 @@ const SpecialistData = () => {
     <Fragment>
       <View style={styles.rowView}>
         <View>
-          <ThemedText fontType="bold" onPress={openActionSheet}>
+          <ThemedText
+            fontType="bold"
+            onPress={() => {
+              if (serviceData?.status === ServiceRequestStatus.Completed) {
+                openActionSheet();
+              }
+            }}
+          >
             {serviceData?.specialist?.firstName}{" "}
             {serviceData?.specialist?.lastName}
           </ThemedText>
@@ -98,7 +106,11 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
 
-  contentView: { paddingHorizontal: 15, alignItems: "center" },
+  contentView: {
+    paddingHorizontal: 15,
+    alignItems: "center",
+    paddingBottom: 20,
+  },
 
   textBtn: {
     fontWeight: "400",
