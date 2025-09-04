@@ -20,7 +20,8 @@ export default function PaymentWaitingSheet({
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { onCompletePress, completePending } = useOrderDetailHook();
+  const { onCompletePress, completePending, serviceData, isComplete } =
+    useOrderDetailHook();
   const { isExpert } = authCacheStore();
 
   useEffect(() => {
@@ -49,15 +50,15 @@ export default function PaymentWaitingSheet({
       </View>
       <View style={styles.content}>
         <ThemedText style={styles.title} type="defaultSemiBold">
-          {isExpert
+          {isComplete
             ? "متخصص عزیز خسته نباشید!\nلطفا در انتظار پرداخت مشتری بمانید."
             : "آیا کار خود را به طور کامل به اتمام رسانده اید؟"}
         </ThemedText>
-        {isExpert && (
+        {isComplete && (
           <CoopratoinIcon width={180} height={180} style={styles.icon} />
         )}
 
-        {!isExpert && (
+        {!isComplete && (
           <ThemedButton
             title="اتمام کار"
             fontType="medium"
@@ -71,7 +72,7 @@ export default function PaymentWaitingSheet({
           title="متوجه شدم"
           fontType="medium"
           type={!isExpert ? "outline" : "filled"}
-          onPress={() => closeActionSheet()}
+          onPress={() => closeActionSheet}
         />
       </View>
     </ActionSheet>

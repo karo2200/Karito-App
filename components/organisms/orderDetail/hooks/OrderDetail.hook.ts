@@ -35,6 +35,7 @@ export default function useOrderDetailHook() {
   const [specialistFinishWorkVisible, setSpecialistFinishWorkVisible] =
     useState(false);
   const [cancelRequestVisible, setCancelRequestVisible] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
   const [rate, setRate] = useState(0);
 
@@ -209,6 +210,7 @@ export default function useOrderDetailHook() {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getById],
             });
+            setIsComplete(true);
           } else {
             showToast({
               message: data?.serviceRequest_completeService.status,
@@ -273,5 +275,6 @@ export default function useOrderDetailHook() {
     onRatePress,
     ratePending,
     setRate,
+    isComplete,
   };
 }
