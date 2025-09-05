@@ -14,7 +14,7 @@ export type ThemedTextProps = TextProps & {
     | "link"
     | "text"
     | "header";
-  fontType?: "bold" | "regular" | "medium";
+  fontType?: "bold" | "regular" | "medium" | "extraBold";
 };
 
 export default function ThemedText({
@@ -36,8 +36,10 @@ export default function ThemedText({
             fontType === "bold"
               ? FontType.YekanBakhBold
               : fontType === "regular"
-              ? FontType.YekanBakhRegular
-              : FontType.YekanBakhMedium,
+                ? FontType.YekanBakhRegular
+                : fontType === "extraBold"
+                  ? FontType.YekanBakhHeavy
+                  : FontType.YekanBakhMedium,
           textAlign: "right",
         },
         type === "default" ? styles.default : undefined,
