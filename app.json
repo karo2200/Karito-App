@@ -15,11 +15,19 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.amirma21.karitoapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["ACCESS_NETWORK_STATE", "INTERNET"],
+      "permissions": [
+        "ACCESS_NETWORK_STATE",
+        "INTERNET",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
       "edgeToEdgeEnabled": true,
       "config": {
         "googleMaps": {
@@ -67,6 +75,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "00a277ff-72b2-4031-b097-328ab5a76ed4"
+      }
     }
   }
 }

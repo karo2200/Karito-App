@@ -1,0 +1,9 @@
+node_modules
+.git
+.gitignore
+eas.json
+yarn.lock
+package-lock.json
+*.md
+*.log
+*.env
