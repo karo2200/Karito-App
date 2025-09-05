@@ -18,10 +18,12 @@ export default function SplashScreen() {
         router?.replace("/(tabs)/home");
       }
     } else {
-      if (isExpert) {
+      if (isExpert && isSelectRole) {
         router?.replace("/ExpertLoginPage");
-      } else {
+      } else if (!isExpert && isSelectRole) {
         router?.replace("/LoginPage");
+      } else {
+        router?.replace("/(tabs)/home");
       }
     }
   }, [isLoggedIn, isExpert, isSelectRole]);
