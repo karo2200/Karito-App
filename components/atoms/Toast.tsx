@@ -84,10 +84,10 @@ function Toast({
           type === "success"
             ? styles.successContainer
             : type === "error"
-            ? styles.errorContainer
-            : type === "warning"
-            ? styles.warnContainer
-            : styles.container,
+              ? styles.errorContainer
+              : type === "warning"
+                ? styles.warnContainer
+                : styles.container,
           { opacity, ...style },
         ]}
         {...props}
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.titleGreen,
   },
 
