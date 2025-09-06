@@ -9,7 +9,13 @@ import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import CustomerEditProfileSheet from "./Views/CustomerEditProfileSheet";
 import useProfileHook from "./hooks/Profile.hook";
 
@@ -35,7 +41,14 @@ export default function ProfileScreen() {
       {isLoggedIn ? (
         <View style={styles.flex1}>
           <View style={styles.headerContainer}>
-            <EmptyProfileIcon />
+            {userData?.profileImageUrl ? (
+              <Image
+                source={{ uri: userData?.profileImageUrl }}
+                style={styles.image}
+              />
+            ) : (
+              <EmptyProfileIcon />
+            )}
             <View style={{ flex: 1, paddingHorizontal: 8 }}>
               <ThemedText
                 fontType="bold"
@@ -230,6 +243,12 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
     flex: 1,
+  },
+
+  image: {
+    width: 64,
+    height: 64,
+    borderRadius: 64,
   },
 });
 

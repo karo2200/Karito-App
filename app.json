@@ -15,8 +15,9 @@
       "supportsTablet": true
     },
     "android": {
+      "icon": "./assets/images/icon.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -27,7 +28,8 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "edgeToEdgeEnabled": true,"usesCleartextTraffic": true,
+      "edgeToEdgeEnabled": true,
+      "usesCleartextTraffic": true,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
@@ -38,7 +40,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
     "plugins": [
       "expo-router",
@@ -76,7 +78,7 @@
         "expo-build-properties",
         {
           "android": {
-            "usesCleartextTraffic":true
+            "usesCleartextTraffic": true
           },
           "ios": {
             "deploymentTarget": "15.1"

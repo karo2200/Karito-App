@@ -17,12 +17,10 @@ export default function SpecialistItem({
       activeOpacity={1}
       onPress={onItemPress}
     >
-      <Image
-        style={styles.image}
-        source={require("../../../../assets/images/Home-Banner.png")}
-      />
+      <Image style={styles.image} source={{ uri: item?.profileImageUrl }} />
       <ThemedText style={styles.title} numberOfLines={2}>
-        محمد مردانی (سلامت و زیبایی)
+        {item?.firstName} {item?.lastName}
+        {"\n"}({item?.serviceSubCategory?.name})
       </ThemedText>
     </TouchableOpacity>
   );

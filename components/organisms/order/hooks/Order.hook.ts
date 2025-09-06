@@ -16,11 +16,12 @@ export default function useOrderHook() {
     where: {
       or: [
         { status: { neq: ServiceRequestStatus.Cancelled } },
-        { status: { neq: ServiceRequestStatus.Completed } },
+        { status: { neq: ServiceRequestStatus.Paid } },
       ],
     },
-    // order: [{ requestDate: SortEnumType.Desc }],
+    order: [{ requestDate: SortEnumType.Desc }],
   });
+  console.log("iiiiii", inprogressOrders);
 
   const {
     data: completeOrders,
@@ -30,7 +31,7 @@ export default function useOrderHook() {
     fetchNextPage: completeFetchNextPage,
     isLoading: completeLoading,
   } = useGetServiceRequestsQuery({
-    where: { status: { eq: ServiceRequestStatus.Completed } },
+    where: { status: { eq: ServiceRequestStatus.Paid } },
     order: [{ requestDate: SortEnumType.Desc }],
   });
 

@@ -39,10 +39,8 @@ query serviceRequest_getAvailableRequests(
       items {
         address {
           text
-          location {
-            latitude
-            longitude
-          }
+          latitude
+          longitude
           neighborhood {
             id
             city {
@@ -56,6 +54,7 @@ query serviceRequest_getAvailableRequests(
           id
           name
         }
+        finalPrice
         customer {
           firstName
           lastName

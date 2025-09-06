@@ -17,7 +17,7 @@ export default function ServiceItem({
     <View style={[styles.container, style]}>
       <Image
         style={styles.image}
-        source={require("../../../../assets/images/Home-Banner.png")}
+        source={require("../../../../assets/images/sampleCard.png")}
         resizeMode="cover"
         borderRadius={4}
       />

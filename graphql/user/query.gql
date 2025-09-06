@@ -22,10 +22,8 @@ query address_getMyAddresses(
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         id
-        location {
-          latitude
-          longitude
-        }
+        latitude
+        longitude
         neighborhood {
           id
           city {
@@ -131,6 +129,34 @@ query province_getAll(
       items {
         id
         name
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    status
+  }
+}
+
+query specialist_getAll(
+  $skip: Int
+  $take: Int
+  $where: SpecialistProfileDtoFilterInput
+  $order: [SpecialistProfileDtoSortInput!]
+) {
+  specialist_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        firstName
+        lastName
+        profileImageUrl
+        serviceSubCategory {
+          id
+          logo
+          name
+        }
       }
       pageInfo {
         hasNextPage

@@ -10,6 +10,8 @@ query serviceRequest_getMyRequests(
         address {
           text
         }
+        basePrice
+        finalPrice
         customer {
           lastName
           firstName
@@ -51,10 +53,8 @@ query serviceRequest_getMyAcceptances(
       items {
         address {
           text
-          location {
-            latitude
-            longitude
-          }
+          latitude
+          longitude
           neighborhood {
             id
             city {
@@ -64,6 +64,7 @@ query serviceRequest_getMyAcceptances(
             name
           }
         }
+        finalPrice
         cancellationReason {
           id
           name
@@ -109,10 +110,8 @@ query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
     result {
       address {
         text
-        location {
-          latitude
-          longitude
-        }
+        latitude
+        longitude
         neighborhood {
           id
           city {
@@ -122,6 +121,7 @@ query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
           name
         }
       }
+      finalPrice
       cancellationReason {
         id
         name

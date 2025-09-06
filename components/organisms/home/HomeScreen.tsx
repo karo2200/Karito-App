@@ -8,7 +8,7 @@ import HorizontalSpeciaLists from "./Views/HorizontalSpeciaLists";
 import useHomeHook from "./hooks/Home.hook";
 
 const HomeScreen = () => {
-  const { activeBanner } = useHomeHook();
+  const { activeCarousel, specialists } = useHomeHook();
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -19,13 +19,13 @@ const HomeScreen = () => {
         loading={false}
         data={[{}, {}]}
       />
-      {activeBanner && <CustomCarousel data={activeBanner} />}
+      {activeCarousel && <CustomCarousel data={activeCarousel?.imageUrls} />}
       <HorizontalServiceList
         title="انواع جابجایی"
         loading={false}
         data={[{}]}
       />
-      <HorizontalSpeciaLists data={[{ id: 1 }, { id: 2 }]} />
+      <HorizontalSpeciaLists data={specialists} />
     </ScrollView>
   );
 };

@@ -67,7 +67,8 @@ export type AddressDto = {
   customer: CustomerDto;
   id: Scalars["UUID"]["output"];
   isPrimary: Scalars["Boolean"]["output"];
-  location: Coordinates;
+  latitude: Scalars["Float"]["output"];
+  longitude: Scalars["Float"]["output"];
   neighborhood: NeighborhoodDto;
   text: Scalars["String"]["output"];
 };
@@ -87,7 +88,8 @@ export type AddressDtoFilterInput = {
   customer?: InputMaybe<CustomerDtoFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isPrimary?: InputMaybe<BooleanOperationFilterInput>;
-  location?: InputMaybe<CoordinatesFilterInput>;
+  latitude?: InputMaybe<FloatOperationFilterInput>;
+  longitude?: InputMaybe<FloatOperationFilterInput>;
   neighborhood?: InputMaybe<NeighborhoodDtoFilterInput>;
   or?: InputMaybe<Array<AddressDtoFilterInput>>;
   text?: InputMaybe<StringOperationFilterInput>;
@@ -97,7 +99,8 @@ export type AddressDtoSortInput = {
   customer?: InputMaybe<CustomerDtoSortInput>;
   id?: InputMaybe<SortEnumType>;
   isPrimary?: InputMaybe<SortEnumType>;
-  location?: InputMaybe<CoordinatesSortInput>;
+  latitude?: InputMaybe<SortEnumType>;
+  longitude?: InputMaybe<SortEnumType>;
   neighborhood?: InputMaybe<NeighborhoodDtoSortInput>;
   text?: InputMaybe<SortEnumType>;
 };
@@ -273,29 +276,6 @@ export type CompleteMultipartUploadInput = {
 
 export type CompleteServiceInput = {
   serviceRequestId: Scalars["UUID"]["input"];
-};
-
-export type Coordinates = {
-  __typename?: "Coordinates";
-  latitude: Scalars["Float"]["output"];
-  longitude: Scalars["Float"]["output"];
-};
-
-export type CoordinatesFilterInput = {
-  and?: InputMaybe<Array<CoordinatesFilterInput>>;
-  latitude?: InputMaybe<FloatOperationFilterInput>;
-  longitude?: InputMaybe<FloatOperationFilterInput>;
-  or?: InputMaybe<Array<CoordinatesFilterInput>>;
-};
-
-export type CoordinatesInput = {
-  latitude: Scalars["Float"]["input"];
-  longitude: Scalars["Float"]["input"];
-};
-
-export type CoordinatesSortInput = {
-  latitude?: InputMaybe<SortEnumType>;
-  longitude?: InputMaybe<SortEnumType>;
 };
 
 export type CreateBannerInput = {
@@ -876,7 +856,8 @@ export enum LocationType {
 }
 
 export type MarkAsArrivedInput = {
-  location: CoordinatesInput;
+  latitude: Scalars["Float"]["input"];
+  longitude: Scalars["Float"]["input"];
   serviceRequestId: Scalars["UUID"]["input"];
 };
 
@@ -1689,7 +1670,6 @@ export type ServiceRequestQnADtoFilterInput = {
 export enum ServiceRequestStatus {
   AcceptedBySpecialist = "ACCEPTED_BY_SPECIALIST",
   Cancelled = "CANCELLED",
-  Completed = "COMPLETED",
   Paid = "PAID",
   Pending = "PENDING",
   PendingPayment = "PENDING_PAYMENT",
@@ -2380,6 +2360,8 @@ export type ServiceRequest_GetMyRequestsQuery = {
       totalCount: number;
       items?: Array<{
         __typename?: "ServiceRequestDto";
+        basePrice: any;
+        finalPrice: any;
         description?: string | null;
         id: any;
         requestDate: any;
@@ -2428,6 +2410,7 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
       totalCount: number;
       items?: Array<{
         __typename?: "ServiceRequestDto";
+        finalPrice: any;
         description?: string | null;
         requestDate: any;
         id: any;
@@ -2435,11 +2418,8 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
         address: {
           __typename?: "AddressDto";
           text: string;
-          location: {
-            __typename?: "Coordinates";
-            latitude: number;
-            longitude: number;
-          };
+          latitude: number;
+          longitude: number;
           neighborhood: {
             __typename?: "NeighborhoodDto";
             id: any;
@@ -2497,6 +2477,7 @@ export type ServiceRequest_GetByIdQuery = {
     status?: any | null;
     result?: {
       __typename?: "ServiceRequestDto";
+      finalPrice: any;
       description?: string | null;
       requestDate: any;
       id: any;
@@ -2504,11 +2485,8 @@ export type ServiceRequest_GetByIdQuery = {
       address: {
         __typename?: "AddressDto";
         text: string;
-        location: {
-          __typename?: "Coordinates";
-          latitude: number;
-          longitude: number;
-        };
+        latitude: number;
+        longitude: number;
         neighborhood: {
           __typename?: "NeighborhoodDto";
           id: any;
@@ -2778,6 +2756,7 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
       };
       items?: Array<{
         __typename?: "ServiceRequestDto";
+        finalPrice: any;
         description?: string | null;
         requestDate: any;
         id: any;
@@ -2785,11 +2764,8 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
         address: {
           __typename?: "AddressDto";
           text: string;
-          location: {
-            __typename?: "Coordinates";
-            latitude: number;
-            longitude: number;
-          };
+          latitude: number;
+          longitude: number;
           neighborhood: {
             __typename?: "NeighborhoodDto";
             id: any;
@@ -2989,12 +2965,9 @@ export type Address_GetMyAddressesQuery = {
       items?: Array<{
         __typename?: "AddressDto";
         id: any;
+        latitude: number;
+        longitude: number;
         text: string;
-        location: {
-          __typename?: "Coordinates";
-          latitude: number;
-          longitude: number;
-        };
         neighborhood: {
           __typename?: "NeighborhoodDto";
           id: any;
@@ -3121,6 +3094,44 @@ export type Province_GetAllQuery = {
         __typename?: "ProvinceDto";
         id: any;
         name: string;
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
+};
+
+export type Specialist_GetAllQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<SpecialistProfileDtoFilterInput>;
+  order?: InputMaybe<
+    Array<SpecialistProfileDtoSortInput> | SpecialistProfileDtoSortInput
+  >;
+}>;
+
+export type Specialist_GetAllQuery = {
+  __typename?: "Query";
+  specialist_getAll: {
+    __typename?: "ListResponseBaseOfSpecialistProfileDto";
+    status?: any | null;
+    result?: {
+      __typename?: "SpecialistProfileDtoCollectionSegment";
+      items?: Array<{
+        __typename?: "SpecialistProfileDto";
+        id: any;
+        firstName?: string | null;
+        lastName?: string | null;
+        profileImageUrl?: string | null;
+        serviceSubCategory?: {
+          __typename?: "ServiceSubCategoryDto";
+          id: any;
+          logo: string;
+          name: string;
+        } | null;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -3756,6 +3767,8 @@ export const ServiceRequest_GetMyRequestsDocument = `
         address {
           text
         }
+        basePrice
+        finalPrice
         customer {
           lastName
           firstName
@@ -3861,10 +3874,8 @@ export const ServiceRequest_GetMyAcceptancesDocument = `
       items {
         address {
           text
-          location {
-            latitude
-            longitude
-          }
+          latitude
+          longitude
           neighborhood {
             id
             city {
@@ -3874,6 +3885,7 @@ export const ServiceRequest_GetMyAcceptancesDocument = `
             name
           }
         }
+        finalPrice
         cancellationReason {
           id
           name
@@ -3992,10 +4004,8 @@ export const ServiceRequest_GetByIdDocument = `
     result {
       address {
         text
-        location {
-          latitude
-          longitude
-        }
+        latitude
+        longitude
         neighborhood {
           id
           city {
@@ -4005,6 +4015,7 @@ export const ServiceRequest_GetByIdDocument = `
           name
         }
       }
+      finalPrice
       cancellationReason {
         id
         name
@@ -4744,10 +4755,8 @@ export const ServiceRequest_GetAvailableRequestsDocument = `
       items {
         address {
           text
-          location {
-            latitude
-            longitude
-          }
+          latitude
+          longitude
           neighborhood {
             id
             city {
@@ -4761,6 +4770,7 @@ export const ServiceRequest_GetAvailableRequestsDocument = `
           id
           name
         }
+        finalPrice
         customer {
           firstName
           lastName
@@ -5292,10 +5302,8 @@ export const Address_GetMyAddressesDocument = `
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
         id
-        location {
-          latitude
-          longitude
-        }
+        latitude
+        longitude
         neighborhood {
           id
           city {
@@ -5661,6 +5669,95 @@ export const useInfiniteProvince_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<Province_GetAllQuery, Province_GetAllQueryVariables>(
             Province_GetAllDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const Specialist_GetAllDocument = `
+    query specialist_getAll($skip: Int, $take: Int, $where: SpecialistProfileDtoFilterInput, $order: [SpecialistProfileDtoSortInput!]) {
+  specialist_getAll {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        id
+        firstName
+        lastName
+        profileImageUrl
+        serviceSubCategory {
+          id
+          logo
+          name
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+    status
+  }
+}
+    `;
+
+export const useSpecialist_GetAllQuery = <
+  TData = Specialist_GetAllQuery,
+  TError = unknown,
+>(
+  variables?: Specialist_GetAllQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Specialist_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      Specialist_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<Specialist_GetAllQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["specialist_getAll"]
+        : ["specialist_getAll", variables],
+    queryFn: fetcher<Specialist_GetAllQuery, Specialist_GetAllQueryVariables>(
+      Specialist_GetAllDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
+
+export const useInfiniteSpecialist_GetAllQuery = <
+  TData = InfiniteData<Specialist_GetAllQuery>,
+  TError = unknown,
+>(
+  variables: Specialist_GetAllQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Specialist_GetAllQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Specialist_GetAllQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<Specialist_GetAllQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["specialist_getAll.infinite"]
+            : ["specialist_getAll.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<Specialist_GetAllQuery, Specialist_GetAllQueryVariables>(
+            Specialist_GetAllDocument,
             { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,

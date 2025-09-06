@@ -10,6 +10,9 @@ import {
   Province_GetAllDocument,
   ProvinceDtoFilterInput,
   ProvinceDtoSortInput,
+  Specialist_GetAllDocument,
+  SpecialistProfileDtoFilterInput,
+  SpecialistProfileDtoSortInput,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -35,6 +38,13 @@ type UseGetAllProvinceOptions = {
   where?: ProvinceDtoFilterInput;
   order?: [ProvinceDtoSortInput];
   enabled?: boolean;
+};
+
+type UseGetAllSpecialistOptions = {
+  skip?: number;
+  take?: number;
+  where?: SpecialistProfileDtoFilterInput;
+  order?: [SpecialistProfileDtoSortInput];
 };
 
 export const useGetAllCityQuery = (options: UseGetAllCityOptions = {}) => {
@@ -117,6 +127,37 @@ export const useGetAllprovinceQuery = (
           ?.map((a) => a?.province_getAll?.result?.items)
           .flat(),
         totalCount: data?.pages?.[0]?.province_getAll?.result?.totalCount,
+      };
+    },
+  });
+};
+
+export const useGetAllSpecialistQuery = (
+  options: UseGetAllSpecialistOptions = {}
+) => {
+  return useInfiniteQuery({
+    queryKey: [queryKeys.specialist_getAll, options],
+    queryFn: async ({ pageParam = 0 }) => {
+      return fetcher(Specialist_GetAllDocument, {
+        skip: pageParam * PAGE_SIZE,
+        take: PAGE_SIZE,
+        ...options,
+      })();
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.specialist_getAll?.result?.pageInfo?.hasNextPage) {
+        return allPages.length;
+      }
+      return undefined;
+    },
+    select: (data) => {
+      return {
+        ...data,
+        pages: data?.pages
+          ?.map((a) => a?.specialist_getAll?.result?.items)
+          .flat(),
+        totalCount: data?.pages?.[0]?.specialist_getAll?.result?.totalCount,
       };
     },
   });

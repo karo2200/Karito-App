@@ -23,33 +23,32 @@ export default function CustomCarousel({ data }: { data: any }) {
 
   return (
     <View style={styles.container}>
-      {data?.length > 0 && (
-        <Carousel
-          loop
-          width={width - 32}
-          height={200}
-          autoPlay
-          autoPlayInterval={3000}
-          data={data}
-          style={{ borderRadius: 8 }}
-          pagingEnabled
-          onSnapToItem={(index) => setActiveIndex(index)}
-          scrollAnimationDuration={800}
-          renderItem={({ item }) => (
-            <ImageBackground
-              source={{ uri: item?.imageUrls }}
-              style={styles.image}
-              resizeMode="cover"
-            >
-              <TouchableOpacity style={styles.btn}>
-                <ThemedText style={styles.buttonText}>سفارش</ThemedText>
-              </TouchableOpacity>
-            </ImageBackground>
-          )}
-        />
-      )}
+      <Carousel
+        loop
+        width={width - 32}
+        height={200}
+        autoPlay
+        autoPlayInterval={3000}
+        data={data}
+        style={{ borderRadius: 8 }}
+        pagingEnabled
+        onSnapToItem={(index) => setActiveIndex(index)}
+        scrollAnimationDuration={800}
+        renderItem={({ item }) => (
+          <ImageBackground
+            source={{ uri: item }}
+            style={styles.image}
+            resizeMode="cover"
+          >
+            <TouchableOpacity style={styles.btn} activeOpacity={1}>
+              <ThemedText style={styles.buttonText}>سفارش</ThemedText>
+            </TouchableOpacity>
+          </ImageBackground>
+        )}
+      />
+
       <View style={styles.dotsContainer}>
-        {images?.map((_, index) => (
+        {data?.map((_, index) => (
           <View
             key={index}
             style={[

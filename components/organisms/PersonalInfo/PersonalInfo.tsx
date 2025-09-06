@@ -41,7 +41,7 @@ const PersonalInfo = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
-      code: nationalCode,
+      code: profileData?.nationalCode ?? nationalCode,
       name: profileData?.firstName as string,
       family: profileData?.lastName as string,
       codeImage: profileData?.idCardImageUrl as string,
@@ -57,6 +57,8 @@ const PersonalInfo = () => {
     formState: { errors },
     control,
   } = methods;
+
+  console.log("ppppp", profileData?.nationalCode);
 
   return (
     <FormProvider {...methods}>

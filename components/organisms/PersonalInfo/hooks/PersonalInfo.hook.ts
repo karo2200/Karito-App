@@ -74,7 +74,7 @@ export default function usePersonalInfoHook() {
     router,
     onRegistrationPress,
     personalInfoPending,
-    nationalCode,
+    nationalCode: nationalCode ?? profileData?.nationalCode,
     profileData,
   };
 }

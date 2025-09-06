@@ -26,8 +26,15 @@ const OrderCard = ({
         </ThemedText>
       </View>
       <View style={styles.rowView}>
-        <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
-          1,200,000 تومان
+        <ThemedText
+          fontType="bold"
+          style={{
+            color: Colors.hint500,
+            minWidth: "26%",
+            textAlign: "left",
+          }}
+        >
+          {item?.finalPrice} تومان
         </ThemedText>
         <View style={styles.row}>
           {isCustomer ? (
@@ -124,6 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "81%",
     justifyContent: "flex-end",
+    alignItems: "center",
     marginLeft: 16,
   },
 });

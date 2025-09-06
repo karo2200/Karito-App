@@ -1,9 +1,10 @@
+import { SortEnumType } from "@/generated/graphql";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { useGetServiceCategoriesQuery } from "../../service/hooks";
-import { useGetAllCityQuery } from "./Home.query";
+import { useGetAllCityQuery, useGetAllSpecialistQuery } from "./Home.query";
 
 export default function useHomeHook() {
   const router = useRouter();
@@ -14,6 +15,25 @@ export default function useHomeHook() {
 
   const { data: cityData, isLoading } = useGetAllCityQuery({
     where: { isActive: { eq: true } },
+  });
+
+  const { data: specialists } = useGetAllSpecialistQuery({
+    // where: {
+    //   and: [
+    //     { idCardVerificationStatus: { eq: VerificationStatus.Approved } },
+    //     {
+    //       specializedDocumentsVerificationStatus: {
+    //         eq: VerificationStatus.Approved,
+    //       },
+    //     },
+    //     {
+    //       identityVerificationVideoStatus: {
+    //         eq: VerificationStatus.Approved,
+    //       },
+    //     },
+    //   ],
+    // },
+    order: [{ averageRating: SortEnumType.Desc }],
   });
 
   const { data: homeCategoryData } = useGetServiceCategoriesQuery();
@@ -66,6 +86,7 @@ export default function useHomeHook() {
     onCityPress,
     activeBanner: selectedCityData?.pages[0]?.activeBanner,
     activeCarousel: selectedCityData?.pages[0]?.activeCarousel,
+    specialists: specialists?.pages,
   };
 }
 
