@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 12,
     borderWidth: 2,
+    padding: 15,
   },
   selectedImgContainer: {
     borderRadius: 12,
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 12,
     borderWidth: 2,
+    padding: 15,
   },
 
   container: { alignItems: "center", marginLeft: 34 },

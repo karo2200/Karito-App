@@ -56,8 +56,6 @@ const CustomerEditProfileSheet = ({
     },
   });
 
-  console.log("uuuuu", userData);
-
   const {
     handleSubmit,
     register,
