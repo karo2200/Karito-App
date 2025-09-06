@@ -38,7 +38,9 @@ export default function SubCategoryOrg() {
         <CustomImage src={item?.logo} style={styles.image} resizeMode="cover" />
         <ThemedView style={styles.margin}>
           <ThemedText fontType="bold">{item?.service}</ThemedText>
-          <ThemedText>{`خدمات مربوط به ${item?.subService}`}</ThemedText>
+          <ThemedText
+            numberOfLines={1}
+          >{`خدمات مربوط به ${item?.subService}`}</ThemedText>
         </ThemedView>
       </ThemedView>
       <Divider height={16} />

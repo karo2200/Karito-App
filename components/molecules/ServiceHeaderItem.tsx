@@ -40,7 +40,7 @@ export default function HeaderItem({
             <></>
           )}
         </ThemedView>
-        <ThemedText>{title}</ThemedText>
+        <ThemedText numberOfLines={1}>{title}</ThemedText>
       </ThemedView>
     </TouchableOpacity>
   );
