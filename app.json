@@ -8,6 +8,11 @@
     "scheme": "karitoapp",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/adaptive-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
       "config": {
         "googleMapsApiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
@@ -47,7 +52,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/adaptive-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#f00"
