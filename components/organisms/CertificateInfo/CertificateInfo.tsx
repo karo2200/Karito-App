@@ -23,9 +23,9 @@ const CertificateInfo = () => {
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
-      doc1: profileData?.specializedDocumentUrls[0],
-      doc2: profileData?.specializedDocumentUrls[1],
-      doc3: profileData?.specializedDocumentUrls[2],
+      doc1: profileData?.specializedDocumentUrls?.[0],
+      doc2: profileData?.specializedDocumentUrls?.[1],
+      doc3: profileData?.specializedDocumentUrls?.[2],
     },
   });
   const {
