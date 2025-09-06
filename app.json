@@ -15,7 +15,6 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.amirma21.karitoapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -28,12 +27,13 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "edgeToEdgeEnabled": true,
+      "edgeToEdgeEnabled": true,"usesCleartextTraffic": true,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
         }
-      }
+      },
+      "package": "com.karitoApp"
     },
     "web": {
       "bundler": "metro",
@@ -71,6 +71,17 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic":true
+          },
+          "ios": {
+            "deploymentTarget": "15.1"
+          }
+        }
       ]
     ],
     "experiments": {
@@ -79,7 +90,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "00a277ff-72b2-4031-b097-328ab5a76ed4"
+        "projectId": "0a0c8be9-6922-475d-9f10-37155d496d98"
       }
     }
   }

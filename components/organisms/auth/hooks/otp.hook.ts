@@ -40,6 +40,7 @@ export default function useOtpHook() {
             setRefreshToken(data?.auth_verifyOtp?.result?.refreshToken ?? "");
             setIsExpert(false);
             setIsLoggedIn(true);
+            router?.replace("/(tabs)/home");
           }
         },
         onError: (error) => {
