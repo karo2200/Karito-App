@@ -58,8 +58,6 @@ const PersonalInfo = () => {
     control,
   } = methods;
 
-  console.log("ppppp", profileData?.nationalCode);
-
   return (
     <FormProvider {...methods}>
       <ScreenNameWithBack title="اطلاعات شخصی" />
