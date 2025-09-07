@@ -21,7 +21,6 @@ export default function useOrderHook() {
     },
     order: [{ requestDate: SortEnumType.Desc }],
   });
-  console.log("iiiiii", inprogressOrders);
 
   const {
     data: completeOrders,

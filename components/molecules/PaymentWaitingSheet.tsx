@@ -31,8 +31,8 @@ export default function PaymentWaitingSheet({
   }, [visible]);
 
   const closeActionSheet = () => {
-    onClose?.();
     actionSheetRef.current?.hide();
+    onClose?.();
   };
 
   return (
@@ -71,8 +71,8 @@ export default function PaymentWaitingSheet({
         <ThemedButton
           title="متوجه شدم"
           fontType="medium"
-          type={!isExpert ? "outline" : "filled"}
-          onPress={() => closeActionSheet}
+          type={!isComplete ? "outline" : "filled"}
+          onPress={() => closeActionSheet()}
         />
       </View>
     </ActionSheet>

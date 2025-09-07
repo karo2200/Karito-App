@@ -28,6 +28,11 @@ export default function useWorkOutHook() {
           id: { in: ids },
         },
       },
+      {
+        address: {
+          neighborhood: { city: { id: { eq: profileData?.city?.id } } },
+        },
+      },
     ];
   }, [ids]);
 

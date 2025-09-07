@@ -1,17 +1,15 @@
 import { ServiceRequestStatus } from "@/generated/graphql";
 
-export function getStatusFa(status: string): string {
+export function getStatusFa(status: string, isCustomer?: boolean) {
   switch (status) {
     case ServiceRequestStatus.AcceptedBySpecialist:
-      return "پذیرفته شده توسط متخصص";
+      return isCustomer ? "پذیرفته شده توسط متخصص" : "در انتظار انجام";
     case ServiceRequestStatus.Cancelled:
       return "لغو شده";
-    case ServiceRequestStatus.Completed:
+    case ServiceRequestStatus.Paid:
       return "تکمیل شده";
     case ServiceRequestStatus.PendingPayment:
       return "در انتظار پرداخت";
-    case ServiceRequestStatus.Paid:
-      return "پرداخت شده";
     case ServiceRequestStatus.Pending:
       return "ثبت شده";
     case ServiceRequestStatus.SpecialistArrivedToLocation:

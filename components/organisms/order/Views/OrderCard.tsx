@@ -2,7 +2,7 @@ import LocationIcon from "@/assets/icons/Location";
 import UserFrameIcon from "@/assets/icons/UserFrameIcon";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { ServiceRequestDto } from "@/generated/graphql";
+import { ServiceRequestDto, ServiceRequestStatus } from "@/generated/graphql";
 import { getStatusFa } from "@/services/helper";
 import { formatToJalali } from "@/services/ParseData";
 import React from "react";
@@ -57,11 +57,20 @@ const OrderCard = ({
       <View style={styles.rowView}>
         {isCustomer ? (
           <View style={styles.label}>
-            <ThemedText type="text">{getStatusFa(item?.status)}</ThemedText>
+            <ThemedText type="text">
+              {getStatusFa(item?.status, isCustomer)}
+            </ThemedText>
+          </View>
+        ) : item?.status !== ServiceRequestStatus.Pending ? (
+          <View style={styles.label}>
+            <ThemedText type="text">
+              {getStatusFa(item?.status, isCustomer)}
+            </ThemedText>
           </View>
         ) : (
           <View />
         )}
+
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.detailBtn}

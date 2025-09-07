@@ -12,7 +12,7 @@ export default function useMissionsHook() {
     hasNextPage,
     fetchNextPage,
   } = useGetServiceAcceptanceQuery({
-    where: { status: { neq: ServiceRequestStatus.Completed } },
+    where: { status: { neq: ServiceRequestStatus.Paid } },
     order: [{ requestDate: SortEnumType.Desc }],
   });
 
@@ -23,7 +23,7 @@ export default function useMissionsHook() {
     hasNextPage: completeHasNextPage,
     fetchNextPage: completeFetchNextPage,
   } = useGetServiceAcceptanceQuery({
-    where: { status: { eq: ServiceRequestStatus.Completed } },
+    where: { status: { eq: ServiceRequestStatus.Paid } },
     order: [{ requestDate: SortEnumType.Desc }],
   });
 

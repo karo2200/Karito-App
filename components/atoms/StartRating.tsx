@@ -20,16 +20,16 @@ export default function StarRating({
   const [rating, setRating] = useState(initialRating);
 
   const handlePress = (value: number) => {
-    let newRating = value;
-    if (rating === value - 0.5) {
-      newRating = value;
-    } else if (rating === value) {
-      newRating = value - 0.5;
-    } else {
-      newRating = value - 0.5;
-    }
-    setRating(newRating);
-    onChange?.(newRating);
+    // let newRating = value;
+    // if (rating === value - 0.5) {
+    //   newRating = value;
+    // } else if (rating === value) {
+    //   newRating = value - 0.5;
+    // } else {
+    //   newRating = value - 0.5;
+    // }
+    setRating(value);
+    onChange?.(value);
   };
 
   const renderStar = (index: number) => {

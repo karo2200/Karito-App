@@ -68,4 +68,5 @@ export const Colors = {
   black500: "#4A4A4A",
   successDark: "#059669",
   infoDark: "#3B82F6",
+  warningDark: "#FB923C",
 };

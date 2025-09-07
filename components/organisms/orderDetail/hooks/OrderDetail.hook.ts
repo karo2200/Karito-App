@@ -1,6 +1,7 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  ServiceRequestStatus,
   useRateAndReview_CreateMutation,
   useServiceRequest_AcceptMutation,
   useServiceRequest_CancelMutation,
@@ -12,7 +13,7 @@ import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Linking, Platform } from "react-native";
 import {
   useGetCancelationRequestsQuery,
@@ -61,6 +62,16 @@ export default function useOrderDetailHook() {
   });
 
   const { data: cancelationData } = useGetCancelationRequestsQuery();
+
+  useEffect(() => {
+    if (
+      serviceData?.serviceRequest_getById?.result?.status ===
+        ServiceRequestStatus.PendingPayment &&
+      !isExpert
+    ) {
+      setFinishWorkVisible(true);
+    }
+  }, [serviceData]);
 
   const onBillPress = () => {
     router.push("/order/payment");
@@ -170,10 +181,8 @@ export default function useOrderDetailHook() {
         {
           input: {
             serviceRequestId: params?.id,
-            location: {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            },
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
           },
         },
         {
@@ -223,6 +232,8 @@ export default function useOrderDetailHook() {
   };
 
   const onRatePress = (closeActionSheet: () => void) => {
+    console.log("2", rate);
+
     rateMutate(
       {
         input: {

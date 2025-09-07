@@ -32,7 +32,7 @@ const SpecialistData = () => {
           <ThemedText
             fontType="bold"
             onPress={() => {
-              if (serviceData?.status === ServiceRequestStatus.Completed) {
+              if (serviceData?.status === ServiceRequestStatus.Paid) {
                 openActionSheet();
               }
             }}

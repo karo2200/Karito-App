@@ -54,46 +54,100 @@ export default function OrderDetailScreen() {
     arrivePending,
   } = useOrderDetailHook();
 
-  const handleSuccess = () => {
-    showToast({
-      message: "عملیات با موفقیت انجام شد",
-      type: "success",
-      title: "تبریک!",
-    });
-  };
-
   return (
     <ThemedContainer style={{ paddingHorizontal: 15 }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
       >
-        {!isExpert ? (
+        {!isExpert ||
+        (serviceData?.status !== ServiceRequestStatus.Pending && isExpert) ? (
           <Breadcrumb
             items={[
-              { label: "سفارش‌های من", href: "/order" },
-              { label: "سفارش‌های جاری", href: "/order" },
+              {
+                label: isExpert ? "ماموریت‌ ها" : "سفارش‌های من",
+                href: isExpert ? "/mission" : "/order",
+              },
+              {
+                label: isExpert ? "ماموریت های جاری" : "سفارش‌های جاری",
+                href: isExpert ? "/mission" : "/order",
+              },
               { label: serviceData?.serviceType?.name },
             ]}
           />
         ) : (
           <ScreenNameWithBack title={serviceData?.serviceType?.name} />
         )}
-        {!isExpert && (
+        {(!isExpert ||
+          (serviceData?.status !== ServiceRequestStatus.Pending &&
+            isExpert)) && (
           <React.Fragment>
             <ThemedText fontType="bold" style={{ marginTop: 4 }}>
               {serviceData?.serviceType?.name}
             </ThemedText>
-            <View style={styles.label}>
-              <ThemedText type="text">
-                {getStatusFa(serviceData?.status)}
-              </ThemedText>
+            <View
+              style={[
+                styles.rowView2,
+                { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 },
+              ]}
+            >
+              {serviceData?.status !== ServiceRequestStatus.PendingPayment &&
+              serviceData?.status !== ServiceRequestStatus.Paid &&
+              isExpert ? (
+                <Pressable onPress={() => setCancelRequestVisible(true)}>
+                  {cancelWorkPending ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <ThemedText style={{ color: Colors.darkError }}>
+                      لغو سفارش
+                    </ThemedText>
+                  )}
+                </Pressable>
+              ) : (
+                <View />
+              )}
+              <View
+                style={[
+                  styles.label,
+                  serviceData?.status === ServiceRequestStatus.PendingPayment
+                    ? {
+                        borderColor: isExpert
+                          ? Colors.infoDark
+                          : Colors.warningDark,
+                      }
+                    : serviceData?.status === ServiceRequestStatus.Paid && {
+                        borderColor: isExpert
+                          ? Colors.successDark
+                          : Colors.warningDark,
+                      },
+                ]}
+              >
+                <ThemedText
+                  type="text"
+                  style={
+                    serviceData?.status === ServiceRequestStatus.PendingPayment
+                      ? {
+                          color: isExpert
+                            ? Colors.infoDark
+                            : Colors.warningDark,
+                        }
+                      : serviceData?.status ===
+                          ServiceRequestStatus.PendingPayment && {
+                          color: isExpert
+                            ? Colors.successDark
+                            : Colors.warningDark,
+                        }
+                  }
+                >
+                  {getStatusFa(serviceData?.status)}
+                </ThemedText>
+              </View>
             </View>
           </React.Fragment>
         )}
         <View style={styles.rowView}>
           <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
-            1,200,000 تومان
+            {serviceData?.finalPrice} تومان
           </ThemedText>
           <ThemedText fontType="bold" style={{ color: Colors.gray500 }}>
             {!isExpert ? "هزینه" : "دستمزد"}
@@ -107,6 +161,7 @@ export default function OrderDetailScreen() {
             زمان
           </ThemedText>
         </View>
+
         {!isExpert && (
           <View
             style={[
@@ -117,17 +172,22 @@ export default function OrderDetailScreen() {
               },
             ]}
           >
-            <Pressable onPress={() => setCancelRequestVisible(true)}>
-              {cancelWorkPending ? (
-                <ActivityIndicator />
-              ) : (
-                <ThemedText style={{ color: Colors.darkError }}>
-                  لغو سفارش
-                </ThemedText>
-              )}
-            </Pressable>
-            {serviceData?.status ===
-            ServiceRequestStatus.AcceptedBySpecialist ? (
+            {serviceData?.status !== ServiceRequestStatus.PendingPayment &&
+            serviceData?.status !== ServiceRequestStatus.Paid ? (
+              <Pressable onPress={() => setCancelRequestVisible(true)}>
+                {cancelWorkPending ? (
+                  <ActivityIndicator />
+                ) : (
+                  <ThemedText style={{ color: Colors.darkError }}>
+                    لغو سفارش
+                  </ThemedText>
+                )}
+              </Pressable>
+            ) : (
+              <View />
+            )}
+
+            {serviceData?.status !== ServiceRequestStatus.Pending ? (
               <SpecialistData />
             ) : (
               serviceData?.status === ServiceRequestStatus.Pending && (
@@ -138,7 +198,7 @@ export default function OrderDetailScreen() {
             )}
           </View>
         )}
-        {isExpert && <Divider height={16} />}
+        <Divider height={16} />
         <ThemedText fontType="bold" style={{ color: "black" }}>
           جزئیات
         </ThemedText>
@@ -309,7 +369,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 30,
+    paddingTop: 30,
+    paddingBottom: 14,
     paddingHorizontal: 14,
   },
 
