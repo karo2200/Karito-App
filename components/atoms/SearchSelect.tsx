@@ -30,7 +30,7 @@ type Props = {
 
 const SearchSelect = forwardRef<any, Props>(
   ({ name, control, label, options, placeholder, sheetTitle }, ref) => {
-    const { field } = useController({ name, control });
+    const { field, fieldState } = useController({ name, control });
     const [search, setSearch] = useState("");
     const actionSheetRef = useRef<ActionSheetRef>(null);
 
@@ -111,6 +111,11 @@ const SearchSelect = forwardRef<any, Props>(
             />
           </View>
         </ActionSheet>
+        {fieldState.error?.message && (
+          <ThemedText fontType="regular" style={styles.errorTxt}>
+            {fieldState.error?.message}
+          </ThemedText>
+        )}
       </View>
     );
   }
@@ -158,5 +163,12 @@ const styles = StyleSheet.create({
 
   selectBtn: {
     paddingVertical: 12,
+  },
+
+  errorTxt: {
+    color: Colors.darkError,
+    fontSize: 12,
+    fontFamily: FontType.YekanBakhRegular,
+    textAlign: "right",
   },
 });

@@ -1,4 +1,5 @@
 import { Divider, ThemedButton, ThemedText } from "@/components";
+import Breadcrumb from "@/components/atoms/Breadcrumb";
 import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { Colors } from "@/constants/Colors";
@@ -14,7 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import MapView from "./MapView";
 import { useGetNeighborhoodsQuery } from "./hooks";
@@ -135,9 +136,19 @@ export default function AddressMap() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <FormProvider {...methods}>
-        <ThemedText fontType="bold">آدرس خود را مشخص کنید:</ThemedText>
+        {editItem && (
+          <Breadcrumb
+            items={[
+              { label: "مدیریت آدرس‌ها", href: "/(tabs)/profile/address" },
+              { label: "تغییر آدرس" },
+            ]}
+          />
+        )}
+        <ThemedText fontType="bold" style={{ marginTop: editItem ? 0 : 16 }}>
+          آدرس خود را مشخص کنید:
+        </ThemedText>
         <Divider height={24} />
         <View style={styles.dropdownContainer}>
           <DropDownPicker
@@ -174,16 +185,19 @@ export default function AddressMap() {
           title="ذخیره"
           onPress={handleSubmit(onPress)}
           isLoading={isPending || isUpdating}
+          style={styles.button}
         />
       </FormProvider>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", padding: 16 },
+  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
 
   dropdownContainer: {
     marginBottom: 12,
   },
+
+  button: { position: "absolute", bottom: 10 },
 });

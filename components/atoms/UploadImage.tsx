@@ -43,6 +43,8 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.7,
+      allowsEditing: true,
+      aspect: [4, 3],
     });
     if (!result.canceled) {
       const file = {
@@ -67,6 +69,8 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
   const pickFromGallery = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [4, 3],
+      allowsEditing: true,
       quality: 0.7,
     });
     if (!result.canceled) {

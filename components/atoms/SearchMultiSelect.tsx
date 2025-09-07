@@ -29,7 +29,7 @@ type Props = {
 
 const SearchMultiSelect = forwardRef<any, Props>(
   ({ name, control, label, options, placeholder, sheetTitle }, ref) => {
-    const { field } = useController({ name, control });
+    const { field, fieldState } = useController({ name, control });
     const [search, setSearch] = useState("");
     const actionSheetRef = useRef<ActionSheetRef>(null);
 
@@ -144,6 +144,11 @@ const SearchMultiSelect = forwardRef<any, Props>(
             />
           </View>
         </ActionSheet>
+        {fieldState.error?.message && (
+          <ThemedText style={styles.errorTxt} fontType="regular">
+            {fieldState.error?.message}
+          </ThemedText>
+        )}
       </View>
     );
   }
@@ -192,5 +197,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
+  },
+
+  errorTxt: {
+    color: Colors.darkError,
+    fontSize: 12,
+    fontFamily: FontType.YekanBakhRegular,
+    textAlign: "right",
   },
 });

@@ -24,6 +24,7 @@ query address_getMyAddresses(
         id
         latitude
         longitude
+        isPrimary
         neighborhood {
           id
           city {

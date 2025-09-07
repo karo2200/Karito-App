@@ -3,7 +3,7 @@ import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -25,7 +25,10 @@ export default function CancelRequestSheet({
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { onCancelReuest, cancelationData } = useOrderDetailHook();
+  const { onCancelReuest, cancelationData, cancelWorkPending } =
+    useOrderDetailHook();
+
+  const [cancelId, setCancelId] = useState();
 
   useEffect(() => {
     if (visible) {
@@ -63,15 +66,15 @@ export default function CancelRequestSheet({
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => {
-                onCancelReuest(item?.id);
+                setCancelId(item?.id);
               }}
               style={styles.selectBtn}
             >
               <CustomRadioButton
                 label={item?.name}
-                checked={true}
+                checked={item?.id === cancelId}
                 onPress={() => {
-                  onCancelReuest(item?.id);
+                  setCancelId(item?.id);
                 }}
               />
             </TouchableOpacity>
@@ -80,7 +83,12 @@ export default function CancelRequestSheet({
         <ThemedButton
           title="لغو"
           type="outline"
-          onPress={() => actionSheetRef.current?.hide()}
+          isLoading={cancelWorkPending}
+          onPress={() => {
+            if (cancelId) {
+              onCancelReuest(cancelId, closeActionSheet);
+            }
+          }}
           style={{ marginBottom: 40 }}
         />
       </View>

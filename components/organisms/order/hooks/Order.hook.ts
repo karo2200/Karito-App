@@ -14,7 +14,7 @@ export default function useOrderHook() {
     isLoading: inProgressLoading,
   } = useGetServiceRequestsQuery({
     where: {
-      or: [
+      and: [
         { status: { neq: ServiceRequestStatus.Cancelled } },
         { status: { neq: ServiceRequestStatus.Paid } },
       ],

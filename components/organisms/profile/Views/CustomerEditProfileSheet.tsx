@@ -18,8 +18,14 @@ import useProfileHook from "../hooks/Profile.hook";
 const { height, width } = Dimensions.get("screen");
 
 const schema = yup.object().shape({
-  name: yup.string().required("نام خود را وارد کنید."),
-  family: yup.string().required("نام خانوادگی خود را وارد کنید."),
+  name: yup
+    .string()
+    .required("نام خود را وارد کنید.")
+    .matches(/^[\u0600-\u06FF\s]+$/, "لطفاً فقط حروف فارسی وارد کنید."),
+  family: yup
+    .string()
+    .required("نام خانوادگی خود را وارد کنید.")
+    .matches(/^[\u0600-\u06FF\s]+$/, "لطفاً فقط حروف فارسی وارد کنید."),
 });
 
 const CustomerEditProfileSheet = ({

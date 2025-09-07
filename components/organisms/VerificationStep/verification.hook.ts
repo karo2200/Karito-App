@@ -1,19 +1,15 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
-import { useSpecialist_UpdateIdentityVerificationVideoMutation } from "@/generated/graphql";
+import {
+  SpecialistProfileDto,
+  useSpecialist_UpdateIdentityVerificationVideoMutation,
+} from "@/generated/graphql";
 import { useUploadFile } from "@/graphql/upload";
 import { useQueryClient } from "@tanstack/react-query";
 import * as FileSystem from "expo-file-system";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
-
-const textList = [
-  "تمام رخ روبروی دوربین جلوی گوشی قرار بگیرید.",
-  "کارت ملی خود را رو به دوربین در دست نگه دارید طوری که واضح دیده شود ولی صورت شما را نپوشاند.",
-  "سپس دکمه ضبط ویديو را بزنید و وارد صفحه بعد شوید.",
-  "متن زیر را به صورت شمرده بخوانید.",
-  "من رضا یوسفی تمامی قوانین کاریتو را پذیرفته و تعهد کامل نسبت به انجام آن‌ها دارم.",
-];
+import { useGetSpecialistProfile } from "../PersonalInfo/hooks/personalInfo.query";
 
 export default function useVerificationVideoHook() {
   const { mutate: upload, isPending } = useUploadFile();
@@ -26,6 +22,12 @@ export default function useVerificationVideoHook() {
   const cameraRef = useRef<any>(null);
   const router = useRouter();
   const { showToast } = useToast();
+
+  const { data: expertData } = useGetSpecialistProfile();
+
+  const profileData: SpecialistProfileDto =
+    expertData?.specialist_getMyProfile?.result;
+
   const { mutate } = useSpecialist_UpdateIdentityVerificationVideoMutation();
 
   function doVerification(url: string) {
@@ -112,10 +114,17 @@ export default function useVerificationVideoHook() {
     cameraRef.current.stopRecording();
   };
 
+  const textList = [
+    "تمام رخ روبروی دوربین جلوی گوشی قرار بگیرید.",
+    "کارت ملی خود را رو به دوربین در دست نگه دارید طوری که واضح دیده شود ولی صورت شما را نپوشاند.",
+    "سپس دکمه ضبط ویديو را بزنید و وارد صفحه بعد شوید.",
+    "متن زیر را به صورت شمرده بخوانید.",
+    `من ${profileData?.firstName} ${profileData?.lastName} تمامی قوانین کاریتو را پذیرفته و تعهد کامل نسبت به انجام آن‌ها دارم.`,
+  ];
+
   return {
     sendVideo,
     isSendingVideo,
-
     textList,
     cameraRef,
     video,

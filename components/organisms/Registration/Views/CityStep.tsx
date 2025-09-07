@@ -12,10 +12,14 @@ import * as yup from "yup";
 import useExpertHook from "../hooks/Expert.hook";
 
 const schema = yup.object().shape({
-  state: yup.string().required(""),
-  city: yup.string().required(""),
-  profession: yup.string().required(""),
-  serviceTypes: yup.array(yup.string()).required(""),
+  state: yup.string().required("انتخاب کنید"),
+  city: yup.string().required("انتخاب کنید"),
+  profession: yup.string().required("انتخاب کنید"),
+  serviceTypes: yup
+    .array()
+    .of(yup.string().required("گزینه معتبر نیست"))
+    .min(1, "حداقل یک مورد باید انتخاب شود")
+    .required("انتخاب حداقل یک مورد الزامی است"),
 });
 
 const CityStep = ({
@@ -55,6 +59,7 @@ const CityStep = ({
     control,
     watch,
   } = methods;
+  console.log("www", watch("serviceTypes"));
 
   const onPress = (formData: any) => {
     onRegisterCity(formData, onNextPress);

@@ -55,3 +55,9 @@ mutation rateAndReview_create($input: CreateRateAndReviewInput!) {
     status
   }
 }
+
+mutation address_setPrimary($input: SetPrimaryAddressInput!) {
+  address_setPrimary(input: $input) {
+    status
+  }
+}

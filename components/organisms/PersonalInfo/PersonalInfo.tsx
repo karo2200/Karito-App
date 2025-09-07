@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
@@ -16,8 +16,14 @@ import * as yup from "yup";
 import usePersonalInfoHook from "./hooks/PersonalInfo.hook";
 
 const schema = yup.object().shape({
-  name: yup.string().required("نام خود را وارد کنید."),
-  family: yup.string().required("نام خانوادگی خود را وارد کنید."),
+  name: yup
+    .string()
+    .required("نام خود را وارد کنید.")
+    .matches(/^[\u0600-\u06FF\s]+$/, "لطفاً فقط حروف فارسی وارد کنید."),
+  family: yup
+    .string()
+    .required("نام خانوادگی خود را وارد کنید.")
+    .matches(/^[\u0600-\u06FF\s]+$/, "لطفاً فقط حروف فارسی وارد کنید."),
   code: yup
     .string()
     .length(10, "کد ملی بدرستی وارد نشده است")
@@ -40,23 +46,25 @@ const PersonalInfo = () => {
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: {
-      code: profileData?.nationalCode ?? nationalCode,
-      name: profileData?.firstName as string,
-      family: profileData?.lastName as string,
-      codeImage: profileData?.idCardImageUrl as string,
-      year: parseDate(profileData?.birthDate)?.year,
-      day: parseDate(profileData?.birthDate)?.day,
-      month: parseDate(profileData?.birthDate)?.month,
-      profilePhoto: profileData?.profileImageUrl as string,
-    },
   });
   const {
     handleSubmit,
     register,
     formState: { errors },
     control,
+    setValue,
   } = methods;
+
+  useEffect(() => {
+    (setValue("name", profileData?.firstName as string),
+      setValue("family", profileData?.lastName as string),
+      setValue("codeImage", profileData?.idCardImageUrl as string),
+      setValue("year", parseDate(profileData?.birthDate)?.year),
+      setValue("day", parseDate(profileData?.birthDate)?.day),
+      setValue("month", parseDate(profileData?.birthDate)?.month),
+      setValue("profilePhoto", profileData?.profileImageUrl as string),
+      setValue("code", nationalCode ?? profileData?.nationalCode));
+  }, [nationalCode, profileData]);
 
   return (
     <FormProvider {...methods}>
@@ -103,7 +111,7 @@ const PersonalInfo = () => {
               {...register("day")}
               label="روز"
               data={days}
-              width={"20%"}
+              width={"23%"}
               right={"36%"}
             />
           </View>

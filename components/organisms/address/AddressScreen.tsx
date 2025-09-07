@@ -30,7 +30,11 @@ export default function AddressScreen() {
         item={item}
         onChange={() => {}}
         key={item?.id}
-        isChecked={true}
+        onEditPress={() =>
+          router.push(
+            `/CreateAddress?nid=${item?.neighborhood?.id}&txt=${item?.text}&lat=${item?.latitude}&lng=${item?.longitude}&id=${item?.id}`
+          )
+        }
       />
     ),
     []
@@ -90,18 +94,18 @@ const styles = StyleSheet.create({
 
 const AddressCard = ({
   item,
-  isChecked,
   onChange,
+  onEditPress,
 }: {
   item: AddressDto;
-  isChecked: boolean;
   onChange: () => void;
+  onEditPress: () => void;
 }) => {
   return (
     <ThemedView style={styles.groupView}>
-      <Edit size={24} color={Colors.gray500} />
+      <Edit size={24} color={Colors.gray500} onPress={onEditPress} />
       <CustomRadioButton
-        checked={isChecked}
+        checked={item?.isPrimary}
         label={item?.text}
         onPress={() => {
           onChange();

@@ -2929,6 +2929,18 @@ export type RateAndReview_CreateMutation = {
   };
 };
 
+export type Address_SetPrimaryMutationVariables = Exact<{
+  input: SetPrimaryAddressInput;
+}>;
+
+export type Address_SetPrimaryMutation = {
+  __typename?: "Mutation";
+  address_setPrimary: {
+    __typename?: "ResponseBaseOfAddressDto";
+    status?: any | null;
+  };
+};
+
 export type User_GetMyProfileQueryVariables = Exact<{ [key: string]: never }>;
 
 export type User_GetMyProfileQuery = {
@@ -2967,6 +2979,7 @@ export type Address_GetMyAddressesQuery = {
         id: any;
         latitude: number;
         longitude: number;
+        isPrimary: boolean;
         text: string;
         neighborhood: {
           __typename?: "NeighborhoodDto";
@@ -5216,6 +5229,41 @@ export const useRateAndReview_CreateMutation = <
   });
 };
 
+export const Address_SetPrimaryDocument = `
+    mutation address_setPrimary($input: SetPrimaryAddressInput!) {
+  address_setPrimary(input: $input) {
+    status
+  }
+}
+    `;
+
+export const useAddress_SetPrimaryMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    Address_SetPrimaryMutation,
+    TError,
+    Address_SetPrimaryMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Address_SetPrimaryMutation,
+    TError,
+    Address_SetPrimaryMutationVariables,
+    TContext
+  >({
+    mutationKey: ["address_setPrimary"],
+    mutationFn: (variables?: Address_SetPrimaryMutationVariables) =>
+      fetcher<Address_SetPrimaryMutation, Address_SetPrimaryMutationVariables>(
+        Address_SetPrimaryDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
+
 export const User_GetMyProfileDocument = `
     query user_getMyProfile {
   user_getMyProfile {
@@ -5304,6 +5352,7 @@ export const Address_GetMyAddressesDocument = `
         id
         latitude
         longitude
+        isPrimary
         neighborhood {
           id
           city {

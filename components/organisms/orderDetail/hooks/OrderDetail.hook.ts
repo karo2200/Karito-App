@@ -95,14 +95,15 @@ export default function useOrderDetailHook() {
       {
         onSuccess: (data) => {
           if (data?.serviceRequest_accept.status?.code === 1) {
+            router.push("/(expertTabs)/mission");
+            setCancelRequestVisible(false);
             showToast({ message: "ماموریت قبول شد.", type: "success" });
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getMyAcceptances],
             });
-            router.push("/(expertTabs)/mission");
           } else {
             showToast({
-              message: data?.serviceRequest_accept.status,
+              message: data?.serviceRequest_accept.status?.message,
               type: "error",
             });
           }
@@ -111,7 +112,10 @@ export default function useOrderDetailHook() {
     );
   };
 
-  const onCancelReuest = (cancelationId: number) => {
+  const onCancelReuest = (
+    cancelationId: number,
+    closeActionSheet: () => void
+  ) => {
     cancelWorkMutate(
       {
         input: {
@@ -126,10 +130,11 @@ export default function useOrderDetailHook() {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getMyAcceptances],
             });
-            router.push("/(expertTabs)/mission");
+            router.back();
+            closeActionSheet?.();
           } else {
             showToast({
-              message: data?.serviceRequest_cancel.status,
+              message: data?.serviceRequest_cancel.status?.message,
               type: "error",
             });
           }
@@ -155,7 +160,7 @@ export default function useOrderDetailHook() {
             router.push("/(expertTabs)/workList");
           } else {
             showToast({
-              message: data?.serviceRequest_reject.status,
+              message: data?.serviceRequest_reject.status?.message,
               type: "error",
             });
           }
@@ -222,7 +227,7 @@ export default function useOrderDetailHook() {
             setIsComplete(true);
           } else {
             showToast({
-              message: data?.serviceRequest_completeService.status,
+              message: data?.serviceRequest_completeService.status?.message,
               type: "error",
             });
           }
@@ -232,8 +237,6 @@ export default function useOrderDetailHook() {
   };
 
   const onRatePress = (closeActionSheet: () => void) => {
-    console.log("2", rate);
-
     rateMutate(
       {
         input: {
