@@ -1,5 +1,7 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { ServiceTypeDto } from "@/generated/graphql";
+import { useRouter } from "expo-router";
 import {
   Image,
   StyleSheet,
@@ -9,22 +11,32 @@ import {
 } from "react-native";
 
 export default function ServiceItem({
+  item,
   style,
 }: {
+  item: ServiceTypeDto;
   style: ViewStyle | undefined;
 }) {
+  const router = useRouter();
   return (
     <View style={[styles.container, style]}>
       <Image
         style={styles.image}
-        source={require("../../../../assets/images/sampleCard.png")}
+        source={{ uri: item?.logo }}
         resizeMode="cover"
         borderRadius={4}
       />
       <ThemedText type="default" style={styles.title} numberOfLines={1}>
-        اثاث کشی با کامیون
+        {item?.name}
       </ThemedText>
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() =>
+          router.push(
+            `/(tabs)/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${""}`
+          )
+        }
+      >
         <ThemedText style={styles.buttonText}>سفارش</ThemedText>
       </TouchableOpacity>
     </View>

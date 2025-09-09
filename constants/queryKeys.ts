@@ -18,4 +18,5 @@ export const queryKeys = {
   user_updateProfile: "user_updateProfile",
   user_getMyProfile: "user_getMyProfile",
   specialist_getAll: "specialist_getAll",
+  serviceTypes_getPopular: "serviceTypes_getPopular",
 };

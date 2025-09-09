@@ -343,6 +343,7 @@ export type CreateServiceSubCategoryInput = {
 
 export type CreateServiceTypeInput = {
   basePrice: Scalars["Decimal"]["input"];
+  isSpecial: Scalars["Boolean"]["input"];
   logo: Scalars["String"]["input"];
   name: Scalars["String"]["input"];
   serviceSubCategoryId: Scalars["UUID"]["input"];
@@ -735,6 +736,19 @@ export type ListResponseBaseOfNeighborhoodDtoResultArgs = {
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<NeighborhoodDtoFilterInput>;
+};
+
+export type ListResponseBaseOfPopularServiceTypeDto = {
+  __typename?: "ListResponseBaseOfPopularServiceTypeDto";
+  result?: Maybe<PopularServiceTypeDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfPopularServiceTypeDtoResultArgs = {
+  order?: InputMaybe<Array<PopularServiceTypeDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<PopularServiceTypeDtoFilterInput>;
 };
 
 export type ListResponseBaseOfProvinceDto = {
@@ -1212,6 +1226,49 @@ export type NeighborhoodDtoSortInput = {
   name?: InputMaybe<SortEnumType>;
 };
 
+export type PopularServiceTypeDto = {
+  __typename?: "PopularServiceTypeDto";
+  basePrice: Scalars["Decimal"]["output"];
+  id: Scalars["UUID"]["output"];
+  isSpecial: Scalars["Boolean"]["output"];
+  logo: Scalars["String"]["output"];
+  name: Scalars["String"]["output"];
+  requestCount: Scalars["Int"]["output"];
+  serviceSubCategory: ServiceSubCategoryDto;
+};
+
+/** A segment of a collection. */
+export type PopularServiceTypeDtoCollectionSegment = {
+  __typename?: "PopularServiceTypeDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<PopularServiceTypeDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type PopularServiceTypeDtoFilterInput = {
+  and?: InputMaybe<Array<PopularServiceTypeDtoFilterInput>>;
+  basePrice?: InputMaybe<DecimalOperationFilterInput>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  isSpecial?: InputMaybe<BooleanOperationFilterInput>;
+  logo?: InputMaybe<StringOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PopularServiceTypeDtoFilterInput>>;
+  requestCount?: InputMaybe<IntOperationFilterInput>;
+  serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoFilterInput>;
+};
+
+export type PopularServiceTypeDtoSortInput = {
+  basePrice?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  isSpecial?: InputMaybe<SortEnumType>;
+  logo?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+  requestCount?: InputMaybe<SortEnumType>;
+  serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoSortInput>;
+};
+
 export type ProvinceDto = {
   __typename?: "ProvinceDto";
   id: Scalars["UUID"]["output"];
@@ -1280,6 +1337,7 @@ export type Query = {
   serviceTypeQuestion_getByServiceType: ListResponseBaseOfServiceTypeQuestionDto;
   serviceType_getById: ResponseBaseOfServiceTypeDto;
   serviceTypes_getAll: ListResponseBaseOfServiceTypeDto;
+  serviceTypes_getPopular: ListResponseBaseOfPopularServiceTypeDto;
   /** Returns all specialists. */
   specialist_getAll: ListResponseBaseOfSpecialistProfileDto;
   /** Returns a specialist by their ID. */
@@ -1721,6 +1779,7 @@ export type ServiceTypeDto = {
   __typename?: "ServiceTypeDto";
   basePrice: Scalars["Decimal"]["output"];
   id: Scalars["UUID"]["output"];
+  isSpecial: Scalars["Boolean"]["output"];
   logo: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
   serviceSubCategory: ServiceSubCategoryDto;
@@ -1740,6 +1799,7 @@ export type ServiceTypeDtoFilterInput = {
   and?: InputMaybe<Array<ServiceTypeDtoFilterInput>>;
   basePrice?: InputMaybe<DecimalOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  isSpecial?: InputMaybe<BooleanOperationFilterInput>;
   logo?: InputMaybe<StringOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ServiceTypeDtoFilterInput>>;
@@ -1749,6 +1809,7 @@ export type ServiceTypeDtoFilterInput = {
 export type ServiceTypeDtoSortInput = {
   basePrice?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  isSpecial?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
   serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoSortInput>;
@@ -2014,6 +2075,7 @@ export type UpdateServiceSubCategoryInput = {
 export type UpdateServiceTypeInput = {
   basePrice: Scalars["Decimal"]["input"];
   id: Scalars["UUID"]["input"];
+  isSpecial: Scalars["Boolean"]["input"];
   newLogo: Scalars["String"]["input"];
   newName: Scalars["String"]["input"];
 };
@@ -2802,6 +2864,43 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
           rateCount: number;
           phoneNumber: string;
         } | null;
+      }> | null;
+    } | null;
+  };
+};
+
+export type ServiceTypes_GetPopularQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  order?: InputMaybe<
+    Array<PopularServiceTypeDtoSortInput> | PopularServiceTypeDtoSortInput
+  >;
+  where?: InputMaybe<PopularServiceTypeDtoFilterInput>;
+}>;
+
+export type ServiceTypes_GetPopularQuery = {
+  __typename?: "Query";
+  serviceTypes_getPopular: {
+    __typename?: "ListResponseBaseOfPopularServiceTypeDto";
+    status?: any | null;
+    result?: {
+      __typename?: "PopularServiceTypeDtoCollectionSegment";
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+      items?: Array<{
+        __typename?: "PopularServiceTypeDto";
+        name: string;
+        logo: string;
+        id: any;
+        requestCount: number;
+        serviceSubCategory: {
+          __typename?: "ServiceSubCategoryDto";
+          id: any;
+          name: string;
+        };
       }> | null;
     } | null;
   };
@@ -4882,6 +4981,97 @@ export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
             ServiceRequest_GetAvailableRequestsQuery,
             ServiceRequest_GetAvailableRequestsQueryVariables
           >(ServiceRequest_GetAvailableRequestsDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const ServiceTypes_GetPopularDocument = `
+    query serviceTypes_getPopular($skip: Int, $take: Int, $order: [PopularServiceTypeDtoSortInput!], $where: PopularServiceTypeDtoFilterInput) {
+  serviceTypes_getPopular {
+    result(skip: $skip, take: $take, order: $order, where: $where) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      items {
+        name
+        logo
+        id
+        requestCount
+        serviceSubCategory {
+          id
+          name
+        }
+      }
+    }
+    status
+  }
+}
+    `;
+
+export const useServiceTypes_GetPopularQuery = <
+  TData = ServiceTypes_GetPopularQuery,
+  TError = unknown,
+>(
+  variables?: ServiceTypes_GetPopularQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceTypes_GetPopularQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceTypes_GetPopularQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceTypes_GetPopularQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["serviceTypes_getPopular"]
+        : ["serviceTypes_getPopular", variables],
+    queryFn: fetcher<
+      ServiceTypes_GetPopularQuery,
+      ServiceTypes_GetPopularQueryVariables
+    >(ServiceTypes_GetPopularDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceTypes_GetPopularQuery = <
+  TData = InfiniteData<ServiceTypes_GetPopularQuery>,
+  TError = unknown,
+>(
+  variables: ServiceTypes_GetPopularQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<ServiceTypes_GetPopularQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceTypes_GetPopularQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<ServiceTypes_GetPopularQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["serviceTypes_getPopular.infinite"]
+            : ["serviceTypes_getPopular.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceTypes_GetPopularQuery,
+            ServiceTypes_GetPopularQueryVariables
+          >(ServiceTypes_GetPopularDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),

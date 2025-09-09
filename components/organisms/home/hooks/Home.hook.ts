@@ -4,7 +4,11 @@ import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { useGetServiceCategoriesQuery } from "../../service/hooks";
-import { useGetAllCityQuery, useGetAllSpecialistQuery } from "./Home.query";
+import {
+  useGetAllCityQuery,
+  useGetAllPopularQuery,
+  useGetAllSpecialistQuery,
+} from "./Home.query";
 
 export default function useHomeHook() {
   const router = useRouter();
@@ -15,6 +19,12 @@ export default function useHomeHook() {
 
   const { data: cityData, isLoading } = useGetAllCityQuery({
     where: { isActive: { eq: true } },
+  });
+
+  const { data: popularData } = useGetAllPopularQuery();
+
+  const { data: specialData } = useGetAllPopularQuery({
+    where: { isSpecial: { eq: true } },
   });
 
   const { data: specialists } = useGetAllSpecialistQuery({
@@ -87,6 +97,8 @@ export default function useHomeHook() {
     activeBanner: selectedCityData?.pages[0]?.activeBanner,
     activeCarousel: selectedCityData?.pages[0]?.activeCarousel,
     specialists: specialists?.pages,
+    popularData: popularData?.pages ?? [],
+    specialData: specialData?.pages ?? [],
   };
 }
 

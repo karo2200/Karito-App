@@ -22,13 +22,16 @@ export default function AddressScreen() {
     isRefetching,
     isLoading,
     router,
+    onSetPrimary,
   } = useAddressHook();
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
       <AddressCard
         item={item}
-        onChange={() => {}}
+        onChange={() => {
+          onSetPrimary(item?.id);
+        }}
         key={item?.id}
         onEditPress={() =>
           router.push(

@@ -8,7 +8,8 @@ import HorizontalSpeciaLists from "./Views/HorizontalSpeciaLists";
 import useHomeHook from "./hooks/Home.hook";
 
 const HomeScreen = () => {
-  const { activeCarousel, specialists } = useHomeHook();
+  const { activeCarousel, specialists, popularData, specialData } =
+    useHomeHook();
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -17,13 +18,13 @@ const HomeScreen = () => {
       <HorizontalServiceList
         title="پر طرفداردار ترین خدمات"
         loading={false}
-        data={[{}, {}]}
+        data={popularData}
       />
       {activeCarousel && <CustomCarousel data={activeCarousel?.imageUrls} />}
       <HorizontalServiceList
-        title="انواع جابجایی"
+        title="سرویس های ویژه"
         loading={false}
-        data={[{}]}
+        data={specialData}
       />
       <HorizontalSpeciaLists data={specialists} />
     </ScrollView>

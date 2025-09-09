@@ -7,9 +7,12 @@ import {
   City_GetAllDocument,
   CityDtoFilterInput,
   CityDtoSortInput,
+  PopularServiceTypeDtoFilterInput,
+  PopularServiceTypeDtoSortInput,
   Province_GetAllDocument,
   ProvinceDtoFilterInput,
   ProvinceDtoSortInput,
+  ServiceTypes_GetPopularDocument,
   Specialist_GetAllDocument,
   SpecialistProfileDtoFilterInput,
   SpecialistProfileDtoSortInput,
@@ -45,6 +48,13 @@ type UseGetAllSpecialistOptions = {
   take?: number;
   where?: SpecialistProfileDtoFilterInput;
   order?: [SpecialistProfileDtoSortInput];
+};
+
+type UseGetAllPopularOptions = {
+  skip?: number;
+  take?: number;
+  where?: PopularServiceTypeDtoFilterInput;
+  order?: [PopularServiceTypeDtoSortInput];
 };
 
 export const useGetAllCityQuery = (options: UseGetAllCityOptions = {}) => {
@@ -158,6 +168,38 @@ export const useGetAllSpecialistQuery = (
           ?.map((a) => a?.specialist_getAll?.result?.items)
           .flat(),
         totalCount: data?.pages?.[0]?.specialist_getAll?.result?.totalCount,
+      };
+    },
+  });
+};
+
+export const useGetAllPopularQuery = (
+  options: UseGetAllPopularOptions = {}
+) => {
+  return useInfiniteQuery({
+    queryKey: [queryKeys.serviceTypes_getPopular, options],
+    queryFn: async ({ pageParam = 0 }) => {
+      return fetcher(ServiceTypes_GetPopularDocument, {
+        skip: pageParam * PAGE_SIZE,
+        take: PAGE_SIZE,
+        ...options,
+      })();
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.serviceTypes_getPopular?.result?.pageInfo?.hasNextPage) {
+        return allPages.length;
+      }
+      return undefined;
+    },
+    select: (data) => {
+      return {
+        ...data,
+        pages: data?.pages
+          ?.map((a) => a?.serviceTypes_getPopular?.result?.items)
+          .flat(),
+        totalCount:
+          data?.pages?.[0]?.serviceTypes_getPopular?.result?.totalCount,
       };
     },
   });
