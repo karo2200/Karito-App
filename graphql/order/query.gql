@@ -122,6 +122,8 @@ query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
         }
       }
       finalPrice
+      basePrice
+      discountAmount
       cancellationReason {
         id
         name

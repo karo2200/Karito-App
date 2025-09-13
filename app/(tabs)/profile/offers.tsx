@@ -4,7 +4,7 @@ import { commonStyles } from "@/constants/CommonStyles";
 
 export default function AddressPage() {
   return (
-    <ThemedContainer style={commonStyles.container}>
+    <ThemedContainer style={[commonStyles.container, { paddingTop: 0 }]}>
       <OffersScreen />
     </ThemedContainer>
   );

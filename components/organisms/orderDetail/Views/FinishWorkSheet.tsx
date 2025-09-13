@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import useOrderDetailHook from "../hooks/OrderDetail.hook";
 
 const { height } = Dimensions.get("screen");
 
@@ -16,6 +17,8 @@ export default function FinishWorkSheet({
   setVisible: () => void;
 }) {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  const { onBillPress } = useOrderDetailHook();
 
   useEffect(() => {
     if (visible) {
@@ -54,7 +57,10 @@ export default function FinishWorkSheet({
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.payment}
-          onPress={() => closeActionSheet()}
+          onPress={() => {
+            onBillPress();
+            closeActionSheet();
+          }}
         >
           <ThemedText type="defaultSemiBold" style={styles.textBtn}>
             مشاهده صورت حساب

@@ -2664,6 +2664,59 @@ export type ServiceRequest_CompleteServiceMutation = {
   };
 };
 
+export type Payment_CreateMutationVariables = Exact<{
+  input: CreatePaymentInput;
+}>;
+
+export type Payment_CreateMutation = {
+  __typename?: "Mutation";
+  payment_create: {
+    __typename?: "ResponseBaseOfPaymentDto";
+    status?: any | null;
+    result?: {
+      __typename?: "PaymentDto";
+      id: any;
+      paymentUrl?: string | null;
+    } | null;
+  };
+};
+
+export type ServiceRequest_ApplyDiscountMutationVariables = Exact<{
+  input: ApplyDiscountCodeToServiceRequestInput;
+}>;
+
+export type ServiceRequest_ApplyDiscountMutation = {
+  __typename?: "Mutation";
+  serviceRequest_applyDiscount: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDto";
+      id: any;
+      basePrice: any;
+      finalPrice: any;
+    } | null;
+  };
+};
+
+export type ServiceRequest_RemoveDiscountMutationVariables = Exact<{
+  input: RemoveDiscountCodeFromServiceRequestInput;
+}>;
+
+export type ServiceRequest_RemoveDiscountMutation = {
+  __typename?: "Mutation";
+  serviceRequest_removeDiscount: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDto";
+      id: any;
+      basePrice: any;
+      finalPrice: any;
+    } | null;
+  };
+};
+
 export type ServiceRequest_GetMyRequestsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -2801,6 +2854,8 @@ export type ServiceRequest_GetByIdQuery = {
     result?: {
       __typename?: "ServiceRequestDto";
       finalPrice: any;
+      basePrice: any;
+      discountAmount: any;
       description?: string | null;
       requestDate: any;
       id: any;
@@ -4211,6 +4266,122 @@ export const useServiceRequest_CompleteServiceMutation = <
   });
 };
 
+export const Payment_CreateDocument = `
+    mutation payment_create($input: CreatePaymentInput!) {
+  payment_create(input: $input) {
+    status
+    result {
+      id
+      paymentUrl
+    }
+  }
+}
+    `;
+
+export const usePayment_CreateMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    Payment_CreateMutation,
+    TError,
+    Payment_CreateMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Payment_CreateMutation,
+    TError,
+    Payment_CreateMutationVariables,
+    TContext
+  >({
+    mutationKey: ["payment_create"],
+    mutationFn: (variables?: Payment_CreateMutationVariables) =>
+      fetcher<Payment_CreateMutation, Payment_CreateMutationVariables>(
+        Payment_CreateDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
+
+export const ServiceRequest_ApplyDiscountDocument = `
+    mutation serviceRequest_applyDiscount($input: ApplyDiscountCodeToServiceRequestInput!) {
+  serviceRequest_applyDiscount(input: $input) {
+    status
+    result {
+      id
+      basePrice
+      finalPrice
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_ApplyDiscountMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceRequest_ApplyDiscountMutation,
+    TError,
+    ServiceRequest_ApplyDiscountMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceRequest_ApplyDiscountMutation,
+    TError,
+    ServiceRequest_ApplyDiscountMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceRequest_applyDiscount"],
+    mutationFn: (variables?: ServiceRequest_ApplyDiscountMutationVariables) =>
+      fetcher<
+        ServiceRequest_ApplyDiscountMutation,
+        ServiceRequest_ApplyDiscountMutationVariables
+      >(ServiceRequest_ApplyDiscountDocument, variables)(),
+    ...options,
+  });
+};
+
+export const ServiceRequest_RemoveDiscountDocument = `
+    mutation serviceRequest_removeDiscount($input: RemoveDiscountCodeFromServiceRequestInput!) {
+  serviceRequest_removeDiscount(input: $input) {
+    status
+    result {
+      id
+      basePrice
+      finalPrice
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_RemoveDiscountMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceRequest_RemoveDiscountMutation,
+    TError,
+    ServiceRequest_RemoveDiscountMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceRequest_RemoveDiscountMutation,
+    TError,
+    ServiceRequest_RemoveDiscountMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceRequest_removeDiscount"],
+    mutationFn: (variables?: ServiceRequest_RemoveDiscountMutationVariables) =>
+      fetcher<
+        ServiceRequest_RemoveDiscountMutation,
+        ServiceRequest_RemoveDiscountMutationVariables
+      >(ServiceRequest_RemoveDiscountDocument, variables)(),
+    ...options,
+  });
+};
+
 export const ServiceRequest_GetMyRequestsDocument = `
     query serviceRequest_getMyRequests($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
   serviceRequest_getMyRequests {
@@ -4468,6 +4639,8 @@ export const ServiceRequest_GetByIdDocument = `
         }
       }
       finalPrice
+      basePrice
+      discountAmount
       cancellationReason {
         id
         name
