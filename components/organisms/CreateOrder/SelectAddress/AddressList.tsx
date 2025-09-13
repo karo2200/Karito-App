@@ -21,8 +21,10 @@ export default function AddressList({
 
   const myAddresses = useMemo(() => {
     if (data?.pages?.[0]) {
-      setValue("addressId", data?.pages?.[0]?.id);
-      setValue("addressLabel", data?.pages?.[0]?.text);
+      const primaryAddress =
+        data?.pages.find((addr) => addr.isPrimary) ?? data?.pages?.[0];
+      setValue("addressId", primaryAddress?.id);
+      setValue("addressLabel", primaryAddress?.text);
     }
     return data?.pages?.[0]
       ? data?.pages?.map?.((item, index) => {

@@ -19,4 +19,5 @@ export const queryKeys = {
   user_getMyProfile: "user_getMyProfile",
   specialist_getAll: "specialist_getAll",
   serviceTypes_getPopular: "serviceTypes_getPopular",
+  disabledServiceTime_getAll: "disabledServiceTime_getAll",
 };
