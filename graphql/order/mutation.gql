@@ -44,3 +44,39 @@ mutation serviceRequest_completeService($input: CompleteServiceInput!) {
     }
   }
 }
+
+mutation payment_create($input: CreatePaymentInput!) {
+  payment_create(input: $input) {
+    status
+    result {
+      id
+      paymentUrl
+    }
+  }
+}
+
+mutation serviceRequest_applyDiscount(
+  $input: ApplyDiscountCodeToServiceRequestInput!
+) {
+  serviceRequest_applyDiscount(input: $input) {
+    status
+    result {
+      id
+      basePrice
+      finalPrice
+    }
+  }
+}
+
+mutation serviceRequest_removeDiscount(
+  $input: RemoveDiscountCodeFromServiceRequestInput!
+) {
+  serviceRequest_removeDiscount(input: $input) {
+    status
+    result {
+      id
+      basePrice
+      finalPrice
+    }
+  }
+}

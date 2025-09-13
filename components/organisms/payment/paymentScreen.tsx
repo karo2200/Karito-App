@@ -1,33 +1,41 @@
 import BankCardIcon from "@/assets/icons/BankCard";
-import SnappPayIcon from "@/assets/icons/SnappPay";
-import TaraPayIcon from "@/assets/icons/TaraPay";
+import CloseIcon from "@/assets/icons/Close";
 import TomanIcon from "@/assets/icons/Toman";
 import { RadioButton } from "@/components/atoms/RadioButton";
 import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
+import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
-import { useToast } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
-import { useRouter } from "expo-router";
+import { FontStyle } from "@/constants/Fonts";
 import * as React from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import usePaymentHook from "./hooks/Payment.hook";
 
 export default function PaymentScreen() {
-  const { showToast } = useToast();
-  const router = useRouter();
+  const {
+    isLoading,
+    serviceData,
+    discountCode,
+    setDiscountCode,
+    onHandleDisCountCode,
+    disCountLoading,
+    paymentLoading,
+    onPayPress,
+    removeLoading,
+    onRemoveCode,
+    isSetCode,
+  } = usePaymentHook();
 
-  const handleSuccess = () => {
-    showToast({
-      message: "عملیات با موفقیت انجام شد",
-      type: "success",
-      title: "تبریک!",
-    });
-  };
+  if (isLoading) {
+    return <ActivityIndicator style={styles.indicator} />;
+  }
 
   return (
     <>
@@ -44,7 +52,7 @@ export default function PaymentScreen() {
           title="کارت بانکی"
           description="تمام کارت‌های عضو شتاب"
         />
-        <PaymentTypeCard
+        {/* <PaymentTypeCard
           image={<SnappPayIcon />}
           title="پرداخت قسطی با اسنپ‌پی"
           description="۴ قسط، ماهانه ۲۰۰.۰۰۰ تومان، بدون کارمزد"
@@ -52,18 +60,40 @@ export default function PaymentScreen() {
         <PaymentTypeCard
           image={<TaraPayIcon />}
           title="پرداخت با اعتبار تارا"
-        />
+        /> */}
         <View style={styles.rowView2}>
           <TextInput
             style={styles.input}
+            value={discountCode}
+            onChangeText={(t) => setDiscountCode(t)}
             placeholder="کد تخفیف را اینجا وارد کنید"
             textAlign="right"
             placeholderTextColor={Colors.mediumGray}
           />
-          <TouchableOpacity activeOpacity={0.8} style={styles.offerBtn}>
-            <ThemedText fontType="bold" style={styles.offerText}>
-              بررسی کد
-            </ThemedText>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={[
+              styles.offerBtn,
+              discountCode && { borderColor: Colors.hint500 },
+            ]}
+            disabled={!discountCode}
+            onPress={isSetCode ? onRemoveCode : onHandleDisCountCode}
+          >
+            {disCountLoading || removeLoading ? (
+              <ActivityIndicator />
+            ) : isSetCode ? (
+              <CloseIcon width={36} height={36} fill={Colors.hint500} />
+            ) : (
+              <ThemedText
+                fontType="bold"
+                style={[
+                  styles.offerText,
+                  discountCode && { color: Colors.hint500 },
+                ]}
+              >
+                بررسی کد
+              </ThemedText>
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.priceView}>
@@ -104,7 +134,7 @@ export default function PaymentScreen() {
                 type="text"
                 style={{ color: Colors.darkGray, marginLeft: 8 }}
               >
-                ۸۷۳.۰۰۰
+                {serviceData?.basePrice}
               </ThemedText>
               <TomanIcon color={Colors.darkGray} height={13} width={13} />
             </View>
@@ -139,7 +169,7 @@ export default function PaymentScreen() {
             </ThemedText>
             <View style={styles.flexRow2}>
               <ThemedText style={{ color: Colors.semiBlack, marginLeft: 8 }}>
-                ۸۷۳.۰۰۰
+                {serviceData?.finalPrice}
               </ThemedText>
               <TomanIcon color={Colors.semiBlack} height={16} width={16} />
             </View>
@@ -154,19 +184,17 @@ export default function PaymentScreen() {
           <View style={styles.flexRow}>
             <TomanIcon />
             <ThemedText type="defaultSemiBold" style={styles.footerText}>
-              1,200,000
+              {serviceData?.finalPrice}
             </ThemedText>
           </View>
         </View>
-        <TouchableOpacity
-          activeOpacity={0.7}
+        <ThemedButton
+          title="پرداخت"
+          fontType="bold"
+          isLoading={paymentLoading}
           style={styles.payment}
-          onPress={() => router.push("/order/paymentStatus")}
-        >
-          <ThemedText type="defaultSemiBold" style={styles.textBtn}>
-            پرداخت
-          </ThemedText>
-        </TouchableOpacity>
+          onPress={() => onPayPress()}
+        />
       </View>
     </>
   );
@@ -196,14 +224,8 @@ const styles = StyleSheet.create({
   },
 
   payment: {
-    backgroundColor: Colors.hint500,
-    paddingVertical: 10,
     width: "48%",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
     marginLeft: 16,
-    borderRadius: 4,
   },
 
   flex1: {
@@ -238,6 +260,7 @@ const styles = StyleSheet.create({
     padding: 8,
     flex: 1,
     marginLeft: 8,
+    fontFamily: FontStyle.regular,
   },
 
   priceView: {
@@ -282,6 +305,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
+
+  indicator: { alignSelf: "center", flex: 1 },
 });
 
 const PaymentTypeCard = ({

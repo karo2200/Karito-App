@@ -74,7 +74,7 @@ export default function useOrderDetailHook() {
   }, [serviceData]);
 
   const onBillPress = () => {
-    router.push("/order/payment");
+    router.push(`/order/payment?id=${params?.id}`);
   };
 
   const makeCall = (phoneNumber: string) => {

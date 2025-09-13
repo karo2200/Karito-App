@@ -105,6 +105,11 @@ export type AddressDtoSortInput = {
   text?: InputMaybe<SortEnumType>;
 };
 
+export type ApplyDiscountCodeToServiceRequestInput = {
+  discountCode: Scalars["String"]["input"];
+  serviceRequestId: Scalars["UUID"]["input"];
+};
+
 /** Defines when a policy shall be executed. */
 export enum ApplyPolicy {
   /** After the resolver was executed. */
@@ -297,6 +302,10 @@ export type CreateCityInput = {
   provinceId: Scalars["UUID"]["input"];
 };
 
+export type CreateDisabledServiceTimeInput = {
+  time: Scalars["DateTime"]["input"];
+};
+
 export type CreateDiscountCodeInput = {
   amount: Scalars["Decimal"]["input"];
   customerId: Scalars["UUID"]["input"];
@@ -308,6 +317,10 @@ export type CreateDiscountCodeInput = {
 export type CreateNeighborhoodInput = {
   cityId: Scalars["UUID"]["input"];
   name: Scalars["String"]["input"];
+};
+
+export type CreatePaymentInput = {
+  serviceRequestId: Scalars["UUID"]["input"];
 };
 
 export type CreateProvinceInput = {
@@ -359,6 +372,7 @@ export type CreateServiceTypeQuestionInput = {
 
 export type CustomerDto = {
   __typename?: "CustomerDto";
+  code: Scalars["String"]["output"];
   firstName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
@@ -367,8 +381,19 @@ export type CustomerDto = {
   profileImageUrl?: Maybe<Scalars["String"]["output"]>;
 };
 
+/** A segment of a collection. */
+export type CustomerDtoCollectionSegment = {
+  __typename?: "CustomerDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<CustomerDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
 export type CustomerDtoFilterInput = {
   and?: InputMaybe<Array<CustomerDtoFilterInput>>;
+  code?: InputMaybe<StringOperationFilterInput>;
   firstName?: InputMaybe<StringOperationFilterInput>;
   gender?: InputMaybe<GenderOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
@@ -379,6 +404,7 @@ export type CustomerDtoFilterInput = {
 };
 
 export type CustomerDtoSortInput = {
+  code?: InputMaybe<SortEnumType>;
   firstName?: InputMaybe<SortEnumType>;
   gender?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
@@ -467,6 +493,34 @@ export type DeleteServiceTypeInput = {
 
 export type DeleteServiceTypeQuestionInput = {
   id: Scalars["UUID"]["input"];
+};
+
+export type DisabledServiceTimeDto = {
+  __typename?: "DisabledServiceTimeDto";
+  id: Scalars["UUID"]["output"];
+  time: Scalars["DateTime"]["output"];
+};
+
+/** A segment of a collection. */
+export type DisabledServiceTimeDtoCollectionSegment = {
+  __typename?: "DisabledServiceTimeDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<DisabledServiceTimeDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type DisabledServiceTimeDtoFilterInput = {
+  and?: InputMaybe<Array<DisabledServiceTimeDtoFilterInput>>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  or?: InputMaybe<Array<DisabledServiceTimeDtoFilterInput>>;
+  time?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type DisabledServiceTimeDtoSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  time?: InputMaybe<SortEnumType>;
 };
 
 export type DiscountCodeDto = {
@@ -573,6 +627,10 @@ export type GetCityByIdInput = {
   id: Scalars["UUID"]["input"];
 };
 
+export type GetCustomerByIdInput = {
+  customerId: Scalars["UUID"]["input"];
+};
+
 export type GetDiscountCodeByIdInput = {
   id: Scalars["UUID"]["input"];
 };
@@ -584,6 +642,14 @@ export type GetNearestAddressesInput = {
 
 export type GetNeighborhoodByIdInput = {
   id: Scalars["UUID"]["input"];
+};
+
+export type GetPaymentByIdInput = {
+  paymentId: Scalars["UUID"]["input"];
+};
+
+export type GetPaymentsForServiceRequestInput = {
+  serviceRequestId: Scalars["UUID"]["input"];
 };
 
 export type GetProvinceByIdInput = {
@@ -712,6 +778,32 @@ export type ListResponseBaseOfCityDtoResultArgs = {
   where?: InputMaybe<CityDtoFilterInput>;
 };
 
+export type ListResponseBaseOfCustomerDto = {
+  __typename?: "ListResponseBaseOfCustomerDto";
+  result?: Maybe<CustomerDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfCustomerDtoResultArgs = {
+  order?: InputMaybe<Array<CustomerDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<CustomerDtoFilterInput>;
+};
+
+export type ListResponseBaseOfDisabledServiceTimeDto = {
+  __typename?: "ListResponseBaseOfDisabledServiceTimeDto";
+  result?: Maybe<DisabledServiceTimeDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfDisabledServiceTimeDtoResultArgs = {
+  order?: InputMaybe<Array<DisabledServiceTimeDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<DisabledServiceTimeDtoFilterInput>;
+};
+
 export type ListResponseBaseOfDiscountCodeDto = {
   __typename?: "ListResponseBaseOfDiscountCodeDto";
   result?: Maybe<DiscountCodeDtoCollectionSegment>;
@@ -736,6 +828,19 @@ export type ListResponseBaseOfNeighborhoodDtoResultArgs = {
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<NeighborhoodDtoFilterInput>;
+};
+
+export type ListResponseBaseOfPaymentDto = {
+  __typename?: "ListResponseBaseOfPaymentDto";
+  result?: Maybe<PaymentDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfPaymentDtoResultArgs = {
+  order?: InputMaybe<Array<PaymentDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<PaymentDtoFilterInput>;
 };
 
 export type ListResponseBaseOfPopularServiceTypeDto = {
@@ -899,6 +1004,8 @@ export type Mutation = {
   city_setActiveBanner: ResponseBaseOfCityDto;
   city_setActiveCarousel: ResponseBaseOfCityDto;
   city_update: ResponseBaseOfCityDto;
+  disabledServiceTime_create: ResponseBaseOfDisabledServiceTimeDto;
+  disabledServiceTime_remove: ResponseBase;
   discountCode_activate: ResponseBaseOfDiscountCodeDto;
   discountCode_create: ResponseBaseOfDiscountCodeDto;
   discountCode_deactivate: ResponseBaseOfDiscountCodeDto;
@@ -906,6 +1013,7 @@ export type Mutation = {
   neighborhood_create: ResponseBaseOfNeighborhoodDto;
   neighborhood_delete: ResponseBase;
   neighborhood_update: ResponseBaseOfNeighborhoodDto;
+  payment_create: ResponseBaseOfPaymentDto;
   province_create: ResponseBaseOfProvinceDto;
   province_delete: ResponseBase;
   province_update: ResponseBaseOfProvinceDto;
@@ -917,11 +1025,13 @@ export type Mutation = {
   serviceCategory_delete: ResponseBase;
   serviceCategory_update: ResponseBaseOfServiceCategoryDto;
   serviceRequest_accept: ResponseBaseOfServiceRequestDto;
+  serviceRequest_applyDiscount: ResponseBaseOfServiceRequestDto;
   serviceRequest_cancel: ResponseBaseOfServiceRequestDto;
   serviceRequest_completeService: ResponseBaseOfServiceRequestDto;
   serviceRequest_create: ResponseBaseOfServiceRequestDto;
   serviceRequest_markAsArrived: ResponseBaseOfServiceRequestDto;
   serviceRequest_reject: ResponseBaseOfRejectedServiceRequestDto;
+  serviceRequest_removeDiscount: ResponseBaseOfServiceRequestDto;
   serviceSubCategory_create: ResponseBaseOfServiceSubCategoryDto;
   serviceSubCategory_delete: ResponseBase;
   serviceSubCategory_update: ResponseBaseOfServiceSubCategoryDto;
@@ -960,7 +1070,7 @@ export type MutationAddress_UpdateArgs = {
 };
 
 export type MutationAuth_RefreshTokenArgs = {
-  input: RefreshTokenInput;
+  input: RefreshTokenRequestInput;
 };
 
 export type MutationAuth_RequestOtpArgs = {
@@ -1031,6 +1141,14 @@ export type MutationCity_UpdateArgs = {
   input: UpdateCityInput;
 };
 
+export type MutationDisabledServiceTime_CreateArgs = {
+  input: CreateDisabledServiceTimeInput;
+};
+
+export type MutationDisabledServiceTime_RemoveArgs = {
+  input: RemoveDisabledServiceTimeInput;
+};
+
 export type MutationDiscountCode_ActivateArgs = {
   input: ActivateDiscountCodeInput;
 };
@@ -1057,6 +1175,10 @@ export type MutationNeighborhood_DeleteArgs = {
 
 export type MutationNeighborhood_UpdateArgs = {
   input: UpdateNeighborhoodInput;
+};
+
+export type MutationPayment_CreateArgs = {
+  input: CreatePaymentInput;
 };
 
 export type MutationProvince_CreateArgs = {
@@ -1103,6 +1225,10 @@ export type MutationServiceRequest_AcceptArgs = {
   input: AcceptServiceRequestInput;
 };
 
+export type MutationServiceRequest_ApplyDiscountArgs = {
+  input: ApplyDiscountCodeToServiceRequestInput;
+};
+
 export type MutationServiceRequest_CancelArgs = {
   input: CancelServiceRequestInput;
 };
@@ -1121,6 +1247,10 @@ export type MutationServiceRequest_MarkAsArrivedArgs = {
 
 export type MutationServiceRequest_RejectArgs = {
   input: RejectServiceRequestInput;
+};
+
+export type MutationServiceRequest_RemoveDiscountArgs = {
+  input: RemoveDiscountCodeFromServiceRequestInput;
 };
 
 export type MutationServiceSubCategory_CreateArgs = {
@@ -1226,6 +1356,65 @@ export type NeighborhoodDtoSortInput = {
   name?: InputMaybe<SortEnumType>;
 };
 
+export type PaymentDto = {
+  __typename?: "PaymentDto";
+  amount: Scalars["Decimal"]["output"];
+  discountAmount: Scalars["Decimal"]["output"];
+  discountCode?: Maybe<DiscountCodeDto>;
+  finalAmount: Scalars["Decimal"]["output"];
+  id: Scalars["UUID"]["output"];
+  paymentUrl?: Maybe<Scalars["String"]["output"]>;
+  serviceRequest: ServiceRequestDto;
+  status: PaymentStatus;
+};
+
+/** A segment of a collection. */
+export type PaymentDtoCollectionSegment = {
+  __typename?: "PaymentDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<PaymentDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type PaymentDtoFilterInput = {
+  amount?: InputMaybe<DecimalOperationFilterInput>;
+  and?: InputMaybe<Array<PaymentDtoFilterInput>>;
+  discountAmount?: InputMaybe<DecimalOperationFilterInput>;
+  discountCode?: InputMaybe<DiscountCodeDtoFilterInput>;
+  finalAmount?: InputMaybe<DecimalOperationFilterInput>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  or?: InputMaybe<Array<PaymentDtoFilterInput>>;
+  paymentUrl?: InputMaybe<StringOperationFilterInput>;
+  serviceRequest?: InputMaybe<ServiceRequestDtoFilterInput>;
+  status?: InputMaybe<PaymentStatusOperationFilterInput>;
+};
+
+export type PaymentDtoSortInput = {
+  amount?: InputMaybe<SortEnumType>;
+  discountAmount?: InputMaybe<SortEnumType>;
+  discountCode?: InputMaybe<DiscountCodeDtoSortInput>;
+  finalAmount?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  paymentUrl?: InputMaybe<SortEnumType>;
+  serviceRequest?: InputMaybe<ServiceRequestDtoSortInput>;
+  status?: InputMaybe<SortEnumType>;
+};
+
+export enum PaymentStatus {
+  Failed = "FAILED",
+  Pending = "PENDING",
+  Success = "SUCCESS",
+}
+
+export type PaymentStatusOperationFilterInput = {
+  eq?: InputMaybe<PaymentStatus>;
+  in?: InputMaybe<Array<PaymentStatus>>;
+  neq?: InputMaybe<PaymentStatus>;
+  nin?: InputMaybe<Array<PaymentStatus>>;
+};
+
 export type PopularServiceTypeDto = {
   __typename?: "PopularServiceTypeDto";
   basePrice: Scalars["Decimal"]["output"];
@@ -1315,11 +1504,18 @@ export type Query = {
   carousel_getById: ResponseBaseOfCarouselDto;
   city_getAll: ListResponseBaseOfCityDto;
   city_getById: ResponseBaseOfCityDto;
+  /** Returns all customers. */
+  customer_getAll: ListResponseBaseOfCustomerDto;
+  /** Returns a customer by their ID. */
+  customer_getById: ResponseBaseOfCustomerDto;
+  disabledServiceTime_getAll: ListResponseBaseOfDisabledServiceTimeDto;
   discountCode_getAll: ListResponseBaseOfDiscountCodeDto;
   discountCode_getById: ResponseBaseOfDiscountCodeDto;
   discountCode_getMyCodes: ListResponseBaseOfDiscountCodeDto;
   neighborhood_getAll: ListResponseBaseOfNeighborhoodDto;
   neighborhood_getById: ResponseBaseOfNeighborhoodDto;
+  payment_getById: ResponseBaseOfPaymentDto;
+  payment_listForServiceRequest: ListResponseBaseOfPaymentDto;
   province_getAll: ListResponseBaseOfProvinceDto;
   province_getById: ResponseBaseOfProvinceDto;
   rateAndReview_getByCustomerId: ListResponseBaseOfRateAndReviewDto;
@@ -1372,12 +1568,24 @@ export type QueryCity_GetByIdArgs = {
   input: GetCityByIdInput;
 };
 
+export type QueryCustomer_GetByIdArgs = {
+  input: GetCustomerByIdInput;
+};
+
 export type QueryDiscountCode_GetByIdArgs = {
   input: GetDiscountCodeByIdInput;
 };
 
 export type QueryNeighborhood_GetByIdArgs = {
   input: GetNeighborhoodByIdInput;
+};
+
+export type QueryPayment_GetByIdArgs = {
+  input: GetPaymentByIdInput;
+};
+
+export type QueryPayment_ListForServiceRequestArgs = {
+  input: GetPaymentsForServiceRequestInput;
 };
 
 export type QueryProvince_GetByIdArgs = {
@@ -1460,7 +1668,7 @@ export type RateAndReviewDtoSortInput = {
   rate?: InputMaybe<SortEnumType>;
 };
 
-export type RefreshTokenInput = {
+export type RefreshTokenRequestInput = {
   accessToken: Scalars["String"]["input"];
   refreshToken: Scalars["String"]["input"];
 };
@@ -1473,6 +1681,14 @@ export type RejectedServiceRequestDto = {
   __typename?: "RejectedServiceRequestDto";
   serviceRequest: ServiceRequestDto;
   specialist: SpecialistDto;
+};
+
+export type RemoveDisabledServiceTimeInput = {
+  id: Scalars["UUID"]["input"];
+};
+
+export type RemoveDiscountCodeFromServiceRequestInput = {
+  serviceRequestId: Scalars["UUID"]["input"];
 };
 
 export type RequestOtpInput = {
@@ -1521,6 +1737,18 @@ export type ResponseBaseOfCityDto = {
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
+export type ResponseBaseOfCustomerDto = {
+  __typename?: "ResponseBaseOfCustomerDto";
+  result?: Maybe<CustomerDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfDisabledServiceTimeDto = {
+  __typename?: "ResponseBaseOfDisabledServiceTimeDto";
+  result?: Maybe<DisabledServiceTimeDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
 export type ResponseBaseOfDiscountCodeDto = {
   __typename?: "ResponseBaseOfDiscountCodeDto";
   result?: Maybe<DiscountCodeDto>;
@@ -1530,6 +1758,12 @@ export type ResponseBaseOfDiscountCodeDto = {
 export type ResponseBaseOfNeighborhoodDto = {
   __typename?: "ResponseBaseOfNeighborhoodDto";
   result?: Maybe<NeighborhoodDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfPaymentDto = {
+  __typename?: "ResponseBaseOfPaymentDto";
+  result?: Maybe<PaymentDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -1886,6 +2120,7 @@ export enum SortEnumType {
 export type SpecialistDto = {
   __typename?: "SpecialistDto";
   averageRating: Scalars["Float"]["output"];
+  code: Scalars["String"]["output"];
   firstName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
@@ -1898,6 +2133,7 @@ export type SpecialistDto = {
 export type SpecialistDtoFilterInput = {
   and?: InputMaybe<Array<SpecialistDtoFilterInput>>;
   averageRating?: InputMaybe<FloatOperationFilterInput>;
+  code?: InputMaybe<StringOperationFilterInput>;
   firstName?: InputMaybe<StringOperationFilterInput>;
   gender?: InputMaybe<GenderOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
@@ -1910,6 +2146,7 @@ export type SpecialistDtoFilterInput = {
 
 export type SpecialistDtoSortInput = {
   averageRating?: InputMaybe<SortEnumType>;
+  code?: InputMaybe<SortEnumType>;
   firstName?: InputMaybe<SortEnumType>;
   gender?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
@@ -2101,6 +2338,7 @@ export type UpdateUserProfileInput = {
 
 export type UserProfileDto = {
   __typename?: "UserProfileDto";
+  code: Scalars["String"]["output"];
   firstName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
   id: Scalars["UUID"]["output"];
@@ -2216,7 +2454,7 @@ export type Auth_VerifyOtpMutation = {
 };
 
 export type Auth_RefreshTokenMutationVariables = Exact<{
-  input: RefreshTokenInput;
+  input: RefreshTokenRequestInput;
 }>;
 
 export type Auth_RefreshTokenMutation = {
@@ -2403,6 +2641,59 @@ export type ServiceRequest_CompleteServiceMutation = {
   };
 };
 
+export type Payment_CreateMutationVariables = Exact<{
+  input: CreatePaymentInput;
+}>;
+
+export type Payment_CreateMutation = {
+  __typename?: "Mutation";
+  payment_create: {
+    __typename?: "ResponseBaseOfPaymentDto";
+    status?: any | null;
+    result?: {
+      __typename?: "PaymentDto";
+      id: any;
+      paymentUrl?: string | null;
+    } | null;
+  };
+};
+
+export type ServiceRequest_ApplyDiscountMutationVariables = Exact<{
+  input: ApplyDiscountCodeToServiceRequestInput;
+}>;
+
+export type ServiceRequest_ApplyDiscountMutation = {
+  __typename?: "Mutation";
+  serviceRequest_applyDiscount: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDto";
+      id: any;
+      basePrice: any;
+      finalPrice: any;
+    } | null;
+  };
+};
+
+export type ServiceRequest_RemoveDiscountMutationVariables = Exact<{
+  input: RemoveDiscountCodeFromServiceRequestInput;
+}>;
+
+export type ServiceRequest_RemoveDiscountMutation = {
+  __typename?: "Mutation";
+  serviceRequest_removeDiscount: {
+    __typename?: "ResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDto";
+      id: any;
+      basePrice: any;
+      finalPrice: any;
+    } | null;
+  };
+};
+
 export type ServiceRequest_GetMyRequestsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -2540,6 +2831,8 @@ export type ServiceRequest_GetByIdQuery = {
     result?: {
       __typename?: "ServiceRequestDto";
       finalPrice: any;
+      basePrice: any;
+      discountAmount: any;
       description?: string | null;
       requestDate: any;
       id: any;
@@ -3390,7 +3683,7 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
 };
 
 export const Auth_RefreshTokenDocument = `
-    mutation auth_refreshToken($input: RefreshTokenInput!) {
+    mutation auth_refreshToken($input: RefreshTokenRequestInput!) {
   auth_refreshToken(input: $input) {
     status
     result {
@@ -3871,6 +4164,122 @@ export const useServiceRequest_CompleteServiceMutation = <
   });
 };
 
+export const Payment_CreateDocument = `
+    mutation payment_create($input: CreatePaymentInput!) {
+  payment_create(input: $input) {
+    status
+    result {
+      id
+      paymentUrl
+    }
+  }
+}
+    `;
+
+export const usePayment_CreateMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    Payment_CreateMutation,
+    TError,
+    Payment_CreateMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Payment_CreateMutation,
+    TError,
+    Payment_CreateMutationVariables,
+    TContext
+  >({
+    mutationKey: ["payment_create"],
+    mutationFn: (variables?: Payment_CreateMutationVariables) =>
+      fetcher<Payment_CreateMutation, Payment_CreateMutationVariables>(
+        Payment_CreateDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
+
+export const ServiceRequest_ApplyDiscountDocument = `
+    mutation serviceRequest_applyDiscount($input: ApplyDiscountCodeToServiceRequestInput!) {
+  serviceRequest_applyDiscount(input: $input) {
+    status
+    result {
+      id
+      basePrice
+      finalPrice
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_ApplyDiscountMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceRequest_ApplyDiscountMutation,
+    TError,
+    ServiceRequest_ApplyDiscountMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceRequest_ApplyDiscountMutation,
+    TError,
+    ServiceRequest_ApplyDiscountMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceRequest_applyDiscount"],
+    mutationFn: (variables?: ServiceRequest_ApplyDiscountMutationVariables) =>
+      fetcher<
+        ServiceRequest_ApplyDiscountMutation,
+        ServiceRequest_ApplyDiscountMutationVariables
+      >(ServiceRequest_ApplyDiscountDocument, variables)(),
+    ...options,
+  });
+};
+
+export const ServiceRequest_RemoveDiscountDocument = `
+    mutation serviceRequest_removeDiscount($input: RemoveDiscountCodeFromServiceRequestInput!) {
+  serviceRequest_removeDiscount(input: $input) {
+    status
+    result {
+      id
+      basePrice
+      finalPrice
+    }
+  }
+}
+    `;
+
+export const useServiceRequest_RemoveDiscountMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    ServiceRequest_RemoveDiscountMutation,
+    TError,
+    ServiceRequest_RemoveDiscountMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    ServiceRequest_RemoveDiscountMutation,
+    TError,
+    ServiceRequest_RemoveDiscountMutationVariables,
+    TContext
+  >({
+    mutationKey: ["serviceRequest_removeDiscount"],
+    mutationFn: (variables?: ServiceRequest_RemoveDiscountMutationVariables) =>
+      fetcher<
+        ServiceRequest_RemoveDiscountMutation,
+        ServiceRequest_RemoveDiscountMutationVariables
+      >(ServiceRequest_RemoveDiscountDocument, variables)(),
+    ...options,
+  });
+};
+
 export const ServiceRequest_GetMyRequestsDocument = `
     query serviceRequest_getMyRequests($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
   serviceRequest_getMyRequests {
@@ -4128,6 +4537,8 @@ export const ServiceRequest_GetByIdDocument = `
         }
       }
       finalPrice
+      basePrice
+      discountAmount
       cancellationReason {
         id
         name

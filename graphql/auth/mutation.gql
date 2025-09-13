@@ -14,7 +14,7 @@ mutation auth_verifyOtp($input: VerifyOtpInput!) {
   }
 }
 
-mutation auth_refreshToken($input: RefreshTokenInput!) {
+mutation auth_refreshToken($input: RefreshTokenRequestInput!) {
   auth_refreshToken(input: $input) {
     status
     result {
