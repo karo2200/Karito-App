@@ -1,14 +1,22 @@
+import { queryKeys } from "@/constants/queryKeys";
 import {
   LocationType,
   QnAInput,
   QuestionType,
+  useAddress_SetPrimaryMutation,
   useCreateRequestMutation,
 } from "@/generated/graphql";
 import { useRoute } from "@react-navigation/native";
+import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGetServiceTypeQuestionsQuery } from "./hooks";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const baseData = [
   { type: "address" },
@@ -93,10 +101,40 @@ export default function useCreateOrder() {
 
   const steps = (configDatas?.length ?? 0) - 1;
   const nextDisabled = stage === steps;
-  const nextDay = dayjs().add(1, "day");
+
+  const queryClient = useQueryClient();
+  const { mutate: addressMutate } = useAddress_SetPrimaryMutation();
+
   const onNextPress = () => {
+    const values = getValues();
+    if (stage == 0) {
+      if (values?.addressId)
+        addressMutate(
+          {
+            input: {
+              addressId: values?.addressId,
+            },
+          },
+          {
+            onSuccess: (data) => {
+              if (data?.address_setPrimary?.status?.code === 1) {
+                queryClient.invalidateQueries({
+                  queryKey: [queryKeys.address_getMyAddresses],
+                });
+              }
+            },
+          }
+        );
+    }
+    if (stage == 1) {
+      const tehranDateTime = dayjs.tz(
+        `${getValues("date")} ${getValues("time")}:00`,
+        "YYYY-MM-DD HH:mm",
+        "Asia/Tehran"
+      );
+      setValue("requestDate", tehranDateTime);
+    }
     if (stage === steps - 1) {
-      const values = getValues();
       let qnAs: QnAInput[] = [];
 
       questions?.forEach((item, index) => {
@@ -116,21 +154,18 @@ export default function useCreateOrder() {
             description: "تست",
             locationType: values?.locationType,
             qnAs,
-            requestDate: nextDay.toISOString(),
+            requestDate: values?.requestDate,
             serviceTypeId: params?.sub,
             gender: values?.gender,
           },
         },
         {
           onSuccess(data, variables, context) {
-            console.log(JSON.stringify({ data }));
             if (data?.serviceRequest_create?.status?.code === 1) {
               setStage((prev) => prev + 1);
             }
           },
-          onError(error, variables, context) {
-            // console.log(JSON.stringify({ error }));
-          },
+          onError(error, variables, context) {},
         }
       );
     } else setStage((prev) => prev + 1);

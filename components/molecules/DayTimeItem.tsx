@@ -1,45 +1,65 @@
 import { Colors } from "@/constants/Colors";
-import { DimensionValue, StyleSheet } from "react-native";
-import { ThemedText, ThemedView } from "..";
+import { forwardRef, useImperativeHandle, useState } from "react";
+import { DimensionValue, StyleSheet, TouchableOpacity } from "react-native";
+import { ThemedText } from "..";
 
-export default function DayTimeItem({
-  title,
-  subtitle,
-  width,
-  height,
-  checked,
-}: {
-  title: string;
-  subtitle?: string;
-  width?: DimensionValue;
-  height?: DimensionValue;
-  checked?: boolean;
-}) {
-  return (
-    <ThemedView
-      style={[
-        checked ? styles.selectedContainer : styles.deSelectedContainer,
-        { width, height },
-      ]}
-    >
-      {subtitle && (
+const DayTimeItem = forwardRef(
+  (
+    {
+      title,
+      subtitle,
+      width,
+      height,
+      checked,
+      onItemPress,
+    }: {
+      title: string;
+      subtitle?: string;
+      width?: DimensionValue;
+      height?: DimensionValue;
+      checked?: boolean;
+      onItemPress?: () => void;
+    },
+    ref
+  ) => {
+    const [isChecked, setIsChecked] = useState(checked);
+
+    useImperativeHandle(ref, () => ({
+      setCheck: (value: boolean) => {
+        setIsChecked(value);
+      },
+    }));
+
+    return (
+      <TouchableOpacity
+        style={[
+          isChecked ? styles.selectedContainer : styles.deSelectedContainer,
+          { width, height },
+        ]}
+        onPress={onItemPress}
+        disabled={!onItemPress}
+      >
+        {subtitle && (
+          <ThemedText
+            type="subtitle"
+            style={isChecked ? styles.selectedText : styles.deSelectedText}
+          >
+            {subtitle}
+          </ThemedText>
+        )}
         <ThemedText
-          type="subtitle"
+          fontType="bold"
+          type="title"
           style={checked ? styles.selectedText : styles.deSelectedText}
         >
-          {subtitle}
+          {title}
         </ThemedText>
-      )}
-      <ThemedText
-        fontType="bold"
-        type="title"
-        style={checked ? styles.selectedText : styles.deSelectedText}
-      >
-        {title}
-      </ThemedText>
-    </ThemedView>
-  );
-}
+      </TouchableOpacity>
+    );
+  }
+);
+
+export default DayTimeItem;
 
 const styles = StyleSheet.create({
   selectedContainer: {

@@ -1,11 +1,19 @@
 import { Divider, ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
+import moment from "jalali-moment";
 import { StyleSheet } from "react-native";
 
 export default function PreviewOrder(props: any) {
+  const requestDate = props?.getValues()?.requestDate;
+
   const data = [
     { label: "هزینه برآورد شده", value: "۱۲۰۰۰ تومان" },
-    { label: "زمان", value: "1404/03/15  چهارشنبه ساعت 17:00 " },
+    {
+      label: "زمان",
+      value: moment(new Date(requestDate))
+        .locale("fa")
+        .format("jYYYY/jMM/jDD dddd [ساعت] HH:mm"),
+    },
   ];
 
   const data2 = [
