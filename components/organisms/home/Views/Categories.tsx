@@ -57,6 +57,7 @@ export default function Categories() {
             Icon={() => <HospitalIcon />}
             title={"سایر خدمات"}
             item={homeCategoryData?.[5]}
+            isLast={true}
           />
         </View>
       )}
@@ -69,32 +70,39 @@ function HeaderItem({
   Icon,
   title,
   style,
+  isLast = false,
 }: {
   item: ServiceCategoryDto;
   Icon: ComponentType;
   title: string;
   style?: ViewStyle;
+  isLast?: boolean;
 }) {
   const { router } = useHomeHook();
   return (
     <Pressable
       style={{ alignItems: "center" }}
       onPress={() =>
-        router.push(
-          `/(tabs)/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${""}`
-        )
+        isLast
+          ? router.push("/(tabs)/service")
+          : router.push(
+              `/(tabs)/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${""}`
+            )
       }
     >
       <ThemedView style={[styles.imageContainer, style]}>
-        {/* <Icon /> */}
-        <Image
-          source={{ uri: item?.logo }}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+        {isLast ? (
+          <Icon />
+        ) : (
+          <Image
+            source={{ uri: item?.logo }}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        )}
       </ThemedView>
       <ThemedText type="text" style={styles.text}>
-        {item?.name}
+        {isLast ? title : item?.name}
       </ThemedText>
     </Pressable>
   );

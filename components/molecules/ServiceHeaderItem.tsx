@@ -33,7 +33,7 @@ export default function HeaderItem({
           ]}
         >
           {imagePath ? (
-            <CustomImage src={imagePath} resizeMode="cover" />
+            <CustomImage src={imagePath} resizeMode="contain" />
           ) : Icon ? (
             <Icon color={Colors.hint500} size={24} />
           ) : (
