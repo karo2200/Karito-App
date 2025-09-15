@@ -39,6 +39,7 @@ export default function useProfileHook() {
       Linking.openURL(`tel:${"9382467423467"}`);
     }
   };
+  console.log("//", data?.user_getMyProfile?.result?.id);
 
   return {
     exitVisible,

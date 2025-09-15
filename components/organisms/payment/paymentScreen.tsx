@@ -82,7 +82,7 @@ export default function PaymentScreen() {
             {disCountLoading || removeLoading ? (
               <ActivityIndicator />
             ) : isSetCode ? (
-              <CloseIcon width={36} height={36} fill={Colors.hint500} />
+              <CloseIcon fill={Colors.hint500} />
             ) : (
               <ThemedText
                 fontType="bold"
@@ -97,7 +97,7 @@ export default function PaymentScreen() {
           </TouchableOpacity>
         </View>
         <View style={styles.priceView}>
-          <View style={styles.flexRow2Space}>
+          {/* <View style={styles.flexRow2Space}>
             <ThemedText type="text" style={{ color: Colors.gray500 }}>
               ایاب ذهاب
             </ThemedText>
@@ -110,7 +110,7 @@ export default function PaymentScreen() {
               </ThemedText>
               <TomanIcon color={Colors.darkGray} height={13} width={13} />
             </View>
-          </View>
+          </View> */}
           <View style={styles.flexRow2Space}>
             <ThemedText type="text" style={{ color: Colors.iconGreen }}>
               کد تخفیف
@@ -120,7 +120,7 @@ export default function PaymentScreen() {
                 type="text"
                 style={{ color: Colors.iconGreen, marginLeft: 8 }}
               >
-                ۸۷۳.۰۰۰
+                {serviceData?.discountAmount}
               </ThemedText>
               <TomanIcon color={Colors.iconGreen} height={13} width={13} />
             </View>
@@ -139,7 +139,7 @@ export default function PaymentScreen() {
               <TomanIcon color={Colors.darkGray} height={13} width={13} />
             </View>
           </View>
-          <View style={styles.flexRow2Space}>
+          {/* <View style={styles.flexRow2Space}>
             <ThemedText type="text" style={{ color: Colors.gray500 }}>
               هزینه اضافه شده
             </ThemedText>
@@ -152,7 +152,7 @@ export default function PaymentScreen() {
               </ThemedText>
               <TomanIcon color={Colors.darkGray} height={13} width={13} />
             </View>
-          </View>
+          </View> */}
           <View
             style={[
               styles.flexRow2Space,

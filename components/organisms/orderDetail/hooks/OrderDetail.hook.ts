@@ -40,6 +40,8 @@ export default function useOrderDetailHook() {
 
   const [rate, setRate] = useState(0);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const { isExpert } = authCacheStore();
 
   const { mutate: acceptWorkMutate, isPending: acceptWorkPending } =
@@ -57,11 +59,23 @@ export default function useOrderDetailHook() {
   const { mutate: arriveMutate, isPending: arrivePending } =
     useServiceRequest_MarkAsArrivedMutation();
 
-  const { data: serviceData, isLoading } = useGetServiceById({
+  const {
+    data: serviceData,
+    isLoading,
+    refetch,
+  } = useGetServiceById({
     input: { serviceRequestId: params?.id },
   });
 
   const { data: cancelationData } = useGetCancelationRequestsQuery();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    await refetch();
+
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     if (
@@ -290,5 +304,7 @@ export default function useOrderDetailHook() {
     ratePending,
     setRate,
     isComplete,
+    onRefresh,
+    refreshing,
   };
 }

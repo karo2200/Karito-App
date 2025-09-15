@@ -69,6 +69,7 @@ export default function usePaymentHook() {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getById],
             });
+            setDiscountCode("");
           } else {
             showToast({
               type: "error",

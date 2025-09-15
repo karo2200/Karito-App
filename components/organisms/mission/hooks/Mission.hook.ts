@@ -11,6 +11,7 @@ export default function useMissionsHook() {
     refetch,
     hasNextPage,
     fetchNextPage,
+    isLoading: inProressLoading,
   } = useGetServiceAcceptanceQuery({
     where: { status: { neq: ServiceRequestStatus.Paid } },
     order: [{ requestDate: SortEnumType.Desc }],
@@ -22,6 +23,7 @@ export default function useMissionsHook() {
     refetch: completeRefetch,
     hasNextPage: completeHasNextPage,
     fetchNextPage: completeFetchNextPage,
+    isLoading: copmleteLoading,
   } = useGetServiceAcceptanceQuery({
     where: { status: { eq: ServiceRequestStatus.Paid } },
     order: [{ requestDate: SortEnumType.Desc }],
@@ -39,5 +41,7 @@ export default function useMissionsHook() {
     completeRefetch,
     completeHasNextPage,
     completeFetchNextPage,
+    inProressLoading,
+    copmleteLoading,
   };
 }

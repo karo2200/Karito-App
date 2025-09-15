@@ -1,6 +1,6 @@
 import { ServiceRequestDto } from "@/generated/graphql";
 import React, { useCallback, useRef } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 import useOrderHook from "../hooks/Order.hook";
 import ListEmptyOrder from "./ListEmptyOrder";
 import OrderCard from "./OrderCard";
@@ -15,6 +15,7 @@ export default function CanceledOrders() {
     cancelledIsRefetching,
     cancelledOrders,
     cancelledRefetch,
+    canceledLoading,
   } = useOrderHook();
 
   const renderItem = useCallback(
@@ -24,7 +25,9 @@ export default function CanceledOrders() {
     []
   );
 
-  return (
+  return canceledLoading && cancelledOrders?.length === 0 ? (
+    <ActivityIndicator />
+  ) : (
     <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}

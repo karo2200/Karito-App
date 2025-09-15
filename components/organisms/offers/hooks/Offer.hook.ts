@@ -14,7 +14,10 @@ export default function useOfferHook() {
     fetchNextPage,
   } = useGetDiscountCodesQuery({
     where: {
-      and: [{ isActive: { eq: true } }, { expiryDate: { lte: Date.now() } }],
+      and: [
+        { isActive: { eq: true } },
+        { expiryDate: { gte: new Date().toISOString() } },
+      ],
     },
   });
 

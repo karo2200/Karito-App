@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "karitoapp",
+    "platforms": ["ios", "android", "web"],
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -14,12 +15,27 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "bundleIdentifier": "com.karitoapp",
+      "associatedDomains": ["applinks:karito.com"],
       "config": {
         "googleMapsApiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
       },
       "supportsTablet": true
     },
     "android": {
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "karito.com",
+              "pathPrefix": "/payments"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
       "icon": "./assets/images/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",

@@ -1,6 +1,6 @@
 import { ServiceRequestDto } from "@/generated/graphql";
 import React, { useCallback, useRef } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 import ListEmptyOrder from "../../order/Views/ListEmptyOrder";
 import OrderCard from "../../order/Views/OrderCard";
 import useMissionsHook from "../hooks/Mission.hook";
@@ -15,6 +15,7 @@ export default function InprogressMissions() {
     hasNextPage,
     fetchNextPage,
     router,
+    inProressLoading,
   } = useMissionsHook();
 
   const renderItem = useCallback(
@@ -30,7 +31,9 @@ export default function InprogressMissions() {
     []
   );
 
-  return (
+  return inProressLoading && inProgressData?.length === 0 ? (
+    <ActivityIndicator />
+  ) : (
     <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}

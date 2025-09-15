@@ -18,6 +18,7 @@ import * as React from "react";
 import {
   ActivityIndicator,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -52,6 +53,8 @@ export default function OrderDetailScreen() {
     onRejectPress,
     onArrivePress,
     arrivePending,
+    onRefresh,
+    refreshing,
   } = useOrderDetailHook();
 
   return (
@@ -59,6 +62,9 @@ export default function OrderDetailScreen() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 100 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         {!isExpert ||
         (serviceData?.status !== ServiceRequestStatus.Pending && isExpert) ? (

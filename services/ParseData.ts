@@ -19,7 +19,7 @@ export function formatToJalali(dateString: string) {
 
   const date = m.format("jYYYY/jMM/jDD");
 
-  const weekday = m.format("dddd");
+  const weekday = m.locale("fa").format("dddd");
 
   const time = m.format("HH:mm");
 
