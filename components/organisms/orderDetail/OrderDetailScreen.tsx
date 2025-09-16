@@ -6,7 +6,6 @@ import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedText from "@/components/atoms/ThemedText";
-import { useToast } from "@/components/atoms/Toast";
 import LocationActionSheet from "@/components/molecules/LocationActionSheet";
 import PaymentWaitingSheet from "@/components/molecules/PaymentWaitingSheet";
 import { Colors } from "@/constants/Colors";
@@ -30,8 +29,6 @@ import FinishWorkSheet from "./Views/FinishWorkSheet";
 import SpecialistData from "./Views/SpecialistData";
 
 export default function OrderDetailScreen() {
-  const { showToast } = useToast();
-
   const {
     onBillPress,
     setFinishWorkVisible,
@@ -55,6 +52,7 @@ export default function OrderDetailScreen() {
     arrivePending,
     onRefresh,
     refreshing,
+    pageType,
   } = useOrderDetailHook();
 
   return (
@@ -75,8 +73,16 @@ export default function OrderDetailScreen() {
                 href: isExpert ? "/mission" : "/order",
               },
               {
-                label: isExpert ? "ماموریت های جاری" : "سفارش‌های جاری",
-                href: isExpert ? "/mission" : "/order",
+                label: isExpert
+                  ? "ماموریت های جاری"
+                  : pageType === "canceled"
+                    ? "سفارش‌های لغو شده"
+                    : pageType === "complete"
+                      ? "سفارش‌های گذشته"
+                      : "سفارش‌های جاری",
+                href: isExpert
+                  ? "/mission"
+                  : `/order?index=${pageType === "canceled" ? 2 : pageType === "complete" ? 1 : 0}`,
               },
               { label: serviceData?.serviceType?.name },
             ]}
@@ -122,9 +128,7 @@ export default function OrderDetailScreen() {
                           : Colors.warningDark,
                       }
                     : serviceData?.status === ServiceRequestStatus.Paid && {
-                        borderColor: isExpert
-                          ? Colors.successDark
-                          : Colors.warningDark,
+                        borderColor: Colors.successDark,
                       },
                 ]}
               >
@@ -137,11 +141,8 @@ export default function OrderDetailScreen() {
                             ? Colors.infoDark
                             : Colors.warningDark,
                         }
-                      : serviceData?.status ===
-                          ServiceRequestStatus.PendingPayment && {
-                          color: isExpert
-                            ? Colors.successDark
-                            : Colors.warningDark,
+                      : serviceData?.status === ServiceRequestStatus.Paid && {
+                          color: Colors.successDark,
                         }
                   }
                 >

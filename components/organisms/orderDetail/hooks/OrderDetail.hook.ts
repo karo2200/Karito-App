@@ -306,5 +306,6 @@ export default function useOrderDetailHook() {
     isComplete,
     onRefresh,
     refreshing,
+    pageType: params?.page as string,
   };
 }

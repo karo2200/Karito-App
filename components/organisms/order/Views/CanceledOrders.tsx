@@ -20,7 +20,13 @@ export default function CanceledOrders() {
 
   const renderItem = useCallback(
     ({ item }: { item: ServiceRequestDto }) => (
-      <OrderCard item={item} onOrderPress={() => {}} key={item?.id} />
+      <OrderCard
+        item={item}
+        onOrderPress={() => {
+          router.push(`/order/orderDetail?id=${item?.id}&page=canceled`);
+        }}
+        key={item?.id}
+      />
     ),
     []
   );

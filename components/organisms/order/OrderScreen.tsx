@@ -14,10 +14,10 @@ import {
 import CanceledOrders from "./Views/CanceledOrders";
 import FinishedOrdes from "./Views/FinishedOrders";
 import InProgressOrders from "./Views/InProgressOrders";
+import useOrderHook from "./hooks/Order.hook";
 
 export default function OrderScreen() {
-  const [activeTab, setActiveTab] = React.useState(0);
-  const scrollRef = React.useRef<ScrollView>(null);
+  const { setActiveTab, activeTab, scrollRef } = useOrderHook();
 
   const tabs = [
     { label: "سفارش‌های جاری", content: <InProgressOrders /> },

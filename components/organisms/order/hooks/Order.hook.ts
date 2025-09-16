@@ -1,9 +1,33 @@
+import { DeviceWidth } from "@/constants/Dimension";
 import { ServiceRequestStatus, SortEnumType } from "@/generated/graphql";
+import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import { useEffect, useRef, useState } from "react";
+import { ScrollView } from "react-native";
 import { useGetServiceRequestsQuery } from "./Order.query";
 
 export default function useOrderHook() {
   const router = useRouter();
+
+  const { params } = useRoute();
+
+  const [activeTab, setActiveTab] = useState(params?.index ?? 0);
+
+  const scrollRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    if (params?.index !== undefined) {
+      const index = Number(params.index);
+      setActiveTab(index);
+
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({
+          x: DeviceWidth * index,
+          animated: false,
+        });
+      }, 0);
+    }
+  }, [params?.index]);
 
   const {
     data: inprogressOrders,
@@ -66,5 +90,8 @@ export default function useOrderHook() {
     completeLoading,
     canceledLoading,
     inProgressLoading,
+    activeTab,
+    setActiveTab,
+    scrollRef,
   };
 }
