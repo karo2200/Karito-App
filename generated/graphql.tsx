@@ -126,6 +126,72 @@ export type AuthResult = {
   refreshToken: Scalars["String"]["output"];
 };
 
+export type AvailableServiceRequestDto = {
+  __typename?: "AvailableServiceRequestDto";
+  address: AddressDto;
+  basePrice: Scalars["Decimal"]["output"];
+  cancellationReason?: Maybe<CancellationReasonDto>;
+  customer: CustomerDto;
+  description?: Maybe<Scalars["String"]["output"]>;
+  discountAmount: Scalars["Decimal"]["output"];
+  distance: Scalars["Float"]["output"];
+  finalPrice: Scalars["Decimal"]["output"];
+  id: Scalars["UUID"]["output"];
+  qnAs: Array<ServiceRequestQnADto>;
+  rateAndReview?: Maybe<RateAndReviewDto>;
+  requestDate: Scalars["DateTime"]["output"];
+  serviceType: ServiceTypeDto;
+  specialist?: Maybe<SpecialistDto>;
+  status: ServiceRequestStatus;
+};
+
+/** A segment of a collection. */
+export type AvailableServiceRequestDtoCollectionSegment = {
+  __typename?: "AvailableServiceRequestDtoCollectionSegment";
+  /** A flattened list of the items. */
+  items?: Maybe<Array<AvailableServiceRequestDto>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+export type AvailableServiceRequestDtoFilterInput = {
+  address?: InputMaybe<AddressDtoFilterInput>;
+  and?: InputMaybe<Array<AvailableServiceRequestDtoFilterInput>>;
+  basePrice?: InputMaybe<DecimalOperationFilterInput>;
+  cancellationReason?: InputMaybe<CancellationReasonDtoFilterInput>;
+  customer?: InputMaybe<CustomerDtoFilterInput>;
+  description?: InputMaybe<StringOperationFilterInput>;
+  discountAmount?: InputMaybe<DecimalOperationFilterInput>;
+  distance?: InputMaybe<FloatOperationFilterInput>;
+  finalPrice?: InputMaybe<DecimalOperationFilterInput>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  or?: InputMaybe<Array<AvailableServiceRequestDtoFilterInput>>;
+  qnAs?: InputMaybe<ListFilterInputTypeOfServiceRequestQnADtoFilterInput>;
+  rateAndReview?: InputMaybe<RateAndReviewDtoFilterInput>;
+  requestDate?: InputMaybe<DateTimeOperationFilterInput>;
+  serviceType?: InputMaybe<ServiceTypeDtoFilterInput>;
+  specialist?: InputMaybe<SpecialistDtoFilterInput>;
+  status?: InputMaybe<ServiceRequestStatusOperationFilterInput>;
+};
+
+export type AvailableServiceRequestDtoSortInput = {
+  address?: InputMaybe<AddressDtoSortInput>;
+  basePrice?: InputMaybe<SortEnumType>;
+  cancellationReason?: InputMaybe<CancellationReasonDtoSortInput>;
+  customer?: InputMaybe<CustomerDtoSortInput>;
+  description?: InputMaybe<SortEnumType>;
+  discountAmount?: InputMaybe<SortEnumType>;
+  distance?: InputMaybe<SortEnumType>;
+  finalPrice?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  rateAndReview?: InputMaybe<RateAndReviewDtoSortInput>;
+  requestDate?: InputMaybe<SortEnumType>;
+  serviceType?: InputMaybe<ServiceTypeDtoSortInput>;
+  specialist?: InputMaybe<SpecialistDtoSortInput>;
+  status?: InputMaybe<SortEnumType>;
+};
+
 export type BannerDto = {
   __typename?: "BannerDto";
   id: Scalars["UUID"]["output"];
@@ -614,6 +680,11 @@ export type GetAddressByIdInput = {
   addressId: Scalars["UUID"]["input"];
 };
 
+export type GetAvailableRequestsInput = {
+  latitude: Scalars["Float"]["input"];
+  longitude: Scalars["Float"]["input"];
+};
+
 export type GetBannerByIdInput = {
   id: Scalars["UUID"]["input"];
 };
@@ -738,6 +809,19 @@ export type ListResponseBaseOfAddressDtoResultArgs = {
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   where?: InputMaybe<AddressDtoFilterInput>;
+};
+
+export type ListResponseBaseOfAvailableServiceRequestDto = {
+  __typename?: "ListResponseBaseOfAvailableServiceRequestDto";
+  result?: Maybe<AvailableServiceRequestDtoCollectionSegment>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ListResponseBaseOfAvailableServiceRequestDtoResultArgs = {
+  order?: InputMaybe<Array<AvailableServiceRequestDtoSortInput>>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<AvailableServiceRequestDtoFilterInput>;
 };
 
 export type ListResponseBaseOfBannerDto = {
@@ -1543,7 +1627,7 @@ export type Query = {
   serviceCategory_getAll: ListResponseBaseOfServiceCategoryDto;
   serviceCategory_getById: ResponseBaseOfServiceCategoryDto;
   serviceRequest_getAll: ListResponseBaseOfServiceRequestDto;
-  serviceRequest_getAvailableRequests: ListResponseBaseOfServiceRequestDto;
+  serviceRequest_getAvailableRequests: ListResponseBaseOfAvailableServiceRequestDto;
   serviceRequest_getById: ResponseBaseOfServiceRequestDto;
   serviceRequest_getMyAcceptances: ListResponseBaseOfServiceRequestDto;
   serviceRequest_getMyRequests: ListResponseBaseOfServiceRequestDto;
@@ -1630,6 +1714,10 @@ export type QueryRevenue_GetRevenueBySpecialistIdArgs = {
 
 export type QueryServiceCategory_GetByIdArgs = {
   input: GetServiceCategoryByIdInput;
+};
+
+export type QueryServiceRequest_GetAvailableRequestsArgs = {
+  input: GetAvailableRequestsInput;
 };
 
 export type QueryServiceRequest_GetByIdArgs = {
@@ -3212,28 +3300,30 @@ export type ServiceTypes_GetAllQuery = {
 };
 
 export type ServiceRequest_GetAvailableRequestsQueryVariables = Exact<{
+  input: GetAvailableRequestsInput;
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   order?: InputMaybe<
-    Array<ServiceRequestDtoSortInput> | ServiceRequestDtoSortInput
+    | Array<AvailableServiceRequestDtoSortInput>
+    | AvailableServiceRequestDtoSortInput
   >;
-  where?: InputMaybe<ServiceRequestDtoFilterInput>;
+  where?: InputMaybe<AvailableServiceRequestDtoFilterInput>;
 }>;
 
 export type ServiceRequest_GetAvailableRequestsQuery = {
   __typename?: "Query";
   serviceRequest_getAvailableRequests: {
-    __typename?: "ListResponseBaseOfServiceRequestDto";
+    __typename?: "ListResponseBaseOfAvailableServiceRequestDto";
     status?: any | null;
     result?: {
-      __typename?: "ServiceRequestDtoCollectionSegment";
+      __typename?: "AvailableServiceRequestDtoCollectionSegment";
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
         hasNextPage: boolean;
         hasPreviousPage: boolean;
       };
       items?: Array<{
-        __typename?: "ServiceRequestDto";
+        __typename?: "AvailableServiceRequestDto";
         finalPrice: any;
         description?: string | null;
         requestDate: any;
@@ -5648,8 +5738,8 @@ export const useInfiniteServiceTypes_GetAllQuery = <
 };
 
 export const ServiceRequest_GetAvailableRequestsDocument = `
-    query serviceRequest_getAvailableRequests($skip: Int, $take: Int, $order: [ServiceRequestDtoSortInput!], $where: ServiceRequestDtoFilterInput) {
-  serviceRequest_getAvailableRequests {
+    query serviceRequest_getAvailableRequests($input: GetAvailableRequestsInput!, $skip: Int, $take: Int, $order: [AvailableServiceRequestDtoSortInput!], $where: AvailableServiceRequestDtoFilterInput) {
+  serviceRequest_getAvailableRequests(input: $input) {
     result(skip: $skip, take: $take, order: $order, where: $where) {
       pageInfo {
         hasNextPage
@@ -5710,7 +5800,7 @@ export const useServiceRequest_GetAvailableRequestsQuery = <
   TData = ServiceRequest_GetAvailableRequestsQuery,
   TError = unknown,
 >(
-  variables?: ServiceRequest_GetAvailableRequestsQueryVariables,
+  variables: ServiceRequest_GetAvailableRequestsQueryVariables,
   options?: Omit<
     UseQueryOptions<ServiceRequest_GetAvailableRequestsQuery, TError, TData>,
     "queryKey"
@@ -5723,10 +5813,7 @@ export const useServiceRequest_GetAvailableRequestsQuery = <
   },
 ) => {
   return useQuery<ServiceRequest_GetAvailableRequestsQuery, TError, TData>({
-    queryKey:
-      variables === undefined
-        ? ["serviceRequest_getAvailableRequests"]
-        : ["serviceRequest_getAvailableRequests", variables],
+    queryKey: ["serviceRequest_getAvailableRequests", variables],
     queryFn: fetcher<
       ServiceRequest_GetAvailableRequestsQuery,
       ServiceRequest_GetAvailableRequestsQueryVariables
@@ -5763,10 +5850,10 @@ export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
-        queryKey:
-          (optionsQueryKey ?? variables === undefined)
-            ? ["serviceRequest_getAvailableRequests.infinite"]
-            : ["serviceRequest_getAvailableRequests.infinite", variables],
+        queryKey: optionsQueryKey ?? [
+          "serviceRequest_getAvailableRequests.infinite",
+          variables,
+        ],
         queryFn: (metaData) =>
           fetcher<
             ServiceRequest_GetAvailableRequestsQuery,

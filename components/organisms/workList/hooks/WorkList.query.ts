@@ -1,6 +1,7 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  GetAvailableRequestsInput,
   ServiceRequest_GetAvailableRequestsDocument,
   ServiceRequestDtoFilterInput,
   ServiceRequestDtoSortInput,
@@ -13,13 +14,15 @@ type UseGetAllAvailableRequestOptions = {
   take?: number;
   where?: ServiceRequestDtoFilterInput;
   order?: [ServiceRequestDtoSortInput];
+  input?: GetAvailableRequestsInput;
 };
 
 export const useGetAllAvailableRequestQuery = (
-  options: UseGetAllAvailableRequestOptions = {}
+  options: UseGetAllAvailableRequestOptions = {},
+  enabled?: boolean
 ) => {
   return useInfiniteQuery({
-    queryKey: [queryKeys.serviceRequest_getAvailableRequests, options],
+    queryKey: [queryKeys.serviceRequest_getAvailableRequests, options, enabled],
     queryFn: async ({ pageParam = 0 }) => {
       return fetcher(ServiceRequest_GetAvailableRequestsDocument, {
         skip: pageParam * PAGE_SIZE,
