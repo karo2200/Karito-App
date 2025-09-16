@@ -2,11 +2,11 @@ import { ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet } from "react-native";
 
-export default function IncomeInfo() {
+export default function IncomeInfo({ data }) {
   const infoArray = [
-    { title: "درآمد ماه", value: "۱٫2۰۰٫۵۰۰ ریال" },
-    { title: "درآمد هفته", value: "۱۲٫۲۰۰٫۵۰۰ ریال" },
-    { title: "درآمد امروز", value: "۴٫۹۰۰٫۰۰۰ ریال" },
+    { title: "درآمد ماه", value: `${data?.month?.result?.totalAmount} ریال` },
+    { title: "درآمد هفته", value: `${data?.week?.result?.totalAmount} ریال` },
+    { title: "درآمد امروز", value: `${data?.day?.result?.totalAmount} ریال` },
   ];
 
   return (
@@ -32,7 +32,9 @@ export default function IncomeInfo() {
               { marginRight: index != 2 ? "2%" : 0 },
             ]}
           >
-            <ThemedText style={styles.title}>{item.title}</ThemedText>
+            <ThemedText style={styles.title} numberOfLines={1}>
+              {item.title}
+            </ThemedText>
             <ThemedText style={styles.value} fontType="bold">
               {item.value}
             </ThemedText>
