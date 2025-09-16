@@ -17,6 +17,7 @@ export default function useOfferHook() {
       and: [
         { isActive: { eq: true } },
         { expiryDate: { gte: new Date().toISOString() } },
+        { isUsed: { eq: false } },
       ],
     },
   });

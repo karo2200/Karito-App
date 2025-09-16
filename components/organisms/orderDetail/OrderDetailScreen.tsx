@@ -74,14 +74,16 @@ export default function OrderDetailScreen() {
               },
               {
                 label: isExpert
-                  ? "ماموریت های جاری"
+                  ? pageType === "complete"
+                    ? "ماموریت های گذشته"
+                    : "ماموریت های جاری"
                   : pageType === "canceled"
                     ? "سفارش‌های لغو شده"
                     : pageType === "complete"
                       ? "سفارش‌های گذشته"
                       : "سفارش‌های جاری",
                 href: isExpert
-                  ? "/mission"
+                  ? `/mission?index=${pageType === "complete" ? 1 : 0}`
                   : `/order?index=${pageType === "canceled" ? 2 : pageType === "complete" ? 1 : 0}`,
               },
               { label: serviceData?.serviceType?.name },

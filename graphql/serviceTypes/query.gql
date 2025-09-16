@@ -103,6 +103,7 @@ query serviceTypes_getPopular(
         name
         logo
         id
+        basePrice
         requestCount
         serviceSubCategory {
           id

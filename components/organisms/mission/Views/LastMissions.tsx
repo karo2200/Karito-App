@@ -22,7 +22,7 @@ export default function LastMissions() {
       <OrderCard
         item={item}
         onOrderPress={() => {
-          router.push(`/mission/orderDetail?id=${item?.id}`);
+          router.push(`/mission/orderDetail?id=${item?.id}&page=complete`);
         }}
         isCustomer={false}
       />

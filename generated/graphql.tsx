@@ -3311,6 +3311,7 @@ export type ServiceTypes_GetPopularQuery = {
         name: string;
         logo: string;
         id: any;
+        basePrice: any;
         requestCount: number;
         serviceSubCategory: {
           __typename?: "ServiceSubCategoryDto";
@@ -3537,6 +3538,7 @@ export type DiscountCode_GetMyCodesQuery = {
         isActive: boolean;
         isPercentage: boolean;
         title: string;
+        isUsed: boolean;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -5791,6 +5793,7 @@ export const ServiceTypes_GetPopularDocument = `
         name
         logo
         id
+        basePrice
         requestCount
         serviceSubCategory {
           id
@@ -6431,6 +6434,7 @@ export const DiscountCode_GetMyCodesDocument = `
         isActive
         isPercentage
         title
+        isUsed
       }
       pageInfo {
         hasNextPage

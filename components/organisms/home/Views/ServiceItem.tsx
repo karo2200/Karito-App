@@ -33,7 +33,7 @@ export default function ServiceItem({
         style={styles.btn}
         onPress={() =>
           router.push(
-            `/(tabs)/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${""}`
+            `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}`
           )
         }
       >
