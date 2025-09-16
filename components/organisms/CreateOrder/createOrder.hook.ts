@@ -191,5 +191,7 @@ export default function useCreateOrder() {
     methods,
     setValue,
     getValues,
+
+    nextLoading: stage === steps - 1 && isPending,
   };
 }

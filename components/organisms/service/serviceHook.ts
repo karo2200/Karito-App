@@ -32,23 +32,7 @@ export default function useServiceTabHook() {
             }
           : { serviceCategory: { id: { eq: selectedService?.id } } },
   });
-  console.log(
-    JSON.stringify({
-      where:
-        selectedService?.id === -1
-          ? searchText && searchText?.length > 0
-            ? searchQuery
-            : undefined
-          : searchText && searchText?.length > 0
-            ? {
-                and: [
-                  { serviceCategory: { id: { eq: selectedService?.id } } },
-                  searchQuery,
-                ],
-              }
-            : { serviceCategory: { id: { eq: selectedService?.id } } },
-    })
-  );
+
   const onServiceItemPress = (item: any) => {
     setSelectedService(item);
   };
