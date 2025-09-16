@@ -3200,6 +3200,7 @@ export type ServiceTypes_GetAllQuery = {
         name: string;
         logo: string;
         id: any;
+        basePrice: any;
         serviceSubCategory: {
           __typename?: "ServiceSubCategoryDto";
           id: any;
@@ -5568,6 +5569,7 @@ export const ServiceTypes_GetAllDocument = `
         name
         logo
         id
+        basePrice
         serviceSubCategory {
           id
           name

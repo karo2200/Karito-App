@@ -14,6 +14,7 @@ query serviceTypes_getAll(
         name
         logo
         id
+        basePrice
         serviceSubCategory {
           id
           name

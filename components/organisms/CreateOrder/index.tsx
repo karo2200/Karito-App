@@ -16,6 +16,8 @@ export default function CreateOrderOrg() {
     onNextPress,
     isLast,
 
+    nextLoading,
+
     methods,
     setValue,
     getValues,
@@ -37,6 +39,7 @@ export default function CreateOrderOrg() {
             onNextPress={onNextPress}
             onBackPress={onBackPress}
             nextDisabled={nextDisabled}
+            nextLoading={nextLoading}
           />
         )}
       </FormProvider>

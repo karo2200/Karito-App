@@ -1,13 +1,20 @@
 import { Divider, ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
+import { formatPrice } from "@/services/ParseData";
+import { useRoute } from "@react-navigation/native";
 import moment from "jalali-moment";
 import { StyleSheet } from "react-native";
 
 export default function PreviewOrder(props: any) {
   const requestDate = props?.getValues()?.requestDate;
 
+  const basePrice = useRoute().params?.price;
+
   const data = [
-    { label: "هزینه برآورد شده", value: "۱۲۰۰۰ تومان" },
+    {
+      label: "هزینه برآورد شده",
+      value: `${formatPrice(basePrice ?? 0)}  تومان`,
+    },
     {
       label: "زمان",
       value: moment(new Date(requestDate))

@@ -6,12 +6,14 @@ type BottomFooterProps = {
   onNextPress?: () => void;
   onBackPress?: () => void;
   nextDisabled?: boolean;
+  nextLoading?: boolean;
 };
 
 export default function BottomFooter({
   onNextPress,
   onBackPress,
   nextDisabled,
+  nextLoading,
 }: BottomFooterProps) {
   const insets = useSafeAreaInsets();
   const marginBottom = insets.bottom + 10;
@@ -23,6 +25,7 @@ export default function BottomFooter({
         style={styles.flex1}
         disabled={nextDisabled}
         onPress={onNextPress}
+        isLoading={nextLoading}
       />
       <Divider height={0} width={8} />
       <ThemedButton
