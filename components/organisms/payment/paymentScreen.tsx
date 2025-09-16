@@ -7,6 +7,7 @@ import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { FontStyle } from "@/constants/Fonts";
+import { formatPrice } from "@/services/ParseData";
 import * as React from "react";
 import {
   ActivityIndicator,
@@ -134,7 +135,7 @@ export default function PaymentScreen() {
                 type="text"
                 style={{ color: Colors.darkGray, marginLeft: 8 }}
               >
-                {serviceData?.basePrice}
+                {formatPrice(serviceData?.basePrice)}
               </ThemedText>
               <TomanIcon color={Colors.darkGray} height={13} width={13} />
             </View>
@@ -169,7 +170,7 @@ export default function PaymentScreen() {
             </ThemedText>
             <View style={styles.flexRow2}>
               <ThemedText style={{ color: Colors.semiBlack, marginLeft: 8 }}>
-                {serviceData?.finalPrice}
+                {formatPrice(serviceData?.finalPrice)}
               </ThemedText>
               <TomanIcon color={Colors.semiBlack} height={16} width={16} />
             </View>
@@ -184,7 +185,7 @@ export default function PaymentScreen() {
           <View style={styles.flexRow}>
             <TomanIcon />
             <ThemedText type="defaultSemiBold" style={styles.footerText}>
-              {serviceData?.finalPrice}
+              {formatPrice(serviceData?.finalPrice)}
             </ThemedText>
           </View>
         </View>

@@ -4,7 +4,7 @@ import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { ServiceRequestDto, ServiceRequestStatus } from "@/generated/graphql";
 import { getStatusFa } from "@/services/helper";
-import { formatToJalali } from "@/services/ParseData";
+import { formatPrice, formatToJalali } from "@/services/ParseData";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -34,7 +34,7 @@ const OrderCard = ({
             textAlign: "left",
           }}
         >
-          {item?.finalPrice} تومان
+          {formatPrice(item?.finalPrice)} تومان
         </ThemedText>
         <View style={styles.row}>
           {isCustomer ? (

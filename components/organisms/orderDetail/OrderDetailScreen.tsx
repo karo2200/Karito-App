@@ -12,7 +12,7 @@ import PaymentWaitingSheet from "@/components/molecules/PaymentWaitingSheet";
 import { Colors } from "@/constants/Colors";
 import { ServiceRequestStatus } from "@/generated/graphql";
 import { getStatusFa } from "@/services/helper";
-import { formatToJalali } from "@/services/ParseData";
+import { formatPrice, formatToJalali } from "@/services/ParseData";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
 import {
@@ -153,7 +153,7 @@ export default function OrderDetailScreen() {
         )}
         <View style={styles.rowView}>
           <ThemedText fontType="bold" style={{ color: Colors.hint500 }}>
-            {serviceData?.finalPrice} تومان
+            {formatPrice(serviceData?.finalPrice)} تومان
           </ThemedText>
           <ThemedText fontType="bold" style={{ color: Colors.gray500 }}>
             {!isExpert ? "هزینه" : "دستمزد"}

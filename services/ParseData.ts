@@ -25,3 +25,13 @@ export function formatToJalali(dateString: string) {
 
   return `${date}  ${weekday} ساعت ${time}`;
 }
+
+export function formatPrice(price: number | string): string {
+  if (price === null || price === undefined) return "";
+
+  const num = typeof price === "string" ? parseInt(price, 10) : price;
+
+  if (isNaN(num)) return "";
+
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
