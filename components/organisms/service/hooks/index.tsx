@@ -8,7 +8,7 @@ import {
   ServiceSubCategoryDtoSortInput,
   ServiceSubCategory_GetAllDocument,
 } from "@/generated/graphql";
-import { fetcher } from "@/graphql/fetcher";
+import { graphqlFetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 type ServiceCategoriesOptions = {
@@ -24,11 +24,11 @@ export const useGetServiceCategoriesQuery = (
   return useInfiniteQuery({
     queryKey: [queryKeys.ServiceCategory_GetServiceCategoriesQuery],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceCategory_GetAllDocument, {
+      return await graphqlFetcher(ServiceCategory_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
-      })();
+      });
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
@@ -64,12 +64,12 @@ export const useGetSubServiceCategoriesQuery = ({
   return useInfiniteQuery({
     queryKey: [queryKeys.serviceSubCategory_getAll, where, order, enabled],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceSubCategory_GetAllDocument, {
+      return await graphqlFetcher(ServiceSubCategory_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
         take: take ?? PAGE_SIZE,
         where,
         order,
-      })();
+      });
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {

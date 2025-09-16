@@ -7,9 +7,11 @@ import { StyleSheet } from "react-native";
 export default function ServiceBodySection({
   items = [],
   selectedService,
+  onEndReached,
 }: {
   items?: any[];
   selectedService?: any;
+  onEndReached?: any;
 }) {
   const router = useRouter();
 
@@ -41,6 +43,7 @@ export default function ServiceBodySection({
           renderItem={renderItem}
           contentContainerStyle={{ alignItems: "flex-end" }}
           ItemSeparatorComponent={() => <Divider />}
+          onEndReached={onEndReached}
         />
       </ThemedView>
     </ThemedView>

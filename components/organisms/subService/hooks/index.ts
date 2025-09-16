@@ -5,7 +5,7 @@ import {
   ServiceTypeDtoSortInput,
   ServiceTypes_GetAllDocument,
 } from "@/generated/graphql";
-import { fetcher } from "@/graphql/fetcher";
+import { graphqlFetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const useGetServiceTypesQuery = ({
@@ -22,12 +22,12 @@ export const useGetServiceTypesQuery = ({
   return useInfiniteQuery({
     queryKey: [queryKeys.serviceSubCategory_getAll, where, order, enabled],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceTypes_GetAllDocument, {
+      return await graphqlFetcher(ServiceTypes_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
         take: take ?? PAGE_SIZE,
         where,
         order,
-      })();
+      });
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {

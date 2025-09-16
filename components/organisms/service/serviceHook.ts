@@ -57,5 +57,6 @@ export default function useServiceTabHook() {
     onFetchNextSubServices,
     onServiceItemPress,
     setSearchText,
+    onSubServiceLoadMore: onFetchNextSubServices,
   };
 }

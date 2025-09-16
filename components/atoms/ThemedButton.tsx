@@ -80,16 +80,17 @@ export default function ThemedButton({
     </View>
   );
 }
+const height = 45;
 
 const styles = StyleSheet.create({
   outline: {
     borderColor: Colors.hint500,
     backgroundColor: Colors.background,
     borderWidth: 1,
-    height: 40,
+    height,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 4,
+    borderRadius: 8,
     flexDirection: "row",
   },
 
@@ -100,19 +101,19 @@ const styles = StyleSheet.create({
     borderColor: Colors.hint500,
     backgroundColor: Colors.hint500,
     borderWidth: 1,
-    height: 40,
+    height,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 4,
+    borderRadius: 8,
     flexDirection: "row",
   },
 
   disabled: {
     backgroundColor: Colors.gray300,
-    height: 40,
+    height,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 4,
+    borderRadius: 8,
     flexDirection: "row",
   },
 

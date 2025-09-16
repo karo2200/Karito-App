@@ -17,7 +17,7 @@ import {
   SpecialistProfileDtoFilterInput,
   SpecialistProfileDtoSortInput,
 } from "@/generated/graphql";
-import { fetcher } from "@/graphql/fetcher";
+import { fetcher, graphqlFetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 type UseGetAllCityOptions = {
@@ -148,11 +148,11 @@ export const useGetAllSpecialistQuery = (
   return useInfiniteQuery({
     queryKey: [queryKeys.specialist_getAll, options],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(Specialist_GetAllDocument, {
+      return await graphqlFetcher(Specialist_GetAllDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
-      })();
+      });
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
@@ -179,11 +179,11 @@ export const useGetAllPopularQuery = (
   return useInfiniteQuery({
     queryKey: [queryKeys.serviceTypes_getPopular, options],
     queryFn: async ({ pageParam = 0 }) => {
-      return fetcher(ServiceTypes_GetPopularDocument, {
+      return await graphqlFetcher(ServiceTypes_GetPopularDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
         ...options,
-      })();
+      });
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {

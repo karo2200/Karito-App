@@ -27,7 +27,13 @@ const generateNext7Days = () => {
   });
 };
 
-export default function DayHeader({ setSelectedDate, setValue }) {
+export default function DayHeader({
+  setSelectedDate,
+  setValue,
+}: {
+  setSelectedDate?: (date: any) => void;
+  setValue?: any;
+}) {
   const checkedItem = useRef<any>(0);
   const dayRefs = useRef(Array.from({ length: 7 }, () => createRef<any>()));
 
