@@ -1,9 +1,12 @@
 import { useRouter } from "expo-router";
 
+import { useMemo } from "react";
 import { useGetDiscountCodesQuery } from "./Offer.query";
 
 export default function useOfferHook() {
   const router = useRouter();
+
+  const today = useMemo(() => new Date().toISOString(), []);
 
   const {
     data: discountData,
@@ -16,7 +19,7 @@ export default function useOfferHook() {
     where: {
       and: [
         { isActive: { eq: true } },
-        { expiryDate: { gte: new Date().toISOString() } },
+        { expiryDate: { gte: today } },
         { isUsed: { eq: false } },
       ],
     },

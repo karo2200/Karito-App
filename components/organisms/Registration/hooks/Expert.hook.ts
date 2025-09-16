@@ -59,13 +59,10 @@ export default function useExpertHook() {
     ) {
       setIsExpert(true);
       setIsLoggedIn(true);
-    } else if (
-      profileData?.specializedDocumentUrls?.length > 0 &&
-      profileData?.lastName
-    ) {
+    } else if (profileData?.nationalCode && profileData?.serviceSubCategory) {
       setPage(3);
     }
-  }, [profileData, page]);
+  }, [profileData]);
 
   const { data: provinceData, isPending: provincePending } =
     useGetAllprovinceQuery({ take: 50 });

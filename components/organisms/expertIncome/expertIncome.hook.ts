@@ -7,10 +7,11 @@ export default function useExpertIncome() {
   );
 
   const onDateSelect = (jDate: string) => {
-    const gregorianDate = moment
-      .from(jDate, "fa", "YYYY/MM/DD") // ورودی جلالی
-      .locale("en") // خروجی انگلیسی
-      .format("YYYY-MM-DD");
+    const gregorianDate = moment(jDate, "jYYYY/jMM/jDD") // مشخص می‌کنیم فرمت جلالی هست
+      .locale("en") // خروجی انگلیسی (میلادی)
+      .format("YYYY-MM-DD"); // خروجی نهایی
+
+    console.log(".......//", gregorianDate);
 
     setSelectedDate(gregorianDate);
   };

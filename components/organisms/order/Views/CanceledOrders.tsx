@@ -49,7 +49,7 @@ export default function CanceledOrders() {
         }
       }}
       ListEmptyComponent={() => (
-        <ListEmptyOrder onSeeListPress={() => router.push("/(tabs)/home")} />
+        <ListEmptyOrder onSeeListPress={() => router.push("/(tabs)/service")} />
       )}
     />
   );
