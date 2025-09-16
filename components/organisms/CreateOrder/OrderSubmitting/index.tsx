@@ -8,7 +8,7 @@ export default function OrderSubmittingOrg() {
   const router = useRouter();
   useEffect(() => {
     setTimeout(() => {
-      router?.push("/(tabs)/order");
+      router?.replace("/(tabs)/order");
     }, 2000);
   }, []);
 

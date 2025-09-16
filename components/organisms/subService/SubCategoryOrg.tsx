@@ -30,7 +30,7 @@ export default function SubCategoryOrg() {
       <ThemedText style={{ color: Colors.title }}>
         کاریتو /{" "}
         <ThemedText onPress={() => router.push("/(tabs)/service")}>
-          {item?.service}
+          {item?.service?.length > 0 ? item?.service : "خدمات"}
         </ThemedText>{" "}
         / <ThemedText fontType="bold">{item?.subService}</ThemedText>
       </ThemedText>

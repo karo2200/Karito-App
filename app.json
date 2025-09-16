@@ -39,7 +39,7 @@
       "icon": "./assets/images/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#5D47EA"
       },
       "permissions": [
         "ACCESS_NETWORK_STATE",
@@ -71,7 +71,7 @@
           "image": "./assets/images/adaptive-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#f00"
+          "backgroundColor": "#5D47EA"
         }
       ],
       [

@@ -40,7 +40,12 @@ export default function HeaderItem({
             <></>
           )}
         </ThemedView>
-        <ThemedText numberOfLines={1}>{title}</ThemedText>
+        <ThemedText
+          numberOfLines={2}
+          style={{ width: height, textAlign: "center" }}
+        >
+          {title}
+        </ThemedText>
       </ThemedView>
     </TouchableOpacity>
   );

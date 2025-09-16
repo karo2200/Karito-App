@@ -4,6 +4,7 @@ import ExpertIcon from "@/assets/icons/ExpertIcon";
 import { ThemedText } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
+import { UserType } from "@/generated/graphql";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
@@ -76,6 +77,7 @@ const ExpertLogin = () => {
                   : false
               }
               style={styles.button}
+              role={UserType.Specialist}
             />
           </View>
         </FormProvider>

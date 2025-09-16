@@ -10,7 +10,12 @@ import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
-import { StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import useOtpHook from "./hooks/otp.hook";
 import Footer from "./views/Footer";
 
@@ -22,11 +27,17 @@ const schema = yup.object().shape({
 });
 
 const ExpertOTPSection = () => {
-  const { isVerifying, onDoExpertLogin, phoneNumber, onRetryPress, router } =
-    useOtpHook();
+  const {
+    isVerifying,
+    onDoExpertLogin,
+    phoneNumber,
+    isSendingCode,
+    onSendOtp,
+    onEditNumber,
+  } = useOtpHook();
 
   const [isTimerActive, setIsTimerActive] = useState(true);
-  const [secondsLeft, setSecondsLeft] = useState(60);
+  const [secondsLeft, setSecondsLeft] = useState(120);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -70,28 +81,40 @@ const ExpertOTPSection = () => {
               {`لطفا کد چهار رقمی ارسال شده به شماره ${phoneNumber} را وارد کنید`}
             </ThemedText>
             <ThemedView style={styles.codeContainer}>
-              <ThemedCodeFeild length={4} name="otpCode" />
-              {isTimerActive ? (
+              <ThemedView style={styles.otpContainer}>
+                <ThemedCodeFeild length={4} name="otpCode" />
+              </ThemedView>
+              <ThemedView style={styles.absolute}>
+                {isTimerActive ? (
+                  <ThemedText
+                    style={styles.timerTxt}
+                  >{`${formatTime(secondsLeft)}`}</ThemedText>
+                ) : (
+                  <>
+                    {isSendingCode ? (
+                      <ActivityIndicator size="small" />
+                    ) : (
+                      <TouchableOpacity onPress={() => onSendOtp()}>
+                        <ThemedText style={styles.retryTxt}>
+                          تلاش مجدد
+                        </ThemedText>
+                      </TouchableOpacity>
+                    )}
+                  </>
+                )}
                 <ThemedText
-                  style={styles.timerTxt}
-                >{`${formatTime(secondsLeft)}`}</ThemedText>
-              ) : (
-                <ThemedText style={styles.retryTxt} onPress={onRetryPress}>
-                  تلاش مجدد
+                  fontType="bold"
+                  onPress={onEditNumber}
+                  style={styles.editText}
+                >
+                  ویرایش شماره تلفن همراه
                 </ThemedText>
-              )}
-              <ThemedText
-                fontType="bold"
-                style={{ color: Colors.hint500, textAlign: "center" }}
-                onPress={() => router.back()}
-              >
-                ویرایش شماره تلفن همراه
-              </ThemedText>
+              </ThemedView>
             </ThemedView>
           </View>
           <Footer
             onPress={handleSubmit(onDoExpertLogin)}
-            isNextLoading={isVerifying}
+            isNextLoading={isVerifying || isSendingCode}
             title="ثبت نام"
             style={{ bottom: 0 }}
             hasError={
@@ -150,4 +173,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textDecorationLine: "underline",
   },
+
+  absolute: {
+    position: "absolute",
+    top: 80,
+    zIndex: 1,
+    alignItems: "center",
+  },
+
+  editText: { color: Colors.hint500, textAlign: "center" },
+
+  otpContainer: { height: 80 },
 });

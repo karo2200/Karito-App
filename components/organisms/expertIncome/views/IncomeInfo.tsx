@@ -17,7 +17,7 @@ export default function IncomeInfo({ data }) {
           fontType="bold"
           style={styles.fontSize}
         >
-          ۱٫2۰۰٫۵۰۰ ریال
+          ۱٫۲۰۰٫۵۰۰ ریال
         </ThemedText>
         <ThemedText style={styles.headerTxt} fontType="bold">
           درآمد تسویه نشده
