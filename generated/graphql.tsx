@@ -532,6 +532,7 @@ export type DiscountCodeDto = {
   id: Scalars["UUID"]["output"];
   isActive: Scalars["Boolean"]["output"];
   isPercentage: Scalars["Boolean"]["output"];
+  isUsed: Scalars["Boolean"]["output"];
   title: Scalars["String"]["output"];
 };
 
@@ -554,6 +555,7 @@ export type DiscountCodeDtoFilterInput = {
   id?: InputMaybe<UuidOperationFilterInput>;
   isActive?: InputMaybe<BooleanOperationFilterInput>;
   isPercentage?: InputMaybe<BooleanOperationFilterInput>;
+  isUsed?: InputMaybe<BooleanOperationFilterInput>;
   or?: InputMaybe<Array<DiscountCodeDtoFilterInput>>;
   title?: InputMaybe<StringOperationFilterInput>;
 };
@@ -566,6 +568,7 @@ export type DiscountCodeDtoSortInput = {
   id?: InputMaybe<SortEnumType>;
   isActive?: InputMaybe<SortEnumType>;
   isPercentage?: InputMaybe<SortEnumType>;
+  isUsed?: InputMaybe<SortEnumType>;
   title?: InputMaybe<SortEnumType>;
 };
 
@@ -635,6 +638,11 @@ export type GetDiscountCodeByIdInput = {
   id: Scalars["UUID"]["input"];
 };
 
+export type GetMyRevenueInput = {
+  endDate: Scalars["DateTime"]["input"];
+  startDate: Scalars["DateTime"]["input"];
+};
+
 export type GetNearestAddressesInput = {
   latitude: Scalars["Float"]["input"];
   longitude: Scalars["Float"]["input"];
@@ -682,6 +690,12 @@ export type GetServiceTypeQuestionsByServiceTypeInput = {
 
 export type GetSpecialistByIdInput = {
   specialistId: Scalars["UUID"]["input"];
+};
+
+export type GetSpecialistRevenueByIdInput = {
+  endDate: Scalars["DateTime"]["input"];
+  specialistId: Scalars["UUID"]["input"];
+  startDate: Scalars["DateTime"]["input"];
 };
 
 export type IntOperationFilterInput = {
@@ -1514,12 +1528,18 @@ export type Query = {
   discountCode_getMyCodes: ListResponseBaseOfDiscountCodeDto;
   neighborhood_getAll: ListResponseBaseOfNeighborhoodDto;
   neighborhood_getById: ResponseBaseOfNeighborhoodDto;
+  payment_getAll: ListResponseBaseOfPaymentDto;
   payment_getById: ResponseBaseOfPaymentDto;
+  payment_getMyPayments: ListResponseBaseOfPaymentDto;
   payment_listForServiceRequest: ListResponseBaseOfPaymentDto;
   province_getAll: ListResponseBaseOfProvinceDto;
   province_getById: ResponseBaseOfProvinceDto;
   rateAndReview_getByCustomerId: ListResponseBaseOfRateAndReviewDto;
   rateAndReview_getBySpecialistId: ListResponseBaseOfRateAndReviewDto;
+  /** Get revenue for the currently authenticated specialist in a given date range. */
+  revenue_getMyRevenue: ResponseBaseOfSpecialistRevenueDto;
+  /** Admin: get revenue of a specialist in a given date range. */
+  revenue_getRevenueBySpecialistId: ResponseBaseOfSpecialistRevenueDto;
   serviceCategory_getAll: ListResponseBaseOfServiceCategoryDto;
   serviceCategory_getById: ResponseBaseOfServiceCategoryDto;
   serviceRequest_getAll: ListResponseBaseOfServiceRequestDto;
@@ -1598,6 +1618,14 @@ export type QueryRateAndReview_GetByCustomerIdArgs = {
 
 export type QueryRateAndReview_GetBySpecialistIdArgs = {
   specialistId: Scalars["UUID"]["input"];
+};
+
+export type QueryRevenue_GetMyRevenueArgs = {
+  input: GetMyRevenueInput;
+};
+
+export type QueryRevenue_GetRevenueBySpecialistIdArgs = {
+  input: GetSpecialistRevenueByIdInput;
 };
 
 export type QueryServiceCategory_GetByIdArgs = {
@@ -1830,6 +1858,12 @@ export type ResponseBaseOfServiceTypeQuestionDto = {
 export type ResponseBaseOfSpecialistProfileDto = {
   __typename?: "ResponseBaseOfSpecialistProfileDto";
   result?: Maybe<SpecialistProfileDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfSpecialistRevenueDto = {
+  __typename?: "ResponseBaseOfSpecialistRevenueDto";
+  result?: Maybe<SpecialistRevenueDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -2237,6 +2271,14 @@ export type SpecialistProfileDtoSortInput = {
   serviceSubCategory?: InputMaybe<ServiceSubCategoryDtoSortInput>;
   specializedDocumentsVerificationStatus?: InputMaybe<SortEnumType>;
   successfulMissions?: InputMaybe<SortEnumType>;
+};
+
+export type SpecialistRevenueDto = {
+  __typename?: "SpecialistRevenueDto";
+  payments: Array<PaymentDto>;
+  paymentsCount: Scalars["Int"]["output"];
+  specialist: SpecialistDto;
+  totalAmount: Scalars["Decimal"]["output"];
 };
 
 export type StringOperationFilterInput = {
@@ -2933,6 +2975,63 @@ export type CancellationReason_GetAllQuery = {
         hasPreviousPage: boolean;
       };
     } | null;
+  };
+};
+
+export type Payment_GetMyPaymentsQueryVariables = Exact<{
+  where?: InputMaybe<PaymentDtoFilterInput>;
+  order?: InputMaybe<Array<PaymentDtoSortInput> | PaymentDtoSortInput>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type Payment_GetMyPaymentsQuery = {
+  __typename?: "Query";
+  payment_getMyPayments: {
+    __typename?: "ListResponseBaseOfPaymentDto";
+    status?: any | null;
+    result?: {
+      __typename?: "PaymentDtoCollectionSegment";
+      totalCount: number;
+      items?: Array<{
+        __typename?: "PaymentDto";
+        finalAmount: any;
+        id: any;
+        serviceRequest: {
+          __typename?: "ServiceRequestDto";
+          requestDate: any;
+          customer: { __typename?: "CustomerDto"; phoneNumber: string };
+        };
+      }> | null;
+    } | null;
+  };
+};
+
+export type Revenue_GetMyRevenueQueryVariables = Exact<{
+  daySD: Scalars["DateTime"]["input"];
+  dayED: Scalars["DateTime"]["input"];
+  weekSD: Scalars["DateTime"]["input"];
+  weekED: Scalars["DateTime"]["input"];
+  monthSD: Scalars["DateTime"]["input"];
+  monthED: Scalars["DateTime"]["input"];
+}>;
+
+export type Revenue_GetMyRevenueQuery = {
+  __typename?: "Query";
+  day: {
+    __typename?: "ResponseBaseOfSpecialistRevenueDto";
+    status?: any | null;
+    result?: { __typename?: "SpecialistRevenueDto"; totalAmount: any } | null;
+  };
+  week: {
+    __typename?: "ResponseBaseOfSpecialistRevenueDto";
+    status?: any | null;
+    result?: { __typename?: "SpecialistRevenueDto"; totalAmount: any } | null;
+  };
+  month: {
+    __typename?: "ResponseBaseOfSpecialistRevenueDto";
+    status?: any | null;
+    result?: { __typename?: "SpecialistRevenueDto"; totalAmount: any } | null;
   };
 };
 
@@ -4817,6 +4916,181 @@ export const useInfiniteCancellationReason_GetAllQuery = <
             CancellationReason_GetAllQuery,
             CancellationReason_GetAllQueryVariables
           >(CancellationReason_GetAllDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const Payment_GetMyPaymentsDocument = `
+    query payment_getMyPayments($where: PaymentDtoFilterInput, $order: [PaymentDtoSortInput!], $take: Int, $skip: Int) {
+  payment_getMyPayments {
+    result(where: $where, order: $order, skip: $skip, take: $take) {
+      items {
+        finalAmount
+        id
+        serviceRequest {
+          customer {
+            phoneNumber
+          }
+          requestDate
+        }
+      }
+      totalCount
+    }
+    status
+  }
+}
+    `;
+
+export const usePayment_GetMyPaymentsQuery = <
+  TData = Payment_GetMyPaymentsQuery,
+  TError = unknown,
+>(
+  variables?: Payment_GetMyPaymentsQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Payment_GetMyPaymentsQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      Payment_GetMyPaymentsQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<Payment_GetMyPaymentsQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["payment_getMyPayments"]
+        : ["payment_getMyPayments", variables],
+    queryFn: fetcher<
+      Payment_GetMyPaymentsQuery,
+      Payment_GetMyPaymentsQueryVariables
+    >(Payment_GetMyPaymentsDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfinitePayment_GetMyPaymentsQuery = <
+  TData = InfiniteData<Payment_GetMyPaymentsQuery>,
+  TError = unknown,
+>(
+  variables: Payment_GetMyPaymentsQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Payment_GetMyPaymentsQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Payment_GetMyPaymentsQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<Payment_GetMyPaymentsQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["payment_getMyPayments.infinite"]
+            : ["payment_getMyPayments.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            Payment_GetMyPaymentsQuery,
+            Payment_GetMyPaymentsQueryVariables
+          >(Payment_GetMyPaymentsDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const Revenue_GetMyRevenueDocument = `
+    query revenue_getMyRevenue($daySD: DateTime!, $dayED: DateTime!, $weekSD: DateTime!, $weekED: DateTime!, $monthSD: DateTime!, $monthED: DateTime!) {
+  day: revenue_getMyRevenue(input: {startDate: $daySD, endDate: $dayED}) {
+    status
+    result {
+      totalAmount
+    }
+  }
+  week: revenue_getMyRevenue(input: {startDate: $weekSD, endDate: $weekED}) {
+    status
+    result {
+      totalAmount
+    }
+  }
+  month: revenue_getMyRevenue(input: {startDate: $monthSD, endDate: $monthED}) {
+    status
+    result {
+      totalAmount
+    }
+  }
+}
+    `;
+
+export const useRevenue_GetMyRevenueQuery = <
+  TData = Revenue_GetMyRevenueQuery,
+  TError = unknown,
+>(
+  variables: Revenue_GetMyRevenueQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Revenue_GetMyRevenueQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      Revenue_GetMyRevenueQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<Revenue_GetMyRevenueQuery, TError, TData>({
+    queryKey: ["revenue_getMyRevenue", variables],
+    queryFn: fetcher<
+      Revenue_GetMyRevenueQuery,
+      Revenue_GetMyRevenueQueryVariables
+    >(Revenue_GetMyRevenueDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteRevenue_GetMyRevenueQuery = <
+  TData = InfiniteData<Revenue_GetMyRevenueQuery>,
+  TError = unknown,
+>(
+  variables: Revenue_GetMyRevenueQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Revenue_GetMyRevenueQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Revenue_GetMyRevenueQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<Revenue_GetMyRevenueQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "revenue_getMyRevenue.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            Revenue_GetMyRevenueQuery,
+            Revenue_GetMyRevenueQueryVariables
+          >(Revenue_GetMyRevenueDocument, {
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),

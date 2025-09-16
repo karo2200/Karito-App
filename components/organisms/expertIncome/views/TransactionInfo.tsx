@@ -5,19 +5,41 @@ import { Calendar as CalendarIcon } from "iconsax-react-native";
 import { useCallback } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
+import { useGetMyPaymentsQuery } from "../hooks";
 import EmptyIncom from "./EmptyIncom";
 
-export default function TransactionInfo() {
+export default function TransactionInfo({
+  selectedDate,
+}: {
+  selectedDate?: any;
+}) {
+  const { data } = useGetMyPaymentsQuery({
+    where: selectedDate
+      ? {
+          serviceRequest: {
+            and: [
+              { requestDate: { gte: `${selectedDate}T00:00:00+03:30` } },
+              { requestDate: { lte: `${selectedDate}T23:59:59+03:30` } },
+            ],
+          },
+        }
+      : undefined,
+  });
+
   const renderItem = useCallback(
-    ({ item, index }) => <IncomeInfoItem {...{ item, index }} />,
+    ({ item, index }: { item?: any; index?: number }) => (
+      <IncomeInfoItem {...{ item, index }} />
+    ),
     []
   );
+
   const onCalenderPress = () => {
     SheetManager.hideAll();
     SheetManager.show("calendar-sheet");
   };
+
   return (
-    <ThemedView>
+    <ThemedView style={styles.width}>
       <ThemedView style={styles.headerContainer}>
         <ThemedView style={styles.headerView}>
           <TouchableOpacity onPress={onCalenderPress}>
@@ -29,7 +51,7 @@ export default function TransactionInfo() {
         </ThemedView>
 
         <CustomFlatList
-          data={[1, 2, 3]}
+          data={data?.pages}
           style={styles.width}
           keyExtractor={(item, index) => `${index}_income`}
           ListEmptyComponent={() => <EmptyIncom />}

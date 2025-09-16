@@ -1,4 +1,4 @@
-import { Divider, ThemedButton, ThemedView } from "@/components";
+import { Divider, ThemedButton } from "@/components";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { DeviceHeight } from "@/constants/Dimension";
@@ -6,7 +6,7 @@ import { FontType } from "@/constants/Fonts";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Trash } from "iconsax-react-native";
 import { useRef, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import ActionSheet, {
   ActionSheetRef,
   SheetDefinition,
@@ -22,12 +22,29 @@ declare module "react-native-actions-sheet" {
 export default function SelectDateActionSheet({
   visible,
   onClose,
+  onDateSelect,
 }: {
   visible?: boolean;
   onClose: () => void;
+  onDateSelect?: (date: any) => void;
 }) {
+  const isReset = useRef(false);
   const actionSheetRef = useRef<ActionSheetRef>(null);
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState(
+    getFormatedDate(new Date(), "jYYYY/jMM/jDD")
+  );
+
+  const onApplyPress = () => {
+    onDateSelect?.(selectedDate);
+    onClose();
+  };
+
+  const onRemoveFilter = () => {
+    isReset.current = true;
+    setSelectedDate(getFormatedDate(new Date(), "jYYYY/jMM/jDD"));
+    onDateSelect?.(getFormatedDate(new Date(), "jYYYY/jMM/jDD"));
+    onClose();
+  };
 
   return (
     <ActionSheet
@@ -48,11 +65,20 @@ export default function SelectDateActionSheet({
         <ThemedText fontType="bold">فیلترها</ThemedText>
       </View>
       <DatePicker
-        onDateChange={(date) => setSelectedDate(date)}
-        onSelectedChange={(date) => setSelectedDate(date)}
-        onMonthYearChange={(date) => {}}
-        selected={getFormatedDate(new Date(), "jYYYY/jMM/jDD")}
-        maximumDate={new Date().toISOString()}
+        onDateChange={(date) => {
+          setSelectedDate(date);
+        }}
+        ref
+        onSelectedChange={(date) => {
+          if (isReset?.current) setSelectedDate(selectedDate);
+          else setSelectedDate(date);
+        }}
+        onMonthYearChange={(date) => {
+          setSelectedDate(date);
+        }}
+        selected={selectedDate}
+        selectedDate={selectedDate}
+        maximumDate={getFormatedDate(new Date(), "jYYYY/jMM/jDD")}
         reverse
         options={{
           defaultFont: FontType.YekanBakhBold,
@@ -62,18 +88,19 @@ export default function SelectDateActionSheet({
         }}
       />
       <View style={styles.content}>
-        <ThemedView style={styles.trashIcon}>
+        <TouchableOpacity style={styles.trashIcon} onPress={onRemoveFilter}>
           <ThemedText fontType="medium" style={{ color: Colors.hint500 }}>
             حذف فیلترها
           </ThemedText>
           <Divider width={4} />
           <Trash size={24} color={Colors.hint500} />
-        </ThemedView>
+        </TouchableOpacity>
         <Divider width={12} height={0} />
         <ThemedButton
           fontType="medium"
           title="اعمال فیلتر"
           style={styles.btn}
+          onPress={onApplyPress}
         />
       </View>
     </ActionSheet>

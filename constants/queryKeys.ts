@@ -20,4 +20,5 @@ export const queryKeys = {
   specialist_getAll: "specialist_getAll",
   serviceTypes_getPopular: "serviceTypes_getPopular",
   disabledServiceTime_getAll: "disabledServiceTime_getAll",
+  payment_getMyPayments: "payment_getMyPayments",
 };
