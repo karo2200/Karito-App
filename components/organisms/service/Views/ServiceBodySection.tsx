@@ -1,5 +1,7 @@
 import { CustomFlatList, Divider, ThemedText, ThemedView } from "@/components";
 import HeaderItem from "@/components/molecules/ServiceHeaderItem";
+import { hideSheet, showSheet } from "@/hooks/useShowSheet";
+import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
 import { StyleSheet } from "react-native";
@@ -15,22 +17,39 @@ export default function ServiceBodySection({
 }) {
   const router = useRouter();
 
-  const renderItem = useCallback(
-    ({ item, index }) => (
+  const { isLoggedIn } = authCacheStore();
+
+  const renderItem = useCallback(({ item, index }) => {
+    const onPress = () => {
+      if (isLoggedIn)
+        router.push(
+          `/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${item?.serviceCategory?.name}`
+        );
+      else {
+        showSheet("confirmation-action", {
+          payload: {
+            hasLoading: false,
+            showToastInActionSheet: false,
+            title: "ورود",
+
+            onClose: () => {
+              hideSheet("confirmation-action");
+            },
+          },
+        });
+      }
+    };
+
+    return (
       <HeaderItem
         imagePath={item?.logo}
         title={item?.name}
         key={`${item?.id}_${index}`}
         height={98}
-        onItemPress={() =>
-          router.push(
-            `/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${selectedService?.name}`
-          )
-        }
+        onItemPress={onPress}
       />
-    ),
-    []
-  );
+    );
+  }, []);
 
   return (
     <ThemedView>
