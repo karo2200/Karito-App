@@ -27,7 +27,7 @@ export default function useServiceTabHook() {
     } else {
       setSelectedService(serviceItem0);
     }
-  }, []);
+  }, [params]);
 
   const {
     data: subServiceData,

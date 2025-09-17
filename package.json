@@ -59,7 +59,6 @@
     "react-native": "0.79.5",
     "react-native-actions-sheet": "^0.9.7",
     "react-native-confirmation-code-field": "^8.0.1",
-    "react-native-datetimepicker-pro": "^1.0.4",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-maps": "1.20.1",
     "react-native-mmkv": "^2.12.2",
