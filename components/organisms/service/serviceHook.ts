@@ -1,5 +1,6 @@
+import { useRoute } from "@react-navigation/native";
 import { Menu } from "iconsax-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetServiceCategoriesQuery,
   useGetSubServiceCategoriesQuery,
@@ -7,11 +8,26 @@ import {
 
 export default function useServiceTabHook() {
   const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
-  const [selectedService, setSelectedService] = useState(serviceItem0);
+
+  const { params } = useRoute();
+
+  const [selectedService, setSelectedService] = useState({});
   const [searchText, setSearchText] = useState<string | undefined>("");
   const { data, hasNextPage, fetchNextPage } = useGetServiceCategoriesQuery({});
 
   const searchQuery = { name: { contains: searchText } };
+
+  useEffect(() => {
+    if (params?.id) {
+      setSelectedService({
+        name: params?.name,
+        svg: params?.logo,
+        id: params?.id,
+      });
+    } else {
+      setSelectedService(serviceItem0);
+    }
+  }, []);
 
   const {
     data: subServiceData,

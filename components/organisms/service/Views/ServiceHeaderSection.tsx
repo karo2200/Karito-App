@@ -1,6 +1,7 @@
 import { CustomFlatList, ThemedText, ThemedView } from "@/components";
 import HeaderItem from "@/components/molecules/ServiceHeaderItem";
-import { StyleSheet } from "react-native";
+import { useEffect, useRef } from "react";
+import { FlatList, StyleSheet } from "react-native";
 
 type ServiceHeaderSectionProps = {
   selectedService?: any;
@@ -11,8 +12,25 @@ type ServiceHeaderSectionProps = {
 export default function ServiceHeaderSection({
   selectedService,
   onServiceItemPress,
-  serviceItems,
+  serviceItems = [],
 }: ServiceHeaderSectionProps) {
+  const listRef = useRef<FlatList<any>>(null);
+
+  useEffect(() => {
+    if (selectedService) {
+      const index = serviceItems.findIndex(
+        (s) => s?.id === selectedService?.id
+      );
+      if (index >= 0) {
+        listRef.current?.scrollToIndex({
+          index,
+          animated: true,
+          viewPosition: 0.1,
+        });
+      }
+    }
+  }, [selectedService, serviceItems]);
+
   const renderItem = ({ item, index }) => (
     <HeaderItem
       imagePath={item?.logo}
@@ -29,12 +47,18 @@ export default function ServiceHeaderSection({
       <ThemedText fontType="bold">خدمات</ThemedText>
       <ThemedView style={styles.listContainer}>
         <CustomFlatList
+          ref={listRef}
           data={serviceItems}
           renderItem={renderItem}
           horizontal
           showsHorizontalScrollIndicator={false}
           inverted
           keyExtractor={(item, index) => `${item?.id}_${index}`}
+          getItemLayout={(_, index) => ({
+            length: 100,
+            offset: 100 * index,
+            index,
+          })}
         />
       </ThemedView>
     </ThemedView>

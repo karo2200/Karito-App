@@ -1,3 +1,4 @@
+import CustomImage from "@/components/atoms/CustomImage";
 import SearchWithModal from "@/components/atoms/SearchWithModal";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
@@ -7,7 +8,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
 import {
   Dimensions,
-  Image,
   Pressable,
   StyleSheet,
   TextInput,
@@ -35,11 +35,11 @@ export default function Banner() {
   return (
     <View>
       {activeBanner ? (
-        <Image style={styles.image} source={{ uri: activeBanner?.imageUrl }} />
+        <CustomImage style={styles.image} src={activeBanner?.imageUrl} />
       ) : (
-        <Image
+        <CustomImage
+          localSource={require("@/assets/images/Home-Banner.png")}
           style={styles.image}
-          source={require("@/assets/images/Home-Banner.png")}
         />
       )}
       <View style={styles.inputContainer}>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignItems: "center",
     backgroundColor: Colors.hint500,
-    bottom: "10%",
+    bottom: "12%",
   },
 
   container: {

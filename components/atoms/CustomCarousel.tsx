@@ -34,7 +34,7 @@ export default function CustomCarousel({ data }: { data: any }) {
         pagingEnabled
         onSnapToItem={(index) => setActiveIndex(index)}
         scrollAnimationDuration={800}
-        renderItem={({ item }) => (
+        renderItem={({ item }: { item: string }) => (
           <ImageBackground
             source={{ uri: item }}
             style={styles.image}

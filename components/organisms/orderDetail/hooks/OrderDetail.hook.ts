@@ -269,6 +269,12 @@ export default function useOrderDetailHook() {
               queryKey: [queryKeys.serviceRequest_getById],
             });
             closeActionSheet?.();
+          } else {
+            showToast({
+              message: "شما قبلا امتیاز داده اید.",
+              type: "error",
+            });
+            closeActionSheet?.();
           }
         },
       }

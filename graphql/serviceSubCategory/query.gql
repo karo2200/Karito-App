@@ -16,6 +16,7 @@ query serviceSubCategory_getAll(
         name
         serviceCategory {
           id
+          name
         }
       }
     }
@@ -31,6 +32,7 @@ query serviceSubCategory_getById($input: GetServiceSubCategoryByIdInput!) {
       name
       serviceCategory {
         id
+        name
       }
     }
     status
