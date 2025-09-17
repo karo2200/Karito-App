@@ -1,8 +1,10 @@
 import BackArrowIcon from "@/assets/icons/BackArrow";
 import { Divider, ThemedButton } from "@/components";
+import { dropDownPositionType } from "@/components/atoms/DropDownPicker";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { DeviceHeight } from "@/constants/Dimension";
+import { monthsName } from "@/constants/StaticData";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Trash } from "iconsax-react-native";
 import moment from "jalali-moment";
@@ -10,6 +12,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
+  Modal,
+  Platform,
   Pressable,
   StyleSheet,
   TouchableOpacity,
@@ -62,8 +66,6 @@ export default function SelectDateActionSheet({
   const maxM = maxDate ? moment(maxDate) : moment();
 
   const onApplyPress = () => {
-    console.log("ss", selected);
-
     onDateSelect?.(selected);
     onClose();
   };
@@ -89,7 +91,7 @@ export default function SelectDateActionSheet({
 
     const matrixStart = startOfMonth.clone().subtract(offset, "day");
     const cells: moment.Moment[] = [];
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 42; i++) {
       cells.push(matrixStart.clone().add(i, "day"));
     }
     return cells;
@@ -108,6 +110,66 @@ export default function SelectDateActionSheet({
     setSelected(m.format("jYYYY/jMM/jDD"));
 
     onDateSelect?.(new Date(m.toLocaleString()).toISOString());
+  };
+
+  const DropdownButton = useRef<View>(null);
+  const [visible, setVisible] = useState(false);
+  const [dropdownPosition, setDropdownPosition] =
+    useState<dropDownPositionType>({
+      top: undefined,
+      bottom: undefined,
+    });
+
+  const openDropdown = (): void => {
+    DropdownButton?.current?.measure?.((_fx, _fy, _w, h, _px, py) => {
+      const maxH = 0.9 % DeviceHeight;
+
+      if (DeviceHeight - (py + h) > maxH) {
+        setDropdownPosition({
+          top: Platform.OS === "ios" ? py + 8 + h : py,
+          bottom: undefined,
+        });
+      } else if (py > maxH) {
+        setDropdownPosition({
+          top: undefined,
+          bottom: DeviceHeight - py + 30 - h / 2,
+        });
+      } else {
+        setDropdownPosition({
+          top: 0,
+          bottom: undefined,
+        });
+      }
+    });
+    setVisible(true);
+  };
+
+  const itemOnPress = (item: { label: string; value: number }) => {
+    setCurrentMonth((m) => m.clone().jMonth(Number(item.value) - 1));
+    setVisible(false);
+  };
+
+  const renderItem = ({ item, index }: { item: any; index: number }) => {
+    const isEnable = index === currentMonth.jMonth();
+    return (
+      <TouchableOpacity
+        key={index}
+        style={[styles.item, { backgroundColor: isEnable ? "#eee" : "white" }]}
+        activeOpacity={0.7}
+        onPress={() => itemOnPress(item)}
+      >
+        <ThemedText
+          style={[
+            {
+              color: isEnable ? Colors.hint500 : Colors.semiBlack,
+              textAlign: "right",
+            },
+          ]}
+        >
+          {item?.label}
+        </ThemedText>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -133,12 +195,17 @@ export default function SelectDateActionSheet({
           <TouchableOpacity onPress={onPrev} style={styles.navBtn}>
             <BackArrowIcon style={{ transform: [{ rotate: "180deg" }] }} />
           </TouchableOpacity>
-          <ThemedText
-            style={{ flex: 1, textAlign: "center" }}
-            fontType="regular"
+          <Pressable
+            ref={DropdownButton}
+            onPress={openDropdown}
+            style={{
+              flex: 1,
+            }}
           >
-            {currentMonth.format("jMMMM jYYYY")}
-          </ThemedText>
+            <ThemedText style={{ textAlign: "center" }} fontType="regular">
+              {currentMonth.format("jMMMM jYYYY")}
+            </ThemedText>
+          </Pressable>
           <TouchableOpacity onPress={onNext} style={styles.navBtn}>
             <BackArrowIcon />
           </TouchableOpacity>
@@ -209,6 +276,31 @@ export default function SelectDateActionSheet({
           onPress={onApplyPress}
         />
       </View>
+      <Modal visible={visible} transparent animationType="fade">
+        <TouchableOpacity
+          style={styles.overlay}
+          onPress={() => setVisible(false)}
+        >
+          <View
+            style={[
+              styles.dropdown,
+              {
+                top: dropdownPosition?.top,
+                bottom: dropdownPosition?.bottom,
+
+                width: "40%",
+              },
+            ]}
+          >
+            <FlatList
+              data={monthsName}
+              renderItem={renderItem}
+              keyExtractor={(_, index) => `dropDownItem${index}`}
+              showsVerticalScrollIndicator={false}
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </ActionSheet>
   );
 }
@@ -314,5 +406,25 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.disabledIcon,
     alignSelf: "center",
     marginBottom: 12,
+  },
+
+  overlay: {
+    width: "100%",
+    height: "100%",
+  },
+
+  dropdown: {
+    position: "absolute",
+    alignSelf: "center",
+    backgroundColor: "white",
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.gray300,
+    // overflow: "hidden",
+    maxHeight: DeviceHeight / 5,
+  },
+
+  item: {
+    padding: 12,
   },
 });

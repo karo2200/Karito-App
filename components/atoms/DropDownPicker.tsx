@@ -52,7 +52,7 @@ interface DropDownProps {
   arrowSize?: number;
 }
 
-interface dropDownPositionType {
+export interface dropDownPositionType {
   top: DimensionValue | undefined;
   bottom: DimensionValue | undefined;
 }
