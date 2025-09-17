@@ -33,6 +33,8 @@ declare module "react-native-actions-sheet" {
 
 const weekDaysFa = ["ش", "ی", "د", "س", "چ", "پ", "ج"];
 
+moment.locale("fa", { usePersianDigits: true });
+
 export default function SelectDateActionSheet({
   onClose,
   onDateSelect,
@@ -203,7 +205,7 @@ export default function SelectDateActionSheet({
             }}
           >
             <ThemedText style={{ textAlign: "center" }} fontType="regular">
-              {currentMonth.format("jMMMM jYYYY")}
+              {currentMonth.locale("fa").format("jMMMM jYYYY")}
             </ThemedText>
           </Pressable>
           <TouchableOpacity onPress={onNext} style={styles.navBtn}>

@@ -1,26 +1,20 @@
-import moment from "moment-jalaali";
+import moment from "jalali-moment";
 
 export function parseDate(dateString: string) {
-  const [datePart] = dateString.split("T");
-  const [year, month, day] = datePart.split("-");
+  const m = moment(dateString, "YYYY-MM-DDTHH:mm:ssZ").locale("fa");
 
   return {
-    year: parseInt(year, 10).toString(),
-    month: parseInt(month, 10).toString(),
-    day: parseInt(day, 10).toString(),
+    year: m.jYear().toString(),
+    month: m.jMonth() + 1 + "",
+    day: m.jDate().toString(),
   };
 }
 
-// حتما تنظیمات لوکال فارسی
-moment.loadPersian({ dialect: "persian-modern", usePersianDigits: true });
-
 export function formatToJalali(dateString: string) {
-  const m = moment(dateString);
+  const m = moment(dateString).locale("fa");
 
   const date = m.format("jYYYY/jMM/jDD");
-
-  const weekday = m.locale("fa").format("dddd");
-
+  const weekday = m.format("dddd");
   const time = m.format("HH:mm");
 
   return `${date}  ${weekday} ساعت ${time}`;
