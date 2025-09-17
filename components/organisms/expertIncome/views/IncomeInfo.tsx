@@ -4,9 +4,18 @@ import { StyleSheet } from "react-native";
 
 export default function IncomeInfo({ data }) {
   const infoArray = [
-    { title: "درآمد ماه", value: `${data?.month?.result?.totalAmount} ریال` },
-    { title: "درآمد هفته", value: `${data?.week?.result?.totalAmount} ریال` },
-    { title: "درآمد امروز", value: `${data?.day?.result?.totalAmount} ریال` },
+    {
+      title: "درآمد ماه",
+      value: `${data?.month?.result?.totalAmount ?? 0} ریال`,
+    },
+    {
+      title: "درآمد هفته",
+      value: `${data?.week?.result?.totalAmount ?? 0} ریال`,
+    },
+    {
+      title: "درآمد امروز",
+      value: `${data?.day?.result?.totalAmount ?? 0} ریال`,
+    },
   ];
 
   return (

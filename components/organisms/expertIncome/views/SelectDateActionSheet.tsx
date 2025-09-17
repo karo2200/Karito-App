@@ -6,6 +6,7 @@ import { Colors } from "@/constants/Colors";
 import { DeviceHeight } from "@/constants/Dimension";
 import { monthsName } from "@/constants/StaticData";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import dayjs from "dayjs";
 import { Trash } from "iconsax-react-native";
 import moment from "jalali-moment";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -59,6 +60,8 @@ export default function SelectDateActionSheet({
   const [currentMonth, setCurrentMonth] = useState(moment(startMoment));
   const [selected, setSelected] = useState(startMoment.format("jYYYY/jMM/jDD"));
 
+  const grgDate = useRef(startMoment.format("YYYY-MM-DD"));
+
   useEffect(() => {
     setCurrentMonth(moment(startMoment));
     setSelected(moment(startMoment));
@@ -68,14 +71,14 @@ export default function SelectDateActionSheet({
   const maxM = maxDate ? moment(maxDate) : moment();
 
   const onApplyPress = () => {
-    onDateSelect?.(selected);
+    onDateSelect?.(grgDate?.current);
     onClose();
   };
 
   const onRemoveFilter = () => {
     isReset.current = true;
-    setSelected(new Date(), "jYYYY/jMM/jDD");
-    onDateSelect?.(new Date(), "jYYYY/jMM/jDD");
+    setSelected(moment().format("jYYYY/jMM/jDD"));
+    onDateSelect?.(new Date());
 
     onClose();
   };
@@ -110,8 +113,7 @@ export default function SelectDateActionSheet({
   const handleDayPress = (m: moment.Moment) => {
     if (isDisabled(m)) return;
     setSelected(m.format("jYYYY/jMM/jDD"));
-
-    onDateSelect?.(new Date(m.toLocaleString()).toISOString());
+    grgDate.current = dayjs(m.toISOString()).format("YYYY-MM-DD");
   };
 
   const DropdownButton = useRef<View>(null);
