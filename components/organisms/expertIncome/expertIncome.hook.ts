@@ -7,7 +7,7 @@ export default function useExpertIncome() {
   );
 
   const onDateSelect = (jDate: string) => {
-    const gregorianDate = dayjs(jDate).local().format("YYYY-MM-DD"); // خروجی نهایی
+    const gregorianDate = dayjs(jDate).format("YYYY-MM-DD"); // خروجی نهایی
 
     setSelectedDate(gregorianDate);
   };
