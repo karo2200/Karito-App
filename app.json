@@ -12,7 +12,7 @@
     "splash": {
       "image": "./assets/images/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5D47EA"
     },
     "ios": {
       "bundleIdentifier": "com.karitoapp",

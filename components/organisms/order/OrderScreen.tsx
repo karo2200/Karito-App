@@ -1,5 +1,8 @@
+import ThemedContainer from "@/components/atoms/ThemedContainer";
 import ThemedText from "@/components/atoms/ThemedText";
+import GuestMode from "@/components/molecules/GuestMode";
 import { Colors } from "@/constants/Colors";
+import { commonStyles } from "@/constants/CommonStyles";
 import { DeviceWidth } from "@/constants/Dimension";
 import * as React from "react";
 import {
@@ -17,7 +20,7 @@ import InProgressOrders from "./Views/InProgressOrders";
 import useOrderHook from "./hooks/Order.hook";
 
 export default function OrderScreen() {
-  const { setActiveTab, activeTab, scrollRef } = useOrderHook();
+  const { setActiveTab, activeTab, scrollRef, isLoggedIn } = useOrderHook();
 
   const tabs = [
     { label: "سفارش‌های جاری", content: <InProgressOrders /> },
@@ -35,7 +38,7 @@ export default function OrderScreen() {
     setActiveTab(pageIndex);
   };
 
-  return (
+  return isLoggedIn ? (
     <View>
       {/* Tab Bar */}
       <ScrollView
@@ -80,6 +83,10 @@ export default function OrderScreen() {
         ))}
       </ScrollView>
     </View>
+  ) : (
+    <ThemedContainer style={commonStyles.container}>
+      <GuestMode />
+    </ThemedContainer>
   );
 }
 

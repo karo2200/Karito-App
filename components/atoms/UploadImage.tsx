@@ -1,11 +1,12 @@
 import UploadIcon from "@/assets/icons/Upload";
 import { Colors } from "@/constants/Colors";
 import { useUploadFile } from "@/graphql/upload";
+import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Camera, Gallery } from "iconsax-react-native";
 import React, { useRef } from "react";
 import { Control, useController } from "react-hook-form";
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
@@ -111,7 +112,8 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
             <Image
               source={{ uri: field.value }}
               style={styles.image}
-              resizeMode="cover"
+              contentFit="cover"
+              transition={500}
             />
             <ThemedButton
               title="تغییر"

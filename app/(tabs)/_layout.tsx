@@ -1,6 +1,7 @@
 import { ThemedContainer, ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
+import authCacheStore from "@/stores/authCacheStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -26,6 +27,8 @@ export default function RootLayout() {
     (segments[2] === "payment" || segments[2] === "paymentStatus");
 
   const fontsLoaded = useLoadFonts();
+
+  const { isLoggedIn } = authCacheStore();
 
   const MyTheme = {
     ...DefaultTheme,
@@ -64,6 +67,7 @@ export default function RootLayout() {
     <ThemeProvider value={MyTheme}>
       <ThemedContainer>
         <Tabs
+          key={isLoggedIn ? "logged-in" : "guest"}
           initialRouteName={"home/index"}
           screenOptions={({ route }) => ({
             headerShown: true,

@@ -1,5 +1,6 @@
 import { DeviceWidth } from "@/constants/Dimension";
 import { ServiceRequestStatus, SortEnumType } from "@/generated/graphql";
+import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -10,6 +11,8 @@ export default function useOrderHook() {
   const router = useRouter();
 
   const { params } = useRoute();
+
+  const { isLoggedIn } = authCacheStore();
 
   const [activeTab, setActiveTab] = useState(params?.index ?? 0);
 
@@ -93,5 +96,6 @@ export default function useOrderHook() {
     activeTab,
     setActiveTab,
     scrollRef,
+    isLoggedIn,
   };
 }
