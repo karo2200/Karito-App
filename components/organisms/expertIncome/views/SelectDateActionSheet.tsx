@@ -107,7 +107,7 @@ export default function SelectDateActionSheet({
     if (isDisabled(m)) return;
     setSelected(m.format("jYYYY/jMM/jDD"));
 
-    onDateSelect?.(m.toDate());
+    onDateSelect?.(new Date(m.toLocaleString()).toISOString());
   };
 
   return (

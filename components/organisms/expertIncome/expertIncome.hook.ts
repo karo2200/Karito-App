@@ -1,4 +1,4 @@
-import moment from "jalali-moment";
+import dayjs from "dayjs";
 import { useState } from "react";
 
 export default function useExpertIncome() {
@@ -7,11 +7,7 @@ export default function useExpertIncome() {
   );
 
   const onDateSelect = (jDate: string) => {
-    const gregorianDate = moment(jDate, "jYYYY/jMM/jDD") // مشخص می‌کنیم فرمت جلالی هست
-      .locale("en") // خروجی انگلیسی (میلادی)
-      .format("YYYY-MM-DD"); // خروجی نهایی
-
-    console.log(".......//", gregorianDate);
+    const gregorianDate = dayjs(jDate).local().format("YYYY-MM-DD"); // خروجی نهایی
 
     setSelectedDate(gregorianDate);
   };

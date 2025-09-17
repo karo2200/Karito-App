@@ -1,14 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import React, { useState } from "react";
-import {
-  Dimensions,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, ImageBackground, StyleSheet, View } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-import ThemedText from "./ThemedText";
 
 const { width } = Dimensions.get("screen");
 
@@ -39,11 +32,7 @@ export default function CustomCarousel({ data }: { data: any }) {
             source={{ uri: item }}
             style={styles.image}
             resizeMode="cover"
-          >
-            <TouchableOpacity style={styles.btn} activeOpacity={1}>
-              <ThemedText style={styles.buttonText}>سفارش</ThemedText>
-            </TouchableOpacity>
-          </ImageBackground>
+          ></ImageBackground>
         )}
       />
 
