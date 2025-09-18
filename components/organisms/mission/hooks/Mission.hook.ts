@@ -37,7 +37,12 @@ export default function useMissionsHook() {
     fetchNextPage,
     isLoading: inProressLoading,
   } = useGetServiceAcceptanceQuery({
-    where: { status: { neq: ServiceRequestStatus.Paid } },
+    where: {
+      and: [
+        { status: { neq: ServiceRequestStatus.Paid } },
+        { status: { neq: ServiceRequestStatus.Cancelled } },
+      ],
+    },
     order: [{ requestDate: SortEnumType.Desc }],
   });
 

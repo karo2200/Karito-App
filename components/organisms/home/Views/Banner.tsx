@@ -10,7 +10,6 @@ import {
   Dimensions,
   Pressable,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -22,7 +21,8 @@ const { width, height } = Dimensions.get("screen");
 export default function Banner() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { cityData, customerCity, onCityPress, activeBanner } = useHomeHook();
+  const { cityData, customerCity, onCityPress, activeBanner, router } =
+    useHomeHook();
 
   const openActionSheet = () => {
     actionSheetRef.current?.show();
@@ -44,18 +44,25 @@ export default function Banner() {
       )}
       <View style={styles.inputContainer}>
         <View style={styles.container}>
-          <Ionicons
-            name="search-outline"
-            size={20}
-            color={Colors.unfilledText}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="جستجوی خدمت"
-            textAlign="right"
-            placeholderTextColor={Colors.unfilledText}
-          />
-
+          <Pressable
+            style={styles.searchBtn}
+            onPress={() => router.replace("/(tabs)/service")}
+          >
+            <Ionicons
+              name="search-outline"
+              size={20}
+              color={Colors.unfilledText}
+            />
+            <ThemedText style={{ color: Colors.unfilledText }}>
+              جستجوی خدمت
+            </ThemedText>
+            {/* <TextInput
+              style={styles.input}
+              placeholder="جستجوی خدمت"
+              textAlign="right"
+              placeholderTextColor={Colors.unfilledText}
+            /> */}
+          </Pressable>
           <TouchableOpacity onPress={openActionSheet} style={styles.button}>
             <Ionicons name="location-outline" size={20} color="#000" />
             <ThemedText type="text" style={styles.city}>
@@ -131,7 +138,6 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    flex: 1,
     paddingVertical: 8,
     paddingHorizontal: 8,
     fontSize: 12,
@@ -188,4 +194,10 @@ const styles = StyleSheet.create({
   },
 
   contentView: { paddingHorizontal: 15 },
+
+  searchBtn: {
+    flexDirection: "row-reverse",
+    flex: 1,
+    alignItems: "center",
+  },
 });

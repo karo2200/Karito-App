@@ -109,11 +109,14 @@ export default function useOrderDetailHook() {
       {
         onSuccess: (data) => {
           if (data?.serviceRequest_accept.status?.code === 1) {
-            router.push("/(expertTabs)/mission");
+            router.replace("/(expertTabs)/mission");
             setCancelRequestVisible(false);
             showToast({ message: "ماموریت قبول شد.", type: "success" });
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getMyAcceptances],
+            });
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.serviceRequest_getAvailableRequests],
             });
           } else {
             showToast({
@@ -171,7 +174,7 @@ export default function useOrderDetailHook() {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getAvailableRequests],
             });
-            router.push("/(expertTabs)/workList");
+            router.replace("/(expertTabs)/workList");
           } else {
             showToast({
               message: data?.serviceRequest_reject.status?.message,

@@ -42,7 +42,7 @@ const SpecialistData = () => {
             {serviceData?.specialist?.lastName}
           </ThemedText>
           <ThemedText fontType="bold" style={styles.works}>
-            ۹۰۳ سرویس موفق
+            {serviceData?.specialist?.successfulMissions} سرویس موفق
           </ThemedText>
         </View>
         <CustomImage

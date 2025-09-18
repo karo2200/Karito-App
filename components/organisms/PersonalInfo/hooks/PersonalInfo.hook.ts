@@ -44,7 +44,7 @@ export default function usePersonalInfoHook() {
           gender: Gender.NotSet,
           profileImageUrl: formData?.profilePhoto,
           idCardImageUrl: formData?.codeImage,
-          nationalCode: nationalCode,
+          nationalCode: formData?.code,
           birthDate: date?.toISOString(),
         },
       },
