@@ -59,7 +59,7 @@ export default function LogOutActionSheet({
           type="outline"
           title="انصراف"
           onPress={closeActionSheet}
-          style={styles.btn}
+          style={[styles.btn, { marginBottom: 40 }]}
         />
       </View>
     </ActionSheet>

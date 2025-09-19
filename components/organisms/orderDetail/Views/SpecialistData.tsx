@@ -150,5 +150,5 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 
-  btn: { marginBottom: 20 },
+  btn: { marginBottom: 30 },
 });

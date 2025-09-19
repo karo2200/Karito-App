@@ -56,6 +56,11 @@ export default function ProfileScreen() {
               <ThemedText fontType="bold" style={styles.number}>
                 {userData?.phoneNumber}
               </ThemedText>
+              {isExpert && (
+                <ThemedText fontType="bold" style={styles.number}>
+                  {userData?.serviceSubCategory?.name}
+                </ThemedText>
+              )}
             </View>
             <EditIcon
               onPress={() => {

@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
 
-  btn: { marginTop: 24 },
+  btn: { marginTop: 24, marginBottom: 40 },
 
   content: {
     paddingHorizontal: 16,

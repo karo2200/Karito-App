@@ -86,11 +86,13 @@ export default function usePaymentHook() {
       { input: { serviceRequestId: params?.id } },
       {
         onSuccess: (data) => {
-          if (data?.payment_create?.status?.code === 1) {
+          if (data?.payment_create_zibal?.status?.code === 1) {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getById],
             });
-            Linking.openURL(data?.payment_create?.result?.paymentUrl as string);
+            Linking.openURL(
+              data?.payment_create_zibal?.result?.paymentUrl as string
+            );
           } else {
             showToast({
               type: "error",

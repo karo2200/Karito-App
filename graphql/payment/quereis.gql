@@ -7,7 +7,7 @@ query payment_getMyPayments(
   payment_getMyPayments {
     result(where: $where, order: $order, skip: $skip, take: $take) {
       items {
-        finalAmount
+        amount
         id
         serviceRequest {
           customer {
