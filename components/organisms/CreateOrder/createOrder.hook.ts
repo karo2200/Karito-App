@@ -127,8 +127,9 @@ export default function useCreateOrder() {
         );
     }
     if (stage == 1) {
+      console.log("hh", getValues());
       const tehranDateTime = dayjs.tz(
-        `${getValues("date")} ${getValues("time")}:00`,
+        `${getValues().date} ${getValues().time}:00`,
         "YYYY-MM-DD HH:mm",
         "Asia/Tehran"
       );

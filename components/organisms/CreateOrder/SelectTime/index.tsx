@@ -1,14 +1,17 @@
 import { ThemedText, ThemedView } from "@/components";
 import { commonStyles } from "@/constants/CommonStyles";
-import { useState } from "react";
+import { useRef } from "react";
 import { StyleSheet } from "react-native";
 import DayHeader from "./views/DayHeader";
 import TimeList from "./views/TimeList";
 
 export default function SelectOrderTime(props) {
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toLocaleDateString()
-  );
+  const timeRef = useRef(null);
+
+  const onDateChanged = (date: any) => {
+    timeRef.current?.onDateChanged(date);
+  };
+
   return (
     <ThemedView style={commonStyles.flex1}>
       <ThemedText fontType="bold">
@@ -17,8 +20,8 @@ export default function SelectOrderTime(props) {
       <ThemedText style={styles.margBottom}>
         زمان سفارش از ۴ ساعت آینده به بعد قابل انتخاب است.
       </ThemedText>
-      <DayHeader setSelectedDate={setSelectedDate} setValue={props?.setValue} />
-      <TimeList selectedDate={selectedDate} setValue={props?.setValue} />
+      <DayHeader setSelectedDate={onDateChanged} setValue={props?.setValue} />
+      <TimeList setValue={props?.setValue} ref={timeRef} />
     </ThemedView>
   );
 }

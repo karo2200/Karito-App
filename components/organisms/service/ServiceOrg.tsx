@@ -15,6 +15,7 @@ export default function ServiceOrg() {
     subServiceItems,
     setSearchText,
     onSubServiceLoadMore,
+    subServiceLoading,
   } = useServiceTabHook();
 
   return (
@@ -38,6 +39,7 @@ export default function ServiceOrg() {
         selectedService={selectedService}
         items={subServiceItems}
         onEndReached={onSubServiceLoadMore}
+        isLoading={subServiceLoading}
       />
     </ScrollView>
   );

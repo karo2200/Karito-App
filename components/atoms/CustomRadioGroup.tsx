@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexShrink: 1,
     width: "100%",
-    backgroundColor: "blue",
   },
 
   label: { marginBottom: 16 },
