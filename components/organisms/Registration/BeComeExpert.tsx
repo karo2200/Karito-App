@@ -2,11 +2,10 @@ import React from "react";
 
 import ThemedText from "@/components/atoms/ThemedText";
 import { StyleSheet, View } from "react-native";
-import useExpertHook from "./hooks/Expert.hook";
 import CityStep from "./Views/CityStep";
 import ExitExpertSheet from "./Views/ExitExpertSheet";
 import InfoStep from "./Views/InfoStep";
-import NationalCodeStep from "./Views/NationalCodeStep";
+import useExpertHook from "./hooks/Expert.hook";
 
 const BeComeExpert = () => {
   const { page, setPage, exitVisible, setExitVisible } = useExpertHook();
@@ -23,7 +22,7 @@ const BeComeExpert = () => {
     switch (page) {
       case 1:
         return (
-          <NationalCodeStep
+          <CityStep
             onNextPress={() => {
               setPage(2);
             }}

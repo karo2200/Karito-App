@@ -10,10 +10,12 @@ export default function ServiceBodySection({
   items = [],
   selectedService,
   onEndReached,
+  isLoading,
 }: {
   items?: any[];
   selectedService?: any;
   onEndReached?: any;
+  isLoading?: boolean;
 }) {
   const router = useRouter();
 
@@ -51,6 +53,14 @@ export default function ServiceBodySection({
     );
   }, []);
 
+  const EmptyState = useCallback(() => {
+    return (
+      <ThemedView style={styles.emptyState}>
+        <ThemedText>آیتمی برای نمایش وجود ندارد!</ThemedText>
+      </ThemedView>
+    );
+  }, []);
+
   return (
     <ThemedView>
       <ThemedText fontType="bold">{selectedService?.name}</ThemedText>
@@ -63,6 +73,8 @@ export default function ServiceBodySection({
           contentContainerStyle={{ alignItems: "flex-end" }}
           ItemSeparatorComponent={() => <Divider />}
           onEndReached={onEndReached}
+          isLoading={isLoading}
+          ListEmptyComponent={EmptyState}
         />
       </ThemedView>
     </ThemedView>
@@ -71,4 +83,12 @@ export default function ServiceBodySection({
 
 const styles = StyleSheet.create({
   listContainer: { flexDirection: "row" },
+
+  emptyState: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginTop: 50,
+  },
 });
