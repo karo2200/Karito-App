@@ -60,6 +60,7 @@ query discountCode_getMyCodes(
         isActive
         isPercentage
         title
+        isUsed
       }
       pageInfo {
         hasNextPage

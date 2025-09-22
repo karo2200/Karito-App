@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet } from "react-native";
 import ListEmptyOrder from "../../order/Views/ListEmptyOrder";
 import OrderCard from "../../order/Views/OrderCard";
 import useMissionsHook from "../hooks/Mission.hook";
@@ -14,6 +14,7 @@ export default function LastMissions() {
     completeHasNextPage,
     completeIsRefetching,
     completeRefetch,
+    copmleteLoading,
   } = useMissionsHook();
 
   const renderItem = useCallback(
@@ -21,7 +22,7 @@ export default function LastMissions() {
       <OrderCard
         item={item}
         onOrderPress={() => {
-          router.push(`/mission/orderDetail?id=${item?.id}`);
+          router.push(`/mission/orderDetail?id=${item?.id}&page=complete`);
         }}
         isCustomer={false}
       />
@@ -29,7 +30,9 @@ export default function LastMissions() {
     []
   );
 
-  return (
+  return copmleteLoading && compleateData?.length === 0 ? (
+    <ActivityIndicator />
+  ) : (
     <FlatList
       ref={listRef}
       keyExtractor={(item) => item?.id}

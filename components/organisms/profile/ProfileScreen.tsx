@@ -2,6 +2,7 @@ import EditIcon from "@/assets/icons/Edit";
 import EmptyProfileIcon from "@/assets/icons/EmptyProfile";
 import LocationIcon from "@/assets/icons/Location";
 import PercentIcon from "@/assets/icons/Percent";
+import CustomImage from "@/components/atoms/CustomImage";
 import ThemedText from "@/components/atoms/ThemedText";
 import GuestMode from "@/components/molecules/GuestMode";
 import LogOutActionSheet from "@/components/molecules/LogOutActionSheet";
@@ -9,13 +10,7 @@ import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import CustomerEditProfileSheet from "./Views/CustomerEditProfileSheet";
 import useProfileHook from "./hooks/Profile.hook";
 
@@ -42,8 +37,8 @@ export default function ProfileScreen() {
         <View style={styles.flex1}>
           <View style={styles.headerContainer}>
             {userData?.profileImageUrl ? (
-              <Image
-                source={{ uri: userData?.profileImageUrl }}
+              <CustomImage
+                src={userData?.profileImageUrl}
                 style={styles.image}
               />
             ) : (
@@ -61,6 +56,11 @@ export default function ProfileScreen() {
               <ThemedText fontType="bold" style={styles.number}>
                 {userData?.phoneNumber}
               </ThemedText>
+              {isExpert && (
+                <ThemedText fontType="bold" style={styles.number}>
+                  {userData?.serviceSubCategory?.name}
+                </ThemedText>
+              )}
             </View>
             <EditIcon
               onPress={() => {

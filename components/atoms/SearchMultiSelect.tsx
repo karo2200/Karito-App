@@ -115,6 +115,8 @@ const SearchMultiSelect = forwardRef<any, Props>(
               data={filtered}
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ paddingBottom: 50 }}
+              showsVerticalScrollIndicator={false}
+              style={{ maxHeight: "80%" }}
               renderItem={({ item }) => {
                 const checked = tempSelected.includes(item.id);
                 return (
@@ -140,7 +142,7 @@ const SearchMultiSelect = forwardRef<any, Props>(
               title="انتخاب"
               fontType="bold"
               onPress={onConfirm}
-              style={{ marginBottom: 40 }}
+              style={{ marginBottom: 40, marginTop: 5 }}
             />
           </View>
         </ActionSheet>

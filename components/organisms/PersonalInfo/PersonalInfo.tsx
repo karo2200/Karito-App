@@ -63,7 +63,10 @@ const PersonalInfo = () => {
       setValue("day", parseDate(profileData?.birthDate)?.day),
       setValue("month", parseDate(profileData?.birthDate)?.month),
       setValue("profilePhoto", profileData?.profileImageUrl as string),
-      setValue("code", nationalCode ?? profileData?.nationalCode));
+      setValue(
+        "code",
+        nationalCode?.length > 0 ? nationalCode : profileData?.nationalCode
+      ));
   }, [nationalCode, profileData]);
 
   return (

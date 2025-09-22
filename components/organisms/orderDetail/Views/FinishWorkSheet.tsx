@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   textBtn: {
     fontWeight: "400",
     color: "white",
+    marginBottom: 40,
   },
 
   payment: {

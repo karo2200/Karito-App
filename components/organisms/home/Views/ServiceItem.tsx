@@ -1,14 +1,11 @@
+import CustomImage from "@/components/atoms/CustomImage";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { ServiceTypeDto } from "@/generated/graphql";
+import { hideSheet, showSheet } from "@/hooks/useShowSheet";
+import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 
 export default function ServiceItem({
   item,
@@ -18,23 +15,31 @@ export default function ServiceItem({
   style: ViewStyle | undefined;
 }) {
   const router = useRouter();
+  const { isLoggedIn } = authCacheStore();
   return (
     <View style={[styles.container, style]}>
-      <Image
-        style={styles.image}
-        source={{ uri: item?.logo }}
-        resizeMode="cover"
-        borderRadius={4}
-      />
+      <CustomImage style={styles.image} src={item?.logo} resizeMode="cover" />
       <ThemedText type="default" style={styles.title} numberOfLines={1}>
         {item?.name}
       </ThemedText>
       <TouchableOpacity
         style={styles.btn}
         onPress={() =>
-          router.push(
-            `/(tabs)/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${""}`
-          )
+          isLoggedIn
+            ? router.push(
+                `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}`
+              )
+            : showSheet("confirmation-action", {
+                payload: {
+                  hasLoading: false,
+                  showToastInActionSheet: false,
+                  title: "ورود",
+
+                  onClose: () => {
+                    hideSheet("confirmation-action");
+                  },
+                },
+              })
         }
       >
         <ThemedText style={styles.buttonText}>سفارش</ThemedText>

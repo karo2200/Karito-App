@@ -1,9 +1,33 @@
+import { DeviceWidth } from "@/constants/Dimension";
 import { ServiceRequestStatus, SortEnumType } from "@/generated/graphql";
+import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import { useEffect, useRef, useState } from "react";
+import { ScrollView } from "react-native";
 import { useGetServiceAcceptanceQuery } from "./Mission.query";
 
 export default function useMissionsHook() {
   const router = useRouter();
+
+  const { params } = useRoute();
+
+  const [activeTab, setActiveTab] = useState(params?.index ?? 0);
+
+  const scrollRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    if (params?.index !== undefined) {
+      const index = Number(params.index);
+      setActiveTab(index);
+
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({
+          x: DeviceWidth * index,
+          animated: false,
+        });
+      }, 0);
+    }
+  }, [params?.index]);
 
   const {
     data: inProgressData,
@@ -11,8 +35,14 @@ export default function useMissionsHook() {
     refetch,
     hasNextPage,
     fetchNextPage,
+    isLoading: inProressLoading,
   } = useGetServiceAcceptanceQuery({
-    where: { status: { neq: ServiceRequestStatus.Paid } },
+    where: {
+      and: [
+        { status: { neq: ServiceRequestStatus.Paid } },
+        { status: { neq: ServiceRequestStatus.Cancelled } },
+      ],
+    },
     order: [{ requestDate: SortEnumType.Desc }],
   });
 
@@ -22,6 +52,7 @@ export default function useMissionsHook() {
     refetch: completeRefetch,
     hasNextPage: completeHasNextPage,
     fetchNextPage: completeFetchNextPage,
+    isLoading: copmleteLoading,
   } = useGetServiceAcceptanceQuery({
     where: { status: { eq: ServiceRequestStatus.Paid } },
     order: [{ requestDate: SortEnumType.Desc }],
@@ -39,5 +70,10 @@ export default function useMissionsHook() {
     completeRefetch,
     completeHasNextPage,
     completeFetchNextPage,
+    inProressLoading,
+    copmleteLoading,
+    activeTab,
+    setActiveTab,
+    scrollRef,
   };
 }

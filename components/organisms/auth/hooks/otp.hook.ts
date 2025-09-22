@@ -74,6 +74,7 @@ export default function useOtpHook() {
   };
 
   const onSendOtp = (continueFunc?: () => void) => {
+    console.log("ss");
     requestOtpMutate(
       { input: { phoneNumber, userType: UserType.Customer } },
       {
@@ -93,6 +94,10 @@ export default function useOtpHook() {
     );
   };
 
+  const onEditNumber = () => {
+    router?.back();
+  };
+
   return {
     isVerifying,
     phoneNumber,
@@ -101,5 +106,7 @@ export default function useOtpHook() {
     onDoLogin,
     onSendOtp,
     router,
+
+    onEditNumber,
   };
 }

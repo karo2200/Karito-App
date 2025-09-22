@@ -13,12 +13,12 @@ import {
 } from "react-native";
 import InprogressMissions from "./Views/InprogressMissions";
 import LastMissions from "./Views/LastMissions";
+import useMissionsHook from "./hooks/Mission.hook";
 
 const { width } = Dimensions.get("screen");
 
 export default function MissionScreen() {
-  const [activeTab, setActiveTab] = React.useState(0);
-  const scrollRef = React.useRef<ScrollView>(null);
+  const { activeTab, setActiveTab, scrollRef } = useMissionsHook();
 
   const tabs = [
     { label: "ماموریت های جاری", content: <InprogressMissions /> },

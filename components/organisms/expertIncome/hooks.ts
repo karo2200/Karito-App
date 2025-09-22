@@ -1,37 +1,37 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  ServiceTypeDtoFilterInput,
-  ServiceTypeDtoSortInput,
-  ServiceTypes_GetAllDocument,
+  PaymentDtoFilterInput,
+  PaymentDtoSortInput,
+  Payment_GetMyPaymentsDocument,
 } from "@/generated/graphql";
-import { graphqlFetcher } from "@/graphql/fetcher";
+import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-export const useGetServiceTypesQuery = ({
+export const useGetMyPaymentsQuery = ({
   where,
   order,
-  enabled = true,
   take,
+  enabled = true,
 }: {
-  where?: ServiceTypeDtoFilterInput;
-  order?: [ServiceTypeDtoSortInput];
-  enabled?: boolean;
+  where?: PaymentDtoFilterInput;
+  order?: [PaymentDtoSortInput];
   take?: number;
+  enabled?: boolean;
 }) => {
   return useInfiniteQuery({
-    queryKey: [queryKeys.serviceSubCategory_getAll, where, order, enabled],
+    queryKey: [queryKeys.payment_getMyPayments, where, order, enabled],
     queryFn: async ({ pageParam = 0 }) => {
-      return await graphqlFetcher(ServiceTypes_GetAllDocument, {
+      return fetcher(Payment_GetMyPaymentsDocument, {
         skip: pageParam * PAGE_SIZE,
         take: take ?? PAGE_SIZE,
         where,
         order,
-      });
+      })();
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage?.serviceTypes_getAll?.result?.pageInfo?.hasNextPage) {
+      if (lastPage?.payment_getMyPayments?.result?.pageInfo?.hasNextPage) {
         return allPages.length;
       }
       return undefined;
@@ -40,7 +40,7 @@ export const useGetServiceTypesQuery = ({
       return {
         ...data,
         pages: data?.pages
-          ?.map((a) => a?.serviceTypes_getAll?.result?.items)
+          ?.map((a) => a?.payment_getMyPayments?.result?.items)
           .flat(),
       };
     },

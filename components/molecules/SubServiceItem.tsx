@@ -6,14 +6,14 @@ import ThemedView from "../atoms/ThemedView";
 
 export default function SubServiceItem({ item, index }) {
   const router = useRouter();
-
+  console.log(JSON.stringify({ item }));
   return (
     <ThemedView style={styles.container}>
       <ThemedText
         style={styles.label}
         onPress={() =>
           router.push(
-            `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}`
+            `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}`
           )
         }
       >

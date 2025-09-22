@@ -28,6 +28,7 @@ export default function useProfileHook() {
   const { data: specialist } = useSpecialist_GetMyProfileQuery();
 
   const specialistData = specialist?.specialist_getMyProfile?.result;
+  console.log("....", specialistData);
 
   const { mutate: updateMutate, isPending: updatePending } =
     useUser_UpdateProfileMutation();

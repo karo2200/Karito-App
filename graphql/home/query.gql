@@ -14,15 +14,21 @@ query city_getAll(
           id
           name
         }
-        activeCarousel {
-          imageUrls
-          id
-          title
-        }
         activeBanner {
           imageUrl
           id
           title
+        }
+        activeCarousel {
+          id
+          title
+          serviceTypes {
+            id
+            logo
+            name
+            banner
+            basePrice
+          }
         }
       }
       pageInfo {

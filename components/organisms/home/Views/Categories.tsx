@@ -10,8 +10,9 @@ import ApplianceIcon from "@/assets/icons/Appliance";
 import CarIcon from "@/assets/icons/Car";
 import HospitalIcon from "@/assets/icons/Hospital";
 import HouseOnWheelsIcon from "@/assets/icons/House-On-Wheels";
+import CustomImage from "@/components/atoms/CustomImage";
 import { ServiceCategoryDto } from "@/generated/graphql";
-import { Image, Pressable, StyleSheet, View, ViewStyle } from "react-native";
+import { Pressable, StyleSheet, View, ViewStyle } from "react-native";
 import useHomeHook from "../hooks/Home.hook";
 
 export default function Categories() {
@@ -57,6 +58,7 @@ export default function Categories() {
             Icon={() => <HospitalIcon />}
             title={"سایر خدمات"}
             item={homeCategoryData?.[5]}
+            isLast={true}
           />
         </View>
       )}
@@ -69,32 +71,43 @@ function HeaderItem({
   Icon,
   title,
   style,
+  isLast = false,
 }: {
   item: ServiceCategoryDto;
   Icon: ComponentType;
   title: string;
   style?: ViewStyle;
+  isLast?: boolean;
 }) {
   const { router } = useHomeHook();
   return (
     <Pressable
       style={{ alignItems: "center" }}
-      onPress={() =>
-        router.push(
-          `/(tabs)/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${""}`
-        )
+      onPress={
+        () =>
+          isLast
+            ? router.push("/(tabs)/service")
+            : router.push(
+                `/(tabs)/service?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}`
+              )
+        // router.push(
+        //     `/(tabs)/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${""}`
+        //   )
       }
     >
       <ThemedView style={[styles.imageContainer, style]}>
-        {/* <Icon /> */}
-        <Image
-          source={{ uri: item?.logo }}
-          style={styles.logo}
-          resizeMode="contain"
-        />
+        {isLast ? (
+          <Icon />
+        ) : (
+          <CustomImage
+            src={item?.logo}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        )}
       </ThemedView>
-      <ThemedText type="text" style={styles.text}>
-        {item?.name}
+      <ThemedText type="text" style={styles.text} numberOfLines={1}>
+        {isLast ? title : item?.name}
       </ThemedText>
     </Pressable>
   );
@@ -115,12 +128,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  text: { marginTop: 4, fontFamily: FontType.YekanBakhRegular },
+  text: {
+    marginTop: 4,
+    fontFamily: FontType.YekanBakhRegular,
+    width: 74,
+    textAlign: "center",
+  },
 
   logo: { width: 33, height: 33, alignSelf: "center" },
 
   imageContainer: {
-    width: 64,
+    width: 74,
     height: 64,
     borderRadius: 12,
     alignItems: "center",

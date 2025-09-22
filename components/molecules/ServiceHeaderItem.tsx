@@ -10,6 +10,8 @@ export type HeaderItemProps = {
   onItemPress?: () => void;
   selectedItem?: any;
   id?: number;
+  backgroundColor?: string;
+  padding?: number;
 };
 
 export default function HeaderItem({
@@ -20,6 +22,8 @@ export default function HeaderItem({
   selectedItem,
   onItemPress,
   id,
+  backgroundColor,
+  padding,
 }: HeaderItemProps) {
   return (
     <TouchableOpacity onPress={onItemPress} disabled={!onItemPress}>
@@ -30,6 +34,10 @@ export default function HeaderItem({
               ? styles.selectedImgContainer
               : styles.imgContainer,
             { height, width: height },
+            backgroundColor && {
+              backgroundColor,
+              padding,
+            },
           ]}
         >
           {imagePath ? (
@@ -40,7 +48,12 @@ export default function HeaderItem({
             <></>
           )}
         </ThemedView>
-        <ThemedText numberOfLines={1}>{title}</ThemedText>
+        <ThemedText
+          numberOfLines={2}
+          style={{ width: height, textAlign: "center" }}
+        >
+          {title}
+        </ThemedText>
       </ThemedView>
     </TouchableOpacity>
   );

@@ -58,7 +58,7 @@ export default function useCreateOrder() {
   const methods = useForm<Record<string, any>, object>({
     mode: "onChange",
   });
-  const { getValues, setValue } = methods;
+  const { getValues, setValue, watch } = methods;
 
   const params = useRoute().params;
   const { mutate, isPending } = useCreateRequestMutation();
@@ -100,7 +100,13 @@ export default function useCreateOrder() {
   }, [isLoading, questions]);
 
   const steps = (configDatas?.length ?? 0) - 1;
-  const nextDisabled = stage === steps;
+  const nextDisabled = useMemo(() => {
+    return (
+      stage === steps ||
+      (stage === 1 && !watch("time")) ||
+      (stage == 0 && !watch("addressId"))
+    );
+  }, [stage, watch("time"), watch("addressId")]);
 
   const queryClient = useQueryClient();
   const { mutate: addressMutate } = useAddress_SetPrimaryMutation();
@@ -128,7 +134,7 @@ export default function useCreateOrder() {
     }
     if (stage == 1) {
       const tehranDateTime = dayjs.tz(
-        `${getValues("date")} ${getValues("time")}:00`,
+        `${getValues().date} ${getValues().time}:00`,
         "YYYY-MM-DD HH:mm",
         "Asia/Tehran"
       );
@@ -191,5 +197,8 @@ export default function useCreateOrder() {
     methods,
     setValue,
     getValues,
+    watch,
+
+    nextLoading: stage === steps - 1 && isPending,
   };
 }

@@ -14,6 +14,7 @@ query serviceTypes_getAll(
         name
         logo
         id
+        basePrice
         serviceSubCategory {
           id
           name
@@ -25,12 +26,13 @@ query serviceTypes_getAll(
 }
 
 query serviceRequest_getAvailableRequests(
+  $input: GetAvailableRequestsInput!
   $skip: Int
   $take: Int
-  $order: [ServiceRequestDtoSortInput!]
-  $where: ServiceRequestDtoFilterInput
+  $order: [AvailableServiceRequestDtoSortInput!]
+  $where: AvailableServiceRequestDtoFilterInput
 ) {
-  serviceRequest_getAvailableRequests {
+  serviceRequest_getAvailableRequests(input: $input) {
     result(skip: $skip, take: $take, order: $order, where: $where) {
       pageInfo {
         hasNextPage
@@ -102,6 +104,7 @@ query serviceTypes_getPopular(
         name
         logo
         id
+        basePrice
         requestCount
         serviceSubCategory {
           id

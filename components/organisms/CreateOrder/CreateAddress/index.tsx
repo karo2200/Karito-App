@@ -21,7 +21,7 @@ import MapView from "./MapView";
 import { useGetNeighborhoodsQuery } from "./hooks";
 
 const schema = yup.object().shape({
-  area: yup.string().required("This field is required"),
+  area: yup.string().required("لطفا محله را وارد کنید"),
   address: yup.string().required("لطفا آدرس را وارد کنید."),
   lat: yup.number(),
   lng: yup.number(),
@@ -91,7 +91,6 @@ export default function AddressMap() {
       customerId: user?.id,
       text: formData?.address,
     };
-
     if (editItem?.id) {
       editMutate(
         {
@@ -115,7 +114,7 @@ export default function AddressMap() {
           onError: (edata) => {},
         }
       );
-    } else
+    } else {
       mutate(
         {
           input,
@@ -133,6 +132,7 @@ export default function AddressMap() {
           onError: (edata) => {},
         }
       );
+    }
   };
 
   return (

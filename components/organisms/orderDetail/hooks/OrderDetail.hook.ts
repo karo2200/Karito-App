@@ -40,6 +40,8 @@ export default function useOrderDetailHook() {
 
   const [rate, setRate] = useState(0);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   const { isExpert } = authCacheStore();
 
   const { mutate: acceptWorkMutate, isPending: acceptWorkPending } =
@@ -57,11 +59,23 @@ export default function useOrderDetailHook() {
   const { mutate: arriveMutate, isPending: arrivePending } =
     useServiceRequest_MarkAsArrivedMutation();
 
-  const { data: serviceData, isLoading } = useGetServiceById({
+  const {
+    data: serviceData,
+    isLoading,
+    refetch,
+  } = useGetServiceById({
     input: { serviceRequestId: params?.id },
   });
 
   const { data: cancelationData } = useGetCancelationRequestsQuery();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    await refetch();
+
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     if (
@@ -95,11 +109,14 @@ export default function useOrderDetailHook() {
       {
         onSuccess: (data) => {
           if (data?.serviceRequest_accept.status?.code === 1) {
-            router.push("/(expertTabs)/mission");
+            router.replace("/(expertTabs)/mission");
             setCancelRequestVisible(false);
             showToast({ message: "ماموریت قبول شد.", type: "success" });
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getMyAcceptances],
+            });
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.serviceRequest_getAvailableRequests],
             });
           } else {
             showToast({
@@ -157,7 +174,7 @@ export default function useOrderDetailHook() {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getAvailableRequests],
             });
-            router.push("/(expertTabs)/workList");
+            router.replace("/(expertTabs)/workList");
           } else {
             showToast({
               message: data?.serviceRequest_reject.status?.message,
@@ -255,6 +272,12 @@ export default function useOrderDetailHook() {
               queryKey: [queryKeys.serviceRequest_getById],
             });
             closeActionSheet?.();
+          } else {
+            showToast({
+              message: "شما قبلا امتیاز داده اید.",
+              type: "error",
+            });
+            closeActionSheet?.();
           }
         },
       }
@@ -290,5 +313,8 @@ export default function useOrderDetailHook() {
     ratePending,
     setRate,
     isComplete,
+    onRefresh,
+    refreshing,
+    pageType: params?.page as string,
   };
 }

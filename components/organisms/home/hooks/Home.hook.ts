@@ -1,4 +1,4 @@
-import { SortEnumType } from "@/generated/graphql";
+import { SortEnumType, VerificationStatus } from "@/generated/graphql";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
@@ -28,21 +28,21 @@ export default function useHomeHook() {
   });
 
   const { data: specialists } = useGetAllSpecialistQuery({
-    // where: {
-    //   and: [
-    //     { idCardVerificationStatus: { eq: VerificationStatus.Approved } },
-    //     {
-    //       specializedDocumentsVerificationStatus: {
-    //         eq: VerificationStatus.Approved,
-    //       },
-    //     },
-    //     {
-    //       identityVerificationVideoStatus: {
-    //         eq: VerificationStatus.Approved,
-    //       },
-    //     },
-    //   ],
-    // },
+    where: {
+      and: [
+        { idCardVerificationStatus: { eq: VerificationStatus.Approved } },
+        {
+          specializedDocumentsVerificationStatus: {
+            eq: VerificationStatus.Approved,
+          },
+        },
+        {
+          identityVerificationVideoStatus: {
+            eq: VerificationStatus.Approved,
+          },
+        },
+      ],
+    },
     order: [{ averageRating: SortEnumType.Desc }],
   });
 
@@ -51,7 +51,6 @@ export default function useHomeHook() {
   const { data: selectedCityData, isLoading: selectedCityLoading } =
     useGetAllCityQuery({ where: { name: { eq: customerCity } } });
 
-  console.log({ isLoggedIn });
   useEffect(() => {
     if (isLoggedIn) return;
     const timeout = setTimeout(() => {

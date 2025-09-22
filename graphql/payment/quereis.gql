@@ -1,0 +1,23 @@
+query payment_getMyPayments(
+  $where: PaymentDtoFilterInput
+  $order: [PaymentDtoSortInput!]
+  $take: Int
+  $skip: Int
+) {
+  payment_getMyPayments {
+    result(where: $where, order: $order, skip: $skip, take: $take) {
+      items {
+        amount
+        id
+        serviceRequest {
+          customer {
+            phoneNumber
+          }
+          requestDate
+        }
+      }
+      totalCount
+    }
+    status
+  }
+}

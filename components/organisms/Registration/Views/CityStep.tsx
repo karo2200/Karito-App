@@ -59,7 +59,6 @@ const CityStep = ({
     control,
     watch,
   } = methods;
-  console.log("www", watch("serviceTypes"));
 
   const onPress = (formData: any) => {
     onRegisterCity(formData, onNextPress);

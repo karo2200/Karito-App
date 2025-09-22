@@ -1,14 +1,10 @@
-import {
-  Image,
-  ImageProps,
-  ImageResizeMode,
-  ImageSourcePropType,
-  StyleSheet,
-} from "react-native";
+import { ImageProps, ImageSourcePropType, StyleSheet } from "react-native";
+
+import { Image, ImageContentFit } from "expo-image";
 
 export type CustomImageProps = ImageProps & {
   src?: string;
-  resizeMode?: ImageResizeMode | undefined;
+  resizeMode?: ImageContentFit | undefined;
   localSource?: ImageSourcePropType;
 };
 
@@ -22,7 +18,7 @@ export default function CustomImage({
     <Image
       source={localSource ?? { uri: src }}
       style={[styles.fullView, style]}
-      resizeMode={resizeMode}
+      contentFit={resizeMode}
     />
   );
 }

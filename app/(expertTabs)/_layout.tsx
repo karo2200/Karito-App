@@ -3,7 +3,7 @@ import { ToastProvider } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { Tabs, useSegments } from "expo-router";
+import { Tabs, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { DocumentText, Profile, Task, Wallet1 } from "iconsax-react-native";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
@@ -16,6 +16,8 @@ type TabBarIconProps = {
 
 export default function RootLayout() {
   const segments = useSegments();
+
+  const router = useRouter();
 
   const hideTabBar =
     segments[1] === "order" &&
@@ -116,6 +118,11 @@ export default function RootLayout() {
                 tabBarLabel: "لیست کارها",
                 tabBarIcon: ({ focused }) =>
                   tabBarIcon({ focused, Icon: DocumentText }),
+              }}
+              listeners={{
+                focus: () => {
+                  router.replace("/(expertTabs)/workList");
+                },
               }}
             />
           </Tabs>

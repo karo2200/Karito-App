@@ -1,12 +1,12 @@
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import ThemedContainer from "@/components/atoms/ThemedContainer";
 import React, { useCallback } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import EmptyOfferState from "./Views/EmptyOfferState";
 import OfferCard from "./Views/OfferCard";
 import useOfferHook from "./hooks/Offer.hook";
 
-export default function OffersScreen() {
+const OffersScreen = () => {
   const listRef = React.useRef<FlatList>(null);
 
   const {
@@ -55,6 +55,5 @@ export default function OffersScreen() {
       </View>
     </ThemedContainer>
   );
-}
-
-const styles = StyleSheet.create({});
+};
+export default OffersScreen;

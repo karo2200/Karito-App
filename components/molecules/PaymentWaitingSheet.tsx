@@ -73,6 +73,7 @@ export default function PaymentWaitingSheet({
           fontType="medium"
           type={!isComplete ? "outline" : "filled"}
           onPress={() => closeActionSheet()}
+          style={styles.mb}
         />
       </View>
     </ActionSheet>
@@ -106,5 +107,9 @@ const styles = StyleSheet.create({
   container: {
     minHeight: height / 3.5,
     width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+  },
+
+  mb: {
+    marginBottom: 40,
   },
 });

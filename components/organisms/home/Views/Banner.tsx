@@ -1,3 +1,4 @@
+import CustomImage from "@/components/atoms/CustomImage";
 import SearchWithModal from "@/components/atoms/SearchWithModal";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
@@ -7,10 +8,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
 import {
   Dimensions,
-  Image,
   Pressable,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -22,7 +21,8 @@ const { width, height } = Dimensions.get("screen");
 export default function Banner() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { cityData, customerCity, onCityPress, activeBanner } = useHomeHook();
+  const { cityData, customerCity, onCityPress, activeBanner, router } =
+    useHomeHook();
 
   const openActionSheet = () => {
     actionSheetRef.current?.show();
@@ -35,27 +35,34 @@ export default function Banner() {
   return (
     <View>
       {activeBanner ? (
-        <Image style={styles.image} source={{ uri: activeBanner?.imageUrl }} />
+        <CustomImage style={styles.image} src={activeBanner?.imageUrl} />
       ) : (
-        <Image
+        <CustomImage
+          localSource={require("@/assets/images/Home-Banner.png")}
           style={styles.image}
-          source={require("@/assets/images/Home-Banner.png")}
         />
       )}
       <View style={styles.inputContainer}>
         <View style={styles.container}>
-          <Ionicons
-            name="search-outline"
-            size={20}
-            color={Colors.unfilledText}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="جستجوی خدمت"
-            textAlign="right"
-            placeholderTextColor={Colors.unfilledText}
-          />
-
+          <Pressable
+            style={styles.searchBtn}
+            onPress={() => router.replace("/(tabs)/service")}
+          >
+            <Ionicons
+              name="search-outline"
+              size={20}
+              color={Colors.unfilledText}
+            />
+            <ThemedText style={{ color: Colors.unfilledText }}>
+              جستجوی خدمت
+            </ThemedText>
+            {/* <TextInput
+              style={styles.input}
+              placeholder="جستجوی خدمت"
+              textAlign="right"
+              placeholderTextColor={Colors.unfilledText}
+            /> */}
+          </Pressable>
           <TouchableOpacity onPress={openActionSheet} style={styles.button}>
             <Ionicons name="location-outline" size={20} color="#000" />
             <ThemedText type="text" style={styles.city}>
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignItems: "center",
     backgroundColor: Colors.hint500,
-    bottom: "10%",
+    bottom: "12%",
   },
 
   container: {
@@ -131,7 +138,6 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    flex: 1,
     paddingVertical: 8,
     paddingHorizontal: 8,
     fontSize: 12,
@@ -188,4 +194,10 @@ const styles = StyleSheet.create({
   },
 
   contentView: { paddingHorizontal: 15 },
+
+  searchBtn: {
+    flexDirection: "row-reverse",
+    flex: 1,
+    alignItems: "center",
+  },
 });

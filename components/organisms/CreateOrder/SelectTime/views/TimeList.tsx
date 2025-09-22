@@ -1,10 +1,16 @@
 import { CustomFlatList, Divider, ThemedText } from "@/components";
-import { Colors } from "@/constants/Colors";
-import { DeviceWidth } from "@/constants/Dimension";
 import dayjs from "dayjs";
-import { useEffect, useMemo, useState } from "react";
-import { SectionList, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
+import { useController } from "react-hook-form";
+import { SectionList, StyleSheet } from "react-native";
 import { useGetDisabledTimesQuery } from "../hooks";
+import TimeSlotItem from "./TimeSlotItem";
 
 const DATA = [
   {
@@ -69,42 +75,42 @@ const DATA = [
   },
 ];
 
-export default function TimeList({
-  selectedDate = new Date().toDateString(),
-  setValue,
-}) {
-  const [selectedTime, setSelectedTime] = useState<any | null>(null);
-  const [date, setCurrentDate] = useState(selectedDate);
+const TimeList = forwardRef(({}, ref) => {
+  const { field } = useController({ name: "selectedTime" });
+  const { field: timeField } = useController({ name: "time" });
+  const { field: dateField } = useController({ name: "date" });
+
+  const [date, setCurrentDate] = useState(new Date().toDateString());
 
   const { data } = useGetDisabledTimesQuery({
     where: {
       time: {
-        gte: `${date}T00:00:00+03:30`,
-        lte: `${date}T23:59:59+03:30`,
+        gte: `${dateField.value ?? date}T00:00:00+03:30`,
+        lte: `${dateField.value ?? date}T23:59:59+03:30`,
       },
     },
   });
 
-  useEffect(() => {
-    setCurrentDate(selectedDate);
-  }, [selectedDate]);
+  useImperativeHandle(ref, () => ({
+    onDateChanged: (date: any) => {
+      setCurrentDate(date);
+    },
+  }));
 
   const nextFourHour = useMemo(() => {
     const dayDiff = dayjs().isSame(
-      dayjs(selectedDate).format("YYYY/MM/DD"),
+      dayjs(dateField.value).format("YYYY/MM/DD"),
       "D"
     );
 
     if (dayDiff) {
       const minTime = dayjs().add(4, "hour");
 
-      if (minTime.hour() <= 24) setSelectedTime({ value: minTime.hour() + 1 });
       return minTime.hour() + 1;
     } else {
-      setSelectedTime({ value: 8 });
       return -1;
     }
-  }, [selectedDate]);
+  }, [dateField.value]);
 
   const disabledTime = useMemo(() => {
     const disabledTimes: any[] = [];
@@ -121,9 +127,20 @@ export default function TimeList({
     return disabledTimes;
   }, [data]);
 
-  useEffect(() => {
-    setValue("time", selectedTime?.value);
-  }, [selectedTime]);
+  const SectionItem = useCallback(
+    ({ item, index }) => {
+      const isDisabled =
+        item?.value < nextFourHour || disabledTime.includes(item?.value);
+
+      const onPress = () => {
+        timeField.onChange(item?.value);
+        field.onChange(item);
+      };
+
+      return <TimeSlotItem {...{ item, onPress, field, isDisabled, index }} />;
+    },
+    [nextFourHour, disabledTime, field.value]
+  );
 
   return (
     <SectionList
@@ -139,34 +156,7 @@ export default function TimeList({
             inverted
             snapToEnd
             ItemSeparatorComponent={() => <Divider width={8} height={0} />}
-            renderItem={({ item, index }) => {
-              const isSelected = selectedTime?.value === item?.value;
-              const isDisabled =
-                item?.value < nextFourHour ||
-                disabledTime.includes(item?.value);
-
-              return (
-                <TouchableOpacity
-                  style={[
-                    styles.timeButton,
-                    isSelected && styles.timeButtonSelected,
-                    isDisabled && { backgroundColor: Colors.disabledIcon },
-                  ]}
-                  onPress={() => setSelectedTime(item)}
-                  disabled={isDisabled}
-                >
-                  <ThemedText
-                    fontType={isSelected ? "bold" : "regular"}
-                    style={[
-                      styles.timeText,
-                      isSelected && styles.timeTextSelected,
-                    ]}
-                  >
-                    {item?.label}
-                  </ThemedText>
-                </TouchableOpacity>
-              );
-            }}
+            renderItem={SectionItem}
           />
         );
       }}
@@ -177,7 +167,9 @@ export default function TimeList({
       )}
     />
   );
-}
+});
+
+export default TimeList;
 
 const styles = StyleSheet.create({
   container: { width: "100%" },
@@ -186,28 +178,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: "right",
     marginVertical: 8,
-  },
-
-  timeButton: {
-    borderWidth: 2,
-    borderColor: Colors.gray100,
-    borderRadius: 8,
-    paddingVertical: 8,
-    marginBottom: 4,
-    minWidth: DeviceWidth / 3 - 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  timeButtonSelected: {
-    backgroundColor: Colors.hint50,
-    borderColor: Colors.hint500,
-    borderWidth: 2,
-  },
-  timeText: {
-    fontSize: 14,
-    color: Colors.gray900,
-  },
-  timeTextSelected: {
-    color: Colors.hint500,
   },
 });

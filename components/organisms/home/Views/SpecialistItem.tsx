@@ -1,6 +1,7 @@
+import CustomImage from "@/components/atoms/CustomImage";
 import ThemedText from "@/components/atoms/ThemedText";
 import { FontType } from "@/constants/Fonts";
-import { Image, StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
 
 export default function SpecialistItem({
   item,
@@ -17,7 +18,7 @@ export default function SpecialistItem({
       activeOpacity={1}
       onPress={onItemPress}
     >
-      <Image style={styles.image} source={{ uri: item?.profileImageUrl }} />
+      <CustomImage style={styles.image} src={item?.profileImageUrl} />
       <ThemedText style={styles.title} numberOfLines={2}>
         {item?.firstName} {item?.lastName}
         {"\n"}({item?.serviceSubCategory?.name})

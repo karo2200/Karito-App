@@ -61,7 +61,7 @@ const SearchSelect = forwardRef<any, Props>(
         <ActionSheet
           ref={actionSheetRef}
           containerStyle={{
-            maxHeight: Platform.OS === "web" ? 400 : "80%",
+            maxHeight: Platform.OS === "web" ? 400 : "75%",
           }}
         >
           <View style={styles.header}>
@@ -86,6 +86,8 @@ const SearchSelect = forwardRef<any, Props>(
               data={filtered}
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ paddingBottom: 50 }}
+              style={{ maxHeight: "80%" }}
+              showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => {
@@ -107,7 +109,7 @@ const SearchSelect = forwardRef<any, Props>(
               title="انتخاب"
               fontType="bold"
               onPress={() => actionSheetRef.current?.hide()}
-              style={{ marginBottom: 40 }}
+              style={{ marginBottom: 40, marginTop: 5 }}
             />
           </View>
         </ActionSheet>

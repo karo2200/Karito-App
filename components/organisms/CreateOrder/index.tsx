@@ -16,8 +16,11 @@ export default function CreateOrderOrg() {
     onNextPress,
     isLast,
 
+    nextLoading,
+
     methods,
     setValue,
+    watch,
     getValues,
   } = useCreateOrder();
 
@@ -30,6 +33,7 @@ export default function CreateOrderOrg() {
             setValue={setValue}
             {...configDatas[stage]}
             getValues={getValues}
+            watch={watch}
           />
         </ThemedView>
         {!isLast && (
@@ -37,6 +41,7 @@ export default function CreateOrderOrg() {
             onNextPress={onNextPress}
             onBackPress={onBackPress}
             nextDisabled={nextDisabled}
+            nextLoading={nextLoading}
           />
         )}
       </FormProvider>

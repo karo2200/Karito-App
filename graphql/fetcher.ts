@@ -49,7 +49,6 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
   count = count += 1;
   return async (): Promise<any> => {
     const accessToken = authCacheStore?.getState()?.accessToken;
-    console.log("token=>", accessToken);
 
     if (
       !query.includes("auth_requestOtp") &&

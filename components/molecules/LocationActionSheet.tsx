@@ -52,6 +52,7 @@ export default function LocationActionSheet({
         <ThemedButton
           title="متوجه شدم"
           fontType="medium"
+          style={styles.mb}
           onPress={() => closeActionSheet()}
         />
       </View>
@@ -84,5 +85,9 @@ const styles = StyleSheet.create({
   container: {
     minHeight: height / 3.5,
     width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+  },
+
+  mb: {
+    marginBottom: 40,
   },
 });

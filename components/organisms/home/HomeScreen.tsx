@@ -1,6 +1,6 @@
 import CustomCarousel from "@/components/atoms/CustomCarousel";
 import { memo } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import Banner from "./Views/Banner";
 import Categories from "./Views/Categories";
 import HorizontalServiceList from "./Views/HorizontalServiceList";
@@ -15,18 +15,22 @@ const HomeScreen = () => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <Categories />
       <Banner />
-      <HorizontalServiceList
-        title="پر طرفداردار ترین خدمات"
-        loading={false}
-        data={popularData}
-      />
-      {activeCarousel && <CustomCarousel data={activeCarousel?.imageUrls} />}
-      <HorizontalServiceList
-        title="سرویس های ویژه"
-        loading={false}
-        data={specialData}
-      />
-      <HorizontalSpeciaLists data={specialists} />
+      <View style={{ marginTop: -15 }}>
+        <HorizontalServiceList
+          title="پر طرفداردار ترین خدمات"
+          loading={false}
+          data={popularData}
+        />
+        {activeCarousel?.serviceTypes?.length > 0 && (
+          <CustomCarousel data={activeCarousel} />
+        )}
+        <HorizontalServiceList
+          title="سرویس های ویژه"
+          loading={false}
+          data={specialData}
+        />
+        <HorizontalSpeciaLists data={specialists} />
+      </View>
     </ScrollView>
   );
 };

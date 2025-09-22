@@ -1,3 +1,4 @@
+import CustomImage from "@/components/atoms/CustomImage";
 import StarRating from "@/components/atoms/StartRating";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
@@ -5,7 +6,7 @@ import { Colors } from "@/constants/Colors";
 import { ServiceRequestStatus } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Fragment, memo, useRef } from "react";
-import { Dimensions, Image, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import useOrderDetailHook from "../hooks/OrderDetail.hook";
 
@@ -41,11 +42,11 @@ const SpecialistData = () => {
             {serviceData?.specialist?.lastName}
           </ThemedText>
           <ThemedText fontType="bold" style={styles.works}>
-            ۹۰۳ سرویس موفق
+            {serviceData?.specialist?.successfulMissions} سرویس موفق
           </ThemedText>
         </View>
-        <Image
-          source={{ uri: serviceData?.specialist?.profileImageUrl }}
+        <CustomImage
+          src={serviceData?.specialist?.profileImageUrl}
           style={styles.image2}
         />
       </View>
@@ -73,15 +74,16 @@ const SpecialistData = () => {
             {serviceData?.specialist?.firstName}{" "}
             {serviceData?.specialist?.lastName}
           </ThemedText>
-          <Image
+          <CustomImage
             style={styles.image}
-            source={{ uri: serviceData?.specialist?.profileImageUrl }}
+            src={serviceData?.specialist?.profileImageUrl}
           />
           <StarRating onChange={(r) => setRate(r)} />
           <ThemedButton
             isLoading={ratePending}
             onPress={() => onRatePress(closeActionSheet)}
             title="ثبت امتیاز"
+            style={styles.btn}
           />
         </View>
       </ActionSheet>
@@ -147,4 +149,6 @@ const styles = StyleSheet.create({
     color: Colors.gray400,
     marginTop: 8,
   },
+
+  btn: { marginBottom: 30 },
 });

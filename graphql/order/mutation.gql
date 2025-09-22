@@ -45,8 +45,8 @@ mutation serviceRequest_completeService($input: CompleteServiceInput!) {
   }
 }
 
-mutation payment_create($input: CreatePaymentInput!) {
-  payment_create(input: $input) {
+mutation payment_create_zibal($input: CreatePaymentInput!) {
+  payment_create_zibal(input: $input) {
     status
     result {
       id

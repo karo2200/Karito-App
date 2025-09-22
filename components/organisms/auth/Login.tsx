@@ -8,6 +8,7 @@ import { CustomImage } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
+import { UserType } from "@/generated/graphql";
 import { StyleSheet, View } from "react-native";
 import useLoginHook from "./login.hook";
 import Footer from "./views/Footer";
@@ -63,6 +64,7 @@ const LoginSection = () => {
               ? true
               : false
           }
+          role={UserType.Customer}
         />
       </FormProvider>
     </KeyboardAutoHide>

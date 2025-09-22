@@ -7,6 +7,7 @@ import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { FontStyle } from "@/constants/Fonts";
+import { formatPrice } from "@/services/ParseData";
 import * as React from "react";
 import {
   ActivityIndicator,
@@ -82,7 +83,7 @@ export default function PaymentScreen() {
             {disCountLoading || removeLoading ? (
               <ActivityIndicator />
             ) : isSetCode ? (
-              <CloseIcon width={36} height={36} fill={Colors.hint500} />
+              <CloseIcon fill={Colors.hint500} />
             ) : (
               <ThemedText
                 fontType="bold"
@@ -97,7 +98,7 @@ export default function PaymentScreen() {
           </TouchableOpacity>
         </View>
         <View style={styles.priceView}>
-          <View style={styles.flexRow2Space}>
+          {/* <View style={styles.flexRow2Space}>
             <ThemedText type="text" style={{ color: Colors.gray500 }}>
               ایاب ذهاب
             </ThemedText>
@@ -110,7 +111,7 @@ export default function PaymentScreen() {
               </ThemedText>
               <TomanIcon color={Colors.darkGray} height={13} width={13} />
             </View>
-          </View>
+          </View> */}
           <View style={styles.flexRow2Space}>
             <ThemedText type="text" style={{ color: Colors.iconGreen }}>
               کد تخفیف
@@ -120,7 +121,7 @@ export default function PaymentScreen() {
                 type="text"
                 style={{ color: Colors.iconGreen, marginLeft: 8 }}
               >
-                ۸۷۳.۰۰۰
+                {serviceData?.discountAmount}
               </ThemedText>
               <TomanIcon color={Colors.iconGreen} height={13} width={13} />
             </View>
@@ -134,12 +135,12 @@ export default function PaymentScreen() {
                 type="text"
                 style={{ color: Colors.darkGray, marginLeft: 8 }}
               >
-                {serviceData?.basePrice}
+                {formatPrice(serviceData?.basePrice)}
               </ThemedText>
               <TomanIcon color={Colors.darkGray} height={13} width={13} />
             </View>
           </View>
-          <View style={styles.flexRow2Space}>
+          {/* <View style={styles.flexRow2Space}>
             <ThemedText type="text" style={{ color: Colors.gray500 }}>
               هزینه اضافه شده
             </ThemedText>
@@ -152,7 +153,7 @@ export default function PaymentScreen() {
               </ThemedText>
               <TomanIcon color={Colors.darkGray} height={13} width={13} />
             </View>
-          </View>
+          </View> */}
           <View
             style={[
               styles.flexRow2Space,
@@ -169,7 +170,7 @@ export default function PaymentScreen() {
             </ThemedText>
             <View style={styles.flexRow2}>
               <ThemedText style={{ color: Colors.semiBlack, marginLeft: 8 }}>
-                {serviceData?.finalPrice}
+                {formatPrice(serviceData?.finalPrice)}
               </ThemedText>
               <TomanIcon color={Colors.semiBlack} height={16} width={16} />
             </View>
@@ -184,7 +185,7 @@ export default function PaymentScreen() {
           <View style={styles.flexRow}>
             <TomanIcon />
             <ThemedText type="defaultSemiBold" style={styles.footerText}>
-              {serviceData?.finalPrice}
+              {formatPrice(serviceData?.finalPrice)}
             </ThemedText>
           </View>
         </View>

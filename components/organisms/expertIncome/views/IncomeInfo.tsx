@@ -2,11 +2,20 @@ import { ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { StyleSheet } from "react-native";
 
-export default function IncomeInfo() {
+export default function IncomeInfo({ data }) {
   const infoArray = [
-    { title: "درآمد ماه", value: "۱٫2۰۰٫۵۰۰ ریال" },
-    { title: "درآمد هفته", value: "۱۲٫۲۰۰٫۵۰۰ ریال" },
-    { title: "درآمد امروز", value: "۴٫۹۰۰٫۰۰۰ ریال" },
+    {
+      title: "درآمد ماه",
+      value: `${data?.month?.result?.totalAmount ?? 0} ریال`,
+    },
+    {
+      title: "درآمد هفته",
+      value: `${data?.week?.result?.totalAmount ?? 0} ریال`,
+    },
+    {
+      title: "درآمد امروز",
+      value: `${data?.day?.result?.totalAmount ?? 0} ریال`,
+    },
   ];
 
   return (
@@ -17,7 +26,7 @@ export default function IncomeInfo() {
           fontType="bold"
           style={styles.fontSize}
         >
-          ۱٫2۰۰٫۵۰۰ ریال
+          ۱٫۲۰۰٫۵۰۰ ریال
         </ThemedText>
         <ThemedText style={styles.headerTxt} fontType="bold">
           درآمد تسویه نشده
@@ -32,7 +41,9 @@ export default function IncomeInfo() {
               { marginRight: index != 2 ? "2%" : 0 },
             ]}
           >
-            <ThemedText style={styles.title}>{item.title}</ThemedText>
+            <ThemedText style={styles.title} numberOfLines={1}>
+              {item.title}
+            </ThemedText>
             <ThemedText style={styles.value} fontType="bold">
               {item.value}
             </ThemedText>
