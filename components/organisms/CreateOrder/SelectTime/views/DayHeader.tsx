@@ -33,28 +33,20 @@ const generateNext7Days = () => {
 
 export default function DayHeader({
   setSelectedDate,
-  setValue,
 }: {
   setSelectedDate?: (date: any) => void;
-  setValue?: any;
 }) {
   const { field } = useController({ name: "date" });
-  const checkedItem = useRef<any>(0);
   const dayRefs = useRef(Array.from({ length: 7 }, () => createRef<any>()));
 
   const dates = useMemo(() => {
     const data = generateNext7Days();
 
-    setTimeout(() => {
-      dayRefs.current[0].current.setCheck(true);
-    }, 100);
-
-    checkedItem.current = 0;
     if (!field?.value) {
-      console.log("DayHeader");
-      field.onChange(data?.[0]?.value);
+      const item = data?.[0]?.value;
+      field.onChange(item);
+      setSelectedDate?.(item);
     }
-    setSelectedDate?.(data?.[0]?.value);
 
     return data;
   }, []);
@@ -62,17 +54,12 @@ export default function DayHeader({
   const renderItem = ({ item, index }) => {
     const itemRef = dayRefs.current[index];
 
+    const onItemPress = () => {
+      setSelectedDate?.(item?.value);
+    };
+
     return (
-      <TimeListHeaderItem
-        item={item}
-        checkedRef={checkedItem}
-        index={index}
-        dayRefs={dayRefs}
-        onItemPress={() => {
-          setSelectedDate?.(item?.value);
-        }}
-        ref={itemRef}
-      />
+      <TimeListHeaderItem item={item} onItemPress={onItemPress} ref={itemRef} />
     );
   };
 

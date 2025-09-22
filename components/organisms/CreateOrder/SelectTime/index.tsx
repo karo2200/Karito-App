@@ -9,7 +9,7 @@ export default function SelectOrderTime(props) {
   const timeRef = useRef(null);
 
   const onDateChanged = (date: any) => {
-    timeRef.current?.onDateChanged(date);
+    // timeRef.current?.onDateChanged(date);
   };
 
   return (
@@ -20,8 +20,8 @@ export default function SelectOrderTime(props) {
       <ThemedText style={styles.margBottom}>
         زمان سفارش از ۴ ساعت آینده به بعد قابل انتخاب است.
       </ThemedText>
-      <DayHeader setSelectedDate={onDateChanged} setValue={props?.setValue} />
-      <TimeList setValue={props?.setValue} ref={timeRef} />
+      <DayHeader setSelectedDate={onDateChanged} />
+      <TimeList ref={timeRef} />
     </ThemedView>
   );
 }
