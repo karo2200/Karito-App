@@ -91,7 +91,6 @@ export default function AddressMap() {
       customerId: user?.id,
       text: formData?.address,
     };
-
     if (editItem?.id) {
       editMutate(
         {
@@ -115,7 +114,7 @@ export default function AddressMap() {
           onError: (edata) => {},
         }
       );
-    } else
+    } else {
       mutate(
         {
           input,
@@ -133,6 +132,7 @@ export default function AddressMap() {
           onError: (edata) => {},
         }
       );
+    }
   };
 
   return (

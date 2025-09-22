@@ -10,6 +10,8 @@ export type HeaderItemProps = {
   onItemPress?: () => void;
   selectedItem?: any;
   id?: number;
+  backgroundColor?: string;
+  padding?: number;
 };
 
 export default function HeaderItem({
@@ -20,6 +22,8 @@ export default function HeaderItem({
   selectedItem,
   onItemPress,
   id,
+  backgroundColor,
+  padding,
 }: HeaderItemProps) {
   return (
     <TouchableOpacity onPress={onItemPress} disabled={!onItemPress}>
@@ -30,10 +34,14 @@ export default function HeaderItem({
               ? styles.selectedImgContainer
               : styles.imgContainer,
             { height, width: height },
+            backgroundColor && {
+              backgroundColor,
+              padding,
+            },
           ]}
         >
           {imagePath ? (
-            <CustomImage src={imagePath} resizeMode="contain" />
+            <CustomImage src={imagePath} resizeMode="cover" />
           ) : Icon ? (
             <Icon color={Colors.hint500} size={24} />
           ) : (
