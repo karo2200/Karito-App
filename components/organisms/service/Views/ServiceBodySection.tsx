@@ -1,5 +1,6 @@
 import { CustomFlatList, Divider, ThemedText, ThemedView } from "@/components";
 import HeaderItem from "@/components/molecules/ServiceHeaderItem";
+import { Colors } from "@/constants/Colors";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
@@ -49,6 +50,8 @@ export default function ServiceBodySection({
         key={`${item?.id}_${index}`}
         height={98}
         onItemPress={onPress}
+        backgroundColor={Colors.hint50}
+        padding={0}
       />
     );
   }, []);
