@@ -20,6 +20,7 @@ export default function CreateOrderOrg() {
 
     methods,
     setValue,
+    watch,
     getValues,
   } = useCreateOrder();
 
@@ -32,6 +33,7 @@ export default function CreateOrderOrg() {
             setValue={setValue}
             {...configDatas[stage]}
             getValues={getValues}
+            watch={watch}
           />
         </ThemedView>
         {!isLast && (

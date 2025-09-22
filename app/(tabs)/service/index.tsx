@@ -1,11 +1,11 @@
 import { ThemedContainer } from "@/components";
-import BeComeExpert from "@/components/organisms/Registration/BeComeExpert";
+import ServiceOrg from "@/components/organisms/service/ServiceOrg";
 import { commonStyles } from "@/constants/CommonStyles";
 
 export default function ServicePage() {
   return (
     <ThemedContainer style={commonStyles.container}>
-      <BeComeExpert />
+      <ServiceOrg />
     </ThemedContainer>
   );
 }

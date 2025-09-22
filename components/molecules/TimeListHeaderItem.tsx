@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useMemo } from "react";
 import { useController } from "react-hook-form";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "..";
@@ -10,44 +10,23 @@ const TimeListHeaderItem = forwardRef(
   (
     {
       item,
-      checkedRef,
       onItemPress,
-      index,
-      dayRefs,
     }: {
       item: any;
-      checkedRef?: any;
       onItemPress?: () => void;
-      index: number;
-      dayRefs: any;
     },
     ref
   ) => {
-    const [isChecked, setIsChecked] = useState(false);
     const { field } = useController({ name: "date" });
 
-    useImperativeHandle(ref, () => ({
-      setCheck: (value: boolean) => {
-        setIsChecked(value);
-      },
-    }));
-
     const handleOnItemPress = () => {
-      if (index != checkedRef.current) {
-        dayRefs.current[checkedRef.current].current.setCheck(false);
-        checkedRef.current = index;
-        setIsChecked(true);
-      }
-      field.onChange(item?.value);
+      field.onChange(item.value);
       onItemPress?.();
     };
 
-    useEffect(() => {
-      if (field.value == item.value) {
-        console.log({ field });
-        setIsChecked(true);
-      }
-    }, []);
+    const isChecked = useMemo(() => {
+      return item?.value === field.value;
+    }, [field.value]);
 
     return (
       <TouchableOpacity
