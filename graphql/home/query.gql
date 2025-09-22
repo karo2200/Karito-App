@@ -19,6 +19,24 @@ query city_getAll(
           id
           title
         }
+        activeCarousel {
+          id
+          title
+          serviceTypes {
+            id
+            logo
+            name
+            banner
+            serviceSubCategory {
+              id
+              logo
+              name
+              serviceCategory {
+                name
+              }
+            }
+          }
+        }
       }
       pageInfo {
         hasNextPage

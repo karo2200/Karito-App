@@ -1,7 +1,10 @@
 import { Colors } from "@/constants/Colors";
+import { ServiceTypeDto } from "@/generated/graphql";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Dimensions, ImageBackground, StyleSheet, View } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
+import ThemedButton from "./ThemedButton";
 
 const { width } = Dimensions.get("screen");
 
@@ -13,6 +16,9 @@ const images = [
 
 export default function CustomCarousel({ data }: { data: any }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  console.log("dddd", data);
+
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -22,22 +28,32 @@ export default function CustomCarousel({ data }: { data: any }) {
         height={200}
         autoPlay
         autoPlayInterval={3000}
-        data={data}
+        data={data?.serviceTypes}
         style={{ borderRadius: 8 }}
         pagingEnabled
         onSnapToItem={(index) => setActiveIndex(index)}
         scrollAnimationDuration={800}
-        renderItem={({ item }: { item: string }) => (
+        renderItem={({ item }: { item: ServiceTypeDto }) => (
           <ImageBackground
-            source={{ uri: item }}
+            source={{ uri: item?.banner }}
             style={styles.image}
             resizeMode="cover"
-          ></ImageBackground>
+          >
+            <ThemedButton
+              title="سفارش"
+              style={styles.btn}
+              onPress={() =>
+                router.push(
+                  `/service/SubServicePage?id=${item?.serviceSubCategory?.id}&subService=${item?.serviceSubCategory?.name}&logo=${item?.serviceSubCategory?.logo}&service=${item?.serviceSubCategory?.serviceCategory?.name}`
+                )
+              }
+            />
+          </ImageBackground>
         )}
       />
 
       <View style={styles.dotsContainer}>
-        {data?.map((_, index) => (
+        {data?.serviceTypes?.map((_, index) => (
           <View
             key={index}
             style={[

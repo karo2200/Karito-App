@@ -2788,6 +2788,28 @@ export type City_GetAllQuery = {
           id: any;
           title: string;
         } | null;
+        activeCarousel?: {
+          __typename?: "CarouselDto";
+          id: any;
+          title: string;
+          serviceTypes: Array<{
+            __typename?: "ServiceTypeDto";
+            id: any;
+            logo: string;
+            name: string;
+            banner: string;
+            serviceSubCategory: {
+              __typename?: "ServiceSubCategoryDto";
+              id: any;
+              logo: string;
+              name: string;
+              serviceCategory: {
+                __typename?: "ServiceCategoryDto";
+                name: string;
+              };
+            };
+          }>;
+        } | null;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -4171,6 +4193,24 @@ export const City_GetAllDocument = `
           imageUrl
           id
           title
+        }
+        activeCarousel {
+          id
+          title
+          serviceTypes {
+            id
+            logo
+            name
+            banner
+            serviceSubCategory {
+              id
+              logo
+              name
+              serviceCategory {
+                name
+              }
+            }
+          }
         }
       }
       pageInfo {
