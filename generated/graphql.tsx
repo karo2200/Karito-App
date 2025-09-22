@@ -112,6 +112,7 @@ export type AdminDto = {
   gender: Gender;
   id: Scalars["UUID"]["output"];
   isBlocked: Scalars["Boolean"]["output"];
+  isOwner: Scalars["Boolean"]["output"];
   lastName?: Maybe<Scalars["String"]["output"]>;
   phoneNumber: Scalars["String"]["output"];
   profileImageUrl?: Maybe<Scalars["String"]["output"]>;
@@ -134,6 +135,7 @@ export type AdminDtoFilterInput = {
   gender?: InputMaybe<GenderOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isBlocked?: InputMaybe<BooleanOperationFilterInput>;
+  isOwner?: InputMaybe<BooleanOperationFilterInput>;
   lastName?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<AdminDtoFilterInput>>;
   phoneNumber?: InputMaybe<StringOperationFilterInput>;
@@ -146,6 +148,7 @@ export type AdminDtoSortInput = {
   gender?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   isBlocked?: InputMaybe<SortEnumType>;
+  isOwner?: InputMaybe<SortEnumType>;
   lastName?: InputMaybe<SortEnumType>;
   phoneNumber?: InputMaybe<SortEnumType>;
   profileImageUrl?: InputMaybe<SortEnumType>;
@@ -2798,16 +2801,7 @@ export type City_GetAllQuery = {
             logo: string;
             name: string;
             banner: string;
-            serviceSubCategory: {
-              __typename?: "ServiceSubCategoryDto";
-              id: any;
-              logo: string;
-              name: string;
-              serviceCategory: {
-                __typename?: "ServiceCategoryDto";
-                name: string;
-              };
-            };
+            basePrice: any;
           }>;
         } | null;
       }> | null;
@@ -4202,14 +4196,7 @@ export const City_GetAllDocument = `
             logo
             name
             banner
-            serviceSubCategory {
-              id
-              logo
-              name
-              serviceCategory {
-                name
-              }
-            }
+            basePrice
           }
         }
       }

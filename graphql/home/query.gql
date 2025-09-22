@@ -27,14 +27,7 @@ query city_getAll(
             logo
             name
             banner
-            serviceSubCategory {
-              id
-              logo
-              name
-              serviceCategory {
-                name
-              }
-            }
+            basePrice
           }
         }
       }

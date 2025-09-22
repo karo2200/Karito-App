@@ -8,15 +8,8 @@ import ThemedButton from "./ThemedButton";
 
 const { width } = Dimensions.get("screen");
 
-const images = [
-  require("../../assets/images/react-logo.png"),
-  require("../../assets/images/react-logo.png"),
-  require("../../assets/images/react-logo.png"),
-];
-
 export default function CustomCarousel({ data }: { data: any }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  console.log("dddd", data);
 
   const router = useRouter();
 
@@ -44,7 +37,7 @@ export default function CustomCarousel({ data }: { data: any }) {
               style={styles.btn}
               onPress={() =>
                 router.push(
-                  `/service/SubServicePage?id=${item?.serviceSubCategory?.id}&subService=${item?.serviceSubCategory?.name}&logo=${item?.serviceSubCategory?.logo}&service=${item?.serviceSubCategory?.serviceCategory?.name}`
+                  `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}`
                 )
               }
             />
@@ -68,7 +61,12 @@ export default function CustomCarousel({ data }: { data: any }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", paddingHorizontal: 16 },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    marginTop: 8,
+  },
 
   image: {
     width: width,
@@ -111,5 +109,10 @@ const styles = StyleSheet.create({
     bottom: 8,
     left: 8,
     position: "absolute",
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 10,
   },
 });
