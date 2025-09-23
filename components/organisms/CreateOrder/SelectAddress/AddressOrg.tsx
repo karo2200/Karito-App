@@ -18,7 +18,7 @@ export default function AddressOrg(props: any) {
         <AddressList
           setValue={props?.setValue}
           onChange={(item: any) => {
-            props?.setValue("addressLabel", item?.label);
+            props?.setValue("addressLabel", item?.text);
           }}
         />
       ) : (

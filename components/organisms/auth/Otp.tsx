@@ -38,7 +38,7 @@ const OTPSection = () => {
   } = useOtpHook();
 
   const [isTimerActive, setIsTimerActive] = useState(true);
-  const [secondsLeft, setSecondsLeft] = useState(5);
+  const [secondsLeft, setSecondsLeft] = useState(120);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

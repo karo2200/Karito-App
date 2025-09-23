@@ -65,7 +65,9 @@ const PersonalInfo = () => {
       setValue("profilePhoto", profileData?.profileImageUrl as string),
       setValue(
         "code",
-        nationalCode?.length > 0 ? nationalCode : profileData?.nationalCode
+        nationalCode?.length > 0
+          ? nationalCode.toString()
+          : profileData?.nationalCode?.toString()
       ));
   }, [nationalCode, profileData]);
 
