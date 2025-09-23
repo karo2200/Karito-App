@@ -40,7 +40,7 @@ export default function useMissionsHook() {
     where: {
       and: [
         { status: { neq: ServiceRequestStatus.Paid } },
-        { status: { neq: ServiceRequestStatus.Cancelled } },
+        { status: { neq: ServiceRequestStatus.CancelledBySpecialist } },
       ],
     },
     order: [{ requestDate: SortEnumType.Desc }],

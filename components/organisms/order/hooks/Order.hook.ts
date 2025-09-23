@@ -42,7 +42,7 @@ export default function useOrderHook() {
   } = useGetServiceRequestsQuery({
     where: {
       and: [
-        { status: { neq: ServiceRequestStatus.Cancelled } },
+        { status: { neq: ServiceRequestStatus.CancelledByCustomer } },
         { status: { neq: ServiceRequestStatus.Paid } },
       ],
     },
@@ -69,7 +69,7 @@ export default function useOrderHook() {
     fetchNextPage: cancelledFetchNextPage,
     isLoading: canceledLoading,
   } = useGetServiceRequestsQuery({
-    where: { status: { eq: ServiceRequestStatus.Cancelled } },
+    where: { status: { eq: ServiceRequestStatus.CancelledByCustomer } },
     order: [{ requestDate: SortEnumType.Desc }],
   });
 
