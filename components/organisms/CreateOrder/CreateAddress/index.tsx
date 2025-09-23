@@ -1,8 +1,9 @@
-import { Divider, ThemedButton, ThemedText } from "@/components";
+import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { Colors } from "@/constants/Colors";
+import { DeviceHeight } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useAddress_CreateMutation,
@@ -137,67 +138,75 @@ export default function AddressMap() {
 
   return (
     <ScrollView style={styles.container}>
-      <FormProvider {...methods}>
-        {editItem && (
-          <Breadcrumb
-            items={[
-              { label: "مدیریت آدرس‌ها", href: "/(tabs)/profile/address" },
-              { label: "تغییر آدرس" },
-            ]}
-          />
-        )}
-        <ThemedText fontType="bold" style={{ marginTop: editItem ? 0 : 16 }}>
-          آدرس خود را مشخص کنید:
-        </ThemedText>
-        <Divider height={24} />
-        <View style={styles.dropdownContainer}>
-          <DropDownPicker
-            {...register("area")}
-            title="محله"
-            data={neighborHoods}
-            width={"100%"}
-            titleKey="name"
-            valueKey="id"
-            arrowBGColor={Colors.background}
-            arrowColor={Colors.gray500}
-            titleStyle={{ type: "subtitle" }}
-            containerViewStyle={{
-              width: "100%",
-              borderRadius: 6,
-              borderColor: Colors.disabledIcon,
-            }}
-            arrowSize={16}
-          />
-        </View>
+      <ThemedView style={styles.flex1}>
+        <FormProvider {...methods}>
+          {editItem && (
+            <Breadcrumb
+              items={[
+                { label: "مدیریت آدرس‌ها", href: "/(tabs)/profile/address" },
+                { label: "تغییر آدرس" },
+              ]}
+            />
+          )}
+          <ThemedText fontType="bold" style={{ marginTop: editItem ? 0 : 16 }}>
+            آدرس خود را مشخص کنید:
+          </ThemedText>
+          <Divider height={24} />
+          <View style={styles.dropdownContainer}>
+            <DropDownPicker
+              {...register("area")}
+              title="محله"
+              data={neighborHoods}
+              width={"100%"}
+              titleKey="name"
+              valueKey="id"
+              arrowBGColor={Colors.background}
+              arrowColor={Colors.gray500}
+              titleStyle={{ type: "subtitle" }}
+              containerViewStyle={{
+                width: "100%",
+                borderRadius: 6,
+                borderColor: Colors.disabledIcon,
+              }}
+              arrowSize={16}
+            />
+          </View>
 
-        <ThemedInput
-          placeholder="آدرس شما"
-          name="address"
-          textArea
-          label="نشانی دقیق"
-          labelStyle="sm"
-        />
-        <Divider height={24} />
-        <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
-        <Divider height={16} />
-        <MapView onLocationSelected={onLocationSelected} />
-        <ThemedButton
-          title="ذخیره"
-          onPress={handleSubmit(onPress)}
-          isLoading={isPending || isUpdating}
-          style={styles.button}
-        />
-      </FormProvider>
+          <ThemedInput
+            placeholder="آدرس شما"
+            name="address"
+            textArea
+            label="نشانی دقیق"
+            labelStyle="sm"
+          />
+          <Divider height={24} />
+          <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
+          <Divider height={16} />
+          <ThemedView style={styles.mapView}>
+            <MapView onLocationSelected={onLocationSelected} />
+          </ThemedView>
+          <ThemedButton
+            title="ذخیره"
+            onPress={handleSubmit(onPress)}
+            isLoading={isPending || isUpdating}
+            style={styles.button}
+          />
+        </FormProvider>
+      </ThemedView>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
+  container: { flexGrow: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
+
+  flex1: { flex: 1 },
+
+  mapView: { height: DeviceHeight * 0.35 },
 
   dropdownContainer: {
     marginBottom: 12,
   },
 
-  button: { position: "absolute", bottom: 10 },
+  button: { marginTop: 18, marginBottom: 50 },
 });

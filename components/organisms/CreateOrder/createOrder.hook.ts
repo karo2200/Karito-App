@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import { router } from "expo-router";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGetServiceTypeQuestionsQuery } from "./hooks";
@@ -177,6 +178,7 @@ export default function useCreateOrder() {
     } else setStage((prev) => prev + 1);
   };
   const onBackPress = () => {
+    if (stage === 0) router.back();
     if (stage > 0) setStage((prev) => prev - 1);
   };
 
