@@ -44,6 +44,8 @@ export default function useOtpHook() {
             setIsExpert(false);
             setIsLoggedIn(true);
             router?.replace("/(tabs)/home");
+          } else {
+            toast.showToast({ message: data?.auth_verifyOtp?.status?.message });
           }
         },
         onError: (error) => {
@@ -70,6 +72,8 @@ export default function useOtpHook() {
 
             router.push(`/ExpertRegisterPage?phone=${phoneNumber}`);
             setIsExpert(true);
+          } else {
+            toast.showToast({ message: data?.auth_verifyOtp?.status?.message });
           }
         },
       }

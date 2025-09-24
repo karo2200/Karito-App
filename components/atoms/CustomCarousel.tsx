@@ -27,7 +27,7 @@ export default function CustomCarousel({ data }: { data: any }) {
       <Carousel
         loop
         width={width - 32}
-        height={200}
+        height={241}
         autoPlay
         autoPlayInterval={3000}
         data={data?.serviceTypes}
@@ -90,9 +90,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: width,
-    height: 200,
-    borderRadius: 12,
+    width: "100%",
+    height: 240,
+    borderRadius: 8,
   },
 
   dotsContainer: {
