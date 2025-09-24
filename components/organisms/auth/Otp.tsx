@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
@@ -10,15 +10,11 @@ import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import useOtpHook from "./hooks/otp.hook";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
+import Timer from "./views/Timer";
 
 const schema = yup.object().shape({
   otpCode: yup
@@ -38,23 +34,6 @@ const OTPSection = () => {
     onEditNumber,
   } = useOtpHook();
 
-  const [isTimerActive, setIsTimerActive] = useState(true);
-  const [secondsLeft, setSecondsLeft] = useState(120);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (isTimerActive && secondsLeft > 0) {
-      interval = setInterval(() => {
-        setSecondsLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (secondsLeft === 0) {
-      setIsTimerActive(false);
-    }
-
-    return () => clearInterval(interval);
-  }, [isTimerActive, secondsLeft]);
-
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -63,16 +42,9 @@ const OTPSection = () => {
   const {
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors },
   } = methods;
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, "0");
-    const secs = (seconds % 60).toString().padStart(2, "0");
-    return `${mins}:${secs}`;
-  };
 
   return (
     <KeyboardAutoHide>
@@ -91,21 +63,11 @@ const OTPSection = () => {
               <ThemedCodeFeild length={4} name="otpCode" />
             </ThemedView>
             <ThemedView style={styles.absolute}>
-              {isTimerActive ? (
-                <ThemedText
-                  style={styles.timerTxt}
-                >{`${formatTime(secondsLeft)}`}</ThemedText>
-              ) : (
-                <>
-                  {isSendingCode ? (
-                    <ActivityIndicator size="small" />
-                  ) : (
-                    <TouchableOpacity onPress={() => onSendOtp()}>
-                      <ThemedText style={styles.retryTxt}>تلاش مجدد</ThemedText>
-                    </TouchableOpacity>
-                  )}
-                </>
-              )}
+              <Timer
+                onSendOtp={onSendOtp}
+                isSendingCode={isSendingCode}
+                continueFunc={() => setValue("otpCode", "")}
+              />
               <ThemedText
                 fontType="bold"
                 onPress={onEditNumber}
@@ -166,14 +128,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  timerTxt: { color: Colors.darkGray, textAlign: "center" },
-
-  retryTxt: {
-    color: Colors.hint500,
-    textAlign: "center",
-    textDecorationLine: "underline",
   },
 
   absolute: {

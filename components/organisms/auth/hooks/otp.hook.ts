@@ -7,11 +7,14 @@ import {
 import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import { useRef } from "react";
 
 export default function useOtpHook() {
   const { mutate, isPending: isVerifying } = useAuth_VerifyOtpMutation();
   const { mutate: requestOtpMutate, isPending: isSendingCode } =
     useAuth_RequestOtpMutation();
+
+  const timerRef = useRef<any>(null);
 
   const toast = useToast();
   const router = useRouter();
@@ -74,11 +77,11 @@ export default function useOtpHook() {
   };
 
   const onSendOtp = (continueFunc?: () => void) => {
-    console.log("ss");
     requestOtpMutate(
       { input: { phoneNumber, userType: UserType.Customer } },
       {
         onSuccess: (data) => {
+          console.log(JSON.stringify({ data }));
           if (data?.auth_requestOtp?.status?.code === 1) {
             continueFunc?.();
           } else {
@@ -86,6 +89,29 @@ export default function useOtpHook() {
           }
         },
         onError: (errorData: any) => {
+          console.log(JSON.stringify({ errorData }));
+          toast.showToast({
+            message: "خطایی پیش آمده است. لطفا بعدا تلاش کنید",
+          });
+        },
+      }
+    );
+  };
+
+  const onSendExpertOtp = (continueFunc?: () => void) => {
+    requestOtpMutate(
+      { input: { phoneNumber, userType: UserType.Specialist } },
+      {
+        onSuccess: (data) => {
+          console.log(JSON.stringify({ data }), "***");
+          if (data?.auth_requestOtp?.status?.code === 1) {
+            continueFunc?.();
+          } else {
+            toast.showToast({ message: data?.auth_requestOtp?.status?.value });
+          }
+        },
+        onError: (errorData: any) => {
+          console.log("---", JSON.stringify({ errorData }));
           toast.showToast({
             message: "خطایی پیش آمده است. لطفا بعدا تلاش کنید",
           });
@@ -105,8 +131,10 @@ export default function useOtpHook() {
     onDoExpertLogin,
     onDoLogin,
     onSendOtp,
+    onSendExpertOtp,
     router,
 
     onEditNumber,
+    timerRef,
   };
 }
