@@ -1724,12 +1724,12 @@ export type Query = {
   serviceCategory_getById: ResponseBaseOfServiceCategoryDto;
   serviceRequest_getAll: ListResponseBaseOfServiceRequestDto;
   serviceRequest_getAvailableRequests: ListResponseBaseOfAvailableServiceRequestDto;
-  serviceRequest_getById: ResponseBaseOfServiceRequestDto;
+  serviceRequest_getById: SingleResponseBaseOfServiceRequestDto;
   serviceRequest_getMyAcceptances: ListResponseBaseOfServiceRequestDto;
   serviceRequest_getMyRequests: ListResponseBaseOfServiceRequestDto;
   serviceSubCategory_getAll: ListResponseBaseOfServiceSubCategoryDto;
   serviceSubCategory_getById: ResponseBaseOfServiceSubCategoryDto;
-  serviceTypeQuestion_getById: ResponseBaseOfServiceTypeQuestionDto;
+  serviceTypeQuestion_getById: SingleResponseBaseOfServiceTypeQuestionDto;
   serviceTypeQuestion_getByServiceType: ListResponseBaseOfServiceTypeQuestionDto;
   serviceType_getById: ResponseBaseOfServiceTypeDto;
   serviceTypes_getAll: ListResponseBaseOfServiceTypeDto;
@@ -2296,6 +2296,7 @@ export type ServiceTypeQuestionDto = {
   id: Scalars["UUID"]["output"];
   options: Array<Scalars["String"]["output"]>;
   questionType: QuestionType;
+  serviceType: ServiceTypeDto;
   text: Scalars["String"]["output"];
 };
 
@@ -2315,12 +2316,14 @@ export type ServiceTypeQuestionDtoFilterInput = {
   options?: InputMaybe<ListStringOperationFilterInput>;
   or?: InputMaybe<Array<ServiceTypeQuestionDtoFilterInput>>;
   questionType?: InputMaybe<QuestionTypeOperationFilterInput>;
+  serviceType?: InputMaybe<ServiceTypeDtoFilterInput>;
   text?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type ServiceTypeQuestionDtoSortInput = {
   id?: InputMaybe<SortEnumType>;
   questionType?: InputMaybe<SortEnumType>;
+  serviceType?: InputMaybe<ServiceTypeDtoSortInput>;
   text?: InputMaybe<SortEnumType>;
 };
 
@@ -2357,6 +2360,18 @@ export type SetPrimaryAddressInput = {
 export type SetUserBlockStateInput = {
   isBlocked: Scalars["Boolean"]["input"];
   userId: Scalars["UUID"]["input"];
+};
+
+export type SingleResponseBaseOfServiceRequestDto = {
+  __typename?: "SingleResponseBaseOfServiceRequestDto";
+  result?: Maybe<ServiceRequestDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type SingleResponseBaseOfServiceTypeQuestionDto = {
+  __typename?: "SingleResponseBaseOfServiceTypeQuestionDto";
+  result?: Maybe<ServiceTypeQuestionDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
 };
 
 export enum SortEnumType {
@@ -3127,7 +3142,7 @@ export type ServiceRequest_GetByIdQueryVariables = Exact<{
 export type ServiceRequest_GetByIdQuery = {
   __typename?: "Query";
   serviceRequest_getById: {
-    __typename?: "ResponseBaseOfServiceRequestDto";
+    __typename?: "SingleResponseBaseOfServiceRequestDto";
     status?: any | null;
     result?: {
       __typename?: "ServiceRequestDto";

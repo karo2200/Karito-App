@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
@@ -10,14 +10,10 @@ import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import useOtpHook from "./hooks/otp.hook";
 import Footer from "./views/Footer";
+import Timer from "./views/Timer";
 
 const schema = yup.object().shape({
   otpCode: yup
@@ -32,26 +28,9 @@ const ExpertOTPSection = () => {
     onDoExpertLogin,
     phoneNumber,
     isSendingCode,
-    onSendOtp,
+    onSendExpertOtp,
     onEditNumber,
   } = useOtpHook();
-
-  const [isTimerActive, setIsTimerActive] = useState(true);
-  const [secondsLeft, setSecondsLeft] = useState(120);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (isTimerActive && secondsLeft > 0) {
-      interval = setInterval(() => {
-        setSecondsLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (secondsLeft === 0) {
-      setIsTimerActive(false);
-    }
-
-    return () => clearInterval(interval);
-  }, [isTimerActive, secondsLeft]);
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
@@ -61,16 +40,9 @@ const ExpertOTPSection = () => {
   const {
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors },
   } = methods;
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-      .toString()
-      .padStart(2, "0");
-    const secs = (seconds % 60).toString().padStart(2, "0");
-    return `${mins}:${secs}`;
-  };
 
   return (
     <Fragment>
@@ -85,23 +57,11 @@ const ExpertOTPSection = () => {
                 <ThemedCodeFeild length={4} name="otpCode" />
               </ThemedView>
               <ThemedView style={styles.absolute}>
-                {isTimerActive ? (
-                  <ThemedText
-                    style={styles.timerTxt}
-                  >{`${formatTime(secondsLeft)}`}</ThemedText>
-                ) : (
-                  <>
-                    {isSendingCode ? (
-                      <ActivityIndicator size="small" />
-                    ) : (
-                      <TouchableOpacity onPress={() => onSendOtp()}>
-                        <ThemedText style={styles.retryTxt}>
-                          تلاش مجدد
-                        </ThemedText>
-                      </TouchableOpacity>
-                    )}
-                  </>
-                )}
+                <Timer
+                  onSendOtp={onSendExpertOtp}
+                  isSendingCode={isSendingCode}
+                  continueFunc={() => setValue("otpCode", "")}
+                />
                 <ThemedText
                   fontType="bold"
                   onPress={onEditNumber}
