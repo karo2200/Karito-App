@@ -45,6 +45,7 @@ export default function Banner() {
         <CustomImage
           localSource={require("@/assets/images/Home-Banner.png")}
           style={styles.image}
+          resizeMode="fill"
         />
       )}
       <View style={styles.inputContainer}>

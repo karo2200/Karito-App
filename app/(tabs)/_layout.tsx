@@ -73,7 +73,6 @@ export default function RootLayout() {
             headerShown: true,
             title: "",
             headerRight: () => <RightIcon />,
-            tabBarSafeAreaInset: { bottom: "never" },
             tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBarStyle,
             tabBarActiveTintColor: Colors.hint500,
             tabBarInactiveTintColor: Colors.mediumGray,
@@ -145,7 +144,7 @@ const styles = StyleSheet.create({
   tabBarStyle: {
     backgroundColor: "white",
     borderTopWidth: 0,
-    minHeight: 90,
+    minHeight: 94,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     shadowColor: "#000",

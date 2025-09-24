@@ -43,9 +43,6 @@ mutation specialist_setLocationAndSpecialty(
   $input: SetLocationAndSpecialtyInput!
 ) {
   specialist_setLocationAndSpecialty(input: $input) {
-    result {
-      id
-    }
     status
   }
 }

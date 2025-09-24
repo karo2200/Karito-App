@@ -23,6 +23,7 @@ import AuthHeader from "./views/Header";
 const schema = yup.object().shape({
   otpCode: yup
     .string()
+    .matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید")
     .length(4, "کد چهار رقمی را وارد کنید")
     .required("لطفا کد دریافت شده را وارد کنید"),
 });

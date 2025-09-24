@@ -29,7 +29,7 @@ const schema = yup.object().shape({
     .length(10, "کد ملی بدرستی وارد نشده است")
     .required("لطفا کد ملی خود را وارد کنید"),
   codeImage: yup.string().required(""),
-  year: yup.string(),
+  year: yup.string().matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید"),
   month: yup.string(),
   day: yup.string(),
   profilePhoto: yup.string(),

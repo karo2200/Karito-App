@@ -6,9 +6,9 @@ export function parseDate(dateString: string) {
   const m = moment(dateString, "YYYY-MM-DDTHH:mm:ssZ");
 
   return {
-    year: m.year().toString(),
-    month: (m.month() + 1).toString(),
-    day: m.date().toString(),
+    year: m.jYear().toString(),
+    month: (m.jMonth() + 1).toString(),
+    day: m.jDate().toString(),
   };
 }
 

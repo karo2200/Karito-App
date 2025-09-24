@@ -1165,10 +1165,10 @@ export type MarkServiceRequestSettledInput = {
 
 export type Mutation = {
   __typename?: "Mutation";
-  address_create: ResponseBaseOfAddressDto;
+  address_create: SingleResponseBaseOfAddressDto;
   address_delete: ResponseBase;
-  address_setPrimary: ResponseBaseOfAddressDto;
-  address_update: ResponseBaseOfAddressDto;
+  address_setPrimary: ResponseBase;
+  address_update: SingleResponseBaseOfAddressDto;
   /** Allows an owner to create a new admin user. */
   admin_create: ResponseBase;
   auth_refreshToken: ResponseBaseOfAuthResult;
@@ -1227,7 +1227,7 @@ export type Mutation = {
   serviceType_create: ResponseBaseOfServiceTypeDto;
   serviceType_delete: ResponseBase;
   serviceType_update: ResponseBaseOfServiceTypeDto;
-  specialist_setLocationAndSpecialty: ResponseBaseOfSpecialistProfileDto;
+  specialist_setLocationAndSpecialty: ResponseBase;
   specialist_setPersonalInformation: ResponseBaseOfSpecialistProfileDto;
   specialist_updateIdentityVerificationVideo: ResponseBase;
   specialist_updateSpecializedDocuments: ResponseBase;
@@ -1724,12 +1724,12 @@ export type Query = {
   serviceCategory_getById: ResponseBaseOfServiceCategoryDto;
   serviceRequest_getAll: ListResponseBaseOfServiceRequestDto;
   serviceRequest_getAvailableRequests: ListResponseBaseOfAvailableServiceRequestDto;
-  serviceRequest_getById: ResponseBaseOfServiceRequestDto;
+  serviceRequest_getById: SingleResponseBaseOfServiceRequestDto;
   serviceRequest_getMyAcceptances: ListResponseBaseOfServiceRequestDto;
   serviceRequest_getMyRequests: ListResponseBaseOfServiceRequestDto;
   serviceSubCategory_getAll: ListResponseBaseOfServiceSubCategoryDto;
   serviceSubCategory_getById: ResponseBaseOfServiceSubCategoryDto;
-  serviceTypeQuestion_getById: ResponseBaseOfServiceTypeQuestionDto;
+  serviceTypeQuestion_getById: SingleResponseBaseOfServiceTypeQuestionDto;
   serviceTypeQuestion_getByServiceType: ListResponseBaseOfServiceTypeQuestionDto;
   serviceType_getById: ResponseBaseOfServiceTypeDto;
   serviceTypes_getAll: ListResponseBaseOfServiceTypeDto;
@@ -2296,6 +2296,7 @@ export type ServiceTypeQuestionDto = {
   id: Scalars["UUID"]["output"];
   options: Array<Scalars["String"]["output"]>;
   questionType: QuestionType;
+  serviceType: ServiceTypeDto;
   text: Scalars["String"]["output"];
 };
 
@@ -2315,12 +2316,14 @@ export type ServiceTypeQuestionDtoFilterInput = {
   options?: InputMaybe<ListStringOperationFilterInput>;
   or?: InputMaybe<Array<ServiceTypeQuestionDtoFilterInput>>;
   questionType?: InputMaybe<QuestionTypeOperationFilterInput>;
+  serviceType?: InputMaybe<ServiceTypeDtoFilterInput>;
   text?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type ServiceTypeQuestionDtoSortInput = {
   id?: InputMaybe<SortEnumType>;
   questionType?: InputMaybe<SortEnumType>;
+  serviceType?: InputMaybe<ServiceTypeDtoSortInput>;
   text?: InputMaybe<SortEnumType>;
 };
 
@@ -2357,6 +2360,24 @@ export type SetPrimaryAddressInput = {
 export type SetUserBlockStateInput = {
   isBlocked: Scalars["Boolean"]["input"];
   userId: Scalars["UUID"]["input"];
+};
+
+export type SingleResponseBaseOfAddressDto = {
+  __typename?: "SingleResponseBaseOfAddressDto";
+  result?: Maybe<AddressDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type SingleResponseBaseOfServiceRequestDto = {
+  __typename?: "SingleResponseBaseOfServiceRequestDto";
+  result?: Maybe<ServiceRequestDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type SingleResponseBaseOfServiceTypeQuestionDto = {
+  __typename?: "SingleResponseBaseOfServiceTypeQuestionDto";
+  result?: Maybe<ServiceTypeQuestionDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
 };
 
 export enum SortEnumType {
@@ -2681,7 +2702,7 @@ export type Address_CreateMutationVariables = Exact<{
 export type Address_CreateMutation = {
   __typename?: "Mutation";
   address_create: {
-    __typename?: "ResponseBaseOfAddressDto";
+    __typename?: "SingleResponseBaseOfAddressDto";
     status?: any | null;
   };
 };
@@ -2693,7 +2714,7 @@ export type Address_UpdateMutationVariables = Exact<{
 export type Address_UpdateMutation = {
   __typename?: "Mutation";
   address_update: {
-    __typename?: "ResponseBaseOfAddressDto";
+    __typename?: "SingleResponseBaseOfAddressDto";
     status?: any | null;
   };
 };
@@ -3127,7 +3148,7 @@ export type ServiceRequest_GetByIdQueryVariables = Exact<{
 export type ServiceRequest_GetByIdQuery = {
   __typename?: "Query";
   serviceRequest_getById: {
-    __typename?: "ResponseBaseOfServiceRequestDto";
+    __typename?: "SingleResponseBaseOfServiceRequestDto";
     status?: any | null;
     result?: {
       __typename?: "ServiceRequestDto";
@@ -3673,9 +3694,8 @@ export type Specialist_SetLocationAndSpecialtyMutationVariables = Exact<{
 export type Specialist_SetLocationAndSpecialtyMutation = {
   __typename?: "Mutation";
   specialist_setLocationAndSpecialty: {
-    __typename?: "ResponseBaseOfSpecialistProfileDto";
+    __typename?: "ResponseBase";
     status?: any | null;
-    result?: { __typename?: "SpecialistProfileDto"; id: any } | null;
   };
 };
 
@@ -3697,10 +3717,7 @@ export type Address_SetPrimaryMutationVariables = Exact<{
 
 export type Address_SetPrimaryMutation = {
   __typename?: "Mutation";
-  address_setPrimary: {
-    __typename?: "ResponseBaseOfAddressDto";
-    status?: any | null;
-  };
+  address_setPrimary: { __typename?: "ResponseBase"; status?: any | null };
 };
 
 export type User_GetMyProfileQueryVariables = Exact<{ [key: string]: never }>;
@@ -6393,9 +6410,6 @@ export const useSpecialist_SetPersonalInformationMutation = <
 export const Specialist_SetLocationAndSpecialtyDocument = `
     mutation specialist_setLocationAndSpecialty($input: SetLocationAndSpecialtyInput!) {
   specialist_setLocationAndSpecialty(input: $input) {
-    result {
-      id
-    }
     status
   }
 }
