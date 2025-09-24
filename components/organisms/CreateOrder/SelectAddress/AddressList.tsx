@@ -58,6 +58,7 @@ export default function AddressList({
             checked={isChecked}
             label={item?.text}
             onPress={() => {
+              field.onChange(item.id);
               onChange?.(item);
             }}
           />
