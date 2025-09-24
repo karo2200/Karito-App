@@ -68,7 +68,7 @@ export default function RootLayout() {
               headerShown: true,
               title: "",
               headerRight: () => <RightIcon />,
-              tabBarSafeAreaInset: { bottom: "never" },
+              tabBarSafeAreaInset: { bottom: "always" },
               tabBarStyle: hideTabBar
                 ? { display: "none" }
                 : styles.tabBarStyle,
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 5 },
     shadowRadius: 10,
     elevation: 5,
+    paddingBottom: 5,
   },
 
   tabBarLabelStyle: {
