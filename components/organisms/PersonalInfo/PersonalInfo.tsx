@@ -59,9 +59,18 @@ const PersonalInfo = () => {
     (setValue("name", profileData?.firstName as string),
       setValue("family", profileData?.lastName as string),
       setValue("codeImage", profileData?.idCardImageUrl as string),
-      setValue("year", parseDate(profileData?.birthDate)?.year),
-      setValue("day", parseDate(profileData?.birthDate)?.day),
-      setValue("month", parseDate(profileData?.birthDate)?.month),
+      setValue(
+        "year",
+        profileData?.birthDate ? parseDate(profileData?.birthDate)?.year : ""
+      ),
+      setValue(
+        "day",
+        profileData?.birthDate ? parseDate(profileData?.birthDate)?.day : "1"
+      ),
+      setValue(
+        "month",
+        profileData?.birthDate ? parseDate(profileData?.birthDate)?.month : "1"
+      ),
       setValue("profilePhoto", profileData?.profileImageUrl as string),
       setValue(
         "code",
