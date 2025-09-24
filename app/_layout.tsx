@@ -7,6 +7,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { I18nManager } from "react-native";
 import { SheetProvider } from "react-native-actions-sheet";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../sheets.tsx";
@@ -24,6 +25,10 @@ export default function RootLayout() {
   const { isConnected, type, ip } = useNetworkStatus();
 
   useEffect(() => {
+    if (!I18nManager.isRTL) {
+      I18nManager.allowRTL(false);
+      I18nManager.forceRTL(false);
+    }
     if (loaded) {
       SplashScreen.hide();
     }

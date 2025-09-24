@@ -140,7 +140,7 @@ export default function AddressMap() {
     <ScrollView style={styles.container}>
       <ThemedView style={styles.flex1}>
         <FormProvider {...methods}>
-          {editItem && (
+          {editItem?.id && (
             <Breadcrumb
               items={[
                 { label: "مدیریت آدرس‌ها", href: "/(tabs)/profile/address" },

@@ -17,6 +17,8 @@ const schema = yup.object().shape({
     .required("لطفا شماره موبایل خود را وارد کنید"),
   code: yup
     .string()
+    .matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید")
+    .length(4, "کد چهار رقمی را وارد کنید")
     .length(10, "کد ملی بدرستی وارد نشده است")
     .required("لطفا کد ملی خود را وارد کنید"),
 });
@@ -62,7 +64,7 @@ const NationalCodeStep = ({
           <ThemedInput
             label="کد ملی *"
             {...register("code")}
-            placeholder="۰۹۱۲۳۴۵۶۷۸"
+            placeholder="0000000000"
             keyboardType="numeric"
             maxLength={10}
             forcePersianNumbers

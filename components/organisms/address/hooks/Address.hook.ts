@@ -32,8 +32,6 @@ export default function useAddressHook() {
       },
       {
         onSuccess: (data) => {
-          console.log("dddd", data);
-
           if (data?.address_setPrimary?.status?.code === 1) {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.address_getMyAddresses],
