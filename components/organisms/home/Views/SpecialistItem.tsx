@@ -18,7 +18,11 @@ export default function SpecialistItem({
       activeOpacity={1}
       onPress={onItemPress}
     >
-      <CustomImage style={styles.image} src={item?.profileImageUrl} />
+      <CustomImage
+        style={styles.image}
+        src={item?.profileImageUrl}
+        resizeMode="cover"
+      />
       <ThemedText style={styles.title} numberOfLines={2}>
         {item?.firstName} {item?.lastName}
         {"\n"}({item?.serviceSubCategory?.name})
