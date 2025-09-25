@@ -55,6 +55,10 @@ export default function OrderDetailScreen() {
     pageType,
   } = useOrderDetailHook();
 
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
   return (
     <ThemedContainer style={{ paddingHorizontal: 15 }}>
       <ScrollView

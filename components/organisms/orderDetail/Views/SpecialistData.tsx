@@ -48,6 +48,7 @@ const SpecialistData = () => {
         <CustomImage
           src={serviceData?.specialist?.profileImageUrl}
           style={styles.image2}
+          resizeMode="cover"
         />
       </View>
       <ActionSheet
