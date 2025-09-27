@@ -175,42 +175,45 @@ export default function OrderDetailScreen() {
           </ThemedText>
         </View>
 
-        {!isExpert && (
-          <View
-            style={[
-              styles.rowView2,
-              serviceData?.status ===
-                ServiceRequestStatus.AcceptedBySpecialist && {
-                paddingRight: 0,
-              },
-            ]}
-          >
-            {serviceData?.status !== ServiceRequestStatus.PendingPayment &&
-            serviceData?.status !== ServiceRequestStatus.Paid ? (
-              <Pressable onPress={() => setCancelRequestVisible(true)}>
-                {cancelWorkPending ? (
-                  <ActivityIndicator />
-                ) : (
-                  <ThemedText style={{ color: Colors.darkError }}>
-                    لغو سفارش
-                  </ThemedText>
-                )}
-              </Pressable>
-            ) : (
-              <View />
-            )}
+        {!isExpert &&
+          serviceData?.status !== ServiceRequestStatus.CancelledByCustomer && (
+            <View
+              style={[
+                styles.rowView2,
+                serviceData?.status ===
+                  ServiceRequestStatus.AcceptedBySpecialist && {
+                  paddingRight: 0,
+                },
+              ]}
+            >
+              {serviceData?.status !== ServiceRequestStatus.PendingPayment &&
+              serviceData?.status !== ServiceRequestStatus.Paid ? (
+                <Pressable onPress={() => setCancelRequestVisible(true)}>
+                  {cancelWorkPending ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <ThemedText style={{ color: Colors.darkError }}>
+                      لغو سفارش
+                    </ThemedText>
+                  )}
+                </Pressable>
+              ) : (
+                <View />
+              )}
 
-            {serviceData?.status !== ServiceRequestStatus.Pending ? (
-              <SpecialistData />
-            ) : (
-              serviceData?.status === ServiceRequestStatus.Pending && (
-                <ThemedText fontType="bold" style={{ color: "black" }}>
-                  در انتظار تایید متخصص...
-                </ThemedText>
-              )
-            )}
-          </View>
-        )}
+              {serviceData?.status !== ServiceRequestStatus.Pending &&
+              serviceData?.status !==
+                ServiceRequestStatus?.CancelledByCustomer ? (
+                <SpecialistData />
+              ) : (
+                serviceData?.status === ServiceRequestStatus.Pending && (
+                  <ThemedText fontType="bold" style={{ color: "black" }}>
+                    در انتظار تایید متخصص...
+                  </ThemedText>
+                )
+              )}
+            </View>
+          )}
         <Divider height={16} />
         <ThemedText fontType="bold" style={{ color: "black" }}>
           جزئیات
