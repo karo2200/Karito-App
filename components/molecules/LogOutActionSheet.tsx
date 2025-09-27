@@ -32,7 +32,11 @@ export default function LogOutActionSheet({
   };
 
   return (
-    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
+    <ActionSheet
+      ref={actionSheetRef}
+      containerStyle={styles.container}
+      onClose={closeActionSheet}
+    >
       <View style={styles.header}>
         <Ionicons
           name="close"
