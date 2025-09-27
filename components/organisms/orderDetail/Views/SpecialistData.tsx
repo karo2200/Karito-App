@@ -78,6 +78,7 @@ const SpecialistData = () => {
           <CustomImage
             style={styles.image}
             src={serviceData?.specialist?.profileImageUrl}
+            resizeMode="cover"
           />
           <StarRating onChange={(r) => setRate(r)} />
           <ThemedButton

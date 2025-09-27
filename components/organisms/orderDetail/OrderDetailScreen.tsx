@@ -201,7 +201,9 @@ export default function OrderDetailScreen() {
               <View />
             )}
 
-            {serviceData?.status !== ServiceRequestStatus.Pending ? (
+            {serviceData?.status !== ServiceRequestStatus.Pending &&
+            serviceData?.status !==
+              ServiceRequestStatus?.CancelledByCustomer ? (
               <SpecialistData />
             ) : (
               serviceData?.status === ServiceRequestStatus.Pending && (
