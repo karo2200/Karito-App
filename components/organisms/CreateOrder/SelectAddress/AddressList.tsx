@@ -1,18 +1,12 @@
-import {
-  CustomFlatList,
-  Divider,
-  ThemedButton,
-  ThemedView,
-} from "@/components";
+import { CustomFlatList, ThemedButton, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { Edit } from "iconsax-react-native";
 
-import CustomRadioButton from "@/components/atoms/CustomRadioButton";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { useController } from "react-hook-form";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
+import ListItem from "./ListItem";
 
 export default function AddressList({
   onChange,
@@ -45,30 +39,11 @@ export default function AddressList({
     );
   };
 
-  const renderItem = ({ item, index }) => {
-    const isChecked = field?.value === item?.id;
-
-    return (
-      <ThemedView key={`${index}_${item?.id}`}>
-        <ThemedView style={styles.groupView}>
-          <TouchableOpacity onPress={() => onEditPress?.(item)}>
-            <Edit size={24} color={Colors.gray500} style={styles.editIcon} />
-          </TouchableOpacity>
-          <CustomRadioButton
-            checked={isChecked}
-            label={item?.text}
-            onPress={() => {
-              field.onChange(item.id);
-              onChange?.(item);
-            }}
-          />
-        </ThemedView>
-        {index != (data?.pages ? data?.pages?.length - 1 : 0) && (
-          <Divider height={24} />
-        )}
-      </ThemedView>
-    );
-  };
+  const renderItem = ({ item, index }) => (
+    <ListItem
+      {...{ item, index, field, router, length: data?.pages?.length, onChange }}
+    />
+  );
 
   const onLoadMore = () => {
     if (hasNextPage) fetchNextPage();

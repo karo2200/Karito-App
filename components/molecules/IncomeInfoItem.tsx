@@ -8,6 +8,7 @@ export default function IncomeInfoItem({ item, index }) {
   const paymentDate = dayjs(item?.serviceRequest?.requestDate).format(
     "YYYY/MM/DD - HH:MM"
   );
+  const customer = item?.customer;
 
   return (
     <ThemedView style={styles.container}>
@@ -15,10 +16,12 @@ export default function IncomeInfoItem({ item, index }) {
         <ThemedText style={styles.dateTxt}>{paymentDate}</ThemedText>
         <ThemedText
           style={styles.valueTxt}
-        >{`+${item?.totalAmount ?? 0} ریال`}</ThemedText>
+        >{`+${item?.finalPrice ?? 0} ریال`}</ThemedText>
       </ThemedView>
       <ThemedText style={styles.customerTxt}>
-        {item?.serviceRequest?.customer?.phoneNumber}
+        {customer?.firstName || customer?.lastName
+          ? `${customer?.firstName ?? ""} ${customer?.lastName}`
+          : customer?.phoneNumber}
       </ThemedText>
     </ThemedView>
   );

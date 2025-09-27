@@ -2294,6 +2294,7 @@ export type ServiceTypeDtoSortInput = {
 export type ServiceTypeQuestionDto = {
   __typename?: "ServiceTypeQuestionDto";
   id: Scalars["UUID"]["output"];
+  isRequired: Scalars["Boolean"]["output"];
   options: Array<Scalars["String"]["output"]>;
   questionType: QuestionType;
   serviceType: ServiceTypeDto;
@@ -2313,6 +2314,7 @@ export type ServiceTypeQuestionDtoCollectionSegment = {
 export type ServiceTypeQuestionDtoFilterInput = {
   and?: InputMaybe<Array<ServiceTypeQuestionDtoFilterInput>>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  isRequired?: InputMaybe<BooleanOperationFilterInput>;
   options?: InputMaybe<ListStringOperationFilterInput>;
   or?: InputMaybe<Array<ServiceTypeQuestionDtoFilterInput>>;
   questionType?: InputMaybe<QuestionTypeOperationFilterInput>;
@@ -2322,6 +2324,7 @@ export type ServiceTypeQuestionDtoFilterInput = {
 
 export type ServiceTypeQuestionDtoSortInput = {
   id?: InputMaybe<SortEnumType>;
+  isRequired?: InputMaybe<SortEnumType>;
   questionType?: InputMaybe<SortEnumType>;
   serviceType?: InputMaybe<ServiceTypeDtoSortInput>;
   text?: InputMaybe<SortEnumType>;
@@ -2717,6 +2720,15 @@ export type Address_UpdateMutation = {
     __typename?: "SingleResponseBaseOfAddressDto";
     status?: any | null;
   };
+};
+
+export type Address_DeleteMutationVariables = Exact<{
+  input: DeleteAddressInput;
+}>;
+
+export type Address_DeleteMutation = {
+  __typename?: "Mutation";
+  address_delete: { __typename?: "ResponseBase"; status?: any | null };
 };
 
 export type Auth_RequestOtpMutationVariables = Exact<{
@@ -3133,6 +3145,44 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
   };
 };
 
+export type ServiceRequest_GetMyAcceptancesIncomQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<ServiceRequestDtoFilterInput>;
+  order?: InputMaybe<
+    Array<ServiceRequestDtoSortInput> | ServiceRequestDtoSortInput
+  >;
+}>;
+
+export type ServiceRequest_GetMyAcceptancesIncomQuery = {
+  __typename?: "Query";
+  serviceRequest_getMyAcceptances: {
+    __typename?: "ListResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDtoCollectionSegment";
+      totalCount: number;
+      items?: Array<{
+        __typename?: "ServiceRequestDto";
+        finalPrice: any;
+        paidAt?: any | null;
+        id: any;
+        customer: {
+          __typename?: "CustomerDto";
+          firstName?: string | null;
+          lastName?: string | null;
+          phoneNumber: string;
+        };
+      }> | null;
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    } | null;
+  };
+};
+
 export type ServiceRequest_GetByIdQueryVariables = Exact<{
   input: GetServiceRequestByIdInput;
 }>;
@@ -3259,25 +3309,11 @@ export type Payment_GetMyPaymentsQuery = {
 export type Revenue_GetMyRevenueQueryVariables = Exact<{
   daySD: Scalars["DateTime"]["input"];
   dayED: Scalars["DateTime"]["input"];
-  weekSD: Scalars["DateTime"]["input"];
-  weekED: Scalars["DateTime"]["input"];
-  monthSD: Scalars["DateTime"]["input"];
-  monthED: Scalars["DateTime"]["input"];
 }>;
 
 export type Revenue_GetMyRevenueQuery = {
   __typename?: "Query";
-  day: {
-    __typename?: "ResponseBaseOfSpecialistRevenueDto";
-    status?: any | null;
-    result?: { __typename?: "SpecialistRevenueDto"; totalAmount: any } | null;
-  };
-  week: {
-    __typename?: "ResponseBaseOfSpecialistRevenueDto";
-    status?: any | null;
-    result?: { __typename?: "SpecialistRevenueDto"; totalAmount: any } | null;
-  };
-  month: {
+  revenue_getMyRevenue: {
     __typename?: "ResponseBaseOfSpecialistRevenueDto";
     status?: any | null;
     result?: { __typename?: "SpecialistRevenueDto"; totalAmount: any } | null;
@@ -3985,6 +4021,38 @@ export const useAddress_UpdateMutation = <TError = unknown, TContext = unknown>(
     mutationFn: (variables?: Address_UpdateMutationVariables) =>
       fetcher<Address_UpdateMutation, Address_UpdateMutationVariables>(
         Address_UpdateDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
+
+export const Address_DeleteDocument = `
+    mutation address_delete($input: DeleteAddressInput!) {
+  address_delete(input: $input) {
+    status
+  }
+}
+    `;
+
+export const useAddress_DeleteMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    Address_DeleteMutation,
+    TError,
+    Address_DeleteMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Address_DeleteMutation,
+    TError,
+    Address_DeleteMutationVariables,
+    TContext
+  >({
+    mutationKey: ["address_delete"],
+    mutationFn: (variables?: Address_DeleteMutationVariables) =>
+      fetcher<Address_DeleteMutation, Address_DeleteMutationVariables>(
+        Address_DeleteDocument,
         variables,
       )(),
     ...options,
@@ -4970,6 +5038,106 @@ export const useInfiniteServiceRequest_GetMyAcceptancesQuery = <
   );
 };
 
+export const ServiceRequest_GetMyAcceptancesIncomDocument = `
+    query serviceRequest_getMyAcceptancesIncom($skip: Int, $take: Int, $where: ServiceRequestDtoFilterInput, $order: [ServiceRequestDtoSortInput!]) {
+  serviceRequest_getMyAcceptances {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        finalPrice
+        customer {
+          firstName
+          lastName
+          phoneNumber
+        }
+        paidAt
+        id
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
+    }
+    status
+  }
+}
+    `;
+
+export const useServiceRequest_GetMyAcceptancesIncomQuery = <
+  TData = ServiceRequest_GetMyAcceptancesIncomQuery,
+  TError = unknown,
+>(
+  variables?: ServiceRequest_GetMyAcceptancesIncomQueryVariables,
+  options?: Omit<
+    UseQueryOptions<ServiceRequest_GetMyAcceptancesIncomQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      ServiceRequest_GetMyAcceptancesIncomQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<ServiceRequest_GetMyAcceptancesIncomQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["serviceRequest_getMyAcceptancesIncom"]
+        : ["serviceRequest_getMyAcceptancesIncom", variables],
+    queryFn: fetcher<
+      ServiceRequest_GetMyAcceptancesIncomQuery,
+      ServiceRequest_GetMyAcceptancesIncomQueryVariables
+    >(ServiceRequest_GetMyAcceptancesIncomDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteServiceRequest_GetMyAcceptancesIncomQuery = <
+  TData = InfiniteData<ServiceRequest_GetMyAcceptancesIncomQuery>,
+  TError = unknown,
+>(
+  variables: ServiceRequest_GetMyAcceptancesIncomQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<
+      ServiceRequest_GetMyAcceptancesIncomQuery,
+      TError,
+      TData
+    >,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      ServiceRequest_GetMyAcceptancesIncomQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<
+    ServiceRequest_GetMyAcceptancesIncomQuery,
+    TError,
+    TData
+  >(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["serviceRequest_getMyAcceptancesIncom.infinite"]
+            : ["serviceRequest_getMyAcceptancesIncom.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            ServiceRequest_GetMyAcceptancesIncomQuery,
+            ServiceRequest_GetMyAcceptancesIncomQueryVariables
+          >(ServiceRequest_GetMyAcceptancesIncomDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
 export const ServiceRequest_GetByIdDocument = `
     query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
   serviceRequest_getById(input: $input) {
@@ -5264,20 +5432,8 @@ export const useInfinitePayment_GetMyPaymentsQuery = <
 };
 
 export const Revenue_GetMyRevenueDocument = `
-    query revenue_getMyRevenue($daySD: DateTime!, $dayED: DateTime!, $weekSD: DateTime!, $weekED: DateTime!, $monthSD: DateTime!, $monthED: DateTime!) {
-  day: revenue_getMyRevenue(input: {startDate: $daySD, endDate: $dayED}) {
-    status
-    result {
-      totalAmount
-    }
-  }
-  week: revenue_getMyRevenue(input: {startDate: $weekSD, endDate: $weekED}) {
-    status
-    result {
-      totalAmount
-    }
-  }
-  month: revenue_getMyRevenue(input: {startDate: $monthSD, endDate: $monthED}) {
+    query revenue_getMyRevenue($daySD: DateTime!, $dayED: DateTime!) {
+  revenue_getMyRevenue(input: {startDate: $daySD, endDate: $dayED}) {
     status
     result {
       totalAmount

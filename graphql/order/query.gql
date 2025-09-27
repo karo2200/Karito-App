@@ -104,6 +104,33 @@ query serviceRequest_getMyAcceptances(
     status
   }
 }
+query serviceRequest_getMyAcceptancesIncom(
+  $skip: Int
+  $take: Int
+  $where: ServiceRequestDtoFilterInput
+  $order: [ServiceRequestDtoSortInput!]
+) {
+  serviceRequest_getMyAcceptances {
+    result(skip: $skip, take: $take, where: $where, order: $order) {
+      items {
+        finalPrice
+        customer {
+          firstName
+          lastName
+          phoneNumber
+        }
+        paidAt
+        id
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      totalCount
+    }
+    status
+  }
+}
 
 query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
   serviceRequest_getById(input: $input) {

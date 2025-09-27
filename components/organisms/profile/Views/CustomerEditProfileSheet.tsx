@@ -104,7 +104,7 @@ const CustomerEditProfileSheet = ({
             color={Colors.mediumGray}
             onPress={() => closeActionSheet()}
           />
-          <ThemedText fontType="bold">خروج از حساب کاربری</ThemedText>
+          <ThemedText fontType="bold">ویرایش پروفایل</ThemedText>
         </View>
         <View style={styles.content}>
           <ThemedInput
@@ -114,7 +114,7 @@ const CustomerEditProfileSheet = ({
             maxLength={50}
           />
           <ThemedInput
-            label=" خانوادگی"
+            label=" نام خانوادگی"
             {...register("family")}
             placeholder="نام خانوادگی*"
             maxLength={50}
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 8,
     paddingVertical: 4,
+    marginTop: 16,
   },
 
   title: {

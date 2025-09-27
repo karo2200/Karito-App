@@ -77,6 +77,7 @@ export default function RootLayout() {
             tabBarSafeAreaInset: { bottom: "always" },
             tabBarActiveTintColor: Colors.hint500,
             tabBarInactiveTintColor: Colors.mediumGray,
+            // tabBarAllowFontScaling: true,
             tabBarLabelStyle: styles.tabBarLabelStyle,
             tabBarButton: (props) => (
               <TouchableOpacity
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   tabBarLabelStyle: {
     fontSize: 12,
     fontFamily: FontType.YekanBakhRegular,
-    marginTop: 4,
+    marginVertical: 4,
   },
 
   tabBarIconStyle: {

@@ -1,8 +1,6 @@
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
-import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ThemedInput from "@/components/atoms/ThemedInput";
-import { Colors } from "@/constants/Colors";
 import { DeviceHeight } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
@@ -16,7 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
 import MapView from "./MapView";
 import { useGetNeighborhoodsQuery } from "./hooks";
@@ -148,11 +146,11 @@ export default function AddressMap() {
               ]}
             />
           )}
-          <ThemedText fontType="bold" style={{ marginTop: editItem ? 0 : 16 }}>
-            آدرس خود را مشخص کنید:
-          </ThemedText>
+          {!editItem?.id && <Divider height={24} />}
+          <ThemedText fontType="bold">آدرس خود را مشخص کنید:</ThemedText>
           <Divider height={24} />
-          <View style={styles.dropdownContainer}>
+
+          {/* <View style={styles.dropdownContainer}>
             <DropDownPicker
               {...register("area")}
               title="محله"
@@ -170,7 +168,7 @@ export default function AddressMap() {
               }}
               arrowSize={16}
             />
-          </View>
+          </View> */}
 
           <ThemedInput
             placeholder="آدرس شما"
@@ -179,6 +177,12 @@ export default function AddressMap() {
             label="نشانی دقیق"
             labelStyle="sm"
           />
+          <Divider height={24} />
+          <ThemedView style={styles.addressView}>
+            <ThemedInput label="پلاک" name="pno" style={{ width: "32%" }} />
+            <ThemedInput label="واحد" name="pno" style={{ width: "32%" }} />
+            <ThemedInput label="طبقه" name="pno" style={{ width: "32%" }} />
+          </ThemedView>
           <Divider height={24} />
           <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
           <Divider height={16} />
@@ -209,4 +213,10 @@ const styles = StyleSheet.create({
   },
 
   button: { marginTop: 18, marginBottom: 50 },
+
+  addressView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
 });
