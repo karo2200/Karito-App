@@ -40,6 +40,7 @@ export default function ProfileScreen() {
               <CustomImage
                 src={userData?.profileImageUrl}
                 style={styles.image}
+                resizeMode="cover"
               />
             ) : (
               <EmptyProfileIcon />
