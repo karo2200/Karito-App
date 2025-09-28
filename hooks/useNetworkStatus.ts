@@ -1,3 +1,4 @@
+import { useToast } from "@/components/atoms/Toast";
 import * as Network from "expo-network";
 import { useEffect, useState } from "react";
 
@@ -23,4 +24,20 @@ export default function useNetworkStatus() {
   }, []);
 
   return { isConnected, type, ip };
+}
+
+export function NetworkWatcher() {
+  const { isConnected } = useNetworkStatus();
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (isConnected === false) {
+      showToast({
+        message: "لطفا اتصال اینترنت خود را بررسی کنید",
+        type: "error",
+      });
+    }
+  }, [isConnected]);
+
+  return null;
 }

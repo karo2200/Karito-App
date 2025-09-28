@@ -1,6 +1,6 @@
-import { ToastProvider, useToast } from "@/components/atoms/Toast";
+import { ToastProvider } from "@/components/atoms/Toast";
 import AuthProvider from "@/graphql/AuthProvider";
-import useNetworkStatus from "@/hooks/useNetworkStatus";
+import { NetworkWatcher } from "@/hooks/useNetworkStatus";
 import authCacheStore from "@/stores/authCacheStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
@@ -16,15 +16,11 @@ import { RightIcon } from "./(tabs)/_layout";
 export default function RootLayout() {
   const { isLoggedIn, isExpert, isSelectRole } = authCacheStore();
 
-  const { showToast } = useToast();
-
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
     YekanBakhBold: require("../assets/fonts/YekanBakhENBold.ttf"),
     YekanBakhMedium: require("../assets/fonts/YekanBakhENMedium.ttf"),
   });
-
-  const { isConnected, type, ip } = useNetworkStatus();
 
   useEffect(() => {
     // if (!I18nManager.isRTL) {
@@ -38,16 +34,6 @@ export default function RootLayout() {
       SplashScreen.hide();
     }
   }, [loaded]);
-
-  useEffect(() => {
-    console.log("....../", isConnected);
-    if (!isConnected) {
-      showToast({
-        message: "لطفا اتصال اینترنت خود را بررسی کنید",
-        type: "error",
-      });
-    }
-  }, [isConnected]);
 
   const MyTheme = {
     ...DefaultTheme,
@@ -74,6 +60,7 @@ export default function RootLayout() {
         <ThemeProvider value={MyTheme}>
           <SheetProvider>
             <ToastProvider>
+              <NetworkWatcher />
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Protected guard={isLoggedIn && isExpert}>
                   <Stack.Screen name="(expertTabs)" />
