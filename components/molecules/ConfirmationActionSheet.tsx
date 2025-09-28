@@ -1,6 +1,5 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
-import authCacheStore from "@/stores/authCacheStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
@@ -9,20 +8,30 @@ import ThemedButton from "../atoms/ThemedButton";
 
 const { height, width } = Dimensions.get("screen");
 
-export default function LogOutActionSheet({
+const ConfirmationActionSheet = ({
   visible,
+  title,
+  confirmButtonText,
+  cancelButtonText = "انصراف",
+  isLoading = false,
+  onConfirmPress,
   onClose,
 }: {
   visible: boolean;
+  title: string;
+  isLoading: boolean;
+  confirmButtonText: string;
+  cancelButtonText?: string;
+  onConfirmPress: () => void;
   onClose: () => void;
-}) {
+}) => {
   const actionSheetRef = useRef<ActionSheetRef>(null);
-
-  const { clearAuth } = authCacheStore();
 
   useEffect(() => {
     if (visible) {
       actionSheetRef.current?.show();
+    } else {
+      actionSheetRef.current?.hide();
     }
   }, [visible]);
 
@@ -44,31 +53,29 @@ export default function LogOutActionSheet({
           color={Colors.mediumGray}
           onPress={() => closeActionSheet()}
         />
-        <ThemedText fontType="bold">خروج از حساب کاربری</ThemedText>
+        <ThemedText fontType="bold"></ThemedText>
       </View>
       <View style={styles.content}>
-        <ThemedText style={styles.title}>
-          آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟
-        </ThemedText>
+        <ThemedText style={styles.title}>{title}</ThemedText>
         <ThemedButton
-          title="خروج"
+          title={confirmButtonText}
           fontType="medium"
-          onPress={() => {
-            clearAuth();
-            closeActionSheet();
-          }}
+          isLoading={isLoading}
+          onPress={onConfirmPress}
         />
         <ThemedButton
           fontType="medium"
           type="outline"
-          title="انصراف"
+          title={cancelButtonText}
           onPress={closeActionSheet}
           style={[styles.btn, { marginBottom: 40 }]}
         />
       </View>
     </ActionSheet>
   );
-}
+};
+
+export default ConfirmationActionSheet;
 
 const styles = StyleSheet.create({
   header: {

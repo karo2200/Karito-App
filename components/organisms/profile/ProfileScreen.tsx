@@ -140,19 +140,19 @@ export default function ProfileScreen() {
       ) : (
         <GuestMode />
       )}
-      {!isExpert && isLoggedIn && (
+      {isLoggedIn && (
         <TouchableOpacity
           activeOpacity={0.7}
           style={styles.payment}
           onPress={() => {
-            setIsExpert(true);
+            setIsExpert(isExpert ? false : true);
             setIsLoggedIn(false);
             setAccessToken("");
             setRefreshToken("");
           }}
         >
           <ThemedText fontType="bold" style={styles.textBtn}>
-            ورود به عنوان متخصص
+            ورود به عنوان {isExpert ? "مشتری" : "متخصص"}
           </ThemedText>
           <Ionicons name="log-in-outline" size={24} color={Colors.hint500} />
         </TouchableOpacity>

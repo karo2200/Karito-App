@@ -178,6 +178,7 @@ query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
         profileImageUrl
         rateCount
         phoneNumber
+        successfulMissions
       }
       status
     }

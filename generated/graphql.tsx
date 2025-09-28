@@ -55,22 +55,28 @@ export type ActivateDiscountCodeInput = {
 };
 
 export type AddAddressInput = {
+  buildingNumber: Scalars["Int"]["input"];
   customerId: Scalars["UUID"]["input"];
+  floorNumber: Scalars["Int"]["input"];
   latitude: Scalars["Float"]["input"];
   longitude: Scalars["Float"]["input"];
   neighborhoodId: Scalars["UUID"]["input"];
   text: Scalars["String"]["input"];
+  unitNumber: Scalars["Int"]["input"];
 };
 
 export type AddressDto = {
   __typename?: "AddressDto";
+  buildingNumber: Scalars["Int"]["output"];
   customer: CustomerDto;
+  floorNumber: Scalars["Int"]["output"];
   id: Scalars["UUID"]["output"];
   isPrimary: Scalars["Boolean"]["output"];
   latitude: Scalars["Float"]["output"];
   longitude: Scalars["Float"]["output"];
   neighborhood: NeighborhoodDto;
   text: Scalars["String"]["output"];
+  unitNumber: Scalars["Int"]["output"];
 };
 
 /** A segment of a collection. */
@@ -85,7 +91,9 @@ export type AddressDtoCollectionSegment = {
 
 export type AddressDtoFilterInput = {
   and?: InputMaybe<Array<AddressDtoFilterInput>>;
+  buildingNumber?: InputMaybe<IntOperationFilterInput>;
   customer?: InputMaybe<CustomerDtoFilterInput>;
+  floorNumber?: InputMaybe<IntOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isPrimary?: InputMaybe<BooleanOperationFilterInput>;
   latitude?: InputMaybe<FloatOperationFilterInput>;
@@ -93,16 +101,20 @@ export type AddressDtoFilterInput = {
   neighborhood?: InputMaybe<NeighborhoodDtoFilterInput>;
   or?: InputMaybe<Array<AddressDtoFilterInput>>;
   text?: InputMaybe<StringOperationFilterInput>;
+  unitNumber?: InputMaybe<IntOperationFilterInput>;
 };
 
 export type AddressDtoSortInput = {
+  buildingNumber?: InputMaybe<SortEnumType>;
   customer?: InputMaybe<CustomerDtoSortInput>;
+  floorNumber?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   isPrimary?: InputMaybe<SortEnumType>;
   latitude?: InputMaybe<SortEnumType>;
   longitude?: InputMaybe<SortEnumType>;
   neighborhood?: InputMaybe<NeighborhoodDtoSortInput>;
   text?: InputMaybe<SortEnumType>;
+  unitNumber?: InputMaybe<SortEnumType>;
 };
 
 export type AdminDto = {
@@ -1126,17 +1138,17 @@ export type ListResponseBaseOfServiceTypeQuestionDtoResultArgs = {
   where?: InputMaybe<ServiceTypeQuestionDtoFilterInput>;
 };
 
-export type ListResponseBaseOfSpecialistProfileDto = {
-  __typename?: "ListResponseBaseOfSpecialistProfileDto";
-  result?: Maybe<SpecialistProfileDtoCollectionSegment>;
+export type ListResponseBaseOfSpecialistDto = {
+  __typename?: "ListResponseBaseOfSpecialistDto";
+  result?: Maybe<SpecialistDtoCollectionSegment>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
-export type ListResponseBaseOfSpecialistProfileDtoResultArgs = {
-  order?: InputMaybe<Array<SpecialistProfileDtoSortInput>>;
+export type ListResponseBaseOfSpecialistDtoResultArgs = {
+  order?: InputMaybe<Array<SpecialistDtoSortInput>>;
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<SpecialistProfileDtoFilterInput>;
+  where?: InputMaybe<SpecialistDtoFilterInput>;
 };
 
 export type ListStringOperationFilterInput = {
@@ -1735,11 +1747,11 @@ export type Query = {
   serviceTypes_getAll: ListResponseBaseOfServiceTypeDto;
   serviceTypes_getPopular: ListResponseBaseOfPopularServiceTypeDto;
   /** Returns all specialists. */
-  specialist_getAll: ListResponseBaseOfSpecialistProfileDto;
+  specialist_getAll: ListResponseBaseOfSpecialistDto;
   /** Returns a specialist by their ID. */
-  specialist_getById: ResponseBaseOfSpecialistProfileDto;
+  specialist_getById: ResponseBaseOfSpecialistDto;
   /** Returns the profile of the currently authenticated specialist. */
-  specialist_getMyProfile: ResponseBaseOfSpecialistProfileDto;
+  specialist_getMyProfile: ResponseBaseOfSpecialistDto;
   /** Gets the profile of the currently authenticated user. */
   user_getMyProfile: ResponseBaseOfUserProfileDto;
 };
@@ -2049,9 +2061,9 @@ export type ResponseBaseOfServiceTypeQuestionDto = {
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
-export type ResponseBaseOfSpecialistProfileDto = {
-  __typename?: "ResponseBaseOfSpecialistProfileDto";
-  result?: Maybe<SpecialistProfileDto>;
+export type ResponseBaseOfSpecialistDto = {
+  __typename?: "ResponseBaseOfSpecialistDto";
+  result?: Maybe<SpecialistDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -2390,53 +2402,12 @@ export enum SortEnumType {
 
 export type SpecialistDto = {
   __typename?: "SpecialistDto";
-  averageRating: Scalars["Float"]["output"];
-  code: Scalars["String"]["output"];
-  firstName?: Maybe<Scalars["String"]["output"]>;
-  gender: Gender;
-  id: Scalars["UUID"]["output"];
-  isBlocked: Scalars["Boolean"]["output"];
-  lastName?: Maybe<Scalars["String"]["output"]>;
-  phoneNumber: Scalars["String"]["output"];
-  profileImageUrl?: Maybe<Scalars["String"]["output"]>;
-  rateCount: Scalars["Int"]["output"];
-};
-
-export type SpecialistDtoFilterInput = {
-  and?: InputMaybe<Array<SpecialistDtoFilterInput>>;
-  averageRating?: InputMaybe<FloatOperationFilterInput>;
-  code?: InputMaybe<StringOperationFilterInput>;
-  firstName?: InputMaybe<StringOperationFilterInput>;
-  gender?: InputMaybe<GenderOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  isBlocked?: InputMaybe<BooleanOperationFilterInput>;
-  lastName?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<SpecialistDtoFilterInput>>;
-  phoneNumber?: InputMaybe<StringOperationFilterInput>;
-  profileImageUrl?: InputMaybe<StringOperationFilterInput>;
-  rateCount?: InputMaybe<IntOperationFilterInput>;
-};
-
-export type SpecialistDtoSortInput = {
-  averageRating?: InputMaybe<SortEnumType>;
-  code?: InputMaybe<SortEnumType>;
-  firstName?: InputMaybe<SortEnumType>;
-  gender?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  isBlocked?: InputMaybe<SortEnumType>;
-  lastName?: InputMaybe<SortEnumType>;
-  phoneNumber?: InputMaybe<SortEnumType>;
-  profileImageUrl?: InputMaybe<SortEnumType>;
-  rateCount?: InputMaybe<SortEnumType>;
-};
-
-export type SpecialistProfileDto = {
-  __typename?: "SpecialistProfileDto";
   acceptedMissions: Scalars["Int"]["output"];
   averageRating: Scalars["Float"]["output"];
   birthDate: Scalars["DateTime"]["output"];
   cancelledMissions: Scalars["Int"]["output"];
   city?: Maybe<CityDto>;
+  code: Scalars["String"]["output"];
   daysRegistered: Scalars["Int"]["output"];
   firstName?: Maybe<Scalars["String"]["output"]>;
   gender: Gender;
@@ -2460,22 +2431,23 @@ export type SpecialistProfileDto = {
 };
 
 /** A segment of a collection. */
-export type SpecialistProfileDtoCollectionSegment = {
-  __typename?: "SpecialistProfileDtoCollectionSegment";
+export type SpecialistDtoCollectionSegment = {
+  __typename?: "SpecialistDtoCollectionSegment";
   /** A flattened list of the items. */
-  items?: Maybe<Array<SpecialistProfileDto>>;
+  items?: Maybe<Array<SpecialistDto>>;
   /** Information to aid in pagination. */
   pageInfo: CollectionSegmentInfo;
   totalCount: Scalars["Int"]["output"];
 };
 
-export type SpecialistProfileDtoFilterInput = {
+export type SpecialistDtoFilterInput = {
   acceptedMissions?: InputMaybe<IntOperationFilterInput>;
-  and?: InputMaybe<Array<SpecialistProfileDtoFilterInput>>;
+  and?: InputMaybe<Array<SpecialistDtoFilterInput>>;
   averageRating?: InputMaybe<FloatOperationFilterInput>;
   birthDate?: InputMaybe<DateTimeOperationFilterInput>;
   cancelledMissions?: InputMaybe<IntOperationFilterInput>;
   city?: InputMaybe<CityDtoFilterInput>;
+  code?: InputMaybe<StringOperationFilterInput>;
   daysRegistered?: InputMaybe<IntOperationFilterInput>;
   firstName?: InputMaybe<StringOperationFilterInput>;
   gender?: InputMaybe<GenderOperationFilterInput>;
@@ -2487,7 +2459,7 @@ export type SpecialistProfileDtoFilterInput = {
   isBlocked?: InputMaybe<BooleanOperationFilterInput>;
   lastName?: InputMaybe<StringOperationFilterInput>;
   nationalCode?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<SpecialistProfileDtoFilterInput>>;
+  or?: InputMaybe<Array<SpecialistDtoFilterInput>>;
   phoneNumber?: InputMaybe<StringOperationFilterInput>;
   profileImageUrl?: InputMaybe<StringOperationFilterInput>;
   rateCount?: InputMaybe<IntOperationFilterInput>;
@@ -2499,12 +2471,13 @@ export type SpecialistProfileDtoFilterInput = {
   successfulMissions?: InputMaybe<IntOperationFilterInput>;
 };
 
-export type SpecialistProfileDtoSortInput = {
+export type SpecialistDtoSortInput = {
   acceptedMissions?: InputMaybe<SortEnumType>;
   averageRating?: InputMaybe<SortEnumType>;
   birthDate?: InputMaybe<SortEnumType>;
   cancelledMissions?: InputMaybe<SortEnumType>;
   city?: InputMaybe<CityDtoSortInput>;
+  code?: InputMaybe<SortEnumType>;
   daysRegistered?: InputMaybe<SortEnumType>;
   firstName?: InputMaybe<SortEnumType>;
   gender?: InputMaybe<SortEnumType>;
@@ -2550,9 +2523,12 @@ export type StringOperationFilterInput = {
 
 export type UpdateAddressInput = {
   addressId: Scalars["UUID"]["input"];
+  buildingNumber: Scalars["Int"]["input"];
+  floorNumber: Scalars["Int"]["input"];
   newLatitude: Scalars["Float"]["input"];
   newLongitude: Scalars["Float"]["input"];
   newText: Scalars["String"]["input"];
+  unitNumber: Scalars["Int"]["input"];
 };
 
 export type UpdateBannerInput = {
@@ -3241,6 +3217,7 @@ export type ServiceRequest_GetByIdQuery = {
         profileImageUrl?: string | null;
         rateCount: number;
         phoneNumber: string;
+        successfulMissions: number;
       } | null;
     } | null;
   };
@@ -3864,10 +3841,10 @@ export type Specialist_GetMyProfileQueryVariables = Exact<{
 export type Specialist_GetMyProfileQuery = {
   __typename?: "Query";
   specialist_getMyProfile: {
-    __typename?: "ResponseBaseOfSpecialistProfileDto";
+    __typename?: "ResponseBaseOfSpecialistDto";
     status?: any | null;
     result?: {
-      __typename?: "SpecialistProfileDto";
+      __typename?: "SpecialistDto";
       averageRating: number;
       rateCount: number;
       birthDate: any;
@@ -3945,21 +3922,19 @@ export type Province_GetAllQuery = {
 export type Specialist_GetAllQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<SpecialistProfileDtoFilterInput>;
-  order?: InputMaybe<
-    Array<SpecialistProfileDtoSortInput> | SpecialistProfileDtoSortInput
-  >;
+  where?: InputMaybe<SpecialistDtoFilterInput>;
+  order?: InputMaybe<Array<SpecialistDtoSortInput> | SpecialistDtoSortInput>;
 }>;
 
 export type Specialist_GetAllQuery = {
   __typename?: "Query";
   specialist_getAll: {
-    __typename?: "ListResponseBaseOfSpecialistProfileDto";
+    __typename?: "ListResponseBaseOfSpecialistDto";
     status?: any | null;
     result?: {
-      __typename?: "SpecialistProfileDtoCollectionSegment";
+      __typename?: "SpecialistDtoCollectionSegment";
       items?: Array<{
-        __typename?: "SpecialistProfileDto";
+        __typename?: "SpecialistDto";
         id: any;
         firstName?: string | null;
         lastName?: string | null;
@@ -5202,6 +5177,7 @@ export const ServiceRequest_GetByIdDocument = `
         profileImageUrl
         rateCount
         phoneNumber
+        successfulMissions
       }
       status
     }
@@ -7192,7 +7168,7 @@ export const useInfiniteProvince_GetAllQuery = <
 };
 
 export const Specialist_GetAllDocument = `
-    query specialist_getAll($skip: Int, $take: Int, $where: SpecialistProfileDtoFilterInput, $order: [SpecialistProfileDtoSortInput!]) {
+    query specialist_getAll($skip: Int, $take: Int, $where: SpecialistDtoFilterInput, $order: [SpecialistDtoSortInput!]) {
   specialist_getAll {
     result(skip: $skip, take: $take, where: $where, order: $order) {
       items {
