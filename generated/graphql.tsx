@@ -3958,6 +3958,34 @@ export type Specialist_GetAllQuery = {
   };
 };
 
+export type Address_GetAddressByIdQueryVariables = Exact<{
+  input: GetAddressByIdInput;
+}>;
+
+export type Address_GetAddressByIdQuery = {
+  __typename?: "Query";
+  address_getAddressById: {
+    __typename?: "ResponseBaseOfAddressDto";
+    result?: {
+      __typename?: "AddressDto";
+      id: any;
+      latitude: number;
+      longitude: number;
+      isPrimary: boolean;
+      floorNumber: number;
+      buildingNumber: number;
+      unitNumber: number;
+      text: string;
+      neighborhood: {
+        __typename?: "NeighborhoodDto";
+        id: any;
+        name: string;
+        city: { __typename?: "CityDto"; name: string; id: any };
+      };
+    } | null;
+  };
+};
+
 export const Address_CreateDocument = `
     mutation address_create($input: AddAddressInput!) {
   address_create(input: $input) {
@@ -7256,6 +7284,95 @@ export const useInfiniteSpecialist_GetAllQuery = <
             Specialist_GetAllDocument,
             { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const Address_GetAddressByIdDocument = `
+    query address_getAddressById($input: GetAddressByIdInput!) {
+  address_getAddressById(input: $input) {
+    result {
+      id
+      latitude
+      longitude
+      isPrimary
+      floorNumber
+      buildingNumber
+      unitNumber
+      neighborhood {
+        id
+        city {
+          name
+          id
+        }
+        name
+      }
+      text
+    }
+  }
+}
+    `;
+
+export const useAddress_GetAddressByIdQuery = <
+  TData = Address_GetAddressByIdQuery,
+  TError = unknown,
+>(
+  variables: Address_GetAddressByIdQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Address_GetAddressByIdQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      Address_GetAddressByIdQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<Address_GetAddressByIdQuery, TError, TData>({
+    queryKey: ["address_getAddressById", variables],
+    queryFn: fetcher<
+      Address_GetAddressByIdQuery,
+      Address_GetAddressByIdQueryVariables
+    >(Address_GetAddressByIdDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteAddress_GetAddressByIdQuery = <
+  TData = InfiniteData<Address_GetAddressByIdQuery>,
+  TError = unknown,
+>(
+  variables: Address_GetAddressByIdQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Address_GetAddressByIdQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Address_GetAddressByIdQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<Address_GetAddressByIdQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "address_getAddressById.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            Address_GetAddressByIdQuery,
+            Address_GetAddressByIdQueryVariables
+          >(Address_GetAddressByIdDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
         ...restOptions,
       };
     })(),

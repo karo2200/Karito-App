@@ -14,10 +14,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
+import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
 import MapView from "./MapView";
 import { useGetNeighborhoodsQuery } from "./hooks";
 
@@ -43,6 +44,13 @@ const schema = yup.object().shape({
 export default function AddressMap() {
   const editItem = useRoute().params;
 
+  const { data: addressData } = useGetUserAddressesQuery({
+    where: { id: { eq: editItem?.id } },
+    take: 1,
+    skip: 0,
+  });
+  const currentAddress = addressData?.pages[0];
+
   const { data } = useGetNeighborhoodsQuery({});
   const neighborHoods = data?.pages?.[0] ? data?.pages : [];
 
@@ -54,17 +62,20 @@ export default function AddressMap() {
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: {
-      address: editItem?.txt,
-      area: editItem?.nid,
-      lat: parseFloat(editItem?.lat),
-      lng: parseFloat(editItem?.lng),
-      floorNumber: editItem?.fNo,
-      buildingNumber: editItem?.bNo,
-      unitNumber: editItem?.uNo,
-    },
   });
   const { handleSubmit, register, setValue } = methods;
+
+  useEffect(() => {
+    if (currentAddress) {
+      setValue("address", currentAddress?.text);
+      setValue("area", currentAddress?.neighborhood?.id);
+      (setValue("lat", currentAddress?.latitude ?? 0),
+        setValue("lng", currentAddress?.longitude ?? 0),
+        setValue("floorNumber", currentAddress?.floorNumber ?? 0),
+        setValue("buildingNumber", currentAddress?.buildingNumber ?? 0),
+        setValue("unitNumber", currentAddress?.unitNumber ?? 0));
+    }
+  }, [currentAddress]);
 
   const onLocationSelected = (latLng?: string) => {
     if (!latLng || latLng?.length < 3) return;

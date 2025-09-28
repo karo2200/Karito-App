@@ -44,11 +44,7 @@ export default function AddressScreen() {
         item={item}
         onChange={() => onSetPrimary(item?.id)}
         key={item?.id}
-        onEditPress={() =>
-          router.push(
-            `/CreateAddress?nid=${item?.neighborhood?.id}&txt=${item?.text}&lat=${item?.latitude}&lng=${item?.longitude}&id=${item?.id}`
-          )
-        }
+        onEditPress={() => router.push(`/CreateAddress?id=${item?.id}`)}
         onDeletePress={() => {
           setAddress(item?.id);
           setDeleteVisible(true);
