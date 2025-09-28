@@ -1,6 +1,9 @@
 import { ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { useRevenue_GetMyRevenueQuery } from "@/generated/graphql";
+import {
+  useGetMyRevenueQuery,
+  useRevenue_GetMyRevenueQuery,
+} from "@/generated/graphql";
 import dayjs from "dayjs";
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
@@ -22,6 +25,12 @@ export default function IncomeInfo({}) {
 
     return { daySD, dayED, monthSD, weekSD };
   }, []);
+
+  const { data: unSetteledData } = useGetMyRevenueQuery({
+    input: {},
+  });
+  const unSetteledAmount =
+    unSetteledData?.revenue_getMyRevenue?.result?.unsettledAmount;
 
   const { data: dayData } = useRevenue_GetMyRevenueQuery({
     dayED,
@@ -59,7 +68,7 @@ export default function IncomeInfo({}) {
           fontType="bold"
           style={styles.fontSize}
         >
-          ۱٫۲۰۰٫۵۰۰ ریال
+          {`${unSetteledAmount ?? 0}`} ریال
         </ThemedText>
         <ThemedText style={styles.headerTxt} fontType="bold">
           درآمد تسویه نشده

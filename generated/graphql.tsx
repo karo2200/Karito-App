@@ -661,7 +661,7 @@ export type DiscountCodeDto = {
   __typename?: "DiscountCodeDto";
   amount: Scalars["Decimal"]["output"];
   code: Scalars["String"]["output"];
-  customerDto: CustomerDto;
+  customer: CustomerDto;
   expiryDate?: Maybe<Scalars["DateTime"]["output"]>;
   id: Scalars["UUID"]["output"];
   isActive: Scalars["Boolean"]["output"];
@@ -684,7 +684,7 @@ export type DiscountCodeDtoFilterInput = {
   amount?: InputMaybe<DecimalOperationFilterInput>;
   and?: InputMaybe<Array<DiscountCodeDtoFilterInput>>;
   code?: InputMaybe<StringOperationFilterInput>;
-  customerDto?: InputMaybe<CustomerDtoFilterInput>;
+  customer?: InputMaybe<CustomerDtoFilterInput>;
   expiryDate?: InputMaybe<DateTimeOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isActive?: InputMaybe<BooleanOperationFilterInput>;
@@ -697,7 +697,7 @@ export type DiscountCodeDtoFilterInput = {
 export type DiscountCodeDtoSortInput = {
   amount?: InputMaybe<SortEnumType>;
   code?: InputMaybe<SortEnumType>;
-  customerDto?: InputMaybe<CustomerDtoSortInput>;
+  customer?: InputMaybe<CustomerDtoSortInput>;
   expiryDate?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   isActive?: InputMaybe<SortEnumType>;
@@ -3320,6 +3320,23 @@ export type Revenue_GetMyRevenueQuery = {
   };
 };
 
+export type GetMyRevenueQueryVariables = Exact<{
+  input: GetMyRevenueInput;
+}>;
+
+export type GetMyRevenueQuery = {
+  __typename?: "Query";
+  revenue_getMyRevenue: {
+    __typename?: "ResponseBaseOfSpecialistRevenueDto";
+    status?: any | null;
+    result?: {
+      __typename?: "SpecialistRevenueDto";
+      totalAmount: any;
+      unsettledAmount: any;
+    } | null;
+  };
+};
+
 export type ServiceCategory_GetAllQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -5500,6 +5517,72 @@ export const useInfiniteRevenue_GetMyRevenueQuery = <
             ...variables,
             ...(metaData.pageParam ?? {}),
           })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const GetMyRevenueDocument = `
+    query getMyRevenue($input: GetMyRevenueInput!) {
+  revenue_getMyRevenue(input: $input) {
+    status
+    result {
+      totalAmount
+      unsettledAmount
+    }
+  }
+}
+    `;
+
+export const useGetMyRevenueQuery = <
+  TData = GetMyRevenueQuery,
+  TError = unknown,
+>(
+  variables: GetMyRevenueQueryVariables,
+  options?: Omit<
+    UseQueryOptions<GetMyRevenueQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<GetMyRevenueQuery, TError, TData>["queryKey"];
+  },
+) => {
+  return useQuery<GetMyRevenueQuery, TError, TData>({
+    queryKey: ["getMyRevenue", variables],
+    queryFn: fetcher<GetMyRevenueQuery, GetMyRevenueQueryVariables>(
+      GetMyRevenueDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
+
+export const useInfiniteGetMyRevenueQuery = <
+  TData = InfiniteData<GetMyRevenueQuery>,
+  TError = unknown,
+>(
+  variables: GetMyRevenueQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<GetMyRevenueQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      GetMyRevenueQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<GetMyRevenueQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ["getMyRevenue.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<GetMyRevenueQuery, GetMyRevenueQueryVariables>(
+            GetMyRevenueDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
         ...restOptions,
       };
     })(),
