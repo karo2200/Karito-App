@@ -2,12 +2,19 @@ import Breadcrumb from "@/components/atoms/Breadcrumb";
 import CustomRadioButton from "@/components/atoms/CustomRadioButton";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedView from "@/components/atoms/ThemedView";
+import ConfirmationActionSheet from "@/components/molecules/ConfirmationActionSheet";
 import { Colors } from "@/constants/Colors";
 import { FontStyle } from "@/constants/Fonts";
 import { AddressDto } from "@/generated/graphql";
-import { Edit } from "iconsax-react-native";
+import { Edit, Trash } from "iconsax-react-native";
 import React, { useCallback } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import EmptyAddressState from "../CreateOrder/SelectAddress/AddressEmpty";
 import useAddressHook from "./hooks/Address.hook";
 
@@ -23,21 +30,30 @@ export default function AddressScreen() {
     isLoading,
     router,
     onSetPrimary,
+    deleteLoading,
+    onDeletePress,
+    deleteVisibe,
+    setDeleteVisible,
+    setAddress,
+    address,
   } = useAddressHook();
 
   const renderItem = useCallback(
     ({ item }: { item: any }) => (
       <AddressCard
         item={item}
-        onChange={() => {
-          onSetPrimary(item?.id);
-        }}
+        onChange={() => onSetPrimary(item?.id)}
         key={item?.id}
         onEditPress={() =>
           router.push(
             `/CreateAddress?nid=${item?.neighborhood?.id}&txt=${item?.text}&lat=${item?.latitude}&lng=${item?.longitude}&id=${item?.id}`
           )
         }
+        onDeletePress={() => {
+          setAddress(item?.id);
+          setDeleteVisible(true);
+        }}
+        isPending={item?.id === address && deleteLoading}
       />
     ),
     []
@@ -81,6 +97,17 @@ export default function AddressScreen() {
           ListEmptyComponent={() => <EmptyAddressState />}
         />
       )}
+      <ConfirmationActionSheet
+        visible={deleteVisibe}
+        onClose={() => setDeleteVisible(false)}
+        confirmButtonText="تایید"
+        title={"آیا از حذف این آدرس اطمینان دارید؟"}
+        isLoading={deleteLoading}
+        onConfirmPress={() => {
+          onDeletePress();
+          setDeleteVisible(false);
+        }}
+      />
     </View>
   );
 }
@@ -99,14 +126,25 @@ const AddressCard = ({
   item,
   onChange,
   onEditPress,
+  isPending,
+  onDeletePress,
 }: {
   item: AddressDto;
   onChange: () => void;
   onEditPress: () => void;
+  isPending: boolean;
+  onDeletePress: () => void;
 }) => {
   return (
     <ThemedView style={styles.groupView}>
       <Edit size={24} color={Colors.gray500} onPress={onEditPress} />
+      <Pressable onPress={onDeletePress} style={{ paddingHorizontal: 8 }}>
+        {isPending ? (
+          <ActivityIndicator color={Colors.hint500} />
+        ) : (
+          <Trash size={24} color={Colors.darkError} />
+        )}
+      </Pressable>
       <CustomRadioButton
         checked={item?.isPrimary}
         label={item?.text}
