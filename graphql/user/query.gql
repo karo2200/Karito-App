@@ -25,6 +25,9 @@ query address_getMyAddresses(
         latitude
         longitude
         isPrimary
+        floorNumber
+        buildingNumber
+        unitNumber
         neighborhood {
           id
           city {

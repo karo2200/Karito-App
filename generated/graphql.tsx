@@ -3781,6 +3781,9 @@ export type Address_GetMyAddressesQuery = {
         latitude: number;
         longitude: number;
         isPrimary: boolean;
+        floorNumber: number;
+        buildingNumber: number;
+        unitNumber: number;
         text: string;
         neighborhood: {
           __typename?: "NeighborhoodDto";
@@ -6793,6 +6796,9 @@ export const Address_GetMyAddressesDocument = `
         latitude
         longitude
         isPrimary
+        floorNumber
+        buildingNumber
+        unitNumber
         neighborhood {
           id
           city {
