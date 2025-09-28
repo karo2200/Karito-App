@@ -1,4 +1,4 @@
-import { ToastProvider } from "@/components/atoms/Toast";
+import { ToastProvider, useToast } from "@/components/atoms/Toast";
 import AuthProvider from "@/graphql/AuthProvider";
 import useNetworkStatus from "@/hooks/useNetworkStatus";
 import authCacheStore from "@/stores/authCacheStore";
@@ -7,6 +7,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { I18nManager } from "react-native";
 import { SheetProvider } from "react-native-actions-sheet";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../sheets.tsx";
@@ -14,6 +15,8 @@ import { RightIcon } from "./(tabs)/_layout";
 
 export default function RootLayout() {
   const { isLoggedIn, isExpert, isSelectRole } = authCacheStore();
+
+  const { showToast } = useToast();
 
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
@@ -24,6 +27,13 @@ export default function RootLayout() {
   const { isConnected, type, ip } = useNetworkStatus();
 
   useEffect(() => {
+    // if (!I18nManager.isRTL) {
+    I18nManager.allowRTL(false);
+    I18nManager.forceRTL(false);
+    // }
+  }, []);
+
+  useEffect(() => {
     if (loaded) {
       SplashScreen.hide();
     }
@@ -31,6 +41,12 @@ export default function RootLayout() {
 
   useEffect(() => {
     console.log("....../", isConnected);
+    if (!isConnected) {
+      showToast({
+        message: "لطفا اتصال اینترنت خود را بررسی کنید",
+        type: "error",
+      });
+    }
   }, [isConnected]);
 
   const MyTheme = {

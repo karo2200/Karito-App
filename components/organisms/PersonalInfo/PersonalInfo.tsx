@@ -29,7 +29,7 @@ const schema = yup.object().shape({
     .length(10, "کد ملی بدرستی وارد نشده است")
     .required("لطفا کد ملی خود را وارد کنید"),
   codeImage: yup.string().required(""),
-  year: yup.string(),
+  year: yup.string().matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید"),
   month: yup.string(),
   day: yup.string(),
   profilePhoto: yup.string(),
@@ -59,13 +59,27 @@ const PersonalInfo = () => {
     (setValue("name", profileData?.firstName as string),
       setValue("family", profileData?.lastName as string),
       setValue("codeImage", profileData?.idCardImageUrl as string),
-      setValue("year", parseDate(profileData?.birthDate)?.year),
-      setValue("day", parseDate(profileData?.birthDate)?.day),
-      setValue("month", parseDate(profileData?.birthDate)?.month),
+      setValue(
+        "year",
+        profileData?.birthDate &&
+          profileData?.birthDate != "0001-01-01T00:00:00.000Z"
+          ? parseDate(profileData?.birthDate)?.year
+          : ""
+      ),
+      setValue(
+        "day",
+        profileData?.birthDate ? parseDate(profileData?.birthDate)?.day : "1"
+      ),
+      setValue(
+        "month",
+        profileData?.birthDate ? parseDate(profileData?.birthDate)?.month : "1"
+      ),
       setValue("profilePhoto", profileData?.profileImageUrl as string),
       setValue(
         "code",
-        nationalCode?.length > 0 ? nationalCode : profileData?.nationalCode
+        nationalCode?.length > 0
+          ? nationalCode.toString()
+          : profileData?.nationalCode?.toString()
       ));
   }, [nationalCode, profileData]);
 

@@ -146,6 +146,11 @@ export default function useOrderDetailHook() {
             showToast({ message: "سفارش با موفقیت لغو شد.", type: "success" });
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getMyAcceptances],
+              exact: false,
+            });
+            queryClient.invalidateQueries({
+              queryKey: [queryKeys.serviceRequest_getMyRequests],
+              exact: false,
             });
             router.back();
             closeActionSheet?.();

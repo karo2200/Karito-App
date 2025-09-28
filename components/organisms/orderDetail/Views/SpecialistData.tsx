@@ -48,6 +48,7 @@ const SpecialistData = () => {
         <CustomImage
           src={serviceData?.specialist?.profileImageUrl}
           style={styles.image2}
+          resizeMode="cover"
         />
       </View>
       <ActionSheet
@@ -77,6 +78,7 @@ const SpecialistData = () => {
           <CustomImage
             style={styles.image}
             src={serviceData?.specialist?.profileImageUrl}
+            resizeMode="cover"
           />
           <StarRating onChange={(r) => setRate(r)} />
           <ThemedButton

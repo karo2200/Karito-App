@@ -6,19 +6,17 @@ import {
   useSpecialist_SetPersonalInformationMutation,
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
-import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
+import moment from "jalali-moment";
 import { useGetSpecialistProfile } from "./personalInfo.query";
 
 export default function usePersonalInfoHook() {
   const router = useRouter();
 
-  const { params } = useRoute();
-
   const { showToast } = useToast();
 
-  const { nationalCode, setIsLoggedIn } = authCacheStore();
+  const { nationalCode } = authCacheStore();
 
   const queryClient = useQueryClient();
 
@@ -31,11 +29,13 @@ export default function usePersonalInfoHook() {
     expertData?.specialist_getMyProfile?.result;
 
   const onRegistrationPress = (formData: any) => {
-    const date = new Date(
-      Number(formData?.year),
-      Number(formData?.month) - 1,
-      Number(formData?.day)
+    const gregorian = moment(
+      `${Number(formData?.year)}/${Number(formData?.month)}/${Number(formData?.day)}`,
+      "jYYYY/jM/jD"
     );
+
+    const date = gregorian.toISOString();
+
     infoMutate(
       {
         input: {
@@ -45,7 +45,7 @@ export default function usePersonalInfoHook() {
           profileImageUrl: formData?.profilePhoto,
           idCardImageUrl: formData?.codeImage,
           nationalCode: formData?.code,
-          birthDate: date?.toISOString(),
+          birthDate: date,
         },
       },
       {

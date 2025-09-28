@@ -8,6 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
 import {
   Dimensions,
+  Platform,
   Pressable,
   StyleSheet,
   TouchableOpacity,
@@ -35,11 +36,16 @@ export default function Banner() {
   return (
     <View>
       {activeBanner ? (
-        <CustomImage style={styles.image} src={activeBanner?.imageUrl} />
+        <CustomImage
+          style={styles.image}
+          src={activeBanner?.imageUrl}
+          resizeMode="fill"
+        />
       ) : (
         <CustomImage
           localSource={require("@/assets/images/Home-Banner.png")}
           style={styles.image}
+          resizeMode="fill"
         />
       )}
       <View style={styles.inputContainer}>
@@ -48,14 +54,8 @@ export default function Banner() {
             style={styles.searchBtn}
             onPress={() => router.replace("/(tabs)/service")}
           >
-            <Ionicons
-              name="search-outline"
-              size={20}
-              color={Colors.unfilledText}
-            />
-            <ThemedText style={{ color: Colors.unfilledText }}>
-              جستجوی خدمت
-            </ThemedText>
+            <Ionicons name="search-outline" size={20} />
+            <ThemedText>جستجوی خدمت</ThemedText>
             {/* <TextInput
               style={styles.input}
               placeholder="جستجوی خدمت"
@@ -88,11 +88,11 @@ export default function Banner() {
         </View>
         <SearchWithModal list={cityData} onSelect={() => closeActionSheet()} />
         <View style={styles.contentView}>
-          <ThemedText type="text" style={styles.title}>
+          <ThemedText type="text" style={styles.title} fontType="bold">
             شهرهای پر بازدید
           </ThemedText>
           <View style={styles.flexWrap}>
-            {cityData?.map((element: CityDto) => {
+            {cityData?.slice(0, 9)?.map((element: CityDto) => {
               return (
                 <Pressable
                   style={styles.cityView}
@@ -115,26 +115,30 @@ export default function Banner() {
 
 const styles = StyleSheet.create({
   image: {
-    width: "100%",
+    width: Platform.OS === "web" ? Math.min(width, 480) : width,
     height: 250,
     marginTop: 4,
   },
 
   inputContainer: {
     alignItems: "center",
-    backgroundColor: Colors.hint500,
-    bottom: "12%",
+    bottom: "5%",
   },
 
   container: {
     flexDirection: "row-reverse",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: Colors.hint50,
     borderRadius: 8,
     paddingHorizontal: 10,
     margin: 16,
     marginTop: 0,
     height: 32,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 10,
   },
 
   input: {
@@ -146,7 +150,7 @@ const styles = StyleSheet.create({
 
   button: {
     flexDirection: "row",
-    backgroundColor: "white",
+    backgroundColor: Colors.hint50,
     borderRadius: 8,
     alignItems: "center",
   },
@@ -187,8 +191,6 @@ const styles = StyleSheet.create({
   text: { fontFamily: FontType.YekanBakhRegular, color: Colors.gray900 },
 
   title: {
-    fontWeight: "700",
-    fontFamily: FontType.YekanBakhBold,
     marginTop: 21,
     marginBottom: 8,
   },

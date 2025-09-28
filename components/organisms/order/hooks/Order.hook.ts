@@ -3,7 +3,7 @@ import { ServiceRequestStatus, SortEnumType } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView } from "react-native";
 import { useGetServiceRequestsQuery } from "./Order.query";
 
@@ -17,6 +17,8 @@ export default function useOrderHook() {
   const [activeTab, setActiveTab] = useState(params?.index ?? 0);
 
   const scrollRef = useRef<ScrollView>(null);
+
+  const today = useMemo(() => new Date().toISOString(), []);
 
   useEffect(() => {
     if (params?.index !== undefined) {
@@ -42,7 +44,8 @@ export default function useOrderHook() {
   } = useGetServiceRequestsQuery({
     where: {
       and: [
-        { status: { neq: ServiceRequestStatus.Cancelled } },
+        { status: { neq: ServiceRequestStatus.CancelledByCustomer } },
+        { requestDate: { gte: today } },
         { status: { neq: ServiceRequestStatus.Paid } },
       ],
     },
@@ -69,7 +72,7 @@ export default function useOrderHook() {
     fetchNextPage: cancelledFetchNextPage,
     isLoading: canceledLoading,
   } = useGetServiceRequestsQuery({
-    where: { status: { eq: ServiceRequestStatus.Cancelled } },
+    where: { status: { eq: ServiceRequestStatus.CancelledByCustomer } },
     order: [{ requestDate: SortEnumType.Desc }],
   });
 

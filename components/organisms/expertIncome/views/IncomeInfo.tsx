@@ -1,20 +1,62 @@
 import { ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
+import {
+  useGetMyRevenueQuery,
+  useRevenue_GetMyRevenueQuery,
+} from "@/generated/graphql";
+import dayjs from "dayjs";
+import { useMemo } from "react";
 import { StyleSheet } from "react-native";
 
-export default function IncomeInfo({ data }) {
+const startTimeStr = "T00:00:00+03:30";
+const endTimeStr = "T23:59:59+03:30";
+
+export default function IncomeInfo({}) {
+  const { daySD, dayED, weekSD, monthSD } = useMemo(() => {
+    const today = dayjs().format("YYYY-MM-DD");
+    const daySD = today + startTimeStr;
+    const dayED = today + endTimeStr;
+
+    const weekStart = dayjs().subtract(1, "week").format("YYYY-MM-DD");
+    const weekSD = weekStart + startTimeStr;
+
+    const monthStart = dayjs().subtract(1, "month").format("YYYY-MM-DD");
+    const monthSD = monthStart + startTimeStr;
+
+    return { daySD, dayED, monthSD, weekSD };
+  }, []);
+
+  const { data: unSetteledData } = useGetMyRevenueQuery({
+    input: {},
+  });
+  const unSetteledAmount =
+    unSetteledData?.revenue_getMyRevenue?.result?.unsettledAmount;
+
+  const { data: dayData } = useRevenue_GetMyRevenueQuery({
+    dayED,
+    daySD,
+  });
+  const { data: weekData } = useRevenue_GetMyRevenueQuery({
+    dayED,
+    daySD: weekSD,
+  });
+  const { data: monthData } = useRevenue_GetMyRevenueQuery({
+    dayED,
+    daySD: monthSD,
+  });
+
   const infoArray = [
     {
       title: "درآمد ماه",
-      value: `${data?.month?.result?.totalAmount ?? 0} ریال`,
+      value: `${monthData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
     },
     {
       title: "درآمد هفته",
-      value: `${data?.week?.result?.totalAmount ?? 0} ریال`,
+      value: `${weekData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
     },
     {
       title: "درآمد امروز",
-      value: `${data?.day?.result?.totalAmount ?? 0} ریال`,
+      value: `${dayData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
     },
   ];
 
@@ -26,7 +68,7 @@ export default function IncomeInfo({ data }) {
           fontType="bold"
           style={styles.fontSize}
         >
-          ۱٫۲۰۰٫۵۰۰ ریال
+          {`${unSetteledAmount ?? 0}`} ریال
         </ThemedText>
         <ThemedText style={styles.headerTxt} fontType="bold">
           درآمد تسویه نشده

@@ -57,6 +57,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.lightGray,
     paddingHorizontal: 4,
     paddingVertical: 8,
+    elevation: 3,
+    backgroundColor: Colors.white,
+    marginBottom: 8,
+    shadowColor: Colors.mediumGray,
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 10,
   },
 
   title: {

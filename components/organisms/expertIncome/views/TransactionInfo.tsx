@@ -1,11 +1,12 @@
 import { CustomFlatList, ThemedText, ThemedView } from "@/components";
 import IncomeInfoItem from "@/components/molecules/IncomeInfoItem";
 import { Colors } from "@/constants/Colors";
+import { ServiceRequestStatus } from "@/generated/graphql";
 import { Calendar as CalendarIcon } from "iconsax-react-native";
 import { useCallback } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
-import { useGetMyPaymentsQuery } from "../hooks";
+import { useGetServiceAcceptanceIncomeQuery } from "../hooks";
 import EmptyIncom from "./EmptyIncom";
 
 export default function TransactionInfo({
@@ -13,17 +14,21 @@ export default function TransactionInfo({
 }: {
   selectedDate?: any;
 }) {
-  const { data } = useGetMyPaymentsQuery({
+  const { data, isLoading } = useGetServiceAcceptanceIncomeQuery({
     where: selectedDate
       ? {
-          serviceRequest: {
-            and: [
-              { requestDate: { gte: `${selectedDate}T00:00:00+03:30` } },
-              { requestDate: { lte: `${selectedDate}T23:59:59+03:30` } },
-            ],
-          },
+          and: [
+            { paidAt: { gte: `${selectedDate}T00:00:00+03:30` } },
+            { paidAt: { lte: `${selectedDate}T23:59:59+03:30` } },
+            { status: { eq: ServiceRequestStatus.Paid } },
+          ],
         }
-      : undefined,
+      : {
+          paidAt: {
+            gte: `2018-09-09T00:00:00+03:30`,
+          },
+          status: { eq: ServiceRequestStatus.Paid },
+        },
   });
 
   const renderItem = useCallback(
@@ -50,13 +55,19 @@ export default function TransactionInfo({
           </ThemedText>
         </ThemedView>
 
-        <CustomFlatList
-          data={data?.pages}
-          style={styles.width}
-          keyExtractor={(item, index) => `${index}_income`}
-          ListEmptyComponent={() => <EmptyIncom />}
-          renderItem={renderItem}
-        />
+        {isLoading ? (
+          <ThemedView style={styles.loading}>
+            <ActivityIndicator size={"large"} />
+          </ThemedView>
+        ) : (
+          <CustomFlatList
+            data={data?.pages}
+            style={styles.width}
+            keyExtractor={(item, index) => `${index}_income`}
+            ListEmptyComponent={() => <EmptyIncom />}
+            renderItem={renderItem}
+          />
+        )}
       </ThemedView>
     </ThemedView>
   );
@@ -76,4 +87,10 @@ const styles = StyleSheet.create({
   blackTxt: { color: Colors.black },
 
   width: { width: "100%" },
+
+  loading: {
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
 });

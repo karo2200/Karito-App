@@ -113,7 +113,7 @@ const Dropdown = React.forwardRef<any, DropDownProps>(
 
         if (screenHeight - (py + h) > maxH) {
           setDropdownPosition({
-            top: Platform.OS === "ios" ? py + 8 + h : py,
+            top: Platform.OS === "ios" ? py + 8 + h : py + 10,
             bottom: undefined,
           });
         } else if (py > maxH) {

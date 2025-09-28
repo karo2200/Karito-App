@@ -22,6 +22,7 @@ export default function useLoginHook() {
           }
         },
         onError: (errorData: any) => {
+          console.log({ errorData });
           toast.showToast({
             message: "خطایی پیش آمده است. لطفا بعدا تلاش کنید",
           });

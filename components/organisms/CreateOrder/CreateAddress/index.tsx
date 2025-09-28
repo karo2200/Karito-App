@@ -1,8 +1,9 @@
-import { Divider, ThemedButton, ThemedText } from "@/components";
+import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { Colors } from "@/constants/Colors";
+import { DeviceHeight } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useAddress_CreateMutation,
@@ -25,6 +26,18 @@ const schema = yup.object().shape({
   address: yup.string().required("لطفا آدرس را وارد کنید."),
   lat: yup.number(),
   lng: yup.number(),
+  buildingNumber: yup
+    .number()
+    .typeError("عدد وارد کنید")
+    .required("لطفاْ شماره پلاک را وارد کنید"),
+  floorNumber: yup
+    .number()
+    .typeError("عدد وارد کنید")
+    .required("لطفاْ طبقه را وارد کنید"),
+  unitNumber: yup
+    .number()
+    .typeError("عدد وارد کنید")
+    .required("لطفاْ شماره واحد را وارد کنید"),
 });
 
 export default function AddressMap() {
@@ -37,6 +50,7 @@ export default function AddressMap() {
 
   const { data: userData } = useUser_GetMyProfileQuery();
   const user = userData?.user_getMyProfile?.result;
+
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -45,6 +59,9 @@ export default function AddressMap() {
       area: editItem?.nid,
       lat: parseFloat(editItem?.lat),
       lng: parseFloat(editItem?.lng),
+      floorNumber: editItem?.fNo,
+      buildingNumber: editItem?.bNo,
+      unitNumber: editItem?.uNo,
     },
   });
   const { handleSubmit, register, setValue } = methods;
@@ -90,6 +107,9 @@ export default function AddressMap() {
       longitude: formData?.lng,
       customerId: user?.id,
       text: formData?.address,
+      buildingNumber: formData?.buildingNumber,
+      unitNumber: formData?.unitNumber,
+      floorNumber: formData?.floorNumber,
     };
     if (editItem?.id) {
       editMutate(
@@ -99,6 +119,9 @@ export default function AddressMap() {
             newLatitude: formData?.lat,
             newLongitude: formData?.lng,
             newText: formData?.address,
+            buildingNumber: formData?.buildingNumber,
+            unitNumber: formData?.unitNumber,
+            floorNumber: formData?.floorNumber,
           },
         },
         {
@@ -137,67 +160,109 @@ export default function AddressMap() {
 
   return (
     <ScrollView style={styles.container}>
-      <FormProvider {...methods}>
-        {editItem && (
-          <Breadcrumb
-            items={[
-              { label: "مدیریت آدرس‌ها", href: "/(tabs)/profile/address" },
-              { label: "تغییر آدرس" },
-            ]}
-          />
-        )}
-        <ThemedText fontType="bold" style={{ marginTop: editItem ? 0 : 16 }}>
-          آدرس خود را مشخص کنید:
-        </ThemedText>
-        <Divider height={24} />
-        <View style={styles.dropdownContainer}>
-          <DropDownPicker
-            {...register("area")}
-            title="محله"
-            data={neighborHoods}
-            width={"100%"}
-            titleKey="name"
-            valueKey="id"
-            arrowBGColor={Colors.background}
-            arrowColor={Colors.gray500}
-            titleStyle={{ type: "subtitle" }}
-            containerViewStyle={{
-              width: "100%",
-              borderRadius: 6,
-              borderColor: Colors.disabledIcon,
-            }}
-            arrowSize={16}
-          />
-        </View>
+      <ThemedView style={styles.flex1}>
+        <FormProvider {...methods}>
+          {editItem?.id && (
+            <Breadcrumb
+              items={[
+                { label: "مدیریت آدرس‌ها", href: "/(tabs)/profile/address" },
+                { label: "تغییر آدرس" },
+              ]}
+            />
+          )}
+          {!editItem?.id && <Divider height={24} />}
+          <ThemedText fontType="bold">آدرس خود را مشخص کنید:</ThemedText>
+          <Divider height={24} />
 
-        <ThemedInput
-          placeholder="آدرس شما"
-          name="address"
-          textArea
-          label="نشانی دقیق"
-          labelStyle="sm"
-        />
-        <Divider height={24} />
-        <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
-        <Divider height={16} />
-        <MapView onLocationSelected={onLocationSelected} />
-        <ThemedButton
-          title="ذخیره"
-          onPress={handleSubmit(onPress)}
-          isLoading={isPending || isUpdating}
-          style={styles.button}
-        />
-      </FormProvider>
+          <View style={styles.dropdownContainer}>
+            <DropDownPicker
+              {...register("area")}
+              title="محله"
+              data={neighborHoods}
+              width={"100%"}
+              titleKey="name"
+              valueKey="id"
+              arrowBGColor={Colors.background}
+              arrowColor={Colors.gray500}
+              titleStyle={{ type: "subtitle" }}
+              containerViewStyle={{
+                width: "100%",
+                borderRadius: 6,
+                borderColor: Colors.disabledIcon,
+              }}
+              arrowSize={16}
+            />
+          </View>
+
+          <ThemedInput
+            placeholder="آدرس شما"
+            name="address"
+            textArea
+            label="نشانی دقیق"
+            labelStyle="sm"
+          />
+          <Divider height={24} />
+          <ThemedView style={styles.addressView}>
+            <ThemedInput
+              label="پلاک"
+              name="buildingNumber"
+              style={{ width: "32%" }}
+              keyboardType="numeric"
+              maxLength={8}
+              labelStyle="sm"
+            />
+            <ThemedInput
+              label="واحد"
+              name="unitNumber"
+              style={{ width: "32%" }}
+              keyboardType="numeric"
+              maxLength={4}
+              labelStyle="sm"
+            />
+            <ThemedInput
+              label="طبقه"
+              name="floorNumber"
+              style={{ width: "32%" }}
+              keyboardType="numeric"
+              maxLength={4}
+              labelStyle="sm"
+            />
+          </ThemedView>
+          <Divider height={24} />
+          <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
+          <Divider height={16} />
+          <ThemedView style={styles.mapView}>
+            <MapView onLocationSelected={onLocationSelected} />
+          </ThemedView>
+          <ThemedButton
+            title="ذخیره"
+            onPress={handleSubmit(onPress)}
+            isLoading={isPending || isUpdating}
+            style={styles.button}
+          />
+        </FormProvider>
+      </ThemedView>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
+  container: { flexGrow: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
+
+  flex1: { flex: 1 },
+
+  mapView: { height: DeviceHeight * 0.35 },
 
   dropdownContainer: {
     marginBottom: 12,
   },
 
-  button: { position: "absolute", bottom: 10 },
+  button: { marginTop: 18, marginBottom: 50 },
+
+  addressView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "flex-start",
+  },
 });

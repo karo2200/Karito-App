@@ -9,3 +9,9 @@ mutation address_update($input: UpdateAddressInput!) {
     status
   }
 }
+
+mutation address_delete($input: DeleteAddressInput!) {
+  address_delete(input: $input) {
+    status
+  }
+}

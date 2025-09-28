@@ -67,16 +67,18 @@ export default function RootLayout() {
     <ThemeProvider value={MyTheme}>
       <ThemedContainer>
         <Tabs
+          backBehavior="initialRoute"
           key={isLoggedIn ? "logged-in" : "guest"}
           initialRouteName={"home/index"}
           screenOptions={({ route }) => ({
             headerShown: true,
             title: "",
             headerRight: () => <RightIcon />,
-            tabBarSafeAreaInset: { bottom: "never" },
             tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBarStyle,
+            tabBarSafeAreaInset: { bottom: "always" },
             tabBarActiveTintColor: Colors.hint500,
             tabBarInactiveTintColor: Colors.mediumGray,
+            tabBarAllowFontScaling: true,
             tabBarLabelStyle: styles.tabBarLabelStyle,
             tabBarButton: (props) => (
               <TouchableOpacity
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
   tabBarStyle: {
     backgroundColor: "white",
     borderTopWidth: 0,
-    minHeight: 84,
+    minHeight: 94,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     shadowColor: "#000",
@@ -153,12 +155,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 5 },
     shadowRadius: 10,
     elevation: 5,
+    paddingBottom: 5,
   },
 
   tabBarLabelStyle: {
     fontSize: 12,
     fontFamily: FontType.YekanBakhRegular,
-    marginTop: 4,
+    marginVertical: 4,
   },
 
   tabBarIconStyle: {

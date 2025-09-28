@@ -25,6 +25,9 @@ query address_getMyAddresses(
         latitude
         longitude
         isPrimary
+        floorNumber
+        buildingNumber
+        unitNumber
         neighborhood {
           id
           city {
@@ -144,8 +147,8 @@ query province_getAll(
 query specialist_getAll(
   $skip: Int
   $take: Int
-  $where: SpecialistProfileDtoFilterInput
-  $order: [SpecialistProfileDtoSortInput!]
+  $where: SpecialistDtoFilterInput
+  $order: [SpecialistDtoSortInput!]
 ) {
   specialist_getAll {
     result(skip: $skip, take: $take, where: $where, order: $order) {

@@ -133,7 +133,9 @@ const CustomInput = React.forwardRef(
                 textAlignVertical: textArea ? "top" : "center",
                 color: color,
                 textAlign: forcePersianNumbers ? "left" : "right",
-                fontSize: labelStyle == "sm" ? 12 : 16,
+                fontSize: labelStyle === "sm" ? 12 : 16,
+                includeFontPadding: false,
+                paddingVertical: 0,
               },
             ]}
           />

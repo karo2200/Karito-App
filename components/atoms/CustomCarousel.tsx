@@ -1,10 +1,17 @@
 import { Colors } from "@/constants/Colors";
 import { ServiceTypeDto } from "@/generated/graphql";
+import { hideSheet, showSheet } from "@/hooks/useShowSheet";
+import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Dimensions, ImageBackground, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  ImageBackground,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-import ThemedButton from "./ThemedButton";
 
 const { width } = Dimensions.get("screen");
 
@@ -13,12 +20,14 @@ export default function CustomCarousel({ data }: { data: any }) {
 
   const router = useRouter();
 
+  const { isLoggedIn } = authCacheStore();
+
   return (
     <View style={styles.container}>
       <Carousel
         loop
         width={width - 32}
-        height={200}
+        height={241}
         autoPlay
         autoPlayInterval={3000}
         data={data?.serviceTypes}
@@ -27,21 +36,33 @@ export default function CustomCarousel({ data }: { data: any }) {
         onSnapToItem={(index) => setActiveIndex(index)}
         scrollAnimationDuration={800}
         renderItem={({ item }: { item: ServiceTypeDto }) => (
-          <ImageBackground
-            source={{ uri: item?.banner }}
-            style={styles.image}
-            resizeMode="cover"
-          >
-            <ThemedButton
-              title="سفارش"
-              style={styles.btn}
-              onPress={() =>
+          <Pressable
+            onPress={() => {
+              if (isLoggedIn) {
                 router.push(
                   `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}`
-                )
+                );
+              } else {
+                showSheet("confirmation-action", {
+                  payload: {
+                    hasLoading: false,
+                    showToastInActionSheet: false,
+                    title: "ورود",
+
+                    onClose: () => {
+                      hideSheet("confirmation-action");
+                    },
+                  },
+                });
               }
+            }}
+          >
+            <ImageBackground
+              source={{ uri: item?.banner }}
+              style={styles.image}
+              resizeMode="cover"
             />
-          </ImageBackground>
+          </Pressable>
         )}
       />
 
@@ -69,9 +90,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: width,
-    height: 200,
-    borderRadius: 12,
+    width: "100%",
+    height: 240,
+    borderRadius: 8,
   },
 
   dotsContainer: {
@@ -97,22 +118,5 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: "white",
-  },
-
-  btn: {
-    alignItems: "center",
-    borderRadius: 4,
-    backgroundColor: Colors.hint500,
-    height: 36,
-    width: "40%",
-    justifyContent: "center",
-    bottom: 8,
-    left: 8,
-    position: "absolute",
-    elevation: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 5 },
-    shadowRadius: 10,
   },
 });

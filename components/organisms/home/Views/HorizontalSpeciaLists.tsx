@@ -25,11 +25,13 @@ function HorizontalSpeciaLists({ data }: { data: any }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <ThemedText type="default" fontType="bold" style={styles.title}>
-          برترین متخصص‌ها
-        </ThemedText>
-      </View>
+      {data?.length > 0 && (
+        <View style={styles.header}>
+          <ThemedText type="default" fontType="bold" style={styles.title}>
+            برترین متخصص‌ها
+          </ThemedText>
+        </View>
+      )}
 
       <FlatList
         ref={listRef}

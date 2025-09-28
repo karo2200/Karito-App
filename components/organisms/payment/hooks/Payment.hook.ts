@@ -2,15 +2,15 @@ import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   ServiceRequestDto,
-  usePayment_CreateMutation,
+  usePayment_Create_ZibalMutation,
   useServiceRequest_ApplyDiscountMutation,
   useServiceRequest_RemoveDiscountMutation,
 } from "@/generated/graphql";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Linking } from "react-native";
+import { useEffect, useState } from "react";
+import { AppState, Linking } from "react-native";
 import { useGetServiceById } from "../../orderDetail/hooks/OrderDetail.guery";
 
 export default function usePaymentHook() {
@@ -24,6 +24,31 @@ export default function usePaymentHook() {
 
   const [discountCode, setDiscountCode] = useState("");
   const [isSetCode, setIsSetCode] = useState(false);
+  const [appState, setAppState] = useState("active");
+
+  useEffect(() => {
+    const checkUrl = async () => {
+      const url = await Linking.getInitialURL();
+
+      console.log("uuuuuuu", url);
+
+      if (url === "socialorder://socialorder") {
+        router.replace("/order/paymentStatus");
+      }
+    };
+
+    const subscription = AppState.addEventListener("change", (state) => {
+      if (state === "active") {
+        setAppState("active");
+        checkUrl();
+      }
+    });
+
+    return () => {
+      setAppState("down");
+      subscription.remove();
+    };
+  }, [appState]);
 
   const { data: serviceData, isLoading } = useGetServiceById({
     input: { serviceRequestId: params?.id },
@@ -33,7 +58,7 @@ export default function usePaymentHook() {
     useServiceRequest_ApplyDiscountMutation();
 
   const { mutate: paymentCreate, isPending: paymentLoading } =
-    usePayment_CreateMutation();
+    usePayment_Create_ZibalMutation();
 
   const { mutate: removeCode, isPending: removeLoading } =
     useServiceRequest_RemoveDiscountMutation();

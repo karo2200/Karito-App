@@ -4,6 +4,8 @@ import {
   PaymentDtoFilterInput,
   PaymentDtoSortInput,
   Payment_GetMyPaymentsDocument,
+  ServiceRequestDtoFilterInput,
+  ServiceRequest_GetMyAcceptancesIncomDocument,
 } from "@/generated/graphql";
 import { fetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -42,6 +44,42 @@ export const useGetMyPaymentsQuery = ({
         pages: data?.pages
           ?.map((a) => a?.payment_getMyPayments?.result?.items)
           .flat(),
+      };
+    },
+  });
+};
+
+export const useGetServiceAcceptanceIncomeQuery = ({
+  where,
+}: {
+  where?: ServiceRequestDtoFilterInput;
+}) => {
+  return useInfiniteQuery({
+    queryKey: [queryKeys.serviceRequest_getMyAcceptances, where],
+    queryFn: async ({ pageParam = 0 }) => {
+      return fetcher(ServiceRequest_GetMyAcceptancesIncomDocument, {
+        skip: pageParam * PAGE_SIZE,
+        take: PAGE_SIZE,
+        ...where,
+      })();
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (
+        lastPage?.serviceRequest_getMyAcceptances?.result?.pageInfo?.hasNextPage
+      ) {
+        return allPages.length;
+      }
+      return undefined;
+    },
+    select: (data) => {
+      return {
+        ...data,
+        pages: data?.pages
+          ?.map((a) => a?.serviceRequest_getMyAcceptances?.result?.items)
+          .flat(),
+        totalCount:
+          data?.pages?.[0]?.serviceRequest_getMyAcceptances?.result?.totalCount,
       };
     },
   });

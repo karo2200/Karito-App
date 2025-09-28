@@ -23,6 +23,8 @@
       "supportsTablet": true
     },
     "android": {
+      "allowBackup": false,
+      "rtl": false,
       "intentFilters": [
         {
           "action": "VIEW",

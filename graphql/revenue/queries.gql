@@ -1,29 +1,18 @@
-query revenue_getMyRevenue(
-  $daySD: DateTime!
-  $dayED: DateTime!
-  $weekSD: DateTime!
-  $weekED: DateTime!
-  $monthSD: DateTime!
-  $monthED: DateTime!
-) {
-  day: revenue_getMyRevenue(input: { startDate: $daySD, endDate: $dayED }) {
+query revenue_getMyRevenue($daySD: DateTime!, $dayED: DateTime!) {
+  revenue_getMyRevenue(input: { startDate: $daySD, endDate: $dayED }) {
     status
     result {
       totalAmount
     }
   }
-  week: revenue_getMyRevenue(input: { startDate: $weekSD, endDate: $weekED }) {
+}
+
+query getMyRevenue($input: GetMyRevenueInput!) {
+  revenue_getMyRevenue(input: $input) {
     status
     result {
       totalAmount
-    }
-  }
-  month: revenue_getMyRevenue(
-    input: { startDate: $monthSD, endDate: $monthED }
-  ) {
-    status
-    result {
-      totalAmount
+      unsettledAmount
     }
   }
 }

@@ -10,8 +10,8 @@ import LocationActionSheet from "@/components/molecules/LocationActionSheet";
 import PaymentWaitingSheet from "@/components/molecules/PaymentWaitingSheet";
 import { Colors } from "@/constants/Colors";
 import { ServiceRequestStatus } from "@/generated/graphql";
-import { getStatusFa } from "@/services/helper";
 import { formatPrice, formatToJalali } from "@/services/ParseData";
+import { getStatusFa } from "@/services/helper";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
 import {
@@ -23,10 +23,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import useOrderDetailHook from "./hooks/OrderDetail.hook";
 import CancelRequestSheet from "./Views/CancelRequestSheet";
 import FinishWorkSheet from "./Views/FinishWorkSheet";
 import SpecialistData from "./Views/SpecialistData";
+import useOrderDetailHook from "./hooks/OrderDetail.hook";
 
 export default function OrderDetailScreen() {
   const {
@@ -54,6 +54,10 @@ export default function OrderDetailScreen() {
     refreshing,
     pageType,
   } = useOrderDetailHook();
+  console.log(JSON.stringify({ serviceData }));
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <ThemedContainer style={{ paddingHorizontal: 15 }}>
@@ -182,7 +186,8 @@ export default function OrderDetailScreen() {
             ]}
           >
             {serviceData?.status !== ServiceRequestStatus.PendingPayment &&
-            serviceData?.status !== ServiceRequestStatus.Paid ? (
+            serviceData?.status !== ServiceRequestStatus.Paid &&
+            serviceData?.status != ServiceRequestStatus.CancelledByCustomer ? (
               <Pressable onPress={() => setCancelRequestVisible(true)}>
                 {cancelWorkPending ? (
                   <ActivityIndicator />
@@ -196,7 +201,9 @@ export default function OrderDetailScreen() {
               <View />
             )}
 
-            {serviceData?.status !== ServiceRequestStatus.Pending ? (
+            {serviceData?.status !== ServiceRequestStatus.Pending &&
+            serviceData?.status !==
+              ServiceRequestStatus?.CancelledByCustomer ? (
               <SpecialistData />
             ) : (
               serviceData?.status === ServiceRequestStatus.Pending && (

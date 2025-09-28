@@ -15,6 +15,7 @@ import Footer from "./views/Footer";
 const schema = yup.object().shape({
   phone: yup
     .string()
+    .matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید")
     .length(11, "شماره موبایل بدرستی وارد نشده است")
     .required("لطفا شماره موبایل خود را وارد کنید"),
 });

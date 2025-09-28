@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function useExpertIncome() {
   const [selectedDate, setSelectedDate] = useState<string | undefined>(
-    new Date()?.toLocaleDateString()
+    undefined
   );
 
   const onDateSelect = (jDate: string) => {
