@@ -14,12 +14,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
-import MapView from "./MapView";
+// import MapView from "./MapView";
+import GoogleMapView from "./GoogleMapView";
 import { useGetNeighborhoodsQuery } from "./hooks";
 
 const schema = yup.object().shape({
@@ -55,6 +56,7 @@ export default function AddressMap() {
   const neighborHoods = data?.pages?.[0] ? data?.pages : [];
 
   const router = useRouter();
+  const mapRef = useRef(null);
 
   const { data: userData } = useUser_GetMyProfileQuery();
   const user = userData?.user_getMyProfile?.result;
@@ -69,19 +71,20 @@ export default function AddressMap() {
     if (currentAddress) {
       setValue("address", currentAddress?.text);
       setValue("area", currentAddress?.neighborhood?.id);
-      (setValue("lat", currentAddress?.latitude ?? 0),
-        setValue("lng", currentAddress?.longitude ?? 0),
-        setValue("floorNumber", currentAddress?.floorNumber ?? 0),
-        setValue("buildingNumber", currentAddress?.buildingNumber ?? 0),
-        setValue("unitNumber", currentAddress?.unitNumber ?? 0));
+      setValue("lat", currentAddress?.latitude ?? 0);
+      setValue("lng", currentAddress?.longitude ?? 0);
+      setValue("floorNumber", currentAddress?.floorNumber ?? 0);
+      setValue("buildingNumber", currentAddress?.buildingNumber ?? 0);
+      setValue("unitNumber", currentAddress?.unitNumber ?? 0);
+      mapRef.current?.changeLocation({
+        latitude: currentAddress?.latitude,
+        longitude: currentAddress?.longitude,
+      });
     }
   }, [currentAddress]);
 
-  const onLocationSelected = (latLng?: string) => {
-    if (!latLng || latLng?.length < 3) return;
+  const onLocationSelected = (latLngJson?: any) => {
     try {
-      const latLngJson = JSON.parse(latLng);
-
       setValue("lat", latLngJson?.lat);
       setValue("lng", latLngJson?.lng);
 
@@ -243,7 +246,18 @@ export default function AddressMap() {
           <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
           <Divider height={16} />
           <ThemedView style={styles.mapView}>
-            <MapView onLocationSelected={onLocationSelected} />
+            <GoogleMapView
+              onLocationSelected={onLocationSelected}
+              latLng={
+                currentAddress?.id
+                  ? {
+                      lat: currentAddress?.latitude,
+                      lng: currentAddress?.longitude,
+                    }
+                  : undefined
+              }
+              ref={mapRef}
+            />
           </ThemedView>
           <ThemedButton
             title="ذخیره"
@@ -262,7 +276,7 @@ const styles = StyleSheet.create({
 
   flex1: { flex: 1 },
 
-  mapView: { height: DeviceHeight * 0.35 },
+  mapView: { height: DeviceHeight * 0.35, width: "100%" },
 
   dropdownContainer: {
     marginBottom: 12,
