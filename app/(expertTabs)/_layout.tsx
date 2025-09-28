@@ -63,6 +63,7 @@ export default function RootLayout() {
       <ThemeProvider value={MyTheme}>
         <ThemedContainer>
           <Tabs
+            backBehavior="initialRoute"
             initialRouteName={"workList"}
             screenOptions={({ route }) => ({
               headerShown: true,
@@ -75,6 +76,7 @@ export default function RootLayout() {
               tabBarActiveTintColor: Colors.hint500,
               tabBarInactiveTintColor: Colors.mediumGray,
               tabBarLabelStyle: styles.tabBarLabelStyle,
+              tabBarAllowFontScaling: true,
               tabBarButton: (props) => (
                 <TouchableOpacity
                   activeOpacity={1}
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
   tabBarLabelStyle: {
     fontSize: 12,
     fontFamily: FontType.YekanBakhRegular,
-    marginTop: 4,
+    marginVertical: 4,
   },
 
   tabBarIconStyle: {

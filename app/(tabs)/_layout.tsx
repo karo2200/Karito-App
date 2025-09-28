@@ -67,6 +67,7 @@ export default function RootLayout() {
     <ThemeProvider value={MyTheme}>
       <ThemedContainer>
         <Tabs
+          backBehavior="initialRoute"
           key={isLoggedIn ? "logged-in" : "guest"}
           initialRouteName={"home/index"}
           screenOptions={({ route }) => ({
@@ -77,7 +78,7 @@ export default function RootLayout() {
             tabBarSafeAreaInset: { bottom: "always" },
             tabBarActiveTintColor: Colors.hint500,
             tabBarInactiveTintColor: Colors.mediumGray,
-            // tabBarAllowFontScaling: true,
+            tabBarAllowFontScaling: true,
             tabBarLabelStyle: styles.tabBarLabelStyle,
             tabBarButton: (props) => (
               <TouchableOpacity

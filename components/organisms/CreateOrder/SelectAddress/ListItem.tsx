@@ -37,9 +37,7 @@ const ListItem = ({ item, index, length, onChange, field, router }) => {
   };
 
   const onEditPress = () => {
-    router.push(
-      `/CreateAddress?nid=${item?.neighborhood?.id}&txt=${item?.text}&lat=${item?.latitude}&lng=${item?.longitude}&id=${item?.id}`
-    );
+    router.push(`/CreateAddress?id=${item?.id}`);
   };
 
   return (

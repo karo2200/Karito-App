@@ -6,3 +6,13 @@ query revenue_getMyRevenue($daySD: DateTime!, $dayED: DateTime!) {
     }
   }
 }
+
+query getMyRevenue($input: GetMyRevenueInput!) {
+  revenue_getMyRevenue(input: $input) {
+    status
+    result {
+      totalAmount
+      unsettledAmount
+    }
+  }
+}

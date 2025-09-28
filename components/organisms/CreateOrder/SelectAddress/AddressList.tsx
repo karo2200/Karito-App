@@ -33,12 +33,6 @@ export default function AddressList({
     router.push("/CreateAddress");
   };
 
-  const onEditPress = (item: any) => {
-    router.push(
-      `/CreateAddress?nid=${item?.neighborhood?.id}&txt=${item?.text}&lat=${item?.latitude}&lng=${item?.longitude}&id=${item?.id}`
-    );
-  };
-
   const renderItem = ({ item, index }) => (
     <ListItem
       {...{ item, index, field, router, length: data?.pages?.length, onChange }}

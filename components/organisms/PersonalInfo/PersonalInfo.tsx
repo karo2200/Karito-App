@@ -61,7 +61,10 @@ const PersonalInfo = () => {
       setValue("codeImage", profileData?.idCardImageUrl as string),
       setValue(
         "year",
-        profileData?.birthDate ? parseDate(profileData?.birthDate)?.year : ""
+        profileData?.birthDate &&
+          profileData?.birthDate != "0001-01-01T00:00:00.000Z"
+          ? parseDate(profileData?.birthDate)?.year
+          : ""
       ),
       setValue(
         "day",

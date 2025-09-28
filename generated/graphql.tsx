@@ -3297,6 +3297,23 @@ export type Revenue_GetMyRevenueQuery = {
   };
 };
 
+export type GetMyRevenueQueryVariables = Exact<{
+  input: GetMyRevenueInput;
+}>;
+
+export type GetMyRevenueQuery = {
+  __typename?: "Query";
+  revenue_getMyRevenue: {
+    __typename?: "ResponseBaseOfSpecialistRevenueDto";
+    status?: any | null;
+    result?: {
+      __typename?: "SpecialistRevenueDto";
+      totalAmount: any;
+      unsettledAmount: any;
+    } | null;
+  };
+};
+
 export type ServiceCategory_GetAllQueryVariables = Exact<{
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
@@ -3764,6 +3781,9 @@ export type Address_GetMyAddressesQuery = {
         latitude: number;
         longitude: number;
         isPrimary: boolean;
+        floorNumber: number;
+        buildingNumber: number;
+        unitNumber: number;
         text: string;
         neighborhood: {
           __typename?: "NeighborhoodDto";
@@ -3933,6 +3953,34 @@ export type Specialist_GetAllQuery = {
         __typename?: "CollectionSegmentInfo";
         hasNextPage: boolean;
         hasPreviousPage: boolean;
+      };
+    } | null;
+  };
+};
+
+export type Address_GetAddressByIdQueryVariables = Exact<{
+  input: GetAddressByIdInput;
+}>;
+
+export type Address_GetAddressByIdQuery = {
+  __typename?: "Query";
+  address_getAddressById: {
+    __typename?: "ResponseBaseOfAddressDto";
+    result?: {
+      __typename?: "AddressDto";
+      id: any;
+      latitude: number;
+      longitude: number;
+      isPrimary: boolean;
+      floorNumber: number;
+      buildingNumber: number;
+      unitNumber: number;
+      text: string;
+      neighborhood: {
+        __typename?: "NeighborhoodDto";
+        id: any;
+        name: string;
+        city: { __typename?: "CityDto"; name: string; id: any };
       };
     } | null;
   };
@@ -5482,6 +5530,72 @@ export const useInfiniteRevenue_GetMyRevenueQuery = <
   );
 };
 
+export const GetMyRevenueDocument = `
+    query getMyRevenue($input: GetMyRevenueInput!) {
+  revenue_getMyRevenue(input: $input) {
+    status
+    result {
+      totalAmount
+      unsettledAmount
+    }
+  }
+}
+    `;
+
+export const useGetMyRevenueQuery = <
+  TData = GetMyRevenueQuery,
+  TError = unknown,
+>(
+  variables: GetMyRevenueQueryVariables,
+  options?: Omit<
+    UseQueryOptions<GetMyRevenueQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<GetMyRevenueQuery, TError, TData>["queryKey"];
+  },
+) => {
+  return useQuery<GetMyRevenueQuery, TError, TData>({
+    queryKey: ["getMyRevenue", variables],
+    queryFn: fetcher<GetMyRevenueQuery, GetMyRevenueQueryVariables>(
+      GetMyRevenueDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
+
+export const useInfiniteGetMyRevenueQuery = <
+  TData = InfiniteData<GetMyRevenueQuery>,
+  TError = unknown,
+>(
+  variables: GetMyRevenueQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<GetMyRevenueQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      GetMyRevenueQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<GetMyRevenueQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ["getMyRevenue.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<GetMyRevenueQuery, GetMyRevenueQueryVariables>(
+            GetMyRevenueDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
 export const ServiceCategory_GetAllDocument = `
     query serviceCategory_getAll($skip: Int, $take: Int, $where: ServiceCategoryDtoFilterInput, $order: [ServiceCategoryDtoSortInput!]) {
   serviceCategory_getAll {
@@ -6710,6 +6824,9 @@ export const Address_GetMyAddressesDocument = `
         latitude
         longitude
         isPrimary
+        floorNumber
+        buildingNumber
+        unitNumber
         neighborhood {
           id
           city {
@@ -7167,6 +7284,95 @@ export const useInfiniteSpecialist_GetAllQuery = <
             Specialist_GetAllDocument,
             { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const Address_GetAddressByIdDocument = `
+    query address_getAddressById($input: GetAddressByIdInput!) {
+  address_getAddressById(input: $input) {
+    result {
+      id
+      latitude
+      longitude
+      isPrimary
+      floorNumber
+      buildingNumber
+      unitNumber
+      neighborhood {
+        id
+        city {
+          name
+          id
+        }
+        name
+      }
+      text
+    }
+  }
+}
+    `;
+
+export const useAddress_GetAddressByIdQuery = <
+  TData = Address_GetAddressByIdQuery,
+  TError = unknown,
+>(
+  variables: Address_GetAddressByIdQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Address_GetAddressByIdQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      Address_GetAddressByIdQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<Address_GetAddressByIdQuery, TError, TData>({
+    queryKey: ["address_getAddressById", variables],
+    queryFn: fetcher<
+      Address_GetAddressByIdQuery,
+      Address_GetAddressByIdQueryVariables
+    >(Address_GetAddressByIdDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteAddress_GetAddressByIdQuery = <
+  TData = InfiniteData<Address_GetAddressByIdQuery>,
+  TError = unknown,
+>(
+  variables: Address_GetAddressByIdQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Address_GetAddressByIdQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Address_GetAddressByIdQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<Address_GetAddressByIdQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "address_getAddressById.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            Address_GetAddressByIdQuery,
+            Address_GetAddressByIdQueryVariables
+          >(Address_GetAddressByIdDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
         ...restOptions,
       };
     })(),

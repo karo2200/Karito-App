@@ -1,6 +1,8 @@
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
+import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ThemedInput from "@/components/atoms/ThemedInput";
+import { Colors } from "@/constants/Colors";
 import { DeviceHeight } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
@@ -12,10 +14,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
+import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
 import MapView from "./MapView";
 import { useGetNeighborhoodsQuery } from "./hooks";
 
@@ -24,10 +27,29 @@ const schema = yup.object().shape({
   address: yup.string().required("لطفا آدرس را وارد کنید."),
   lat: yup.number(),
   lng: yup.number(),
+  buildingNumber: yup
+    .number()
+    .typeError("عدد وارد کنید")
+    .required("لطفاْ شماره پلاک را وارد کنید"),
+  floorNumber: yup
+    .number()
+    .typeError("عدد وارد کنید")
+    .required("لطفاْ طبقه را وارد کنید"),
+  unitNumber: yup
+    .number()
+    .typeError("عدد وارد کنید")
+    .required("لطفاْ شماره واحد را وارد کنید"),
 });
 
 export default function AddressMap() {
   const editItem = useRoute().params;
+
+  const { data: addressData } = useGetUserAddressesQuery({
+    where: { id: { eq: editItem?.id } },
+    take: 1,
+    skip: 0,
+  });
+  const currentAddress = addressData?.pages[0];
 
   const { data } = useGetNeighborhoodsQuery({});
   const neighborHoods = data?.pages?.[0] ? data?.pages : [];
@@ -36,17 +58,24 @@ export default function AddressMap() {
 
   const { data: userData } = useUser_GetMyProfileQuery();
   const user = userData?.user_getMyProfile?.result;
+
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: {
-      address: editItem?.txt,
-      area: editItem?.nid,
-      lat: parseFloat(editItem?.lat),
-      lng: parseFloat(editItem?.lng),
-    },
   });
   const { handleSubmit, register, setValue } = methods;
+
+  useEffect(() => {
+    if (currentAddress) {
+      setValue("address", currentAddress?.text);
+      setValue("area", currentAddress?.neighborhood?.id);
+      (setValue("lat", currentAddress?.latitude ?? 0),
+        setValue("lng", currentAddress?.longitude ?? 0),
+        setValue("floorNumber", currentAddress?.floorNumber ?? 0),
+        setValue("buildingNumber", currentAddress?.buildingNumber ?? 0),
+        setValue("unitNumber", currentAddress?.unitNumber ?? 0));
+    }
+  }, [currentAddress]);
 
   const onLocationSelected = (latLng?: string) => {
     if (!latLng || latLng?.length < 3) return;
@@ -89,6 +118,9 @@ export default function AddressMap() {
       longitude: formData?.lng,
       customerId: user?.id,
       text: formData?.address,
+      buildingNumber: formData?.buildingNumber,
+      unitNumber: formData?.unitNumber,
+      floorNumber: formData?.floorNumber,
     };
     if (editItem?.id) {
       editMutate(
@@ -98,6 +130,9 @@ export default function AddressMap() {
             newLatitude: formData?.lat,
             newLongitude: formData?.lng,
             newText: formData?.address,
+            buildingNumber: formData?.buildingNumber,
+            unitNumber: formData?.unitNumber,
+            floorNumber: formData?.floorNumber,
           },
         },
         {
@@ -150,7 +185,7 @@ export default function AddressMap() {
           <ThemedText fontType="bold">آدرس خود را مشخص کنید:</ThemedText>
           <Divider height={24} />
 
-          {/* <View style={styles.dropdownContainer}>
+          <View style={styles.dropdownContainer}>
             <DropDownPicker
               {...register("area")}
               title="محله"
@@ -168,7 +203,7 @@ export default function AddressMap() {
               }}
               arrowSize={16}
             />
-          </View> */}
+          </View>
 
           <ThemedInput
             placeholder="آدرس شما"
@@ -179,9 +214,30 @@ export default function AddressMap() {
           />
           <Divider height={24} />
           <ThemedView style={styles.addressView}>
-            <ThemedInput label="پلاک" name="pno" style={{ width: "32%" }} />
-            <ThemedInput label="واحد" name="pno" style={{ width: "32%" }} />
-            <ThemedInput label="طبقه" name="pno" style={{ width: "32%" }} />
+            <ThemedInput
+              label="پلاک"
+              name="buildingNumber"
+              style={{ width: "32%" }}
+              keyboardType="numeric"
+              maxLength={8}
+              labelStyle="sm"
+            />
+            <ThemedInput
+              label="واحد"
+              name="unitNumber"
+              style={{ width: "32%" }}
+              keyboardType="numeric"
+              maxLength={4}
+              labelStyle="sm"
+            />
+            <ThemedInput
+              label="طبقه"
+              name="floorNumber"
+              style={{ width: "32%" }}
+              keyboardType="numeric"
+              maxLength={4}
+              labelStyle="sm"
+            />
           </ThemedView>
           <Divider height={24} />
           <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
@@ -218,5 +274,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    alignItems: "flex-start",
   },
 });
