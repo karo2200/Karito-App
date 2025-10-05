@@ -1,8 +1,6 @@
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
-import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ThemedInput from "@/components/atoms/ThemedInput";
-import { Colors } from "@/constants/Colors";
 import { DeviceHeight } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
@@ -16,15 +14,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
 // import MapView from "./MapView";
-import GoogleMapView from "./GoogleMapView";
-import { useGetNeighborhoodsQuery } from "./hooks";
 
 const schema = yup.object().shape({
-  area: yup.string().required("لطفا محله را وارد کنید"),
   address: yup.string().required("لطفا آدرس را وارد کنید."),
   lat: yup.number(),
   lng: yup.number(),
@@ -52,9 +47,6 @@ export default function AddressMap() {
   });
   const currentAddress = addressData?.pages[0];
 
-  const { data } = useGetNeighborhoodsQuery({});
-  const neighborHoods = data?.pages?.[0] ? data?.pages : [];
-
   const router = useRouter();
   const mapRef = useRef(null);
 
@@ -65,12 +57,11 @@ export default function AddressMap() {
     resolver: yupResolver(schema),
     mode: "onChange",
   });
-  const { handleSubmit, register, setValue } = methods;
+  const { handleSubmit, setValue } = methods;
 
   useEffect(() => {
     if (currentAddress) {
       setValue("address", currentAddress?.text);
-      setValue("area", currentAddress?.neighborhood?.id);
       setValue("lat", currentAddress?.latitude ?? 0);
       setValue("lng", currentAddress?.longitude ?? 0);
       setValue("floorNumber", currentAddress?.floorNumber ?? 0);
@@ -116,7 +107,6 @@ export default function AddressMap() {
   const queryClient = useQueryClient();
   const onPress = (formData) => {
     const input = {
-      neighborhoodId: formData?.area,
       latitude: formData?.lat,
       longitude: formData?.lng,
       customerId: user?.id,
@@ -187,27 +177,6 @@ export default function AddressMap() {
           {!editItem?.id && <Divider height={24} />}
           <ThemedText fontType="bold">آدرس خود را مشخص کنید:</ThemedText>
           <Divider height={24} />
-
-          <View style={styles.dropdownContainer}>
-            <DropDownPicker
-              {...register("area")}
-              title="محله"
-              data={neighborHoods}
-              width={"100%"}
-              titleKey="name"
-              valueKey="id"
-              arrowBGColor={Colors.background}
-              arrowColor={Colors.gray500}
-              titleStyle={{ type: "subtitle" }}
-              containerViewStyle={{
-                width: "100%",
-                borderRadius: 6,
-                borderColor: Colors.disabledIcon,
-              }}
-              arrowSize={16}
-            />
-          </View>
-
           <ThemedInput
             placeholder="آدرس شما"
             name="address"
@@ -246,18 +215,20 @@ export default function AddressMap() {
           <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
           <Divider height={16} />
           <ThemedView style={styles.mapView}>
-            <GoogleMapView
-              onLocationSelected={onLocationSelected}
-              latLng={
-                currentAddress?.id
-                  ? {
-                      lat: currentAddress?.latitude,
-                      lng: currentAddress?.longitude,
-                    }
-                  : undefined
-              }
-              ref={mapRef}
-            />
+            {/* {Platform.OS != "web" && (
+              <GoogleMapView
+                onLocationSelected={onLocationSelected}
+                latLng={
+                  currentAddress?.id
+                    ? {
+                        lat: currentAddress?.latitude,
+                        lng: currentAddress?.longitude,
+                      }
+                    : undefined
+                }
+                ref={mapRef}
+              />
+            )} */}
           </ThemedView>
           <ThemedButton
             title="ذخیره"

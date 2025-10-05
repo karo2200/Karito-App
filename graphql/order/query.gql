@@ -55,13 +55,9 @@ query serviceRequest_getMyAcceptances(
           text
           latitude
           longitude
-          neighborhood {
-            id
-            city {
-              name
-              id
-            }
+          city {
             name
+            id
           }
         }
         finalPrice
@@ -139,13 +135,9 @@ query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
         text
         latitude
         longitude
-        neighborhood {
-          id
-          city {
-            name
-            id
-          }
+        city {
           name
+          id
         }
       }
       finalPrice

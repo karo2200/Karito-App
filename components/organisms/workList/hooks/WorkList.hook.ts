@@ -61,7 +61,7 @@ export default function useWorkOutHook() {
       },
       {
         address: {
-          neighborhood: { city: { id: { eq: profileData?.city?.id } } },
+          city: { id: { eq: profileData?.city?.id } },
         },
       },
     ];
