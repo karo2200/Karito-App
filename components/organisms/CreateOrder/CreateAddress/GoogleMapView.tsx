@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { StyleSheet } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { Platform, StyleSheet } from "react-native";
 
+import { ThemedText, ThemedView } from "@/components";
 import * as Location from "expo-location";
 
 const GoogleMapView = forwardRef(
@@ -40,6 +40,20 @@ const GoogleMapView = forwardRef(
         setInitRegion({ latitude, longitude, ...delta });
       },
     }));
+
+    // ✅ Web branch (no crash)
+    if (Platform.OS === "web") {
+      return (
+        <ThemedView style={styles.container}>
+          <ThemedText>Map is not supported on web</ThemedText>
+        </ThemedView>
+      );
+    }
+
+    // ✅ Mobile branch (require inside branch so it's never touched on web)
+    const MapModule = require("react-native-maps");
+    const MapView = MapModule.default;
+    const { Marker, PROVIDER_GOOGLE } = MapModule;
 
     return (
       <MapView

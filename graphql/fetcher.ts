@@ -53,7 +53,6 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
     if (
       !query.includes("auth_requestOtp") &&
       !query.includes("auth_verifyOtp") &&
-      !query.includes("neighborhood_getAll") &&
       (!accessToken || isTokenExpired(accessToken))
     ) {
       const newToken = await refreshAccessToken();

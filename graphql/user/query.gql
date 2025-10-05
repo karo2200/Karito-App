@@ -28,13 +28,9 @@ query address_getMyAddresses(
         floorNumber
         buildingNumber
         unitNumber
-        neighborhood {
-          id
-          city {
-            name
-            id
-          }
+        city {
           name
+          id
         }
         text
       }
@@ -182,13 +178,9 @@ query address_getAddressById($input: GetAddressByIdInput!) {
       floorNumber
       buildingNumber
       unitNumber
-      neighborhood {
-        id
-        city {
-          name
-          id
-        }
+      city {
         name
+        id
       }
       text
     }
