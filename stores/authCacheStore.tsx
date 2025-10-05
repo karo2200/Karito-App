@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 import { create, StateCreator } from "zustand";
 import { createJSONStorage, persist, PersistOptions } from "zustand/middleware";
 
@@ -26,6 +27,8 @@ type AuthCacheType = {
   phone: string;
   isSelectRole: boolean;
   setIsSelectRole: (value: boolean) => void;
+  _hasHydrated: boolean;
+  setHasHydrated: (value: boolean) => void;
 };
 type AuthCacheStore = (
   config: StateCreator<AuthCacheType>,
@@ -36,6 +39,11 @@ export const authCacheStore = create<AuthCacheType>(
   (persist as AuthCacheStore)(
     (set) => ({
       accessToken: null,
+      _hasHydrated: false,
+      setHasHydrated: (value: boolean) =>
+        set({
+          _hasHydrated: value,
+        }),
       setAccessToken: (accessToken: string) => set({ accessToken }),
       refreshToken: null,
       setRefreshToken: (refreshToken: string) => set({ refreshToken }),
@@ -71,7 +79,13 @@ export const authCacheStore = create<AuthCacheType>(
     }),
     {
       name: "auth-cache-storage",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage:
+        Platform.OS === "web"
+          ? undefined
+          : createJSONStorage(() => AsyncStorage),
+      onRehydrateStorage: (state) => {
+        return () => state.setHasHydrated(true);
+      },
     }
   )
 );

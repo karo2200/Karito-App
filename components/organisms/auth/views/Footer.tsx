@@ -2,7 +2,7 @@ import React from "react";
 
 import { ThemedButton, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
+import { DeviceHeight, DeviceWidth, maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { UserType } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
@@ -50,6 +50,7 @@ const Footer = ({
         disabledTextColor={Colors.mediumGray}
         isLoading={isNextLoading}
         fontType="bold"
+        style={{ width: 0.9 * maxWidth }}
       />
       {role && (
         <Text
@@ -69,11 +70,10 @@ export default Footer;
 
 const styles = StyleSheet.create({
   button: {
-    position: "absolute",
-    bottom: DeviceHeight * 0.15,
+    marginBottom: DeviceHeight * 0.15,
     width: DeviceWidth - 30,
     alignSelf: "center",
-    zIndex: 1,
+    alignItems: "center",
   },
 
   txt: {
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginTop: 12,
     letterSpacing: 3,
+    alignSelf: "center",
   },
 
   color: { color: Colors.hint500 },

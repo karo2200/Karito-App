@@ -9,7 +9,7 @@ import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { UserType } from "@/generated/graphql";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import useLoginHook from "./login.hook";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
@@ -40,7 +40,7 @@ const LoginSection = () => {
   return (
     <KeyboardAutoHide>
       <FormProvider {...methods}>
-        <View style={styles.form}>
+        <ScrollView style={styles.form}>
           <CustomImage
             localSource={require("@/assets/images/loginBg.png")}
             style={styles.image}
@@ -54,19 +54,19 @@ const LoginSection = () => {
             maxLength={11}
             forcePersianNumbers
           />
-        </View>
-        <Footer
-          onPress={handleSubmit(onDoLogin)}
-          isNextLoading={isSendingCode}
-          hasError={
-            errors?.["phone"]?.message?.length > 0 ||
-            getValues("phone")?.length < 1 ||
-            !getValues("phone")
-              ? true
-              : false
-          }
-          role={UserType.Customer}
-        />
+          <Footer
+            onPress={handleSubmit(onDoLogin)}
+            isNextLoading={isSendingCode}
+            hasError={
+              errors?.["phone"]?.message?.length > 0 ||
+              getValues("phone")?.length < 1 ||
+              !getValues("phone")
+                ? true
+                : false
+            }
+            role={UserType.Customer}
+          />
+        </ScrollView>
       </FormProvider>
     </KeyboardAutoHide>
   );
@@ -75,14 +75,6 @@ const LoginSection = () => {
 export default LoginSection;
 
 const styles = StyleSheet.create({
-  button: {
-    position: "absolute",
-    bottom: 100,
-    width: DeviceWidth - 40,
-    alignSelf: "center",
-    zIndex: 1,
-  },
-
   form: {
     width: "100%",
     flex: 1,
@@ -93,6 +85,6 @@ const styles = StyleSheet.create({
     width: DeviceWidth * 0.5,
     height: DeviceHeight * 0.6,
     position: "absolute",
-    zIndex: 1,
+    zIndex: -1,
   },
 });

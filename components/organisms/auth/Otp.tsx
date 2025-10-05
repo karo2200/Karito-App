@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
+import { isWeb } from "@/app/_layout";
 import { CustomImage, ThemedText, ThemedView } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
@@ -131,10 +132,11 @@ const styles = StyleSheet.create({
   },
 
   absolute: {
-    position: "absolute",
-    top: 80,
+    position: isWeb ? "relative" : "absolute",
+    marginVertical: isWeb ? 100 : 0,
     zIndex: 1,
     alignItems: "center",
+    top: isWeb ? 0 : 80,
   },
 
   editText: { color: Colors.hint500, textAlign: "center" },
