@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import { CustomImage } from "@/components";
+import { CustomImage, ThemedView } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
@@ -40,7 +40,7 @@ const LoginSection = () => {
   return (
     <KeyboardAutoHide>
       <FormProvider {...methods}>
-        <ScrollView style={styles.form}>
+        <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
           <CustomImage
             localSource={require("@/assets/images/loginBg.png")}
             style={styles.image}
@@ -54,19 +54,20 @@ const LoginSection = () => {
             maxLength={11}
             forcePersianNumbers
           />
-          <Footer
-            onPress={handleSubmit(onDoLogin)}
-            isNextLoading={isSendingCode}
-            hasError={
-              errors?.["phone"]?.message?.length > 0 ||
-              getValues("phone")?.length < 1 ||
-              !getValues("phone")
-                ? true
-                : false
-            }
-            role={UserType.Customer}
-          />
         </ScrollView>
+        <ThemedView style={styles.flex1} />
+        <Footer
+          onPress={handleSubmit(onDoLogin)}
+          isNextLoading={isSendingCode}
+          hasError={
+            errors?.["phone"]?.message?.length > 0 ||
+            getValues("phone")?.length < 1 ||
+            !getValues("phone")
+              ? true
+              : false
+          }
+          role={UserType.Customer}
+        />
       </FormProvider>
     </KeyboardAutoHide>
   );
@@ -77,8 +78,10 @@ export default LoginSection;
 const styles = StyleSheet.create({
   form: {
     width: "100%",
-    flex: 1,
+    flexGrow: 1,
   },
+
+  flex1: { flex: 1 },
 
   image: {
     alignSelf: "flex-end",
