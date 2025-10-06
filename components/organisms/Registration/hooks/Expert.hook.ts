@@ -34,6 +34,7 @@ export default function useExpertHook() {
     phone,
     setIsLoggedIn,
     setIsExpert,
+    isLoggedIn,
   } = authCacheStore();
 
   const [page, setPage] = useState<number>(1);
@@ -50,19 +51,23 @@ export default function useExpertHook() {
     expertData?.specialist_getMyProfile?.result;
 
   useEffect(() => {
-    if (
-      profileData?.specializedDocumentsVerificationStatus ===
-        VerificationStatus.Approved &&
-      profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
-      profileData?.identityVerificationVideoStatus ===
-        VerificationStatus.Approved
-    ) {
-      setIsExpert(true);
-      setIsLoggedIn(true);
-    } else if (profileData?.nationalCode && profileData?.serviceSubCategory) {
-      setPage(3);
+    if (!isLoggedIn) {
+      if (
+        profileData?.specializedDocumentsVerificationStatus ===
+          VerificationStatus.Approved &&
+        profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
+        profileData?.identityVerificationVideoStatus ===
+          VerificationStatus.Approved
+      ) {
+        setIsExpert(true);
+        setIsLoggedIn(true);
+      } else if (profileData?.nationalCode && profileData?.serviceSubCategory) {
+        setPage(3);
+      }
+    } else {
+      setPage(1);
     }
-  }, [profileData]);
+  }, [profileData, isLoggedIn]);
 
   const { data: provinceData, isPending: provincePending } =
     useGetAllprovinceQuery({ take: 50 });
@@ -114,13 +119,20 @@ export default function useExpertHook() {
     );
   };
 
+  function convertIranPhoneNumber(phone) {
+    return phone.replace(/^\+98/, "0");
+  }
+
   return {
     router,
     page,
     setPage,
     exitVisible,
     setExitVisible,
-    phoneNumber: params?.phone ?? phone,
+    phoneNumber:
+      params?.phone ||
+      phone ||
+      convertIranPhoneNumber(profileData?.phoneNumber),
     onRegistrationPress,
     provincePending,
     provinceData: provinceData?.pages as [{ name: string; id: string }],
@@ -136,5 +148,6 @@ export default function useExpertHook() {
     setCategory,
     profileData,
     nationalCode: profileData?.nationalCode ?? nationalCode,
+    isLoggedIn,
   };
 }

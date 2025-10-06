@@ -1172,13 +1172,13 @@ export type Mutation = {
   carousel_create: ResponseBaseOfCarouselDto;
   carousel_delete: ResponseBase;
   carousel_update: ResponseBaseOfCarouselDto;
-  city_activate: ResponseBaseOfCityDto;
-  city_create: ResponseBaseOfCityDto;
-  city_deactivate: ResponseBaseOfCityDto;
-  city_setActiveBanner: ResponseBaseOfCityDto;
-  city_setActiveCarousel: ResponseBaseOfCityDto;
-  city_update: ResponseBaseOfCityDto;
-  city_updateBoundary: ResponseBaseOfCityDto;
+  city_activate: SingleResponseBaseOfCityDto;
+  city_create: SingleResponseBaseOfCityDto;
+  city_deactivate: SingleResponseBaseOfCityDto;
+  city_setActiveBanner: SingleResponseBaseOfCityDto;
+  city_setActiveCarousel: SingleResponseBaseOfCityDto;
+  city_update: SingleResponseBaseOfCityDto;
+  city_updateBoundary: SingleResponseBaseOfCityDto;
   disabledServiceTime_create: ResponseBaseOfDisabledServiceTimeDto;
   disabledServiceTime_remove: ResponseBase;
   discountCode_activate: ResponseBaseOfDiscountCodeDto;
@@ -1645,7 +1645,7 @@ export type Query = {
   carousel_getAll: ListResponseBaseOfCarouselDto;
   carousel_getById: ResponseBaseOfCarouselDto;
   city_getAll: ListResponseBaseOfCityDto;
-  city_getById: ResponseBaseOfCityDto;
+  city_getById: SingleResponseBaseOfCityDto;
   /** Returns all customers. */
   customer_getAll: ListResponseBaseOfCustomerDto;
   /** Returns a customer by their ID. */
@@ -1886,12 +1886,6 @@ export type ResponseBaseOfCancellationReasonDto = {
 export type ResponseBaseOfCarouselDto = {
   __typename?: "ResponseBaseOfCarouselDto";
   result?: Maybe<CarouselDto>;
-  status?: Maybe<Scalars["Any"]["output"]>;
-};
-
-export type ResponseBaseOfCityDto = {
-  __typename?: "ResponseBaseOfCityDto";
-  result?: Maybe<CityDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -2298,6 +2292,12 @@ export type SetUserBlockStateInput = {
 export type SingleResponseBaseOfAddressDto = {
   __typename?: "SingleResponseBaseOfAddressDto";
   result?: Maybe<AddressDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type SingleResponseBaseOfCityDto = {
+  __typename?: "SingleResponseBaseOfCityDto";
+  result?: Maybe<CityDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -2722,14 +2722,6 @@ export type City_GetAllQuery = {
           __typename?: "CarouselDto";
           id: any;
           title: string;
-          serviceTypes: Array<{
-            __typename?: "ServiceTypeDto";
-            id: any;
-            logo: string;
-            name: string;
-            banner: string;
-            basePrice: any;
-          }>;
         } | null;
       }> | null;
       pageInfo: {
@@ -2767,6 +2759,30 @@ export type Banner_GetAllQuery = {
         hasNextPage: boolean;
         hasPreviousPage: boolean;
       };
+    } | null;
+  };
+};
+
+export type Carousel_GetByIdQueryVariables = Exact<{
+  input: GetCarouselByIdInput;
+}>;
+
+export type Carousel_GetByIdQuery = {
+  __typename?: "Query";
+  carousel_getById: {
+    __typename?: "ResponseBaseOfCarouselDto";
+    result?: {
+      __typename?: "CarouselDto";
+      id: any;
+      title: string;
+      serviceTypes: Array<{
+        __typename?: "ServiceTypeDto";
+        banner: string;
+        basePrice: any;
+        logo: string;
+        name: string;
+        id: any;
+      }>;
     } | null;
   };
 };
@@ -4154,13 +4170,6 @@ export const City_GetAllDocument = `
         activeCarousel {
           id
           title
-          serviceTypes {
-            id
-            logo
-            name
-            banner
-            basePrice
-          }
         }
       }
       pageInfo {
@@ -4301,6 +4310,82 @@ export const useInfiniteBanner_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<Banner_GetAllQuery, Banner_GetAllQueryVariables>(
             Banner_GetAllDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
+export const Carousel_GetByIdDocument = `
+    query carousel_getById($input: GetCarouselByIdInput!) {
+  carousel_getById(input: $input) {
+    result {
+      id
+      serviceTypes {
+        banner
+        basePrice
+        logo
+        name
+        id
+      }
+      title
+    }
+  }
+}
+    `;
+
+export const useCarousel_GetByIdQuery = <
+  TData = Carousel_GetByIdQuery,
+  TError = unknown,
+>(
+  variables: Carousel_GetByIdQueryVariables,
+  options?: Omit<
+    UseQueryOptions<Carousel_GetByIdQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      Carousel_GetByIdQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<Carousel_GetByIdQuery, TError, TData>({
+    queryKey: ["carousel_getById", variables],
+    queryFn: fetcher<Carousel_GetByIdQuery, Carousel_GetByIdQueryVariables>(
+      Carousel_GetByIdDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
+
+export const useInfiniteCarousel_GetByIdQuery = <
+  TData = InfiniteData<Carousel_GetByIdQuery>,
+  TError = unknown,
+>(
+  variables: Carousel_GetByIdQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<Carousel_GetByIdQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      Carousel_GetByIdQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<Carousel_GetByIdQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? ["carousel_getById.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<Carousel_GetByIdQuery, Carousel_GetByIdQueryVariables>(
+            Carousel_GetByIdDocument,
             { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,

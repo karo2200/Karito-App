@@ -30,7 +30,7 @@ export default function CustomCarousel({ data }: { data: any }) {
         height={241}
         autoPlay
         autoPlayInterval={3000}
-        data={data?.serviceTypes}
+        data={data}
         style={{ borderRadius: 8 }}
         pagingEnabled
         onSnapToItem={(index) => setActiveIndex(index)}
@@ -67,7 +67,7 @@ export default function CustomCarousel({ data }: { data: any }) {
       />
 
       <View style={styles.dotsContainer}>
-        {data?.serviceTypes?.map((_, index) => (
+        {data?.map((_, index) => (
           <View
             key={index}
             style={[

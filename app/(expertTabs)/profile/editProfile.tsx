@@ -1,10 +1,11 @@
 import { ThemedContainer } from "@/components";
-import PersonalInfo from "@/components/organisms/PersonalInfo/PersonalInfo";
+import BeComeExpert from "@/components/organisms/Registration/BeComeExpert";
 
 export default function editProfilePage() {
   return (
     <ThemedContainer style={{ paddingHorizontal: 15 }}>
-      <PersonalInfo />
+      {/* <PersonalInfo /> */}
+      <BeComeExpert />
     </ThemedContainer>
   );
 }
