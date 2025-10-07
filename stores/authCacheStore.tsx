@@ -79,10 +79,9 @@ export const authCacheStore = create<AuthCacheType>(
     }),
     {
       name: "auth-cache-storage",
-      storage:
-        Platform.OS === "web"
-          ? undefined
-          : createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() =>
+        Platform.OS === "web" ? localStorage : AsyncStorage
+      ),
       onRehydrateStorage: (state) => {
         return () => state.setHasHydrated(true);
       },

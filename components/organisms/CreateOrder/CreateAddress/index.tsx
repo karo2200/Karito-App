@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  button: { marginTop: 18, marginBottom: 50 },
+  button: { marginTop: 18, marginBottom: 50, width: "100%" },
 
   addressView: {
     flexDirection: "row",

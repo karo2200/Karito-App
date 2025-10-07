@@ -11,7 +11,7 @@ import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import useOtpHook from "./hooks/otp.hook";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    width: DeviceWidth - 40,
+    width: Platform.OS === "web" ? "100%" : DeviceWidth - 40,
     alignItems: "flex-end",
     alignSelf: "center",
   },
@@ -132,11 +132,10 @@ const styles = StyleSheet.create({
   },
 
   absolute: {
-    position: isWeb ? "relative" : "absolute",
     marginVertical: isWeb ? 100 : 0,
     zIndex: 1,
     alignItems: "center",
-    top: isWeb ? 0 : 80,
+    marginBottom: 40,
   },
 
   editText: { color: Colors.hint500, textAlign: "center" },
