@@ -1,7 +1,9 @@
+import authCacheStore from "@/stores/authCacheStore";
 import useServiceStore from "@/stores/serviceTabStore";
 import { useRoute } from "@react-navigation/native";
 import { Menu } from "iconsax-react-native";
 import { useEffect, useState } from "react";
+import { SheetManager } from "react-native-actions-sheet";
 import {
   useGetServiceCategoriesQuery,
   useGetSubServiceCategoriesQuery,
@@ -9,6 +11,7 @@ import {
 
 export default function useServiceTabHook() {
   const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
+  const { customerCity, setCustomerCity } = authCacheStore();
 
   const { params } = useRoute();
   const { serCurrentService, currentService } = useServiceStore();
@@ -68,6 +71,15 @@ export default function useServiceTabHook() {
     if (subServiceHasNextPage) subServiceFetchNextPage();
   };
 
+  const onLocationPress = () => {
+    console.log("MM");
+    SheetManager.show("address-sheet");
+  };
+
+  const onCloseSheet = () => {
+    SheetManager.hide("address-sheet");
+  };
+
   return {
     serviceItems:
       data && data?.pages?.length > 0
@@ -76,11 +88,15 @@ export default function useServiceTabHook() {
     selectedService,
     subServiceItems: subServiceData?.pages ?? [],
     subServiceLoading,
+    customerCity,
 
     onFetchNextServices,
     onFetchNextSubServices,
     onServiceItemPress,
     setSearchText,
     onSubServiceLoadMore: onFetchNextSubServices,
+    onLocationPress,
+    onCloseSheet,
+    setCustomerCity,
   };
 }

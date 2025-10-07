@@ -1,7 +1,7 @@
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import ThemedInput from "@/components/atoms/ThemedInput";
-import { DeviceHeight } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useAddress_CreateMutation,
@@ -17,7 +17,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
-// import MapView from "./MapView";
+import GoogleMapView from "./GoogleMapView";
 
 const schema = yup.object().shape({
   address: yup.string().required("لطفا آدرس را وارد کنید."),
@@ -148,15 +148,19 @@ export default function AddressMap() {
         },
         {
           onSuccess: (data) => {
+            console.log(JSON.stringify({ data }));
             if (data?.address_create?.status?.code === 1) {
               queryClient.invalidateQueries({
                 queryKey: [queryKeys.address_getMyAddresses],
                 exact: false,
               });
               router?.back();
+            } else {
             }
           },
-          onError: (edata) => {},
+          onError: (edata) => {
+            console.log(JSON.stringify({ edata }));
+          },
         }
       );
     }
@@ -215,20 +219,18 @@ export default function AddressMap() {
           <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
           <Divider height={16} />
           <ThemedView style={styles.mapView}>
-            {/* {Platform.OS != "web" && (
-              <GoogleMapView
-                onLocationSelected={onLocationSelected}
-                latLng={
-                  currentAddress?.id
-                    ? {
-                        lat: currentAddress?.latitude,
-                        lng: currentAddress?.longitude,
-                      }
-                    : undefined
-                }
-                ref={mapRef}
-              />
-            )} */}
+            <GoogleMapView
+              onLocationSelected={onLocationSelected}
+              latLng={
+                currentAddress?.id
+                  ? {
+                      lat: currentAddress?.latitude,
+                      lng: currentAddress?.longitude,
+                    }
+                  : undefined
+              }
+              ref={mapRef}
+            />
           </ThemedView>
           <ThemedButton
             title="ذخیره"
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  button: { marginTop: 18, marginBottom: 50 },
+  button: { marginTop: 18, marginBottom: 50, width: maxWidth * 0.9 },
 
   addressView: {
     flexDirection: "row",

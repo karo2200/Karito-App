@@ -54,7 +54,7 @@ export default function SearchWithModal({
         />
       </View>
 
-      {filtered.length > 0 && (
+      {filtered?.length > 0 && (
         <View style={styles.dropdown}>
           <FlatList
             data={filtered}

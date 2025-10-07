@@ -1,8 +1,16 @@
-import { Divider, ThemedView } from "@/components";
+import { Divider, ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { ScrollView, StyleSheet, TextInput } from "react-native";
+import { useRef } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import { ActionSheetRef } from "react-native-actions-sheet";
+import CityActionSheet from "../home/Views/CityActionSheet";
 import ServiceBodySection from "./Views/ServiceBodySection";
 import ServiceHeaderSection from "./Views/ServiceHeaderSection";
 import useServiceTabHook from "./serviceHook";
@@ -16,10 +24,31 @@ export default function ServiceOrg() {
     setSearchText,
     onSubServiceLoadMore,
     subServiceLoading,
+    customerCity,
+    setCustomerCity,
   } = useServiceTabHook();
+
+  const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  const closeActionSheet = () => {
+    actionSheetRef.current?.hide();
+  };
+
+  const onCityPress = (city: string) => {
+    setCustomerCity(city);
+  };
+
+  const openActionSheet = () => {
+    actionSheetRef.current?.show();
+  };
 
   return (
     <ScrollView style={styles.flex1}>
+      <CityActionSheet
+        ref={actionSheetRef}
+        closeActionSheet={closeActionSheet}
+        onCityPress={onCityPress}
+      />
       <ThemedView style={styles.container}>
         <Ionicons name="search-outline" size={20} color={Colors.unfilledText} />
         <TextInput
@@ -30,6 +59,12 @@ export default function ServiceOrg() {
           placeholderTextColor={Colors.unfilledText}
           onChangeText={setSearchText}
         />
+        <TouchableOpacity onPress={openActionSheet} style={styles.button}>
+          <Ionicons name="location-outline" size={20} color="#000" />
+          <ThemedText type="text" style={styles.city}>
+            {customerCity ? customerCity : "انتخاب شهر"}
+          </ThemedText>
+        </TouchableOpacity>
       </ThemedView>
       <ServiceHeaderSection
         {...{ onServiceItemPress, selectedService, serviceItems }}
@@ -68,5 +103,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FontType.YekanBakhRegular,
     textAlignVertical: "center",
+  },
+
+  button: {
+    flexDirection: "row",
+    backgroundColor: Colors.hint50,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+
+  city: {
+    marginHorizontal: 8,
   },
 });

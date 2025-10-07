@@ -1,3 +1,4 @@
+import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   LocationType,
@@ -56,6 +57,7 @@ const baseData = [
 ];
 
 export default function useCreateOrder() {
+  const toast = useToast();
   const methods = useForm<Record<string, any>, object>({
     mode: "onChange",
   });
@@ -168,8 +170,15 @@ export default function useCreateOrder() {
         },
         {
           onSuccess(data, variables, context) {
-            if (data?.serviceRequest_create?.status?.code === 1) {
+            const resultCode = data?.serviceRequest_create?.status?.code;
+            if (resultCode === 1) {
               setStage((prev) => prev + 1);
+            } else if (resultCode === 0) {
+              toast.showToast({
+                message: "آدرس شما تحت پوشش خدمات کاریتو قرار ندارد",
+                type: "error",
+              });
+              router?.navigate("/(tabs)/service");
             }
           },
           onError(error, variables, context) {},
