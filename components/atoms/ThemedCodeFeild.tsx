@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
-import React from "react";
+import React, { useEffect } from "react";
 import { useController } from "react-hook-form";
 import { Platform, StyleSheet, Text, TextInputProps } from "react-native";
 import {
@@ -33,6 +33,16 @@ export default function ThemedCodeFeild({
     setValue: field.onChange,
   });
 
+  useEffect(() => {
+    if (Platform.OS === "web" && ref?.current) {
+      setTimeout(() => {
+        try {
+          ref.current.focus();
+        } catch {}
+      }, 300);
+    }
+  }, []);
+
   return (
     <CodeField
       ref={ref}
@@ -45,6 +55,7 @@ export default function ThemedCodeFeild({
       textContentType="oneTimeCode"
       autoComplete={autoComplete}
       testID="my-code-input"
+      autoFocus
       renderCell={({ index, symbol, isFocused }) => (
         <Text
           key={index}

@@ -8,24 +8,27 @@ import { StyleSheet, Text } from "react-native";
 
 export default function SplashScreen() {
   const { isLoggedIn, isExpert, isSelectRole } = authCacheStore();
+
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      if (isExpert) {
-        router?.replace("/(expertTabs)/workList");
+    setTimeout(() => {
+      if (isLoggedIn) {
+        if (isExpert) {
+          router?.replace("/(expertTabs)/workList");
+        } else {
+          router?.replace("/(tabs)/home");
+        }
       } else {
-        router?.replace("/(tabs)/home");
+        if (isExpert && isSelectRole) {
+          router?.replace("/ExpertLoginPage");
+        } else if (!isExpert && isSelectRole) {
+          router?.replace("/LoginPage");
+        } else {
+          router?.replace("/(tabs)/home");
+        }
       }
-    } else {
-      if (isExpert && isSelectRole) {
-        router?.replace("/ExpertLoginPage");
-      } else if (!isExpert && isSelectRole) {
-        router?.replace("/LoginPage");
-      } else {
-        router?.replace("/(tabs)/home");
-      }
-    }
+    }, 1000);
   }, [isLoggedIn, isExpert, isSelectRole]);
 
   return (

@@ -33,12 +33,12 @@ export default function ThemedContainer({
     <View
       style={[
         containerStyle,
+        style,
         (isWeb || isLargeScreen) && {
           maxWidth: 480,
           alignSelf: "center",
           width: "100%",
         },
-        style,
       ]}
       {...otherProps}
     />

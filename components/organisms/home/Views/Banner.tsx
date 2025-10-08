@@ -139,6 +139,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 5 },
     shadowRadius: 10,
+    width: "93%",
+    alignSelf: "center",
   },
 
   input: {

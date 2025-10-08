@@ -56,7 +56,11 @@ const LoginActionSheet = (props: SheetProps<"confirmation-action">) => {
   };
 
   return (
-    <ActionSheetContainer id="confirmation-action" onClose={() => onClose}>
+    <ActionSheetContainer
+      id="confirmation-action"
+      onClose={() => onClose}
+      containerStyle={styles.container}
+    >
       <View style={styles.container}>
         <View style={styles.contentView}>
           <TouchableOpacity

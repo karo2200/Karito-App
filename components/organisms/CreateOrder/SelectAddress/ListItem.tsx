@@ -13,8 +13,22 @@ import {
   View,
 } from "react-native";
 
-const ListItem = ({ item, index, length, onChange, field, router }) => {
-  const isChecked = field?.value === item?.id;
+const AddressListItem = ({
+  item,
+  index,
+  length,
+  onChange,
+  field,
+  router,
+}: {
+  item: any;
+  index: number;
+  length: number;
+  onChange?: any;
+  field: any;
+  router?: any;
+}) => {
+  const isChecked = (field?.value ?? field) === item?.id;
 
   const { mutate, isPending } = useAddress_DeleteMutation();
   const queryClient = useQueryClient();
@@ -65,7 +79,7 @@ const ListItem = ({ item, index, length, onChange, field, router }) => {
           checked={isChecked}
           label={item?.text}
           onPress={() => {
-            field.onChange(item.id);
+            field?.onChange(item.id);
             onChange?.(item);
           }}
         />
@@ -75,7 +89,7 @@ const ListItem = ({ item, index, length, onChange, field, router }) => {
   );
 };
 
-export default memo(ListItem);
+export default memo(AddressListItem);
 
 const styles = StyleSheet.create({
   editIcon: { backgroundColor: Colors.background },

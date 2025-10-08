@@ -3,15 +3,18 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
+  Pressable,
 } from "react-native";
 
 export default function KeyboardAutoHide(props: any) {
+  const handlePress = () => {
+    if (Platform.OS !== "web") {
+      Keyboard.dismiss();
+    }
+  };
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => Keyboard.dismiss()}
-      style={commonStyles.flex1}
-    >
+    <Pressable onPress={handlePress} style={commonStyles.flex1}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={commonStyles.flex1}
@@ -21,6 +24,6 @@ export default function KeyboardAutoHide(props: any) {
           props.children
         }
       </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 }

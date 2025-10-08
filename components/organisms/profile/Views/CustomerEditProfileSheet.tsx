@@ -95,7 +95,11 @@ const CustomerEditProfileSheet = ({
   };
 
   return (
-    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
+    <ActionSheet
+      ref={actionSheetRef}
+      containerStyle={styles.container}
+      onClose={closeActionSheet}
+    >
       <FormProvider {...methods}>
         <View style={styles.header}>
           <Ionicons

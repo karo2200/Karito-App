@@ -1,7 +1,7 @@
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import ThemedInput from "@/components/atoms/ThemedInput";
-import { DeviceHeight } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useAddress_CreateMutation,
@@ -17,10 +17,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
-// import MapView from "./MapView";
+import GoogleMapView from "./GoogleMapView";
 
 const schema = yup.object().shape({
   address: yup.string().required("لطفا آدرس را وارد کنید."),
+  title: yup.string().required("عنوان آدرس خود را وارد کنید."),
   lat: yup.number(),
   lng: yup.number(),
   buildingNumber: yup
@@ -67,6 +68,7 @@ export default function AddressMap() {
       setValue("floorNumber", currentAddress?.floorNumber ?? 0);
       setValue("buildingNumber", currentAddress?.buildingNumber ?? 0);
       setValue("unitNumber", currentAddress?.unitNumber ?? 0);
+      setValue("title", currentAddress?.title ?? "");
       mapRef.current?.changeLocation({
         latitude: currentAddress?.latitude,
         longitude: currentAddress?.longitude,
@@ -114,6 +116,7 @@ export default function AddressMap() {
       buildingNumber: formData?.buildingNumber,
       unitNumber: formData?.unitNumber,
       floorNumber: formData?.floorNumber,
+      title: formData?.title,
     };
     if (editItem?.id) {
       editMutate(
@@ -148,15 +151,19 @@ export default function AddressMap() {
         },
         {
           onSuccess: (data) => {
+            console.log(JSON.stringify({ data }));
             if (data?.address_create?.status?.code === 1) {
               queryClient.invalidateQueries({
                 queryKey: [queryKeys.address_getMyAddresses],
                 exact: false,
               });
               router?.back();
+            } else {
             }
           },
-          onError: (edata) => {},
+          onError: (edata) => {
+            console.log(JSON.stringify({ edata }));
+          },
         }
       );
     }
@@ -176,6 +183,13 @@ export default function AddressMap() {
           )}
           {!editItem?.id && <Divider height={24} />}
           <ThemedText fontType="bold">آدرس خود را مشخص کنید:</ThemedText>
+          <Divider height={24} />
+          <ThemedInput
+            placeholder=" خانه"
+            name="title"
+            label="عنوان آدرس"
+            labelStyle="sm"
+          />
           <Divider height={24} />
           <ThemedInput
             placeholder="آدرس شما"
@@ -215,20 +229,18 @@ export default function AddressMap() {
           <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
           <Divider height={16} />
           <ThemedView style={styles.mapView}>
-            {/* {Platform.OS != "web" && (
-              <GoogleMapView
-                onLocationSelected={onLocationSelected}
-                latLng={
-                  currentAddress?.id
-                    ? {
-                        lat: currentAddress?.latitude,
-                        lng: currentAddress?.longitude,
-                      }
-                    : undefined
-                }
-                ref={mapRef}
-              />
-            )} */}
+            <GoogleMapView
+              onLocationSelected={onLocationSelected}
+              latLng={
+                currentAddress?.id
+                  ? {
+                      lat: currentAddress?.latitude,
+                      lng: currentAddress?.longitude,
+                    }
+                  : undefined
+              }
+              ref={mapRef}
+            />
           </ThemedView>
           <ThemedButton
             title="ذخیره"
@@ -253,7 +265,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  button: { marginTop: 18, marginBottom: 50 },
+  button: { marginTop: 18, marginBottom: 50, width: maxWidth * 0.9 },
 
   addressView: {
     flexDirection: "row",

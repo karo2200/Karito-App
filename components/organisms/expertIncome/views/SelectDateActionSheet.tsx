@@ -20,10 +20,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ActionSheet, {
-  ActionSheetRef,
-  SheetDefinition,
-} from "react-native-actions-sheet";
+import ActionSheet, { SheetDefinition } from "react-native-actions-sheet";
 
 const { height } = Dimensions.get("window");
 declare module "react-native-actions-sheet" {
@@ -55,7 +52,6 @@ export default function SelectDateActionSheet({
   );
 
   const isReset = useRef(false);
-  const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const [currentMonth, setCurrentMonth] = useState(moment(startMoment));
   const [selected, setSelected] = useState(startMoment.format("jYYYY/jMM/jDD"));
@@ -178,7 +174,6 @@ export default function SelectDateActionSheet({
 
   return (
     <ActionSheet
-      ref={actionSheetRef}
       id="calendar-sheet"
       containerStyle={{
         minHeight: height / 3.5,

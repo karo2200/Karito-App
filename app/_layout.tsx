@@ -1,20 +1,25 @@
 import { ToastProvider } from "@/components/atoms/Toast";
 import AuthProvider from "@/graphql/AuthProvider";
-import { NetworkWatcher } from "@/hooks/useNetworkStatus";
 import authCacheStore from "@/stores/authCacheStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { I18nManager } from "react-native";
+import { I18nManager, Platform } from "react-native";
 import { SheetProvider } from "react-native-actions-sheet";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../sheets.tsx";
 import { RightIcon } from "./(tabs)/_layout";
 
+export const isWeb = Platform.OS === "web";
+
+if (!isWeb) {
+  SplashScreen.preventAutoHideAsync();
+}
+
 export default function RootLayout() {
-  const { isLoggedIn, isExpert, isSelectRole } = authCacheStore();
+  const { isLoggedIn, isExpert, isSelectRole, _hasHydrated } = authCacheStore();
 
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
@@ -23,17 +28,15 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    // if (!I18nManager.isRTL) {
     I18nManager.allowRTL(false);
     I18nManager.forceRTL(false);
-    // }
   }, []);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hide();
+    if (loaded && _hasHydrated) {
+      SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [loaded, _hasHydrated]);
 
   const MyTheme = {
     ...DefaultTheme,
@@ -44,6 +47,9 @@ export default function RootLayout() {
   };
 
   if (!loaded) {
+    return null;
+  }
+  if (!_hasHydrated && !isWeb) {
     return null;
   }
 
@@ -60,7 +66,7 @@ export default function RootLayout() {
         <ThemeProvider value={MyTheme}>
           <SheetProvider>
             <ToastProvider>
-              <NetworkWatcher />
+              {/* <NetworkWatcher /> */}
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Protected guard={isLoggedIn && isExpert}>
                   <Stack.Screen name="(expertTabs)" />
@@ -71,12 +77,9 @@ export default function RootLayout() {
                   <Stack.Screen name="(tabs)" />
                 </Stack.Protected>
 
-                <Stack.Protected guard={!isLoggedIn && !isExpert}>
+                <Stack.Protected guard={!isLoggedIn}>
                   <Stack.Screen name="LoginPage" />
                   <Stack.Screen name="OTPScreen" />
-                </Stack.Protected>
-
-                <Stack.Protected guard={!isLoggedIn && isExpert}>
                   <Stack.Screen
                     name="ExpertLoginPage"
                     options={expertScreenOptions}

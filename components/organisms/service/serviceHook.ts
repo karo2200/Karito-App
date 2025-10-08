@@ -1,21 +1,27 @@
+import authCacheStore from "@/stores/authCacheStore";
 import useServiceStore from "@/stores/serviceTabStore";
 import { useRoute } from "@react-navigation/native";
 import { Menu } from "iconsax-react-native";
 import { useEffect, useState } from "react";
+import { SheetManager } from "react-native-actions-sheet";
 import {
-  useGetServiceCategoriesQuery,
-  useGetSubServiceCategoriesQuery,
+  useGetCityServiceCategoriesQuery,
+  useGetCitySubServiceCategoriesQuery,
 } from "./hooks";
 
 export default function useServiceTabHook() {
   const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
+  const { customerCity, setCustomerCity, setCustomerCityId, customerCityId } =
+    authCacheStore();
 
   const { params } = useRoute();
   const { serCurrentService, currentService } = useServiceStore();
 
   const [selectedService, setSelectedService] = useState({});
   const [searchText, setSearchText] = useState<string | undefined>("");
-  const { data, hasNextPage, fetchNextPage } = useGetServiceCategoriesQuery({});
+  const { data, hasNextPage, fetchNextPage } = useGetCityServiceCategoriesQuery(
+    { input: { cityId: customerCityId } }
+  );
 
   const searchQuery = { name: { contains: searchText } };
 
@@ -38,7 +44,8 @@ export default function useServiceTabHook() {
     hasNextPage: subServiceHasNextPage,
     fetchNextPage: subServiceFetchNextPage,
     isLoading: subServiceLoading,
-  } = useGetSubServiceCategoriesQuery({
+  } = useGetCitySubServiceCategoriesQuery({
+    input: { cityId: customerCityId },
     where:
       selectedService?.id === -1
         ? searchText && searchText?.length > 0
@@ -68,6 +75,20 @@ export default function useServiceTabHook() {
     if (subServiceHasNextPage) subServiceFetchNextPage();
   };
 
+  const onLocationPress = () => {
+    console.log("MM");
+    SheetManager.show("address-sheet");
+  };
+
+  const onCloseSheet = () => {
+    SheetManager.hide("address-sheet");
+  };
+
+  const onCityPress = (city: any) => {
+    setCustomerCity(city?.name);
+    setCustomerCityId(city?.id);
+  };
+
   return {
     serviceItems:
       data && data?.pages?.length > 0
@@ -76,11 +97,15 @@ export default function useServiceTabHook() {
     selectedService,
     subServiceItems: subServiceData?.pages ?? [],
     subServiceLoading,
+    customerCity,
 
     onFetchNextServices,
     onFetchNextSubServices,
     onServiceItemPress,
     setSearchText,
     onSubServiceLoadMore: onFetchNextSubServices,
+    onLocationPress,
+    onCloseSheet,
+    onCityPress,
   };
 }

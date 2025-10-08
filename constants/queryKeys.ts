@@ -21,4 +21,7 @@ export const queryKeys = {
   serviceTypes_getPopular: "serviceTypes_getPopular",
   disabledServiceTime_getAll: "disabledServiceTime_getAll",
   payment_getMyPayments: "payment_getMyPayments",
+  city_getAvailableServiceCategories: "city_getAvailableServiceCategories",
+  city_getAvailableServiceSubCategories:
+    "city_getAvailableServiceSubCategories",
 };

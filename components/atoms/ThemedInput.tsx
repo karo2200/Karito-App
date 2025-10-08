@@ -25,7 +25,6 @@ const CustomInput = React.forwardRef(
       textArea = false,
       disabled,
       width = "100%",
-      height,
       maxLength,
       leftIcon,
       clearIcon,
@@ -64,7 +63,6 @@ const CustomInput = React.forwardRef(
       disabled?: boolean;
       mode?: "input" | "text";
       width?: DimensionValue | undefined;
-      height?: string | number;
       maxLength?: number;
       leftIcon?: JSX.Element;
       clearIcon?: boolean;
@@ -126,7 +124,7 @@ const CustomInput = React.forwardRef(
             multiline={textArea ? true : false}
             value={field.value?.toString()}
             onChangeText={onChange}
-            onBlur={field.onBlur}
+            // onBlur={field.onBlur}
             style={[
               styles.inputStyle,
               {
@@ -136,6 +134,8 @@ const CustomInput = React.forwardRef(
                 fontSize: labelStyle === "sm" ? 12 : 16,
                 includeFontPadding: false,
                 paddingVertical: 0,
+                paddingHorizontal: 8,
+                cursor: "text",
               },
             ]}
           />
@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: Colors.strokeGray,
     backgroundColor: Colors.background,

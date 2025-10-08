@@ -4,11 +4,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
+import { isWeb } from "@/app/_layout";
 import ExpertIcon from "@/assets/icons/ExpertIcon";
 import { ThemedText, ThemedView } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
+import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { StyleSheet, View } from "react-native";
 import useOtpHook from "./hooks/otp.hook";
@@ -104,8 +106,8 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    width: "100%",
-    flex: 1,
+    width: isWeb ? "100%" : DeviceWidth - 40,
+
     paddingTop: "15%",
   },
 
@@ -116,9 +118,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    alignSelf: "flex-start",
     zIndex: 1,
     left: "-5%",
+    height: isWeb ? DeviceHeight / 2.5 : DeviceHeight / 3,
   },
 
   codeContainer: {
@@ -136,10 +138,9 @@ const styles = StyleSheet.create({
   },
 
   absolute: {
-    position: "absolute",
-    top: 80,
-    zIndex: 1,
+    marginVertical: isWeb ? 10 : 0,
     alignItems: "center",
+    marginBottom: 40,
   },
 
   editText: { color: Colors.hint500, textAlign: "center" },

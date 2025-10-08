@@ -145,7 +145,12 @@ export default function ProfileScreen() {
           activeOpacity={0.7}
           style={styles.payment}
           onPress={() => {
-            setIsExpert(isExpert ? false : true);
+            if (isExpert) {
+              setIsExpert(false);
+            } else {
+              setIsExpert(true);
+            }
+
             setIsLoggedIn(false);
             setAccessToken("");
             setRefreshToken("");

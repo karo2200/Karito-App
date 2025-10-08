@@ -4,13 +4,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
+import { isWeb } from "@/app/_layout";
 import { CustomImage, ThemedText, ThemedView } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
-import { StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet } from "react-native";
 import useOtpHook from "./hooks/otp.hook";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
@@ -49,7 +50,10 @@ const OTPSection = () => {
   return (
     <KeyboardAutoHide>
       <FormProvider {...methods}>
-        <View style={styles.form}>
+        <ScrollView
+          contentContainerStyle={styles.form}
+          showsVerticalScrollIndicator={false}
+        >
           <CustomImage
             localSource={require("@/assets/images/loginBg.png")}
             style={styles.image}
@@ -77,7 +81,8 @@ const OTPSection = () => {
               </ThemedText>
             </ThemedView>
           </ThemedView>
-        </View>
+        </ScrollView>
+        <ThemedView style={styles.flex1} />
         <Footer
           onPress={handleSubmit(onDoLogin)}
           isNextLoading={isVerifying || isSendingCode}
@@ -105,7 +110,7 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    width: DeviceWidth - 40,
+    width: Platform.OS === "web" ? "100%" : DeviceWidth - 40,
     alignItems: "flex-end",
     alignSelf: "center",
   },
@@ -121,7 +126,7 @@ const styles = StyleSheet.create({
     width: DeviceWidth * 0.5,
     height: DeviceHeight * 0.6,
     position: "absolute",
-    zIndex: 1,
+    zIndex: -1,
   },
 
   codeContainer: {
@@ -131,13 +136,15 @@ const styles = StyleSheet.create({
   },
 
   absolute: {
-    position: "absolute",
-    top: 80,
+    marginVertical: isWeb ? 100 : 0,
     zIndex: 1,
     alignItems: "center",
+    marginBottom: 40,
   },
 
   editText: { color: Colors.hint500, textAlign: "center" },
 
   otpContainer: { height: 80 },
+
+  flex1: { flex: 1 },
 });
