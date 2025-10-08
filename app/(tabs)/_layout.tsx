@@ -1,4 +1,5 @@
 import { ThemedContainer, ThemedText } from "@/components";
+import CustomTabBar from "@/components/molecules/CustomTabBar";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
 import authCacheStore from "@/stores/authCacheStore";
@@ -6,7 +7,7 @@ import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Category, Document, Home2, Profile } from "iconsax-react-native";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
 type TabBarIconProps = {
@@ -70,25 +71,26 @@ export default function RootLayout() {
           backBehavior="initialRoute"
           key={isLoggedIn ? "logged-in" : "guest"}
           initialRouteName={"home/index"}
+          tabBar={(props) => <CustomTabBar {...props} />}
           screenOptions={({ route }) => ({
             headerShown: true,
             title: "",
             headerRight: () => <RightIcon />,
             tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBarStyle,
-            tabBarSafeAreaInset: { bottom: "always" },
-            tabBarActiveTintColor: Colors.hint500,
-            tabBarInactiveTintColor: Colors.mediumGray,
-            tabBarAllowFontScaling: true,
-            tabBarLabelStyle: styles.tabBarLabelStyle,
-            tabBarButton: (props) => (
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={props.onPress}
-                style={styles.tabButton}
-              >
-                {props.children}
-              </TouchableOpacity>
-            ),
+            // tabBarSafeAreaInset: { bottom: "always" },
+            // tabBarActiveTintColor: Colors.hint500,
+            // tabBarInactiveTintColor: Colors.mediumGray,
+            // tabBarAllowFontScaling: true,
+            // tabBarLabelStyle: styles.tabBarLabelStyle,
+            // tabBarButton: (props) => (
+            //   <TouchableOpacity
+            //     activeOpacity={1}
+            //     onPress={props.onPress}
+            //     style={styles.tabButton}
+            //   >
+            //     {props.children}
+            //   </TouchableOpacity>
+            // ),
           })}
         >
           <Tabs.Screen
@@ -167,9 +169,8 @@ const styles = StyleSheet.create({
   tabBarIconStyle: {
     height: 4,
     width: 43,
-    borderBottomLeftRadius: 2,
-    borderBottomRightRadius: 2,
-    marginBottom: 6,
+    borderRadius: 2,
+    marginBottom: 4,
     marginTop: 8,
   },
 
