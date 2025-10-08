@@ -1,5 +1,6 @@
 import { ToastProvider } from "@/components/atoms/Toast";
 import AuthProvider from "@/graphql/AuthProvider";
+import { NetworkWatcher } from "@/hooks/useNetworkStatus";
 import authCacheStore from "@/stores/authCacheStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
@@ -66,7 +67,7 @@ export default function RootLayout() {
         <ThemeProvider value={MyTheme}>
           <SheetProvider>
             <ToastProvider>
-              {/* <NetworkWatcher /> */}
+              <NetworkWatcher />
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Protected guard={isLoggedIn && isExpert}>
                   <Stack.Screen name="(expertTabs)" />
@@ -77,9 +78,12 @@ export default function RootLayout() {
                   <Stack.Screen name="(tabs)" />
                 </Stack.Protected>
 
-                <Stack.Protected guard={!isLoggedIn}>
+                <Stack.Protected guard={!isLoggedIn && !isExpert}>
                   <Stack.Screen name="LoginPage" />
                   <Stack.Screen name="OTPScreen" />
+                </Stack.Protected>
+
+                <Stack.Protected guard={!isLoggedIn && isExpert}>
                   <Stack.Screen
                     name="ExpertLoginPage"
                     options={expertScreenOptions}

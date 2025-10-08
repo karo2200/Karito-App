@@ -1,12 +1,13 @@
 import { ThemedContainer, ThemedText } from "@/components";
 import { ToastProvider } from "@/components/atoms/Toast";
+import CustomTabBar from "@/components/molecules/CustomTabBar";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { DocumentText, Profile, Task, Wallet1 } from "iconsax-react-native";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 
 type TabBarIconProps = {
@@ -65,27 +66,14 @@ export default function RootLayout() {
           <Tabs
             backBehavior="initialRoute"
             initialRouteName={"workList"}
+            tabBar={(props) => <CustomTabBar {...props} />}
             screenOptions={({ route }) => ({
               headerShown: true,
               title: "",
               headerRight: () => <RightIcon />,
-              tabBarSafeAreaInset: { bottom: "always" },
               tabBarStyle: hideTabBar
                 ? { display: "none" }
                 : styles.tabBarStyle,
-              tabBarActiveTintColor: Colors.hint500,
-              tabBarInactiveTintColor: Colors.mediumGray,
-              tabBarLabelStyle: styles.tabBarLabelStyle,
-              tabBarAllowFontScaling: true,
-              tabBarButton: (props) => (
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={props.onPress}
-                  style={styles.tabButton}
-                >
-                  {props.children}
-                </TouchableOpacity>
-              ),
             })}
           >
             <Tabs.Screen
@@ -175,7 +163,7 @@ const styles = StyleSheet.create({
     width: 43,
     borderBottomLeftRadius: 2,
     borderBottomRightRadius: 2,
-    marginBottom: 6,
+    marginBottom: 4,
     marginTop: 8,
   },
 
