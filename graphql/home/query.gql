@@ -56,3 +56,19 @@ query banner_getAll(
     status
   }
 }
+
+query carousel_getById($input: GetCarouselByIdInput!) {
+  carousel_getById(input: $input) {
+    result {
+      id
+      serviceTypes {
+        banner
+        basePrice
+        logo
+        name
+        id
+      }
+      title
+    }
+  }
+}

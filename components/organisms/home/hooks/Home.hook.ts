@@ -1,4 +1,8 @@
-import { SortEnumType, VerificationStatus } from "@/generated/graphql";
+import {
+  SortEnumType,
+  useCarousel_GetByIdQuery,
+  VerificationStatus,
+} from "@/generated/graphql";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
@@ -51,6 +55,10 @@ export default function useHomeHook() {
   const { data: selectedCityData, isLoading: selectedCityLoading } =
     useGetAllCityQuery({ where: { name: { eq: customerCity } } });
 
+  const { data: carouselData } = useCarousel_GetByIdQuery({
+    input: { id: selectedCityData?.pages[0]?.activeCarousel?.id },
+  });
+
   useEffect(() => {
     if (isLoggedIn) return;
     const timeout = setTimeout(() => {
@@ -94,7 +102,7 @@ export default function useHomeHook() {
     customerCity,
     onCityPress,
     activeBanner: selectedCityData?.pages[0]?.activeBanner,
-    activeCarousel: selectedCityData?.pages[0]?.activeCarousel,
+    activeCarousel: carouselData?.carousel_getById?.result?.serviceTypes ?? [],
     specialists: specialists?.pages,
     popularData: popularData?.pages ?? [],
     specialData: specialData?.pages ?? [],

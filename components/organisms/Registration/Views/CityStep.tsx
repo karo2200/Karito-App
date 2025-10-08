@@ -40,6 +40,7 @@ const CityStep = ({
     onRegisterCity,
     profileData,
     stepPending,
+    isLoggedIn,
   } = useExpertHook();
 
   const { ...methods } = useForm({
@@ -72,7 +73,10 @@ const CityStep = ({
   return (
     <KeyboardAutoHide>
       <FormProvider {...methods}>
-        <ScreenNameWithBack title="ثبت‌نام" onBackPress={onPrevPress} />
+        <ScreenNameWithBack
+          title={isLoggedIn ? "ویرایش اطلاعات" : "ثبت‌نام"}
+          onBackPress={onPrevPress}
+        />
         {provincePending ? (
           <ActivityIndicator />
         ) : (

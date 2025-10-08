@@ -9,11 +9,16 @@ import InfoStep from "./Views/InfoStep";
 import NationalCodeStep from "./Views/NationalCodeStep";
 
 const BeComeExpert = () => {
-  const { page, setPage, exitVisible, setExitVisible } = useExpertHook();
+  const { page, setPage, exitVisible, setExitVisible, isLoggedIn, router } =
+    useExpertHook();
 
   const onPrevPress = () => {
     if (page === 1) {
-      setExitVisible(true);
+      if (isLoggedIn) {
+        router.back();
+      } else {
+        setExitVisible(true);
+      }
     } else {
       setPage(page - 1);
     }

@@ -21,9 +21,7 @@ const HomeScreen = () => {
           loading={false}
           data={popularData}
         />
-        {activeCarousel?.serviceTypes?.length > 0 && (
-          <CustomCarousel data={activeCarousel} />
-        )}
+        {activeCarousel?.length > 0 && <CustomCarousel data={activeCarousel} />}
         <HorizontalServiceList
           title="سرویس های ویژه"
           loading={false}
