@@ -165,7 +165,7 @@ const Timer = forwardRef(
       continueFunc?.();
       startTimer();
     };
-    console.log({ seconds, isTimerActive });
+
     return (
       <>
         {isTimerActive ? (

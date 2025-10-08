@@ -22,6 +22,7 @@ const CityActionSheet = forwardRef(
     });
 
     const cityData = data?.pages;
+
     return (
       <ActionSheet
         ref={ref}
@@ -49,7 +50,7 @@ const CityActionSheet = forwardRef(
                   style={styles.cityView}
                   key={element?.id}
                   onPress={() => {
-                    onCityPress(element?.name);
+                    onCityPress(element);
                     closeActionSheet();
                   }}
                 >

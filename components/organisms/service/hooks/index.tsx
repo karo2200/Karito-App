@@ -1,6 +1,10 @@
 import { PAGE_SIZE } from "@/constants/MockData";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  City_GetAvailableServiceCategoriesDocument,
+  City_GetAvailableServiceSubCategoriesDocument,
+  GetAvailableServiceCategoriesForCityInput,
+  GetAvailableServiceSubCategoriesForCityInput,
   ServiceCategoryDtoFilterInput,
   ServiceCategoryDtoSortInput,
   ServiceCategory_GetAllDocument,
@@ -83,6 +87,115 @@ export const useGetSubServiceCategoriesQuery = ({
         ...data,
         pages: data?.pages
           ?.map((a) => a?.serviceSubCategory_getAll?.result?.items)
+          .flat(),
+      };
+    },
+  });
+};
+
+export const useGetCityServiceCategoriesQuery = ({
+  where,
+  order,
+  take,
+  enabled = true,
+  input,
+}: {
+  where?: ServiceSubCategoryDtoFilterInput;
+  order?: [ServiceSubCategoryDtoSortInput];
+  take?: number;
+  enabled?: boolean;
+  input: GetAvailableServiceCategoriesForCityInput;
+}) => {
+  return useInfiniteQuery({
+    queryKey: [
+      queryKeys.city_getAvailableServiceCategories,
+      input,
+      where,
+      order,
+      take,
+      enabled,
+    ],
+    queryFn: async ({ pageParam = 0 }) => {
+      return await graphqlFetcher(City_GetAvailableServiceCategoriesDocument, {
+        skip: pageParam * PAGE_SIZE,
+        take: PAGE_SIZE,
+        input,
+        where,
+        order,
+      });
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (
+        lastPage?.city_getAvailableServiceCategories?.result?.pageInfo
+          ?.hasNextPage
+      ) {
+        return allPages.length;
+      }
+      return undefined;
+    },
+    select: (data) => {
+      return {
+        ...data,
+        pages: data?.pages
+          ?.map((a) => a?.city_getAvailableServiceCategories?.result?.items)
+          .flat(),
+        totalCount:
+          data?.pages?.[0]?.city_getAvailableServiceCategories?.result
+            ?.totalCount,
+      };
+    },
+  });
+};
+
+export const useGetCitySubServiceCategoriesQuery = ({
+  where,
+  order,
+  take,
+  enabled = true,
+  input,
+}: {
+  where?: ServiceSubCategoryDtoFilterInput;
+  order?: [ServiceSubCategoryDtoSortInput];
+  take?: number;
+  enabled?: boolean;
+  input: GetAvailableServiceSubCategoriesForCityInput;
+}) => {
+  return useInfiniteQuery({
+    queryKey: [
+      queryKeys.city_getAvailableServiceSubCategories,
+      where,
+      order,
+      enabled,
+      input,
+    ],
+    queryFn: async ({ pageParam = 0 }) => {
+      return await graphqlFetcher(
+        City_GetAvailableServiceSubCategoriesDocument,
+        {
+          skip: pageParam * PAGE_SIZE,
+          take: take ?? PAGE_SIZE,
+          where,
+          order,
+          input,
+        }
+      );
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (
+        lastPage?.city_getAvailableServiceSubCategories?.result?.pageInfo
+          ?.hasNextPage
+      ) {
+        return allPages.length;
+      }
+      return undefined;
+    },
+    select: (data) => {
+      return {
+        ...data,
+        pages: data?.pages
+          ?.map((a) => a?.city_getAvailableServiceSubCategories?.result?.items)
           .flat(),
       };
     },

@@ -15,7 +15,9 @@ type AuthCacheType = {
   userId: string;
   setUserId: (userId: string) => void;
   customerCity: string;
+  customerCityId: string;
   setCustomerCity: (customerCity: string) => void;
+  setCustomerCityId: (customerCityId: string) => void;
   clearAuth: () => void;
   isLoggedIn: boolean;
   isExpert: boolean;
@@ -62,7 +64,9 @@ export const authCacheStore = create<AuthCacheType>(
       setPhone: (phone: string) => set({ phone }),
       setUserId: (userId: string) => set({ userId }),
       customerCity: "تهران",
+      customerCityId: "568a82ea-e914-40d9-a559-84e7a8e14774",
       setCustomerCity: (customerCity: string) => set({ customerCity }),
+      setCustomerCityId: (customerCityId: string) => set({ customerCityId }),
       isSelectRole: false,
       setIsSelectRole: (value: boolean) => set({ isSelectRole: value }),
       clearAuth: () =>
@@ -79,10 +83,9 @@ export const authCacheStore = create<AuthCacheType>(
     }),
     {
       name: "auth-cache-storage",
-      storage:
-        Platform.OS === "web"
-          ? undefined
-          : createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() =>
+        Platform.OS === "web" ? localStorage : AsyncStorage
+      ),
       onRehydrateStorage: (state) => {
         return () => state.setHasHydrated(true);
       },

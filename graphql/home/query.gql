@@ -22,13 +22,6 @@ query city_getAll(
         activeCarousel {
           id
           title
-          serviceTypes {
-            id
-            logo
-            name
-            banner
-            basePrice
-          }
         }
       }
       pageInfo {

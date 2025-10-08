@@ -21,6 +21,7 @@ import GoogleMapView from "./GoogleMapView";
 
 const schema = yup.object().shape({
   address: yup.string().required("لطفا آدرس را وارد کنید."),
+  title: yup.string().required("عنوان آدرس خود را وارد کنید."),
   lat: yup.number(),
   lng: yup.number(),
   buildingNumber: yup
@@ -67,6 +68,7 @@ export default function AddressMap() {
       setValue("floorNumber", currentAddress?.floorNumber ?? 0);
       setValue("buildingNumber", currentAddress?.buildingNumber ?? 0);
       setValue("unitNumber", currentAddress?.unitNumber ?? 0);
+      setValue("title", currentAddress?.title ?? "");
       mapRef.current?.changeLocation({
         latitude: currentAddress?.latitude,
         longitude: currentAddress?.longitude,
@@ -114,6 +116,7 @@ export default function AddressMap() {
       buildingNumber: formData?.buildingNumber,
       unitNumber: formData?.unitNumber,
       floorNumber: formData?.floorNumber,
+      title: formData?.title,
     };
     if (editItem?.id) {
       editMutate(
@@ -180,6 +183,13 @@ export default function AddressMap() {
           )}
           {!editItem?.id && <Divider height={24} />}
           <ThemedText fontType="bold">آدرس خود را مشخص کنید:</ThemedText>
+          <Divider height={24} />
+          <ThemedInput
+            placeholder=" خانه"
+            name="title"
+            label="عنوان آدرس"
+            labelStyle="sm"
+          />
           <Divider height={24} />
           <ThemedInput
             placeholder="آدرس شما"

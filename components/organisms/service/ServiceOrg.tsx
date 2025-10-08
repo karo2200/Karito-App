@@ -25,17 +25,13 @@ export default function ServiceOrg() {
     onSubServiceLoadMore,
     subServiceLoading,
     customerCity,
-    setCustomerCity,
+    onCityPress,
   } = useServiceTabHook();
 
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
-  };
-
-  const onCityPress = (city: string) => {
-    setCustomerCity(city);
   };
 
   const openActionSheet = () => {
