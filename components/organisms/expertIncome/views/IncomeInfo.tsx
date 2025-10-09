@@ -48,15 +48,15 @@ export default function IncomeInfo({}) {
   const infoArray = [
     {
       title: "درآمد ماه",
-      value: `${monthData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
+      value: `${(monthData?.revenue_getMyRevenue?.result?.totalAmount ?? 0) * 10} ریال`,
     },
     {
       title: "درآمد هفته",
-      value: `${weekData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
+      value: `${(weekData?.revenue_getMyRevenue?.result?.totalAmount ?? 0) * 10} ریال`,
     },
     {
       title: "درآمد امروز",
-      value: `${dayData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
+      value: `${(dayData?.revenue_getMyRevenue?.result?.totalAmount ?? 0) * 10} ریال`,
     },
   ];
 
@@ -68,7 +68,7 @@ export default function IncomeInfo({}) {
           fontType="bold"
           style={styles.fontSize}
         >
-          {`${unSetteledAmount ?? 0}`} ریال
+          {`${(unSetteledAmount ?? 0) * 10}`} ریال
         </ThemedText>
         <ThemedText style={styles.headerTxt} fontType="bold">
           درآمد تسویه نشده

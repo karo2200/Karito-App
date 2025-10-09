@@ -21,8 +21,9 @@ export const useGetAllAvailableRequestQuery = (
   options: UseGetAllAvailableRequestOptions = {},
   enabled?: boolean
 ) => {
+  console.log(JSON.stringify({ options }));
   return useInfiniteQuery({
-    queryKey: [queryKeys.serviceRequest_getAvailableRequests, options, enabled],
+    queryKey: [queryKeys.serviceRequest_getAvailableRequests, options],
     queryFn: async ({ pageParam = 0 }) => {
       return fetcher(ServiceRequest_GetAvailableRequestsDocument, {
         skip: pageParam * PAGE_SIZE,
@@ -51,5 +52,6 @@ export const useGetAllAvailableRequestQuery = (
             ?.totalCount,
       };
     },
+    enabled: options?.input?.latitude != undefined,
   });
 };

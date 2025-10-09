@@ -26,10 +26,14 @@ type Props = {
   placeholder?: string;
   options: Option[];
   sheetTitle: string;
+  onEndReached?: () => void;
 };
 
 const SearchSelect = forwardRef<any, Props>(
-  ({ name, control, label, options, placeholder, sheetTitle }, ref) => {
+  (
+    { name, control, label, options, placeholder, sheetTitle, onEndReached },
+    ref
+  ) => {
     const { field, fieldState } = useController({ name, control });
     const [search, setSearch] = useState("");
     const actionSheetRef = useRef<ActionSheetRef>(null);
@@ -88,6 +92,7 @@ const SearchSelect = forwardRef<any, Props>(
               contentContainerStyle={{ paddingBottom: 50 }}
               style={{ maxHeight: "80%" }}
               showsVerticalScrollIndicator={false}
+              onEndReached={onEndReached}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => {

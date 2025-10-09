@@ -62,8 +62,8 @@ export const useGetAllCityQuery = (options: UseGetAllCityOptions = {}) => {
     queryKey: [queryKeys.city_getAll, options],
     queryFn: async ({ pageParam = 0 }) => {
       return await graphqlFetcher(City_GetAllDocument, {
-        skip: pageParam * PAGE_SIZE,
-        take: PAGE_SIZE,
+        skip: pageParam * 30,
+        take: 30,
         ...options,
       });
     },

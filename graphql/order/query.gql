@@ -53,18 +53,8 @@ query serviceRequest_getMyAcceptances(
       items {
         address {
           text
-          latitude
-          longitude
-          city {
-            name
-            id
-          }
         }
         finalPrice
-        cancellationReason {
-          id
-          name
-        }
         customer {
           firstName
           lastName

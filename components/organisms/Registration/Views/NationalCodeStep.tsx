@@ -73,7 +73,7 @@ const NationalCodeStep = ({
             maxLength={10}
             forcePersianNumbers
             style={styles.margin}
-            readOnly={isLoggedIn}
+            readOnly={isLoggedIn && nationalCode?.length > 0}
           />
         </View>
 

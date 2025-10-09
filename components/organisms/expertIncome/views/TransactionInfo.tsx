@@ -7,7 +7,6 @@ import { useCallback } from "react";
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { useGetServiceAcceptanceIncomeQuery } from "../hooks";
-import EmptyIncom from "./EmptyIncom";
 
 export default function TransactionInfo({
   selectedDate,
@@ -44,51 +43,51 @@ export default function TransactionInfo({
   };
 
   return (
-    <ThemedView style={styles.width}>
-      <ThemedView style={styles.headerContainer}>
-        <ThemedView style={styles.headerView}>
-          <TouchableOpacity onPress={onCalenderPress}>
-            <CalendarIcon size={24} color={Colors.hint500} disabled />
-          </TouchableOpacity>
-          <ThemedText style={styles.blackTxt} fontType="bold">
-            لیست تراکنشها
-          </ThemedText>
+    <ThemedView style={styles.container}>
+      {isLoading ? (
+        <ThemedView style={styles.loading}>
+          <ActivityIndicator size="large" />
         </ThemedView>
-
-        {isLoading ? (
-          <ThemedView style={styles.loading}>
-            <ActivityIndicator size={"large"} />
-          </ThemedView>
-        ) : (
-          <CustomFlatList
-            data={data?.pages}
-            style={styles.width}
-            keyExtractor={(item, index) => `${index}_income`}
-            ListEmptyComponent={() => <EmptyIncom />}
-            renderItem={renderItem}
-          />
-        )}
-      </ThemedView>
+      ) : (
+        <CustomFlatList
+          data={data?.pages}
+          keyExtractor={(_, index) => `${index}_income`}
+          renderItem={renderItem}
+          ListHeaderComponent={
+            <ThemedView style={styles.headerView}>
+              <TouchableOpacity onPress={onCalenderPress}>
+                <CalendarIcon size={24} color={Colors.hint500} disabled />
+              </TouchableOpacity>
+              <ThemedText style={styles.blackTxt} fontType="bold">
+                لیست تراکنشها
+              </ThemedText>
+            </ThemedView>
+          }
+          style={styles.list} // make the list take available space
+          keyboardShouldPersistTaps="handled"
+        />
+      )}
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerContainer: { width: "100%", marginTop: 12 },
+  container: { flex: 1 }, // <- important
 
   headerView: {
     flexDirection: "row",
-    width: "100%",
     justifyContent: "space-between",
     paddingVertical: 8,
+    marginTop: 12,
     marginBottom: 12,
   },
 
   blackTxt: { color: Colors.black },
 
-  width: { width: "100%" },
+  list: { flex: 1 }, // <- important
 
   loading: {
+    flex: 1, // <- so the spinner centers in available space
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",

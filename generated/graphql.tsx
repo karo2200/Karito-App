@@ -1,13 +1,13 @@
-import { fetcher } from "@/graphql/fetcher";
 import {
-  InfiniteData,
-  UseInfiniteQueryOptions,
-  UseMutationOptions,
-  UseQueryOptions,
-  useInfiniteQuery,
   useMutation,
   useQuery,
+  useInfiniteQuery,
+  UseMutationOptions,
+  UseQueryOptions,
+  UseInfiniteQueryOptions,
+  InfiniteData,
 } from "@tanstack/react-query";
+import { fetcher } from "@/graphql/fetcher";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -3187,18 +3187,7 @@ export type ServiceRequest_GetMyAcceptancesQuery = {
         requestDate: any;
         id: any;
         status: ServiceRequestStatus;
-        address: {
-          __typename?: "AddressDto";
-          text: string;
-          latitude: number;
-          longitude: number;
-          city: { __typename?: "CityDto"; name: string; id: any };
-        };
-        cancellationReason?: {
-          __typename?: "CancellationReasonDto";
-          id: any;
-          name: string;
-        } | null;
+        address: { __typename?: "AddressDto"; text: string };
         customer: {
           __typename?: "CustomerDto";
           firstName?: string | null;
@@ -4092,7 +4081,7 @@ export const useAddress_CreateMutation = <TError = unknown, TContext = unknown>(
     TError,
     Address_CreateMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Address_CreateMutation,
@@ -4104,7 +4093,7 @@ export const useAddress_CreateMutation = <TError = unknown, TContext = unknown>(
     mutationFn: (variables?: Address_CreateMutationVariables) =>
       fetcher<Address_CreateMutation, Address_CreateMutationVariables>(
         Address_CreateDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -4124,7 +4113,7 @@ export const useAddress_UpdateMutation = <TError = unknown, TContext = unknown>(
     TError,
     Address_UpdateMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Address_UpdateMutation,
@@ -4136,7 +4125,7 @@ export const useAddress_UpdateMutation = <TError = unknown, TContext = unknown>(
     mutationFn: (variables?: Address_UpdateMutationVariables) =>
       fetcher<Address_UpdateMutation, Address_UpdateMutationVariables>(
         Address_UpdateDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -4156,7 +4145,7 @@ export const useAddress_DeleteMutation = <TError = unknown, TContext = unknown>(
     TError,
     Address_DeleteMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Address_DeleteMutation,
@@ -4168,7 +4157,7 @@ export const useAddress_DeleteMutation = <TError = unknown, TContext = unknown>(
     mutationFn: (variables?: Address_DeleteMutationVariables) =>
       fetcher<Address_DeleteMutation, Address_DeleteMutationVariables>(
         Address_DeleteDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -4191,7 +4180,7 @@ export const useAuth_RequestOtpMutation = <
     TError,
     Auth_RequestOtpMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Auth_RequestOtpMutation,
@@ -4203,7 +4192,7 @@ export const useAuth_RequestOtpMutation = <
     mutationFn: (variables?: Auth_RequestOtpMutationVariables) =>
       fetcher<Auth_RequestOtpMutation, Auth_RequestOtpMutationVariables>(
         Auth_RequestOtpDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -4227,7 +4216,7 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
     TError,
     Auth_VerifyOtpMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Auth_VerifyOtpMutation,
@@ -4239,7 +4228,7 @@ export const useAuth_VerifyOtpMutation = <TError = unknown, TContext = unknown>(
     mutationFn: (variables?: Auth_VerifyOtpMutationVariables) =>
       fetcher<Auth_VerifyOtpMutation, Auth_VerifyOtpMutationVariables>(
         Auth_VerifyOtpDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -4266,7 +4255,7 @@ export const useAuth_RefreshTokenMutation = <
     TError,
     Auth_RefreshTokenMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Auth_RefreshTokenMutation,
@@ -4278,7 +4267,7 @@ export const useAuth_RefreshTokenMutation = <
     mutationFn: (variables?: Auth_RefreshTokenMutationVariables) =>
       fetcher<Auth_RefreshTokenMutation, Auth_RefreshTokenMutationVariables>(
         Auth_RefreshTokenDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -4317,7 +4306,7 @@ export const useCity_GetAvailableServiceCategoriesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<City_GetAvailableServiceCategoriesQuery, TError, TData>({
     queryKey: ["city_getAvailableServiceCategories", variables],
@@ -4347,7 +4336,7 @@ export const useInfiniteCity_GetAvailableServiceCategoriesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<
     City_GetAvailableServiceCategoriesQuery,
@@ -4371,7 +4360,7 @@ export const useInfiniteCity_GetAvailableServiceCategoriesQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -4412,7 +4401,7 @@ export const useCity_GetAvailableServiceSubCategoriesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<City_GetAvailableServiceSubCategoriesQuery, TError, TData>({
     queryKey: ["city_getAvailableServiceSubCategories", variables],
@@ -4442,7 +4431,7 @@ export const useInfiniteCity_GetAvailableServiceSubCategoriesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<
     City_GetAvailableServiceSubCategoriesQuery,
@@ -4466,7 +4455,7 @@ export const useInfiniteCity_GetAvailableServiceSubCategoriesQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -4499,7 +4488,7 @@ export const useDisabledServiceTimeQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<DisabledServiceTimeQuery, TError, TData>({
     queryKey:
@@ -4528,7 +4517,7 @@ export const useInfiniteDisabledServiceTimeQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<DisabledServiceTimeQuery, TError, TData>(
     (() => {
@@ -4541,11 +4530,11 @@ export const useInfiniteDisabledServiceTimeQuery = <
         queryFn: (metaData) =>
           fetcher<DisabledServiceTimeQuery, DisabledServiceTimeQueryVariables>(
             DisabledServiceTimeDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -4589,14 +4578,14 @@ export const useCity_GetAllQuery = <TData = City_GetAllQuery, TError = unknown>(
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<City_GetAllQuery, TError, TData>["queryKey"];
-  }
+  },
 ) => {
   return useQuery<City_GetAllQuery, TError, TData>({
     queryKey:
       variables === undefined ? ["city_getAll"] : ["city_getAll", variables],
     queryFn: fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
       City_GetAllDocument,
-      variables
+      variables,
     ),
     ...options,
   });
@@ -4616,7 +4605,7 @@ export const useInfiniteCity_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<City_GetAllQuery, TError, TData>(
     (() => {
@@ -4629,11 +4618,11 @@ export const useInfiniteCity_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<City_GetAllQuery, City_GetAllQueryVariables>(
             City_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -4667,7 +4656,7 @@ export const useBanner_GetAllQuery = <
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<Banner_GetAllQuery, TError, TData>["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Banner_GetAllQuery, TError, TData>({
     queryKey:
@@ -4676,7 +4665,7 @@ export const useBanner_GetAllQuery = <
         : ["banner_getAll", variables],
     queryFn: fetcher<Banner_GetAllQuery, Banner_GetAllQueryVariables>(
       Banner_GetAllDocument,
-      variables
+      variables,
     ),
     ...options,
   });
@@ -4696,7 +4685,7 @@ export const useInfiniteBanner_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Banner_GetAllQuery, TError, TData>(
     (() => {
@@ -4709,11 +4698,11 @@ export const useInfiniteBanner_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<Banner_GetAllQuery, Banner_GetAllQueryVariables>(
             Banner_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -4749,13 +4738,13 @@ export const useCarousel_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Carousel_GetByIdQuery, TError, TData>({
     queryKey: ["carousel_getById", variables],
     queryFn: fetcher<Carousel_GetByIdQuery, Carousel_GetByIdQueryVariables>(
       Carousel_GetByIdDocument,
-      variables
+      variables,
     ),
     ...options,
   });
@@ -4775,7 +4764,7 @@ export const useInfiniteCarousel_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Carousel_GetByIdQuery, TError, TData>(
     (() => {
@@ -4785,11 +4774,11 @@ export const useInfiniteCarousel_GetByIdQuery = <
         queryFn: (metaData) =>
           fetcher<Carousel_GetByIdQuery, Carousel_GetByIdQueryVariables>(
             Carousel_GetByIdDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -4810,7 +4799,7 @@ export const useServiceRequest_AcceptMutation = <
     TError,
     ServiceRequest_AcceptMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     ServiceRequest_AcceptMutation,
@@ -4845,7 +4834,7 @@ export const useServiceRequest_CancelMutation = <
     TError,
     ServiceRequest_CancelMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     ServiceRequest_CancelMutation,
@@ -4880,7 +4869,7 @@ export const useServiceRequest_RejectMutation = <
     TError,
     ServiceRequest_RejectMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     ServiceRequest_RejectMutation,
@@ -4915,7 +4904,7 @@ export const useServiceRequest_MarkAsArrivedMutation = <
     TError,
     ServiceRequest_MarkAsArrivedMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     ServiceRequest_MarkAsArrivedMutation,
@@ -4950,7 +4939,7 @@ export const useServiceRequest_CompleteServiceMutation = <
     TError,
     ServiceRequest_CompleteServiceMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     ServiceRequest_CompleteServiceMutation,
@@ -4989,7 +4978,7 @@ export const usePayment_Create_ZibalMutation = <
     TError,
     Payment_Create_ZibalMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Payment_Create_ZibalMutation,
@@ -5029,7 +5018,7 @@ export const useServiceRequest_ApplyDiscountMutation = <
     TError,
     ServiceRequest_ApplyDiscountMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     ServiceRequest_ApplyDiscountMutation,
@@ -5069,7 +5058,7 @@ export const useServiceRequest_RemoveDiscountMutation = <
     TError,
     ServiceRequest_RemoveDiscountMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     ServiceRequest_RemoveDiscountMutation,
@@ -5142,7 +5131,7 @@ export const useServiceRequest_GetMyRequestsQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceRequest_GetMyRequestsQuery, TError, TData>({
     queryKey:
@@ -5171,7 +5160,7 @@ export const useInfiniteServiceRequest_GetMyRequestsQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceRequest_GetMyRequestsQuery, TError, TData>(
     (() => {
@@ -5191,7 +5180,7 @@ export const useInfiniteServiceRequest_GetMyRequestsQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5202,18 +5191,8 @@ export const ServiceRequest_GetMyAcceptancesDocument = `
       items {
         address {
           text
-          latitude
-          longitude
-          city {
-            name
-            id
-          }
         }
         finalPrice
-        cancellationReason {
-          id
-          name
-        }
         customer {
           firstName
           lastName
@@ -5265,7 +5244,7 @@ export const useServiceRequest_GetMyAcceptancesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceRequest_GetMyAcceptancesQuery, TError, TData>({
     queryKey:
@@ -5298,7 +5277,7 @@ export const useInfiniteServiceRequest_GetMyAcceptancesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceRequest_GetMyAcceptancesQuery, TError, TData>(
     (() => {
@@ -5318,7 +5297,7 @@ export const useInfiniteServiceRequest_GetMyAcceptancesQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5361,7 +5340,7 @@ export const useServiceRequest_GetMyAcceptancesIncomQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceRequest_GetMyAcceptancesIncomQuery, TError, TData>({
     queryKey:
@@ -5394,7 +5373,7 @@ export const useInfiniteServiceRequest_GetMyAcceptancesIncomQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<
     ServiceRequest_GetMyAcceptancesIncomQuery,
@@ -5418,7 +5397,7 @@ export const useInfiniteServiceRequest_GetMyAcceptancesIncomQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5488,7 +5467,7 @@ export const useServiceRequest_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceRequest_GetByIdQuery, TError, TData>({
     queryKey: ["serviceRequest_getById", variables],
@@ -5514,7 +5493,7 @@ export const useInfiniteServiceRequest_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceRequest_GetByIdQuery, TError, TData>(
     (() => {
@@ -5534,7 +5513,7 @@ export const useInfiniteServiceRequest_GetByIdQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5571,7 +5550,7 @@ export const useCancellationReason_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<CancellationReason_GetAllQuery, TError, TData>({
     queryKey:
@@ -5600,7 +5579,7 @@ export const useInfiniteCancellationReason_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<CancellationReason_GetAllQuery, TError, TData>(
     (() => {
@@ -5620,7 +5599,7 @@ export const useInfiniteCancellationReason_GetAllQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5659,7 +5638,7 @@ export const usePayment_GetMyPaymentsQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Payment_GetMyPaymentsQuery, TError, TData>({
     queryKey:
@@ -5688,7 +5667,7 @@ export const useInfinitePayment_GetMyPaymentsQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Payment_GetMyPaymentsQuery, TError, TData>(
     (() => {
@@ -5708,7 +5687,7 @@ export const useInfinitePayment_GetMyPaymentsQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5737,7 +5716,7 @@ export const useRevenue_GetMyRevenueQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Revenue_GetMyRevenueQuery, TError, TData>({
     queryKey: ["revenue_getMyRevenue", variables],
@@ -5763,7 +5742,7 @@ export const useInfiniteRevenue_GetMyRevenueQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Revenue_GetMyRevenueQuery, TError, TData>(
     (() => {
@@ -5783,7 +5762,7 @@ export const useInfiniteRevenue_GetMyRevenueQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5809,13 +5788,13 @@ export const useGetMyRevenueQuery = <
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<GetMyRevenueQuery, TError, TData>["queryKey"];
-  }
+  },
 ) => {
   return useQuery<GetMyRevenueQuery, TError, TData>({
     queryKey: ["getMyRevenue", variables],
     queryFn: fetcher<GetMyRevenueQuery, GetMyRevenueQueryVariables>(
       GetMyRevenueDocument,
-      variables
+      variables,
     ),
     ...options,
   });
@@ -5835,7 +5814,7 @@ export const useInfiniteGetMyRevenueQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<GetMyRevenueQuery, TError, TData>(
     (() => {
@@ -5845,11 +5824,11 @@ export const useInfiniteGetMyRevenueQuery = <
         queryFn: (metaData) =>
           fetcher<GetMyRevenueQuery, GetMyRevenueQueryVariables>(
             GetMyRevenueDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5886,7 +5865,7 @@ export const useServiceCategory_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceCategory_GetAllQuery, TError, TData>({
     queryKey:
@@ -5915,7 +5894,7 @@ export const useInfiniteServiceCategory_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceCategory_GetAllQuery, TError, TData>(
     (() => {
@@ -5935,7 +5914,7 @@ export const useInfiniteServiceCategory_GetAllQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -5966,7 +5945,7 @@ export const useServiceCategory_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceCategory_GetByIdQuery, TError, TData>({
     queryKey: ["serviceCategory_getById", variables],
@@ -5992,7 +5971,7 @@ export const useInfiniteServiceCategory_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceCategory_GetByIdQuery, TError, TData>(
     (() => {
@@ -6012,7 +5991,7 @@ export const useInfiniteServiceCategory_GetByIdQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -6030,7 +6009,7 @@ export const useCreateRequestMutation = <TError = unknown, TContext = unknown>(
     TError,
     CreateRequestMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     CreateRequestMutation,
@@ -6042,7 +6021,7 @@ export const useCreateRequestMutation = <TError = unknown, TContext = unknown>(
     mutationFn: (variables?: CreateRequestMutationVariables) =>
       fetcher<CreateRequestMutation, CreateRequestMutationVariables>(
         CreateRequestDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -6085,7 +6064,7 @@ export const useServiceSubCategory_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceSubCategory_GetAllQuery, TError, TData>({
     queryKey:
@@ -6114,7 +6093,7 @@ export const useInfiniteServiceSubCategory_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceSubCategory_GetAllQuery, TError, TData>(
     (() => {
@@ -6134,7 +6113,7 @@ export const useInfiniteServiceSubCategory_GetAllQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -6169,7 +6148,7 @@ export const useServiceSubCategory_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceSubCategory_GetByIdQuery, TError, TData>({
     queryKey: ["serviceSubCategory_getById", variables],
@@ -6195,7 +6174,7 @@ export const useInfiniteServiceSubCategory_GetByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceSubCategory_GetByIdQuery, TError, TData>(
     (() => {
@@ -6215,7 +6194,7 @@ export const useInfiniteServiceSubCategory_GetByIdQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -6253,7 +6232,7 @@ export const useServiceTypeQuestion_GetByServiceTypeQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceTypeQuestion_GetByServiceTypeQuery, TError, TData>({
     queryKey: ["serviceTypeQuestion_getByServiceType", variables],
@@ -6283,7 +6262,7 @@ export const useInfiniteServiceTypeQuestion_GetByServiceTypeQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<
     ServiceTypeQuestion_GetByServiceTypeQuery,
@@ -6307,7 +6286,7 @@ export const useInfiniteServiceTypeQuestion_GetByServiceTypeQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -6349,7 +6328,7 @@ export const useServiceTypes_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceTypes_GetAllQuery, TError, TData>({
     queryKey:
@@ -6378,7 +6357,7 @@ export const useInfiniteServiceTypes_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceTypes_GetAllQuery, TError, TData>(
     (() => {
@@ -6391,11 +6370,11 @@ export const useInfiniteServiceTypes_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<ServiceTypes_GetAllQuery, ServiceTypes_GetAllQueryVariables>(
             ServiceTypes_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -6468,7 +6447,7 @@ export const useServiceRequest_GetAvailableRequestsQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceRequest_GetAvailableRequestsQuery, TError, TData>({
     queryKey: ["serviceRequest_getAvailableRequests", variables],
@@ -6498,7 +6477,7 @@ export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<
     ServiceRequest_GetAvailableRequestsQuery,
@@ -6522,7 +6501,7 @@ export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -6565,7 +6544,7 @@ export const useServiceTypes_GetPopularQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<ServiceTypes_GetPopularQuery, TError, TData>({
     queryKey:
@@ -6594,7 +6573,7 @@ export const useInfiniteServiceTypes_GetPopularQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<ServiceTypes_GetPopularQuery, TError, TData>(
     (() => {
@@ -6614,7 +6593,7 @@ export const useInfiniteServiceTypes_GetPopularQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -6635,7 +6614,7 @@ export const useS3_CompleteMultipartUploadMutation = <
     TError,
     S3_CompleteMultipartUploadMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     S3_CompleteMultipartUploadMutation,
@@ -6674,7 +6653,7 @@ export const useS3_GeneratePresignedUrlMutation = <
     TError,
     S3_GeneratePresignedUrlMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     S3_GeneratePresignedUrlMutation,
@@ -6714,7 +6693,7 @@ export const useS3_GeneratePresignedUrlsMutation = <
     TError,
     S3_GeneratePresignedUrlsMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     S3_GeneratePresignedUrlsMutation,
@@ -6752,7 +6731,7 @@ export const useUser_UpdateProfileMutation = <
     TError,
     User_UpdateProfileMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     User_UpdateProfileMutation,
@@ -6764,7 +6743,7 @@ export const useUser_UpdateProfileMutation = <
     mutationFn: (variables?: User_UpdateProfileMutationVariables) =>
       fetcher<User_UpdateProfileMutation, User_UpdateProfileMutationVariables>(
         User_UpdateProfileDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -6787,7 +6766,7 @@ export const useSpecialist_UpdateSpecializedDocumentsMutation = <
     TError,
     Specialist_UpdateSpecializedDocumentsMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Specialist_UpdateSpecializedDocumentsMutation,
@@ -6797,7 +6776,7 @@ export const useSpecialist_UpdateSpecializedDocumentsMutation = <
   >({
     mutationKey: ["specialist_updateSpecializedDocuments"],
     mutationFn: (
-      variables?: Specialist_UpdateSpecializedDocumentsMutationVariables
+      variables?: Specialist_UpdateSpecializedDocumentsMutationVariables,
     ) =>
       fetcher<
         Specialist_UpdateSpecializedDocumentsMutation,
@@ -6824,7 +6803,7 @@ export const useSpecialist_UpdateIdentityVerificationVideoMutation = <
     TError,
     Specialist_UpdateIdentityVerificationVideoMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Specialist_UpdateIdentityVerificationVideoMutation,
@@ -6834,7 +6813,7 @@ export const useSpecialist_UpdateIdentityVerificationVideoMutation = <
   >({
     mutationKey: ["specialist_updateIdentityVerificationVideo"],
     mutationFn: (
-      variables?: Specialist_UpdateIdentityVerificationVideoMutationVariables
+      variables?: Specialist_UpdateIdentityVerificationVideoMutationVariables,
     ) =>
       fetcher<
         Specialist_UpdateIdentityVerificationVideoMutation,
@@ -6861,7 +6840,7 @@ export const useSpecialist_SetPersonalInformationMutation = <
     TError,
     Specialist_SetPersonalInformationMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Specialist_SetPersonalInformationMutation,
@@ -6871,7 +6850,7 @@ export const useSpecialist_SetPersonalInformationMutation = <
   >({
     mutationKey: ["specialist_setPersonalInformation"],
     mutationFn: (
-      variables?: Specialist_SetPersonalInformationMutationVariables
+      variables?: Specialist_SetPersonalInformationMutationVariables,
     ) =>
       fetcher<
         Specialist_SetPersonalInformationMutation,
@@ -6898,7 +6877,7 @@ export const useSpecialist_SetLocationAndSpecialtyMutation = <
     TError,
     Specialist_SetLocationAndSpecialtyMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Specialist_SetLocationAndSpecialtyMutation,
@@ -6908,7 +6887,7 @@ export const useSpecialist_SetLocationAndSpecialtyMutation = <
   >({
     mutationKey: ["specialist_setLocationAndSpecialty"],
     mutationFn: (
-      variables?: Specialist_SetLocationAndSpecialtyMutationVariables
+      variables?: Specialist_SetLocationAndSpecialtyMutationVariables,
     ) =>
       fetcher<
         Specialist_SetLocationAndSpecialtyMutation,
@@ -6935,7 +6914,7 @@ export const useRateAndReview_CreateMutation = <
     TError,
     RateAndReview_CreateMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     RateAndReview_CreateMutation,
@@ -6970,7 +6949,7 @@ export const useAddress_SetPrimaryMutation = <
     TError,
     Address_SetPrimaryMutationVariables,
     TContext
-  >
+  >,
 ) => {
   return useMutation<
     Address_SetPrimaryMutation,
@@ -6982,7 +6961,7 @@ export const useAddress_SetPrimaryMutation = <
     mutationFn: (variables?: Address_SetPrimaryMutationVariables) =>
       fetcher<Address_SetPrimaryMutation, Address_SetPrimaryMutationVariables>(
         Address_SetPrimaryDocument,
-        variables
+        variables,
       )(),
     ...options,
   });
@@ -7018,7 +6997,7 @@ export const useUser_GetMyProfileQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<User_GetMyProfileQuery, TError, TData>({
     queryKey:
@@ -7027,7 +7006,7 @@ export const useUser_GetMyProfileQuery = <
         : ["user_getMyProfile", variables],
     queryFn: fetcher<User_GetMyProfileQuery, User_GetMyProfileQueryVariables>(
       User_GetMyProfileDocument,
-      variables
+      variables,
     ),
     ...options,
   });
@@ -7047,7 +7026,7 @@ export const useInfiniteUser_GetMyProfileQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<User_GetMyProfileQuery, TError, TData>(
     (() => {
@@ -7060,11 +7039,11 @@ export const useInfiniteUser_GetMyProfileQuery = <
         queryFn: (metaData) =>
           fetcher<User_GetMyProfileQuery, User_GetMyProfileQueryVariables>(
             User_GetMyProfileDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -7110,7 +7089,7 @@ export const useAddress_GetMyAddressesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Address_GetMyAddressesQuery, TError, TData>({
     queryKey:
@@ -7139,7 +7118,7 @@ export const useInfiniteAddress_GetMyAddressesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Address_GetMyAddressesQuery, TError, TData>(
     (() => {
@@ -7159,7 +7138,7 @@ export const useInfiniteAddress_GetMyAddressesQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -7201,7 +7180,7 @@ export const useDiscountCode_GetMyCodesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<DiscountCode_GetMyCodesQuery, TError, TData>({
     queryKey:
@@ -7230,7 +7209,7 @@ export const useInfiniteDiscountCode_GetMyCodesQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<DiscountCode_GetMyCodesQuery, TError, TData>(
     (() => {
@@ -7250,7 +7229,7 @@ export const useInfiniteDiscountCode_GetMyCodesQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -7319,7 +7298,7 @@ export const useSpecialist_GetMyProfileQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Specialist_GetMyProfileQuery, TError, TData>({
     queryKey:
@@ -7348,7 +7327,7 @@ export const useInfiniteSpecialist_GetMyProfileQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Specialist_GetMyProfileQuery, TError, TData>(
     (() => {
@@ -7368,7 +7347,7 @@ export const useInfiniteSpecialist_GetMyProfileQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -7400,7 +7379,7 @@ export const useProvince_GetAllQuery = <
     "queryKey"
   > & {
     queryKey?: UseQueryOptions<Province_GetAllQuery, TError, TData>["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Province_GetAllQuery, TError, TData>({
     queryKey:
@@ -7409,7 +7388,7 @@ export const useProvince_GetAllQuery = <
         : ["province_getAll", variables],
     queryFn: fetcher<Province_GetAllQuery, Province_GetAllQueryVariables>(
       Province_GetAllDocument,
-      variables
+      variables,
     ),
     ...options,
   });
@@ -7429,7 +7408,7 @@ export const useInfiniteProvince_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Province_GetAllQuery, TError, TData>(
     (() => {
@@ -7442,11 +7421,11 @@ export const useInfiniteProvince_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<Province_GetAllQuery, Province_GetAllQueryVariables>(
             Province_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -7489,7 +7468,7 @@ export const useSpecialist_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Specialist_GetAllQuery, TError, TData>({
     queryKey:
@@ -7498,7 +7477,7 @@ export const useSpecialist_GetAllQuery = <
         : ["specialist_getAll", variables],
     queryFn: fetcher<Specialist_GetAllQuery, Specialist_GetAllQueryVariables>(
       Specialist_GetAllDocument,
-      variables
+      variables,
     ),
     ...options,
   });
@@ -7518,7 +7497,7 @@ export const useInfiniteSpecialist_GetAllQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Specialist_GetAllQuery, TError, TData>(
     (() => {
@@ -7531,11 +7510,11 @@ export const useInfiniteSpecialist_GetAllQuery = <
         queryFn: (metaData) =>
           fetcher<Specialist_GetAllQuery, Specialist_GetAllQueryVariables>(
             Specialist_GetAllDocument,
-            { ...variables, ...(metaData.pageParam ?? {}) }
+            { ...variables, ...(metaData.pageParam ?? {}) },
           )(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };
 
@@ -7574,7 +7553,7 @@ export const useAddress_GetAddressByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useQuery<Address_GetAddressByIdQuery, TError, TData>({
     queryKey: ["address_getAddressById", variables],
@@ -7600,7 +7579,7 @@ export const useInfiniteAddress_GetAddressByIdQuery = <
       TError,
       TData
     >["queryKey"];
-  }
+  },
 ) => {
   return useInfiniteQuery<Address_GetAddressByIdQuery, TError, TData>(
     (() => {
@@ -7620,6 +7599,6 @@ export const useInfiniteAddress_GetAddressByIdQuery = <
           })(),
         ...restOptions,
       };
-    })()
+    })(),
   );
 };

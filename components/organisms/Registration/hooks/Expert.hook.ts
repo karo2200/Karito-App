@@ -49,7 +49,7 @@ export default function useExpertHook() {
 
   const profileData: SpecialistProfileDto =
     expertData?.specialist_getMyProfile?.result;
-
+  console.log(JSON.stringify({ profileData }));
   useEffect(() => {
     if (!isLoggedIn) {
       if (
@@ -72,7 +72,12 @@ export default function useExpertHook() {
   const { data: provinceData, isPending: provincePending } =
     useGetAllprovinceQuery({ take: 50 });
 
-  const { data: cityData, isPending: cityPending } = useGetAllCityQuery({
+  const {
+    data: cityData,
+    isPending: cityPending,
+    fetchNextPage: cityFetchNextPage,
+    hasNextPage: cityHasNextPage,
+  } = useGetAllCityQuery({
     where: { province: { id: { eq: province } } },
   });
 
@@ -84,6 +89,10 @@ export default function useExpertHook() {
     take: 100,
     where: { serviceSubCategory: { id: { eq: category } } },
   });
+
+  const onLoadMoreCity = () => {
+    if (cityHasNextPage) cityFetchNextPage();
+  };
 
   const onRegistrationPress = (formData: any, onNextPress?: () => void) => {
     setNationalCode(formData?.code);
@@ -149,5 +158,6 @@ export default function useExpertHook() {
     profileData,
     nationalCode: profileData?.nationalCode ?? nationalCode,
     isLoggedIn,
+    onLoadMoreCity,
   };
 }

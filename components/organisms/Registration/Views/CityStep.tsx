@@ -41,6 +41,7 @@ const CityStep = ({
     profileData,
     stepPending,
     isLoggedIn,
+    onLoadMoreCity,
   } = useExpertHook();
 
   const { ...methods } = useForm({
@@ -97,6 +98,7 @@ const CityStep = ({
               placeholder="انتخاب کنید"
               options={cityData}
               sheetTitle="انتخاب شهر"
+              onEndReached={onLoadMoreCity}
             />
 
             <SearchSelect
