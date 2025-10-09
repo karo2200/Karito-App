@@ -41,17 +41,12 @@ query serviceRequest_getAvailableRequests(
       items {
         address {
           text
-          latitude
-          longitude
           city {
             id
             name
           }
         }
-        cancellationReason {
-          id
-          name
-        }
+
         finalPrice
         customer {
           firstName

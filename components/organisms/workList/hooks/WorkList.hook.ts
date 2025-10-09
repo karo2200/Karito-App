@@ -1,11 +1,6 @@
-import {
-  ServiceRequestStatus,
-  SortEnumType,
-  SpecialistProfileDto,
-} from "@/generated/graphql";
+import { SortEnumType } from "@/generated/graphql";
 import { useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
-import { useGetSpecialistProfile } from "../../PersonalInfo/hooks/personalInfo.query";
+import { useEffect, useState } from "react";
 import { useGetAllAvailableRequestQuery } from "./WorkList.query";
 
 import { useToast } from "@/components/atoms/Toast";
@@ -22,8 +17,6 @@ export default function useWorkOutHook() {
     latitude?: number;
     longitude?: number;
   }>({});
-
-  const { data: expertData } = useGetSpecialistProfile();
 
   useEffect(() => {
     (async () => {
@@ -46,30 +39,10 @@ export default function useWorkOutHook() {
     })();
   }, []);
 
-  const profileData: SpecialistProfileDto =
-    expertData?.specialist_getMyProfile?.result;
-
-  const ids = profileData?.serviceTypes?.map((item) => item?.id);
-
-  const filters: any[] = useMemo(() => {
-    return [
-      { status: { eq: ServiceRequestStatus.Pending } },
-      {
-        serviceType: {
-          id: { in: ids },
-        },
-      },
-      {
-        address: {
-          city: { id: { eq: profileData?.city?.id } },
-        },
-      },
-    ];
-  }, [ids]);
-
-  if (searchText.length > 0) {
-    filters.push({ serviceType: { name: { eq: searchText } } });
-  }
+  const whereCondition =
+    searchText.length > 0
+      ? { serviceType: { name: { contains: searchText } } }
+      : {};
 
   const {
     data: workData,
@@ -81,9 +54,7 @@ export default function useWorkOutHook() {
   } = useGetAllAvailableRequestQuery(
     {
       input: { latitude: location?.latitude, longitude: location?.longitude },
-      where: {
-        and: filters,
-      },
+      where: whereCondition,
       order: [{ requestDate: SortEnumType.Desc }],
     },
     {
