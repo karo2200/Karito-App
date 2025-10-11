@@ -27,7 +27,7 @@ type CreateOrderSetupProp = {
 };
 
 export function CreateOrderSetup(props: CreateOrderSetupProp): JSX.Element {
-  const type = props?.type || "address";
+  const type = props?.type || "selectDate";
   switch (type) {
     // case "address":
     //   return <AddressOrg {...props} />;
