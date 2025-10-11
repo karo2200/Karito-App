@@ -14,10 +14,12 @@ export default function AddressList({
   onChange,
   setValue,
   setEmptyState = false,
+  onClose,
 }: {
   onChange?: any;
   setValue?: any;
   setEmptyState?: boolean;
+  onClose: () => void;
 }) {
   const router = useRouter();
   const { field } = useController({ name: "addressId" });
@@ -40,12 +42,14 @@ export default function AddressList({
   }, [data]);
 
   const onPress = () => {
+    onClose?.();
     router.push("/CreateAddress");
   };
 
   const renderItem = ({ item, index }) => (
     <ListItem
       {...{ item, index, field, router, length: data?.pages?.length, onChange }}
+      onClose={onClose}
     />
   );
 
@@ -60,6 +64,7 @@ export default function AddressList({
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}_${item?.value}`}
         onEndReached={onLoadMore}
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           setEmptyState ? () => <EmptyAddressState /> : undefined
         }

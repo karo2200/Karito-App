@@ -21,6 +21,7 @@ const AddressListItem = ({
   onChange,
   field,
   router,
+  onClose,
 }: {
   item: any;
   index: number;
@@ -28,6 +29,7 @@ const AddressListItem = ({
   onChange?: any;
   field: any;
   router?: any;
+  onClose: () => void;
 }) => {
   const isChecked = (field?.value ?? field) === item?.id;
 
@@ -61,6 +63,7 @@ const AddressListItem = ({
   };
 
   const onEditPress = () => {
+    onClose?.();
     router.push(`/CreateAddress?id=${item?.id}`);
   };
 

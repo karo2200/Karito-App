@@ -42,6 +42,7 @@ const AddressActionSheet = forwardRef(
             <AddressList
               setValue={setValue}
               onChange={onItemPress}
+              onClose={closeActionSheet}
               setEmptyState
             />
           </FormProvider>
@@ -58,5 +59,7 @@ const styles = StyleSheet.create({
     minHeight: DeviceHeight * 0.7,
     maxHeight: DeviceHeight * 0.8,
     padding: 20,
+    borderTopLeftRadius: 30,
+    borderTopEndRadius: 30,
   },
 });

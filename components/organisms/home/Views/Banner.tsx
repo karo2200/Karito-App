@@ -1,11 +1,9 @@
 import CustomImage from "@/components/atoms/CustomImage";
-import SearchWithModal from "@/components/atoms/SearchWithModal";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
-import { CityDto } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   Dimensions,
   Platform,
@@ -14,7 +12,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import { ActionSheetRef } from "react-native-actions-sheet";
+import AddressActionSheet from "../../service/Views/AddressActionSheet";
+import useServiceTabHook from "../../service/serviceHook";
 import useHomeHook from "../hooks/Home.hook";
 
 const { width, height } = Dimensions.get("screen");
@@ -22,8 +22,13 @@ const { width, height } = Dimensions.get("screen");
 export default function Banner() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { cityData, customerCity, onCityPress, activeBanner, router } =
-    useHomeHook();
+  const {
+    // cityData,
+    //  customerCity, onCityPress,
+    activeBanner,
+    router,
+    isLoggedIn,
+  } = useHomeHook();
 
   const openActionSheet = () => {
     actionSheetRef.current?.show();
@@ -32,6 +37,14 @@ export default function Banner() {
   const closeActionSheet = () => {
     actionSheetRef.current?.hide();
   };
+
+  const { customerCity, onCityPress } = useServiceTabHook();
+
+  useEffect(() => {
+    if (!customerCity && isLoggedIn) {
+      actionSheetRef.current?.show();
+    }
+  }, [customerCity, isLoggedIn]);
 
   return (
     <View>
@@ -66,13 +79,18 @@ export default function Banner() {
           <TouchableOpacity onPress={openActionSheet} style={styles.button}>
             <Ionicons name="location-outline" size={20} color="#000" />
             <ThemedText type="text" style={styles.city}>
-              {customerCity ? customerCity : "انتخاب شهر"}
+              {customerCity ? customerCity : "انتخاب آدرس"}
             </ThemedText>
           </TouchableOpacity>
         </View>
       </View>
+      <AddressActionSheet
+        ref={actionSheetRef}
+        closeActionSheet={closeActionSheet}
+        onCityPress={onCityPress}
+      />
 
-      <ActionSheet
+      {/* <ActionSheet
         ref={actionSheetRef}
         keyboardHandlerEnabled={false}
         containerStyle={{ minHeight: height / 2.5 }}
@@ -108,7 +126,7 @@ export default function Banner() {
             })}
           </View>
         </View>
-      </ActionSheet>
+      </ActionSheet> */}
     </View>
   );
 }

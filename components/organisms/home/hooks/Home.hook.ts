@@ -5,6 +5,7 @@ import {
 } from "@/generated/graphql";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
+import createOrderStore from "@/stores/createOrder";
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { useGetServiceCategoriesQuery } from "../../service/hooks";
@@ -19,7 +20,7 @@ export default function useHomeHook() {
 
   const { isLoggedIn } = authCacheStore();
 
-  const { customerCity, setCustomerCity } = authCacheStore();
+  const { customerCity, setCustomerCity, customerCityId } = createOrderStore();
 
   const { data: cityData, isLoading } = useGetAllCityQuery({
     where: { isActive: { eq: true } },
@@ -45,6 +46,11 @@ export default function useHomeHook() {
             eq: VerificationStatus.Approved,
           },
         },
+        {
+          city: {
+            id: { eq: customerCityId },
+          },
+        },
       ],
     },
     order: [{ averageRating: SortEnumType.Desc }],
@@ -53,7 +59,7 @@ export default function useHomeHook() {
   const { data: homeCategoryData } = useGetServiceCategoriesQuery();
 
   const { data: selectedCityData, isLoading: selectedCityLoading } =
-    useGetAllCityQuery({ where: { name: { eq: customerCity } } });
+    useGetAllCityQuery({ where: { id: { eq: customerCityId } } });
 
   const { data: carouselData } = useCarousel_GetByIdQuery({
     input: { id: selectedCityData?.pages[0]?.activeCarousel?.id },
@@ -106,6 +112,7 @@ export default function useHomeHook() {
     specialists: specialists?.pages,
     popularData: popularData?.pages ?? [],
     specialData: specialData?.pages ?? [],
+    isLoggedIn,
   };
 }
 
