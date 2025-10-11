@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
 import { CloseCircle } from "iconsax-react-native";
-import React, { JSX } from "react";
+import React, { JSX, useMemo } from "react";
 import { useController } from "react-hook-form";
 import {
   DimensionValue,
@@ -96,6 +96,16 @@ const CustomInput = React.forwardRef(
       );
     };
 
+    const isShabnamFont = useMemo(() => {
+      if (
+        keyboardType === "number-pad" ||
+        keyboardType === "numeric" ||
+        forcePersianNumbers
+      )
+        return true;
+      else return false;
+    }, [forcePersianNumbers, keyboardType]);
+
     return (
       <View
         onLayout={onSetHeight ? onLayout : undefined}
@@ -136,6 +146,9 @@ const CustomInput = React.forwardRef(
                 paddingVertical: 0,
                 paddingHorizontal: 8,
                 cursor: "text",
+                fontFamily: isShabnamFont
+                  ? FontType.Shabnam
+                  : FontType.YekanBakhRegular,
               },
             ]}
           />

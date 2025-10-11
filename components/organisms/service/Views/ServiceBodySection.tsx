@@ -62,7 +62,7 @@ export default function ServiceBodySection({
   const EmptyState = useCallback(() => {
     return (
       <ThemedView style={styles.emptyState}>
-        {addressId.length == 0 ? (
+        {addressId?.length == 0 ? (
           <ThemedText>لطفا آدرس خود را انتخاب کنید</ThemedText>
         ) : (
           <ThemedText>آیتمی برای نمایش وجود ندارد!</ThemedText>

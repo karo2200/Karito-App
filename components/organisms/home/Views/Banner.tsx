@@ -31,6 +31,7 @@ export default function Banner() {
   } = useHomeHook();
 
   const openActionSheet = () => {
+    console.log("ss");
     actionSheetRef.current?.show();
   };
 

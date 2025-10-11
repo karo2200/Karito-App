@@ -2,22 +2,19 @@ import createOrderStore from "@/stores/createOrder";
 import useServiceStore from "@/stores/serviceTabStore";
 import { useRoute } from "@react-navigation/native";
 import { Menu } from "iconsax-react-native";
-import { useEffect, useState } from "react";
-import { SheetManager } from "react-native-actions-sheet";
+import { useEffect, useRef, useState } from "react";
+import { ActionSheetRef } from "react-native-actions-sheet";
 import {
   useGetCityServiceCategoriesQuery,
   useGetCitySubServiceCategoriesQuery,
 } from "./hooks";
 
 export default function useServiceTabHook() {
+  const actionSheetRef = useRef<ActionSheetRef>(null);
+
   const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
-  const {
-    customerCity,
-    setCustomerCity,
-    setCustomerCityId,
-    customerCityId,
-    setAddressId,
-  } = createOrderStore();
+  const { customerCity, setCustomerCity, setCustomerCityId, customerCityId } =
+    createOrderStore();
 
   const { params } = useRoute();
   const { serCurrentService, currentService } = useServiceStore();
@@ -80,11 +77,11 @@ export default function useServiceTabHook() {
   };
 
   const onLocationPress = () => {
-    SheetManager.show("addresslist-sheet");
+    actionSheetRef?.current?.show();
   };
 
   const onCloseSheet = () => {
-    SheetManager.hide("addresslist-sheet");
+    actionSheetRef.current?.hide();
   };
 
   const onCityPress = (item: any) => {
@@ -101,6 +98,7 @@ export default function useServiceTabHook() {
     subServiceItems: subServiceData?.pages ?? [],
     subServiceLoading,
     customerCity,
+    actionSheetRef,
 
     onFetchNextServices,
     onFetchNextSubServices,

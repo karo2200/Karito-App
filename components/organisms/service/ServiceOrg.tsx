@@ -2,14 +2,12 @@ import { Divider, ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useRef } from "react";
 import {
   ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { ActionSheetRef } from "react-native-actions-sheet";
 import AddressActionSheet from "./Views/AddressActionSheet";
 import ServiceBodySection from "./Views/ServiceBodySection";
 import ServiceHeaderSection from "./Views/ServiceHeaderSection";
@@ -26,23 +24,16 @@ export default function ServiceOrg() {
     subServiceLoading,
     customerCity,
     onCityPress,
+    onLocationPress,
+    onCloseSheet,
+    actionSheetRef,
   } = useServiceTabHook();
-
-  const actionSheetRef = useRef<ActionSheetRef>(null);
-
-  const closeActionSheet = () => {
-    actionSheetRef.current?.hide();
-  };
-
-  const openActionSheet = () => {
-    actionSheetRef.current?.show();
-  };
 
   return (
     <ScrollView style={styles.flex1}>
       <AddressActionSheet
         ref={actionSheetRef}
-        closeActionSheet={closeActionSheet}
+        closeActionSheet={onCloseSheet}
         onCityPress={onCityPress}
       />
       <ThemedView style={styles.container}>
@@ -55,7 +46,7 @@ export default function ServiceOrg() {
           placeholderTextColor={Colors.unfilledText}
           onChangeText={setSearchText}
         />
-        <TouchableOpacity onPress={openActionSheet} style={styles.button}>
+        <TouchableOpacity onPress={onLocationPress} style={styles.button}>
           <Ionicons name="location-outline" size={20} color="#000" />
           <ThemedText type="text" style={styles.city}>
             {customerCity ? customerCity : "انتخاب آدرس"}

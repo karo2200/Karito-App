@@ -23,12 +23,39 @@ export default function TransactionInfo({
           ],
         }
       : {
-          paidAt: {
-            gte: `2018-09-09T00:00:00+03:30`,
-          },
-          status: { eq: ServiceRequestStatus.Paid },
+          and: [
+            {
+              paidAt: {
+                gte: `2018-09-09T00:00:00+03:30`,
+              },
+            },
+            { status: { eq: ServiceRequestStatus.Paid } },
+          ],
         },
   });
+
+  console.log(
+    JSON.stringify({
+      where: selectedDate
+        ? {
+            and: [
+              { paidAt: { gte: `${selectedDate}T00:00:00+03:30` } },
+              { paidAt: { lte: `${selectedDate}T23:59:59+03:30` } },
+              { status: { eq: ServiceRequestStatus.Paid } },
+            ],
+          }
+        : {
+            and: [
+              {
+                paidAt: {
+                  gte: `2018-09-09T00:00:00+03:30`,
+                },
+              },
+              { status: { eq: ServiceRequestStatus.Paid } },
+            ],
+          },
+    })
+  );
 
   const renderItem = useCallback(
     ({ item, index }: { item?: any; index?: number }) => (
@@ -42,6 +69,14 @@ export default function TransactionInfo({
     SheetManager.show("calendar-sheet");
   };
 
+  const ListEmptyComponent = useCallback(() => {
+    return (
+      <ThemedView style={{ alignItems: "center", marginTop: 30 }}>
+        <ThemedText>تراکنشی در این تاریخ ندارید.</ThemedText>
+      </ThemedView>
+    );
+  }, []);
+
   return (
     <ThemedView style={styles.container}>
       {isLoading ? (
@@ -53,6 +88,7 @@ export default function TransactionInfo({
           data={data?.pages}
           keyExtractor={(_, index) => `${index}_income`}
           renderItem={renderItem}
+          ListEmptyComponent={isLoading ? undefined : ListEmptyComponent}
           ListHeaderComponent={
             <ThemedView style={styles.headerView}>
               <TouchableOpacity onPress={onCalenderPress}>
@@ -80,6 +116,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginTop: 12,
     marginBottom: 12,
+    width: "100%",
   },
 
   blackTxt: { color: Colors.black },

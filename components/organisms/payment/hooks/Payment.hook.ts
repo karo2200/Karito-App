@@ -107,10 +107,12 @@ export default function usePaymentHook() {
   };
 
   const onPayPress = () => {
+    console.log("SSS");
     paymentCreate(
       { input: { serviceRequestId: params?.id } },
       {
         onSuccess: (data) => {
+          console.log(JSON.stringify({ data }));
           if (data?.payment_create_zibal?.status?.code === 1) {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.serviceRequest_getById],

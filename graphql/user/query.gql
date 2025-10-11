@@ -28,6 +28,7 @@ query address_getMyAddresses(
         floorNumber
         buildingNumber
         unitNumber
+        title
         city {
           name
           id

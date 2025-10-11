@@ -201,7 +201,11 @@ export default function SelectDateActionSheet({
               flex: 1,
             }}
           >
-            <ThemedText style={{ textAlign: "center" }} fontType="regular">
+            <ThemedText
+              style={{ textAlign: "center" }}
+              fontType="regular"
+              hasNumber
+            >
               {currentMonth.locale("fa").format("jMMMM jYYYY")}
             </ThemedText>
           </Pressable>
@@ -245,6 +249,7 @@ export default function SelectDateActionSheet({
                 disabled={disabled}
               >
                 <ThemedText
+                  hasNumber
                   fontType="regular"
                   style={[
                     isSelected && styles.dayTextSelected,

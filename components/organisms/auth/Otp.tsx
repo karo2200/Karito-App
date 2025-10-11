@@ -59,7 +59,7 @@ const OTPSection = () => {
             style={styles.image}
           />
           <AuthHeader />
-          <ThemedText style={styles.subtitle}>
+          <ThemedText style={styles.subtitle} hasNumber>
             {`لطفا کد چهار رقمی ارسال شده به شماره ${phoneNumber} را وارد کنید`}
           </ThemedText>
           <ThemedView style={styles.codeContainer}>

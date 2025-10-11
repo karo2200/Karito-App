@@ -24,20 +24,28 @@ export default function AddressList({
   const router = useRouter();
   const { field } = useController({ name: "addressId" });
 
-  const { setAddressId, setCustomerCity, setCustomerCityId } =
+  const { setAddressId, setCustomerCity, setCustomerCityId, setAddress } =
     createOrderStore();
 
-  const { data, fetchNextPage, hasNextPage } = useGetUserAddressesQuery();
+  const { data, fetchNextPage, hasNextPage, isLoading } =
+    useGetUserAddressesQuery();
+
+  const adresses = data?.pages?.[0] ? data?.pages : [];
 
   useEffect(() => {
-    if (data?.pages?.[0]) {
-      const primaryAddress =
-        data?.pages.find((addr) => addr.isPrimary) ?? data?.pages?.[0];
+    if (data?.pages?.[0] && !isLoading) {
+      const primaryAddress = data?.pages.find((addr) => addr.isPrimary);
       setValue("addressId", primaryAddress?.id);
       setValue("addressLabel", primaryAddress?.text);
       setAddressId?.(primaryAddress?.id);
       setCustomerCity(primaryAddress?.city?.name);
       setCustomerCityId(primaryAddress?.city?.id);
+      setAddress(primaryAddress?.text);
+    } else if (!isLoading) {
+      setAddressId?.("");
+      setCustomerCity("");
+      setCustomerCityId("");
+      setAddress("");
     }
   }, [data]);
 
@@ -60,7 +68,7 @@ export default function AddressList({
   return (
     <ThemedView style={styles.container}>
       <CustomFlatList
-        data={data?.pages ?? []}
+        data={adresses}
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}_${item?.value}`}
         onEndReached={onLoadMore}
@@ -69,7 +77,7 @@ export default function AddressList({
           setEmptyState ? () => <EmptyAddressState /> : undefined
         }
       />
-      {data?.pages?.length > 0 && (
+      {adresses?.length > 0 && (
         <ThemedButton
           title="افزودن آدرس جدید"
           fontType={"bold"}

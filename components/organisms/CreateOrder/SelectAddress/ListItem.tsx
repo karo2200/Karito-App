@@ -33,8 +33,13 @@ const AddressListItem = ({
 }) => {
   const isChecked = (field?.value ?? field) === item?.id;
 
-  const { addressId, setAddressId, setCustomerCity, setCustomerCityId } =
-    createOrderStore();
+  const {
+    addressId,
+    setAddressId,
+    setCustomerCity,
+    setCustomerCityId,
+    setAddress,
+  } = createOrderStore();
 
   const { mutate, isPending } = useAddress_DeleteMutation();
   const queryClient = useQueryClient();
@@ -45,12 +50,16 @@ const AddressListItem = ({
       { input: { addressId: item?.id } },
       {
         onSuccess: (data) => {
-          console.log(JSON.stringify({ data }));
           if (data?.address_delete?.status?.code === 1) {
-            if (addressId === item?.id) {
+            console.log("****");
+            if (addressId === id) {
+              console.log("-----");
               setAddressId("");
               setCustomerCity("");
               setCustomerCityId("");
+
+              setAddress("");
+              console.log("****");
             }
             queryClient.invalidateQueries({
               queryKey: [queryKeys.address_getMyAddresses],

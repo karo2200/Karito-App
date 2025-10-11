@@ -4,8 +4,13 @@ import createOrderStore from "@/stores/createOrder";
 import { forwardRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { StyleSheet } from "react-native";
-import ActionSheet from "react-native-actions-sheet";
+import ActionSheet, { SheetDefinition } from "react-native-actions-sheet";
 import AddressList from "../../CreateOrder/SelectAddress/AddressList";
+declare module "react-native-actions-sheet" {
+  interface Sheets {
+    "addresslist-sheet": SheetDefinition;
+  }
+}
 
 const AddressActionSheet = forwardRef(
   (
@@ -15,7 +20,7 @@ const AddressActionSheet = forwardRef(
     }: { closeActionSheet?: any; onCityPress?: any },
     ref
   ) => {
-    const { setAddressId } = createOrderStore();
+    const { setAddressId, setAddress } = createOrderStore();
     const methods = useForm<Record<string, any>, object>({
       mode: "onChange",
     });
@@ -23,6 +28,7 @@ const AddressActionSheet = forwardRef(
 
     const onItemPress = (item) => {
       setAddressId(item?.id);
+      setAddress(item?.text);
       onCityPress(item);
       closeActionSheet?.();
     };

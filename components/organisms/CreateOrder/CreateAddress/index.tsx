@@ -144,7 +144,9 @@ export default function AddressMap() {
               router?.back();
             }
           },
-          onError: (edata) => {},
+          onError: (edata) => {
+            console.log(JSON.stringify({ edata }));
+          },
         }
       );
     } else {

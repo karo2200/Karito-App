@@ -16,6 +16,7 @@ export enum FontType {
   YekanBakhBold = "YekanBakhBold",
   YekanBakhHeavy = "YekanBakhHeavy",
   YekanBakhFat = "YekanBakhFat",
+  Shabnam = "Shabnam",
 }
 
 export default function useLoadFonts() {
@@ -29,6 +30,7 @@ export default function useLoadFonts() {
     YekanBakhBold: require("../assets/fonts/YekanBakhENBold.ttf"),
     YekanBakhHeavy: require("../assets/fonts/YekanBakhENHeavy.ttf"),
     YekanBakhFat: require("../assets/fonts/YekanBakhENFat.ttf"),
+    Shabnam: require("../assets/fonts/Shabnam-FD.ttf"),
   });
 
   return fontsLoaded;

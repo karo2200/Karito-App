@@ -110,6 +110,9 @@ query serviceRequest_getMyAcceptancesIncom(
           lastName
           phoneNumber
         }
+        serviceType {
+          name
+        }
         paidAt
         id
       }

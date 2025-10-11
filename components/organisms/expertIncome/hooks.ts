@@ -60,7 +60,7 @@ export const useGetServiceAcceptanceIncomeQuery = ({
       return fetcher(ServiceRequest_GetMyAcceptancesIncomDocument, {
         skip: pageParam * PAGE_SIZE,
         take: PAGE_SIZE,
-        ...where,
+        where,
       })();
     },
     initialPageParam: 0,

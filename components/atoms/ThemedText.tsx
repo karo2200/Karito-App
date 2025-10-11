@@ -15,6 +15,7 @@ export type ThemedTextProps = TextProps & {
     | "text"
     | "header";
   fontType?: "bold" | "regular" | "medium" | "extraBold";
+  hasNumber?: boolean;
 };
 
 export default function ThemedText({
@@ -23,6 +24,7 @@ export default function ThemedText({
   darkColor,
   type = "default",
   fontType = "regular",
+  hasNumber = false,
   ...rest
 }: ThemedTextProps) {
   const color = Colors.black;
@@ -32,8 +34,9 @@ export default function ThemedText({
       style={[
         { color },
         {
-          fontFamily:
-            fontType === "bold"
+          fontFamily: hasNumber
+            ? FontType.Shabnam
+            : fontType === "bold"
               ? FontType.YekanBakhBold
               : fontType === "regular"
                 ? FontType.YekanBakhRegular
