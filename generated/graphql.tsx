@@ -829,6 +829,10 @@ export type GetPaymentsForServiceRequestInput = {
   serviceRequestId: Scalars["UUID"]["input"];
 };
 
+export type GetPopularServiceTypesInput = {
+  cityId?: InputMaybe<Scalars["UUID"]["input"]>;
+};
+
 export type GetProvinceByIdInput = {
   id: Scalars["UUID"]["input"];
 };
@@ -1850,6 +1854,10 @@ export type QueryServiceTypeQuestion_GetByServiceTypeArgs = {
 
 export type QueryServiceType_GetByIdArgs = {
   input: GetServiceTypeByIdInput;
+};
+
+export type QueryServiceTypes_GetPopularArgs = {
+  input: GetPopularServiceTypesInput;
 };
 
 export type QuerySpecialist_GetByIdArgs = {
@@ -3675,6 +3683,7 @@ export type ServiceRequest_GetAvailableRequestsQuery = {
 };
 
 export type ServiceTypes_GetPopularQueryVariables = Exact<{
+  input: GetPopularServiceTypesInput;
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   take?: InputMaybe<Scalars["Int"]["input"]>;
   order?: InputMaybe<
@@ -6511,8 +6520,8 @@ export const useInfiniteServiceRequest_GetAvailableRequestsQuery = <
 };
 
 export const ServiceTypes_GetPopularDocument = `
-    query serviceTypes_getPopular($skip: Int, $take: Int, $order: [PopularServiceTypeDtoSortInput!], $where: PopularServiceTypeDtoFilterInput) {
-  serviceTypes_getPopular {
+    query serviceTypes_getPopular($input: GetPopularServiceTypesInput!, $skip: Int, $take: Int, $order: [PopularServiceTypeDtoSortInput!], $where: PopularServiceTypeDtoFilterInput) {
+  serviceTypes_getPopular(input: $input) {
     result(skip: $skip, take: $take, order: $order, where: $where) {
       pageInfo {
         hasNextPage
@@ -6539,7 +6548,7 @@ export const useServiceTypes_GetPopularQuery = <
   TData = ServiceTypes_GetPopularQuery,
   TError = unknown,
 >(
-  variables?: ServiceTypes_GetPopularQueryVariables,
+  variables: ServiceTypes_GetPopularQueryVariables,
   options?: Omit<
     UseQueryOptions<ServiceTypes_GetPopularQuery, TError, TData>,
     "queryKey"
@@ -6552,10 +6561,7 @@ export const useServiceTypes_GetPopularQuery = <
   },
 ) => {
   return useQuery<ServiceTypes_GetPopularQuery, TError, TData>({
-    queryKey:
-      variables === undefined
-        ? ["serviceTypes_getPopular"]
-        : ["serviceTypes_getPopular", variables],
+    queryKey: ["serviceTypes_getPopular", variables],
     queryFn: fetcher<
       ServiceTypes_GetPopularQuery,
       ServiceTypes_GetPopularQueryVariables
@@ -6584,10 +6590,10 @@ export const useInfiniteServiceTypes_GetPopularQuery = <
     (() => {
       const { queryKey: optionsQueryKey, ...restOptions } = options;
       return {
-        queryKey:
-          (optionsQueryKey ?? variables === undefined)
-            ? ["serviceTypes_getPopular.infinite"]
-            : ["serviceTypes_getPopular.infinite", variables],
+        queryKey: optionsQueryKey ?? [
+          "serviceTypes_getPopular.infinite",
+          variables,
+        ],
         queryFn: (metaData) =>
           fetcher<
             ServiceTypes_GetPopularQuery,

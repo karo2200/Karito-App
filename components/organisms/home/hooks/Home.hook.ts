@@ -26,9 +26,12 @@ export default function useHomeHook() {
     where: { isActive: { eq: true } },
   });
 
-  const { data: popularData } = useGetAllPopularQuery();
+  const { data: popularData } = useGetAllPopularQuery({
+    input: { cityId: customerCityId },
+  });
 
   const { data: specialData } = useGetAllPopularQuery({
+    input: { cityId: customerCityId },
     where: { isSpecial: { eq: true } },
   });
 

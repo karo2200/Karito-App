@@ -7,6 +7,7 @@ import {
   City_GetAllDocument,
   CityDtoFilterInput,
   CityDtoSortInput,
+  GetPopularServiceTypesInput,
   PopularServiceTypeDtoFilterInput,
   PopularServiceTypeDtoSortInput,
   Province_GetAllDocument,
@@ -51,6 +52,7 @@ type UseGetAllSpecialistOptions = {
 };
 
 type UseGetAllPopularOptions = {
+  input: GetPopularServiceTypesInput;
   skip?: number;
   take?: number;
   where?: PopularServiceTypeDtoFilterInput;

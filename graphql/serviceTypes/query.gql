@@ -80,12 +80,13 @@ query serviceRequest_getAvailableRequests(
 }
 
 query serviceTypes_getPopular(
+  $input: GetPopularServiceTypesInput!
   $skip: Int
   $take: Int
   $order: [PopularServiceTypeDtoSortInput!]
   $where: PopularServiceTypeDtoFilterInput
 ) {
-  serviceTypes_getPopular {
+  serviceTypes_getPopular(input: $input) {
     result(skip: $skip, take: $take, order: $order, where: $where) {
       pageInfo {
         hasNextPage
