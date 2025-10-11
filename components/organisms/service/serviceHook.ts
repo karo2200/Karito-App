@@ -13,8 +13,14 @@ export default function useServiceTabHook() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
-  const { customerCity, setCustomerCity, setCustomerCityId, customerCityId } =
-    createOrderStore();
+  const {
+    customerCity,
+    setCustomerCity,
+    setCustomerCityId,
+    customerCityId,
+    setAddress,
+    setAddressId,
+  } = createOrderStore();
 
   const { params } = useRoute();
   const { serCurrentService, currentService } = useServiceStore();
@@ -87,6 +93,8 @@ export default function useServiceTabHook() {
   const onCityPress = (item: any) => {
     setCustomerCity(item?.city?.name);
     setCustomerCityId(item?.city?.id);
+    setAddress(item?.text);
+    setAddressId(item?.id);
   };
 
   return {
