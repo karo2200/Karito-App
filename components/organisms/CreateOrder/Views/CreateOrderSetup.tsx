@@ -3,7 +3,6 @@ import React, { JSX } from "react";
 import OrderQuestions from "../OrderQuestions";
 import OrderSubmittingOrg from "../OrderSubmitting";
 import PreviewOrder from "../PreviewOrder/PreviewOrder";
-import AddressOrg from "../SelectAddress/AddressOrg";
 import SelectGender from "../SelectGender";
 import SelectOrderTime from "../SelectTime";
 
@@ -30,8 +29,8 @@ type CreateOrderSetupProp = {
 export function CreateOrderSetup(props: CreateOrderSetupProp): JSX.Element {
   const type = props?.type || "address";
   switch (type) {
-    case "address":
-      return <AddressOrg {...props} />;
+    // case "address":
+    //   return <AddressOrg {...props} />;
 
     case "selectDate":
       return <SelectOrderTime {...props} />;

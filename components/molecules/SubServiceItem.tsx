@@ -1,25 +1,20 @@
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import ThemedText from "../atoms/ThemedText";
-import ThemedView from "../atoms/ThemedView";
 
 export default function SubServiceItem({ item, index }) {
   const router = useRouter();
-  console.log(JSON.stringify({ item }));
+
+  const onPress = () =>
+    router.push(
+      `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}`
+    );
+
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText
-        style={styles.label}
-        onPress={() =>
-          router.push(
-            `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}`
-          )
-        }
-      >
-        {item?.name}
-      </ThemedText>
-    </ThemedView>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
+      <ThemedText style={styles.label}>{item?.name}</ThemedText>
+    </TouchableOpacity>
   );
 }
 

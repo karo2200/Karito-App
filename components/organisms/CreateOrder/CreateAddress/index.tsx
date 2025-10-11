@@ -1,6 +1,7 @@
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import ThemedInput from "@/components/atoms/ThemedInput";
+import { useToast } from "@/components/atoms/Toast";
 import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
@@ -40,6 +41,8 @@ const schema = yup.object().shape({
 
 export default function AddressMap() {
   const editItem = useRoute().params;
+
+  const toast = useToast();
 
   const { data: addressData } = useGetUserAddressesQuery({
     where: { id: { eq: editItem?.id } },
@@ -152,13 +155,17 @@ export default function AddressMap() {
         {
           onSuccess: (data) => {
             console.log(JSON.stringify({ data }));
-            if (data?.address_create?.status?.code === 1) {
+            const resultCode = data?.address_create?.status?.code;
+            if (resultCode === 1) {
               queryClient.invalidateQueries({
                 queryKey: [queryKeys.address_getMyAddresses],
                 exact: false,
               });
               router?.back();
-            } else {
+            } else if (resultCode === 0) {
+              toast.showToast({
+                message: "آدرس در محدوده تحت پوشش کاریتو قرار ندارد.",
+              });
             }
           },
           onError: (edata) => {
@@ -170,8 +177,8 @@ export default function AddressMap() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <ThemedView style={styles.flex1}>
+    <ThemedView style={styles.flex1}>
+      <ScrollView style={styles.container}>
         <FormProvider {...methods}>
           {editItem?.id && (
             <Breadcrumb
@@ -201,14 +208,6 @@ export default function AddressMap() {
           <Divider height={24} />
           <ThemedView style={styles.addressView}>
             <ThemedInput
-              label="پلاک"
-              name="buildingNumber"
-              style={{ width: "32%" }}
-              keyboardType="numeric"
-              maxLength={8}
-              labelStyle="sm"
-            />
-            <ThemedInput
               label="واحد"
               name="unitNumber"
               style={{ width: "32%" }}
@@ -222,6 +221,14 @@ export default function AddressMap() {
               style={{ width: "32%" }}
               keyboardType="numeric"
               maxLength={4}
+              labelStyle="sm"
+            />
+            <ThemedInput
+              label="پلاک"
+              name="buildingNumber"
+              style={{ width: "32%" }}
+              keyboardType="numeric"
+              maxLength={8}
               labelStyle="sm"
             />
           </ThemedView>
@@ -242,15 +249,15 @@ export default function AddressMap() {
               ref={mapRef}
             />
           </ThemedView>
-          <ThemedButton
-            title="ذخیره"
-            onPress={handleSubmit(onPress)}
-            isLoading={isPending || isUpdating}
-            style={styles.button}
-          />
         </FormProvider>
-      </ThemedView>
-    </ScrollView>
+      </ScrollView>
+      <ThemedButton
+        title="ذخیره"
+        onPress={handleSubmit(onPress)}
+        isLoading={isPending || isUpdating}
+        style={styles.button}
+      />
+    </ThemedView>
   );
 }
 
@@ -265,7 +272,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  button: { marginTop: 18, marginBottom: 50, width: maxWidth * 0.9 },
+  button: {
+    marginTop: 18,
+    marginBottom: 50,
+    width: maxWidth * 0.93,
+    alignSelf: "center",
+  },
 
   addressView: {
     flexDirection: "row",

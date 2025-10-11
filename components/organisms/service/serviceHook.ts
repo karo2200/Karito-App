@@ -1,4 +1,4 @@
-import authCacheStore from "@/stores/authCacheStore";
+import createOrderStore from "@/stores/createOrder";
 import useServiceStore from "@/stores/serviceTabStore";
 import { useRoute } from "@react-navigation/native";
 import { Menu } from "iconsax-react-native";
@@ -11,8 +11,13 @@ import {
 
 export default function useServiceTabHook() {
   const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
-  const { customerCity, setCustomerCity, setCustomerCityId, customerCityId } =
-    authCacheStore();
+  const {
+    customerCity,
+    setCustomerCity,
+    setCustomerCityId,
+    customerCityId,
+    setAddressId,
+  } = createOrderStore();
 
   const { params } = useRoute();
   const { serCurrentService, currentService } = useServiceStore();
@@ -63,7 +68,6 @@ export default function useServiceTabHook() {
 
   const onServiceItemPress = (item: any) => {
     serCurrentService(item);
-    console.log("****");
     setSelectedService(item);
   };
 
@@ -76,17 +80,16 @@ export default function useServiceTabHook() {
   };
 
   const onLocationPress = () => {
-    console.log("MM");
-    SheetManager.show("address-sheet");
+    SheetManager.show("addresslist-sheet");
   };
 
   const onCloseSheet = () => {
-    SheetManager.hide("address-sheet");
+    SheetManager.hide("addresslist-sheet");
   };
 
-  const onCityPress = (city: any) => {
-    setCustomerCity(city?.name);
-    setCustomerCityId(city?.id);
+  const onCityPress = (item: any) => {
+    setCustomerCity(item?.city?.name);
+    setCustomerCityId(item?.city?.id);
   };
 
   return {

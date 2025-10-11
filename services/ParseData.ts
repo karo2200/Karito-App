@@ -13,11 +13,6 @@ export function parseDate(dateString: string) {
 }
 
 export function formatToJalali(dateString: string) {
-  const m = moment(dateString, "YYYY-MM-DDTHH:mm:ssZ");
-
-  const date = m.format("jYYYY/jMM/jDD");
-  const weekday = m.format("dddd");
-  const time = m.format("HH:mm");
   const faDate = moment(new Date(dateString))
     .locale("fa")
     .format("jYYYY/jMM/jDD dddd [ساعت] HH:mm");

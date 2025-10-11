@@ -3,6 +3,7 @@ import CustomRadioButton from "@/components/atoms/CustomRadioButton";
 import { Colors } from "@/constants/Colors";
 import { queryKeys } from "@/constants/queryKeys";
 import { useAddress_DeleteMutation } from "@/generated/graphql";
+import createOrderStore from "@/stores/createOrder";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Trash } from "iconsax-react-native";
 import { memo } from "react";
@@ -30,16 +31,25 @@ const AddressListItem = ({
 }) => {
   const isChecked = (field?.value ?? field) === item?.id;
 
+  const { addressId, setAddressId, setCustomerCity, setCustomerCityId } =
+    createOrderStore();
+
   const { mutate, isPending } = useAddress_DeleteMutation();
   const queryClient = useQueryClient();
 
   const onRemoveAddress = () => {
+    const id = item?.id;
     mutate(
       { input: { addressId: item?.id } },
       {
         onSuccess: (data) => {
           console.log(JSON.stringify({ data }));
           if (data?.address_delete?.status?.code === 1) {
+            if (addressId === item?.id) {
+              setAddressId("");
+              setCustomerCity("");
+              setCustomerCityId("");
+            }
             queryClient.invalidateQueries({
               queryKey: [queryKeys.address_getMyAddresses],
               exact: false,

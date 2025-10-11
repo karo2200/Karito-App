@@ -7,6 +7,7 @@ import {
   useAddress_SetPrimaryMutation,
   useCreateRequestMutation,
 } from "@/generated/graphql";
+import createOrderStore from "@/stores/createOrder";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -21,7 +22,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const baseData = [
-  { type: "address" },
+  // { type: "address" },
   { type: "selectDate" },
   { type: "gender" },
   {
@@ -62,6 +63,8 @@ export default function useCreateOrder() {
     mode: "onChange",
   });
   const { getValues, setValue, watch } = methods;
+
+  const { addressId } = createOrderStore();
 
   const params = useRoute().params;
   const { mutate, isPending } = useCreateRequestMutation();
@@ -104,12 +107,8 @@ export default function useCreateOrder() {
 
   const steps = (configDatas?.length ?? 0) - 1;
   const nextDisabled = useMemo(() => {
-    return (
-      stage === steps ||
-      (stage === 1 && !watch("time")) ||
-      (stage == 0 && !watch("addressId"))
-    );
-  }, [stage, watch("time"), watch("addressId")]);
+    return stage === steps || (stage === 0 && !watch("time"));
+  }, [stage, watch("time")]);
 
   const queryClient = useQueryClient();
   const { mutate: addressMutate } = useAddress_SetPrimaryMutation();
@@ -135,7 +134,7 @@ export default function useCreateOrder() {
           }
         );
     }
-    if (stage == 1) {
+    if (stage == 0) {
       const tehranDateTime = dayjs.tz(
         `${getValues().date} ${getValues().time}:00`,
         "YYYY-MM-DD HH:mm",
@@ -159,7 +158,7 @@ export default function useCreateOrder() {
       mutate(
         {
           input: {
-            addressId: values?.addressId,
+            addressId,
             description: "تست",
             locationType: values?.locationType,
             qnAs,

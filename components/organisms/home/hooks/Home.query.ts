@@ -14,8 +14,8 @@ import {
   ProvinceDtoSortInput,
   ServiceTypes_GetPopularDocument,
   Specialist_GetAllDocument,
-  SpecialistProfileDtoFilterInput,
-  SpecialistProfileDtoSortInput,
+  SpecialistDtoFilterInput,
+  SpecialistDtoSortInput,
 } from "@/generated/graphql";
 import { graphqlFetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -46,8 +46,8 @@ type UseGetAllProvinceOptions = {
 type UseGetAllSpecialistOptions = {
   skip?: number;
   take?: number;
-  where?: SpecialistProfileDtoFilterInput;
-  order?: [SpecialistProfileDtoSortInput];
+  where?: SpecialistDtoFilterInput;
+  order?: [SpecialistDtoSortInput];
 };
 
 type UseGetAllPopularOptions = {

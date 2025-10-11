@@ -1,22 +1,29 @@
 import { CustomFlatList, ThemedButton, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 
+import createOrderStore from "@/stores/createOrder";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { useController } from "react-hook-form";
 import { StyleSheet } from "react-native";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
+import EmptyAddressState from "./AddressEmpty";
 import ListItem from "./ListItem";
 
 export default function AddressList({
   onChange,
   setValue,
+  setEmptyState = false,
 }: {
   onChange?: any;
   setValue?: any;
+  setEmptyState?: boolean;
 }) {
   const router = useRouter();
   const { field } = useController({ name: "addressId" });
+
+  const { setAddressId, setCustomerCity, setCustomerCityId } =
+    createOrderStore();
 
   const { data, fetchNextPage, hasNextPage } = useGetUserAddressesQuery();
 
@@ -26,6 +33,9 @@ export default function AddressList({
         data?.pages.find((addr) => addr.isPrimary) ?? data?.pages?.[0];
       setValue("addressId", primaryAddress?.id);
       setValue("addressLabel", primaryAddress?.text);
+      setAddressId?.(primaryAddress?.id);
+      setCustomerCity(primaryAddress?.city?.name);
+      setCustomerCityId(primaryAddress?.city?.id);
     }
   }, [data]);
 
@@ -50,14 +60,19 @@ export default function AddressList({
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}_${item?.value}`}
         onEndReached={onLoadMore}
+        ListEmptyComponent={
+          setEmptyState ? () => <EmptyAddressState /> : undefined
+        }
       />
-      <ThemedButton
-        title="افزودن آدرس جدید"
-        fontType={"bold"}
-        style={styles.btn}
-        type="outline"
-        onPress={onPress}
-      />
+      {data?.pages?.length > 0 && (
+        <ThemedButton
+          title="افزودن آدرس جدید"
+          fontType={"bold"}
+          style={styles.btn}
+          type="outline"
+          onPress={onPress}
+        />
+      )}
     </ThemedView>
   );
 }

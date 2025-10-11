@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { ActionSheetRef } from "react-native-actions-sheet";
-import CityActionSheet from "../home/Views/CityActionSheet";
+import AddressActionSheet from "./Views/AddressActionSheet";
 import ServiceBodySection from "./Views/ServiceBodySection";
 import ServiceHeaderSection from "./Views/ServiceHeaderSection";
 import useServiceTabHook from "./serviceHook";
@@ -40,7 +40,7 @@ export default function ServiceOrg() {
 
   return (
     <ScrollView style={styles.flex1}>
-      <CityActionSheet
+      <AddressActionSheet
         ref={actionSheetRef}
         closeActionSheet={closeActionSheet}
         onCityPress={onCityPress}
@@ -58,7 +58,7 @@ export default function ServiceOrg() {
         <TouchableOpacity onPress={openActionSheet} style={styles.button}>
           <Ionicons name="location-outline" size={20} color="#000" />
           <ThemedText type="text" style={styles.city}>
-            {customerCity ? customerCity : "انتخاب شهر"}
+            {customerCity ? customerCity : "انتخاب آدرس"}
           </ThemedText>
         </TouchableOpacity>
       </ThemedView>

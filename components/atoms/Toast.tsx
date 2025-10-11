@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   },
 
   errorTitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.danger900,
   },
 
