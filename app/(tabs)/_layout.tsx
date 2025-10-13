@@ -2,6 +2,7 @@ import { ThemedContainer, ThemedText } from "@/components";
 import CustomTabBar from "@/components/molecules/CustomTabBar";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
+import useRequestSubscription from "@/hooks/useRequestSubscription";
 import authCacheStore from "@/stores/authCacheStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useSegments } from "expo-router";
@@ -22,6 +23,7 @@ export enum RoleType {
 
 export default function RootLayout() {
   const segments = useSegments();
+  useRequestSubscription();
 
   const hideTabBar =
     segments[1] === "order" &&

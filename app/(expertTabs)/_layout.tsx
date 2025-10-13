@@ -3,6 +3,7 @@ import { ToastProvider } from "@/components/atoms/Toast";
 import CustomTabBar from "@/components/molecules/CustomTabBar";
 import { Colors } from "@/constants/Colors";
 import useLoadFonts, { FontType } from "@/constants/Fonts";
+import useRequestSubscription from "@/hooks/useRequestSubscription";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { Tabs, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -17,6 +18,7 @@ type TabBarIconProps = {
 
 export default function RootLayout() {
   const segments = useSegments();
+  useRequestSubscription();
 
   const router = useRouter();
 
