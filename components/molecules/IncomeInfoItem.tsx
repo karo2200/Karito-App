@@ -6,7 +6,6 @@ import moment from "jalali-moment";
 import { StyleSheet } from "react-native";
 
 export default function IncomeInfoItem({ item, index }) {
-  console.log({ paidAt: item?.paidAt });
   const faDate = moment(new Date(item?.paidAt ?? new Date()))
     .locale("fa")
     .format("jYYYY/jMM/jDD HH:mm");

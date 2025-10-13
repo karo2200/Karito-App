@@ -13,29 +13,8 @@ export default function TransactionInfo({
 }: {
   selectedDate?: any;
 }) {
-  const { data, isLoading } = useGetServiceAcceptanceIncomeQuery({
-    where: selectedDate
-      ? {
-          and: [
-            { paidAt: { gte: `${selectedDate}T00:00:00+03:30` } },
-            { paidAt: { lte: `${selectedDate}T23:59:59+03:30` } },
-            { status: { eq: ServiceRequestStatus.Paid } },
-          ],
-        }
-      : {
-          and: [
-            {
-              paidAt: {
-                gte: `2018-09-09T00:00:00+03:30`,
-              },
-            },
-            { status: { eq: ServiceRequestStatus.Paid } },
-          ],
-        },
-  });
-
-  console.log(
-    JSON.stringify({
+  const { data, isLoading, refetch, isRefetching } =
+    useGetServiceAcceptanceIncomeQuery({
       where: selectedDate
         ? {
             and: [
@@ -54,8 +33,7 @@ export default function TransactionInfo({
               { status: { eq: ServiceRequestStatus.Paid } },
             ],
           },
-    })
-  );
+    });
 
   const renderItem = useCallback(
     ({ item, index }: { item?: any; index?: number }) => (
@@ -101,6 +79,8 @@ export default function TransactionInfo({
           }
           style={styles.list} // make the list take available space
           keyboardShouldPersistTaps="handled"
+          onRefresh={refetch}
+          refreshing={isRefetching}
         />
       )}
     </ThemedView>
