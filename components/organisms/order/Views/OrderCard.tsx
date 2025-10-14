@@ -40,7 +40,7 @@ const OrderCard = ({
           {isCustomer ? (
             <>
               <ThemedText type="text" style={styles.user}>
-                {item?.specialist?.firstName}
+                {item?.specialist?.firstName} {item?.specialist?.lastName}
               </ThemedText>
               <UserFrameIcon />
             </>
