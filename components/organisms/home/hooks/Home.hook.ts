@@ -7,7 +7,7 @@ import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
 import createOrderStore from "@/stores/createOrder";
 import { useRouter } from "expo-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGetServiceCategoriesQuery } from "../../service/hooks";
 import {
   useGetAllCityQuery,
@@ -19,6 +19,8 @@ export default function useHomeHook() {
   const router = useRouter();
 
   const { isLoggedIn } = authCacheStore();
+
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const { customerCity, setCustomerCity, customerCityId } = createOrderStore();
 
@@ -85,6 +87,10 @@ export default function useHomeHook() {
   }, [isLoggedIn]);
 
   const onShow = () => {
+    if (isSheetOpen) return;
+
+    setIsSheetOpen(true);
+
     showSheet("confirmation-action", {
       payload: {
         hasLoading: false,
@@ -96,9 +102,10 @@ export default function useHomeHook() {
     });
   };
 
-  const { handleClose } = useShowSheetTimer(isLoggedIn, onShow, () =>
-    hideSheet("confirmation-action")
-  );
+  const { handleClose } = useShowSheetTimer(isLoggedIn, onShow, () => {
+    setIsSheetOpen(false);
+    hideSheet("confirmation-action");
+  });
 
   const onCityPress = (city: string) => {
     setCustomerCity(city);
