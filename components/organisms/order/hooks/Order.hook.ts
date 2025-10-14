@@ -49,7 +49,7 @@ export default function useOrderHook() {
         { status: { neq: ServiceRequestStatus.Paid } },
       ],
     },
-    order: [{ requestDate: SortEnumType.Desc }],
+    order: [{ requestDate: SortEnumType.Asc }],
   });
 
   const {
@@ -61,7 +61,7 @@ export default function useOrderHook() {
     isLoading: completeLoading,
   } = useGetServiceRequestsQuery({
     where: { status: { eq: ServiceRequestStatus.Paid } },
-    order: [{ requestDate: SortEnumType.Desc }],
+    order: [{ requestDate: SortEnumType.Asc }],
   });
 
   const {
@@ -73,7 +73,7 @@ export default function useOrderHook() {
     isLoading: canceledLoading,
   } = useGetServiceRequestsQuery({
     where: { status: { eq: ServiceRequestStatus.CancelledByCustomer } },
-    order: [{ requestDate: SortEnumType.Desc }],
+    order: [{ requestDate: SortEnumType.Asc }],
   });
 
   return {
