@@ -109,7 +109,7 @@ export default function OrderDetailScreen() {
                 { paddingTop: 0, paddingBottom: 0, paddingHorizontal: 0 },
               ]}
             >
-              {serviceData?.status !== ServiceRequestStatus.PendingPayment &&
+              {/* {serviceData?.status !== ServiceRequestStatus.PendingPayment &&
               serviceData?.status !== ServiceRequestStatus.Paid &&
               isExpert ? (
                 <Pressable onPress={() => setCancelRequestVisible(true)}>
@@ -123,7 +123,7 @@ export default function OrderDetailScreen() {
                 </Pressable>
               ) : (
                 <View />
-              )}
+              )} */}
               <View
                 style={[
                   styles.label,
