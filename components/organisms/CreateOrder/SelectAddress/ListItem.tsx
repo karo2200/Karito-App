@@ -2,7 +2,10 @@ import { Divider, ThemedView } from "@/components";
 import CustomRadioButton from "@/components/atoms/CustomRadioButton";
 import { Colors } from "@/constants/Colors";
 import { queryKeys } from "@/constants/queryKeys";
-import { useAddress_DeleteMutation } from "@/generated/graphql";
+import {
+  useAddress_DeleteMutation,
+  useAddress_SetPrimaryMutation,
+} from "@/generated/graphql";
 import createOrderStore from "@/stores/createOrder";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Trash } from "iconsax-react-native";
@@ -27,12 +30,10 @@ const AddressListItem = ({
   index: number;
   length: number;
   onChange?: any;
-  field: any;
+  field?: any;
   router?: any;
   onClose: () => void;
 }) => {
-  const isChecked = (field?.value ?? field) === item?.id;
-
   const {
     addressId,
     setAddressId,
@@ -41,7 +42,11 @@ const AddressListItem = ({
     setAddress,
   } = createOrderStore();
 
+  const isChecked = (field?.value ?? addressId) === item?.id;
+
   const { mutate, isPending } = useAddress_DeleteMutation();
+  const { mutate: primaryMutate, isPending: primaryPending } =
+    useAddress_SetPrimaryMutation();
   const queryClient = useQueryClient();
 
   const onRemoveAddress = () => {
@@ -51,15 +56,11 @@ const AddressListItem = ({
       {
         onSuccess: (data) => {
           if (data?.address_delete?.status?.code === 1) {
-            console.log("****");
             if (addressId === id) {
-              console.log("-----");
               setAddressId("");
               setCustomerCity("");
               setCustomerCityId("");
-
               setAddress("");
-              console.log("****");
             }
             queryClient.invalidateQueries({
               queryKey: [queryKeys.address_getMyAddresses],
@@ -74,6 +75,12 @@ const AddressListItem = ({
   const onEditPress = () => {
     onClose?.();
     router.push(`/CreateAddress?id=${item?.id}`);
+  };
+
+  const onItemClick = () => {
+    field?.onChange(item.id);
+    onChange?.(item);
+    primaryMutate({ input: { addressId: item?.id } });
   };
 
   return (
@@ -100,10 +107,7 @@ const AddressListItem = ({
         <CustomRadioButton
           checked={isChecked}
           label={item?.text}
-          onPress={() => {
-            field?.onChange(item.id);
-            onChange?.(item);
-          }}
+          onPress={onItemClick}
         />
       </ThemedView>
       {index != (length > 1 ? length - 1 : 0) && <Divider height={24} />}

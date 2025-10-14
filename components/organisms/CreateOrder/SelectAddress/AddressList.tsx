@@ -4,7 +4,6 @@ import { Colors } from "@/constants/Colors";
 import createOrderStore from "@/stores/createOrder";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import { useController } from "react-hook-form";
 import { StyleSheet } from "react-native";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
 import EmptyAddressState from "./AddressEmpty";
@@ -22,15 +21,25 @@ export default function AddressList({
   onClose: () => void;
 }) {
   const router = useRouter();
-  const { field } = useController({ name: "addressId" });
 
-  const { setAddressId, setCustomerCity, setCustomerCityId, setAddress } =
-    createOrderStore();
+  const {
+    setAddressId,
+    setCustomerCity,
+    setCustomerCityId,
+    setAddress,
+    addressId,
+    address,
+  } = createOrderStore();
 
   const { data, fetchNextPage, hasNextPage, isLoading } =
     useGetUserAddressesQuery();
 
   const adresses = data?.pages?.[0] ? data?.pages : [];
+
+  useEffect(() => {
+    setValue("addressId", addressId);
+    setValue("addressLabel", address);
+  }, [addressId]);
 
   useEffect(() => {
     if (data?.pages?.[0] && !isLoading) {
@@ -41,11 +50,6 @@ export default function AddressList({
       setCustomerCity(primaryAddress?.city?.name);
       setCustomerCityId(primaryAddress?.city?.id);
       setAddress(primaryAddress?.text);
-    } else if (!isLoading) {
-      setAddressId?.("");
-      setCustomerCity("");
-      setCustomerCityId("");
-      setAddress("");
     }
   }, [data]);
 
@@ -56,7 +60,7 @@ export default function AddressList({
 
   const renderItem = ({ item, index }) => (
     <ListItem
-      {...{ item, index, field, router, length: data?.pages?.length, onChange }}
+      {...{ item, index, router, length: data?.pages?.length, onChange }}
       onClose={onClose}
     />
   );
