@@ -95,7 +95,7 @@ export default function AddressList({
 }
 
 const styles = StyleSheet.create({
-  btn: { width: "100%", marginTop: 70, bottom: 20 },
+  btn: { width: "100%", marginTop: 70, bottom: 30 },
 
   container: { width: "100%", flex: 1 },
 

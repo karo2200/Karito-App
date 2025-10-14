@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.disabledIcon,
     justifyContent: "center",
+    height: 40,
   },
 
   icon: {

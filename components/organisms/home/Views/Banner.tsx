@@ -1,7 +1,9 @@
 import CustomImage from "@/components/atoms/CustomImage";
+import SearchWithModal from "@/components/atoms/SearchWithModal";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
+import { CityDto } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import {
@@ -12,7 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ActionSheetRef } from "react-native-actions-sheet";
+import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import AddressActionSheet from "../../service/Views/AddressActionSheet";
 import useServiceTabHook from "../../service/serviceHook";
 import useHomeHook from "../hooks/Home.hook";
@@ -21,9 +23,10 @@ const { width, height } = Dimensions.get("screen");
 
 export default function Banner() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+  const cityActionSheetRef = useRef<ActionSheetRef>(null);
 
   const {
-    // cityData,
+    cityData,
     //  customerCity, onCityPress,
     activeBanner,
     router,
@@ -31,12 +34,19 @@ export default function Banner() {
   } = useHomeHook();
 
   const openActionSheet = () => {
-    console.log("ss");
-    actionSheetRef.current?.show();
+    if (isLoggedIn) {
+      actionSheetRef.current?.show();
+    } else {
+      cityActionSheetRef.current?.show();
+    }
   };
 
   const closeActionSheet = () => {
-    actionSheetRef.current?.hide();
+    if (isLoggedIn) {
+      actionSheetRef.current?.hide();
+    } else {
+      cityActionSheetRef.current?.hide();
+    }
   };
 
   const { customerCity, onCityPress } = useServiceTabHook();
@@ -91,10 +101,11 @@ export default function Banner() {
         onCityPress={onCityPress}
       />
 
-      {/* <ActionSheet
-        ref={actionSheetRef}
+      <ActionSheet
+        ref={cityActionSheetRef}
         keyboardHandlerEnabled={false}
         containerStyle={{ minHeight: height / 2.5 }}
+        onClose={() => closeActionSheet()}
       >
         <View style={styles.header}>
           <Ionicons
@@ -117,7 +128,7 @@ export default function Banner() {
                   style={styles.cityView}
                   key={element?.id}
                   onPress={() => {
-                    onCityPress(element?.name);
+                    onCityPress(element);
                     closeActionSheet();
                   }}
                 >
@@ -127,7 +138,7 @@ export default function Banner() {
             })}
           </View>
         </View>
-      </ActionSheet> */}
+      </ActionSheet>
     </View>
   );
 }

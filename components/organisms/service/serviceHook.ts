@@ -1,3 +1,4 @@
+import authCacheStore from "@/stores/authCacheStore";
 import createOrderStore from "@/stores/createOrder";
 import useServiceStore from "@/stores/serviceTabStore";
 import { useRoute } from "@react-navigation/native";
@@ -11,6 +12,9 @@ import {
 
 export default function useServiceTabHook() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+  const cityActionSheetRef = useRef<ActionSheetRef>(null);
+
+  const { isLoggedIn } = authCacheStore();
 
   const serviceItem0 = { name: "همه خدمات", svg: Menu, id: -1 };
   const {
@@ -83,18 +87,31 @@ export default function useServiceTabHook() {
   };
 
   const onLocationPress = () => {
-    actionSheetRef?.current?.show();
+    if (isLoggedIn) {
+      actionSheetRef?.current?.show();
+    } else {
+      cityActionSheetRef?.current?.show();
+    }
   };
 
   const onCloseSheet = () => {
-    actionSheetRef.current?.hide();
+    if (isLoggedIn) {
+      actionSheetRef.current?.hide();
+    } else {
+      cityActionSheetRef?.current?.hide();
+    }
   };
 
   const onCityPress = (item: any) => {
-    setCustomerCity(item?.city?.name);
-    setCustomerCityId(item?.city?.id);
-    setAddress(item?.text);
-    setAddressId(item?.id);
+    if (isLoggedIn) {
+      setCustomerCity(item?.city?.name);
+      setCustomerCityId(item?.city?.id);
+      setAddress(item?.text);
+      setAddressId(item?.id);
+    } else {
+      setCustomerCity(item?.name);
+      setCustomerCityId(item.id);
+    }
   };
 
   return {
@@ -116,5 +133,6 @@ export default function useServiceTabHook() {
     onLocationPress,
     onCloseSheet,
     onCityPress,
+    cityActionSheetRef,
   };
 }
