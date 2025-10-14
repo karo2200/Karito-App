@@ -89,7 +89,7 @@ export default function CancelRequestSheet({
               onCancelReuest(cancelId, closeActionSheet);
             }
           }}
-          style={{ marginBottom: 40 }}
+          style={{ marginBottom: 55 }}
         />
       </View>
     </ActionSheet>
