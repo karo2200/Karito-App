@@ -35,6 +35,7 @@ export default function FinishWorkSheet({
     <ActionSheet
       ref={actionSheetRef}
       containerStyle={{ minHeight: height / 2.5 }}
+      onClose={() => closeActionSheet()}
     >
       <View style={styles.header}>
         <Ionicons
