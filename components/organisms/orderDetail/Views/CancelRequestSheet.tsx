@@ -45,6 +45,7 @@ export default function CancelRequestSheet({
     <ActionSheet
       ref={actionSheetRef}
       containerStyle={{ minHeight: height / 2.5 }}
+      onClose={() => closeActionSheet()}
     >
       <View style={styles.header}>
         <Ionicons

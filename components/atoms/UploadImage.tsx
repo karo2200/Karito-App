@@ -141,7 +141,11 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
       </View>
 
       {/* Action Sheet */}
-      <ActionSheet ref={actionSheetRef} gestureEnabled>
+      <ActionSheet
+        ref={actionSheetRef}
+        gestureEnabled
+        onClose={() => actionSheetRef.current?.hide()}
+      >
         <View style={styles.sheetContainer}>
           <Pressable onPress={takePhoto} style={styles.btn}>
             <Camera size={24} color={Colors.semiBlack} />

@@ -43,7 +43,7 @@ const SelectImageModal = ({
   };
 
   return (
-    <ActionSheet ref={actionSheetRef}>
+    <ActionSheet ref={actionSheetRef} onClose={closeActionSheet}>
       <View style={styles.container}>
         {items?.map((item) => {
           return (

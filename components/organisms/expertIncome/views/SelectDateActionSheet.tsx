@@ -179,6 +179,7 @@ export default function SelectDateActionSheet({
         minHeight: height / 3.5,
         maxHeight: 0.9 % DeviceHeight,
       }}
+      onClose={onClose}
     >
       <View style={styles.header}>
         <Ionicons

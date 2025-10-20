@@ -28,6 +28,7 @@ const CityActionSheet = forwardRef(
         ref={ref}
         keyboardHandlerEnabled={false}
         containerStyle={{ minHeight: DeviceHeight / 2.5 }}
+        onClose={() => closeActionSheet()}
       >
         <View style={styles.header}>
           <Ionicons

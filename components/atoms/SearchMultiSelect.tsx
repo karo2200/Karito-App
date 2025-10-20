@@ -91,6 +91,7 @@ const SearchMultiSelect = forwardRef<any, Props>(
           containerStyle={{
             maxHeight: Platform.OS === "web" ? 450 : "80%",
           }}
+          onClose={() => actionSheetRef.current?.hide()}
         >
           <View style={styles.header}>
             <Ionicons

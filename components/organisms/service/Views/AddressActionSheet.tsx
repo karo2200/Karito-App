@@ -38,6 +38,7 @@ const AddressActionSheet = forwardRef(
         ref={ref}
         keyboardHandlerEnabled={false}
         id="addresslist-sheet"
+        onClose={() => closeActionSheet?.()}
       >
         <ThemedView style={styles.contentView}>
           <ThemedText type="title" fontType="bold">
