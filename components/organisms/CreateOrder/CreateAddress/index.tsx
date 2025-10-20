@@ -132,6 +132,7 @@ export default function AddressMap() {
             buildingNumber: formData?.buildingNumber,
             unitNumber: formData?.unitNumber,
             floorNumber: formData?.floorNumber,
+            newTitle: formData?.title,
           },
         },
         {

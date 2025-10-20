@@ -116,13 +116,15 @@ const CustomerEditProfileSheet = ({
             {...register("name")}
             placeholder="نام"
             maxLength={50}
+            required
           />
           <ThemedInput
             label=" نام خانوادگی"
             {...register("family")}
-            placeholder="نام خانوادگی*"
+            placeholder="نام خانوادگی"
             maxLength={50}
             style={styles.margin}
+            required
           />
           <ThemedButton
             title="ذخیره"
