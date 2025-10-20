@@ -1,29 +1,16 @@
 import { useToast } from "@/components/atoms/Toast";
-import * as Network from "expo-network";
+import { useNetworkState } from "expo-network";
 import { useEffect, useState } from "react";
 
 export default function useNetworkStatus() {
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
-  const [type, setType] = useState<Network.NetworkStateType | null>(null);
-  const [ip, setIp] = useState<string | null>(null);
+  const [isConnected, setIsConnected] = useState<boolean | undefined>();
+  const networkState = useNetworkState();
 
   useEffect(() => {
-    const fetchNetworkStatus = async () => {
-      const status = await Network.getNetworkStateAsync();
-      setIsConnected(status.isConnected ?? null);
-      setType(status.type ?? null);
+    setIsConnected(networkState.isConnected);
+  }, [networkState]);
 
-      const ipAddress = await Network.getIpAddressAsync();
-      setIp(ipAddress);
-    };
-
-    fetchNetworkStatus();
-
-    const interval = setInterval(fetchNetworkStatus, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return { isConnected, type, ip };
+  return { isConnected };
 }
 
 export function NetworkWatcher() {
