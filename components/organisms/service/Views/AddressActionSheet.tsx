@@ -1,5 +1,5 @@
 import { Divider, ThemedText, ThemedView } from "@/components";
-import { DeviceHeight } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import createOrderStore from "@/stores/createOrder";
 import { forwardRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -38,6 +38,7 @@ const AddressActionSheet = forwardRef(
         ref={ref}
         keyboardHandlerEnabled={false}
         id="addresslist-sheet"
+        containerStyle={styles.containerStyle}
         onClose={() => closeActionSheet?.()}
       >
         <ThemedView style={styles.contentView}>
@@ -69,4 +70,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopEndRadius: 30,
   },
+
+  containerStyle: { width: maxWidth },
 });
