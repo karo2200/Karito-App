@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    width: maxWidth - 40,
+    width: isWeb ? "92%" : maxWidth - 40,
     alignItems: "flex-end",
     alignSelf: "center",
   },

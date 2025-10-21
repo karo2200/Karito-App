@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    width: isWeb ? "100%" : DeviceWidth - 40,
-
+    width: isWeb ? "92%" : DeviceWidth - 40,
+    alignSelf: "center",
     paddingTop: "15%",
   },
 
