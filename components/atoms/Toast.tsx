@@ -1,4 +1,3 @@
-import { isWeb } from "@/app/_layout";
 import DangerIcon from "@/assets/icons/DangerIcon";
 import SuccessIcon from "@/assets/icons/SuccessIcon";
 import { Colors } from "@/constants/Colors";
@@ -212,7 +211,8 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     zIndex: 1000,
-    width: isWeb ? maxWidth : "100%",
+    width: maxWidth * 0.94,
+    alignSelf: "center",
   },
 
   bottomToast: {
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     zIndex: 1000,
-    width: isWeb ? maxWidth : "100%",
+    width: maxWidth * 0.94,
   },
 
   title: {

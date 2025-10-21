@@ -3,7 +3,7 @@ import { Divider, ThemedButton } from "@/components";
 import { dropDownPositionType } from "@/components/atoms/DropDownPicker";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { DeviceHeight } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { monthsName } from "@/constants/StaticData";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import dayjs from "dayjs";
@@ -178,6 +178,7 @@ export default function SelectDateActionSheet({
       containerStyle={{
         minHeight: height / 3.5,
         maxHeight: 0.9 % DeviceHeight,
+        width: maxWidth,
       }}
       onClose={onClose}
     >

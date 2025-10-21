@@ -62,7 +62,7 @@ export default function IncomeInfo({}) {
   ];
 
   return (
-    <ThemedView>
+    <ThemedView style={{ width: "100%" }}>
       <ThemedView style={styles.headerContainer}>
         <ThemedText
           type="defaultSemiBold"
@@ -111,7 +111,11 @@ const styles = StyleSheet.create({
 
   headerTxt: { color: Colors.darkGray },
 
-  list: { flexDirection: "row", justifyContent: "space-between" },
+  list: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
 
   listContainer: {
     width: "32%",
