@@ -34,9 +34,9 @@ export default function useProfileHook() {
 
   const onCallPress = () => {
     if (Platform.OS === "web") {
-      window.location.href = `tel:${"0938484848"}`;
+      window.location.href = `tel:${"0214443300"}`;
     } else {
-      Linking.openURL(`tel:${"9382467423467"}`);
+      Linking.openURL(`tel:${"0214443300"}`);
     }
   };
 
