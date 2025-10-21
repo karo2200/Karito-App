@@ -3,7 +3,7 @@ import ThemedText from "@/components/atoms/ThemedText";
 import GuestMode from "@/components/molecules/GuestMode";
 import { Colors } from "@/constants/Colors";
 import { commonStyles } from "@/constants/CommonStyles";
-import { DeviceWidth } from "@/constants/Dimension";
+import { DeviceWidth, maxWidth } from "@/constants/Dimension";
 import * as React from "react";
 import {
   NativeScrollEvent,
@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
   },
 
   page: {
-    width: Platform.OS === "web" ? Math.min(DeviceWidth, 480) : DeviceWidth,
+    width: Platform.OS === "web" ? maxWidth : DeviceWidth,
   },
 });

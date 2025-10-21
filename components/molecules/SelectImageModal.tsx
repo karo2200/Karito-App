@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { Camera, Gallery } from "iconsax-react-native";
 import React, { useRef } from "react";
 import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -65,7 +65,7 @@ export default SelectImageModal;
 const styles = StyleSheet.create({
   container: {
     minHeight: DeviceHeight / 3.5,
-    width: Platform.OS === "web" ? Math.min(DeviceWidth, 480) : "100%",
+    width: Platform.OS === "web" ? maxWidth : "100%",
   },
 
   toch: {
