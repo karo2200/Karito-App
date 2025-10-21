@@ -1,6 +1,7 @@
 import { CustomFlatList, ThemedText, ThemedView } from "@/components";
 import IncomeInfoItem from "@/components/molecules/IncomeInfoItem";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { ServiceRequestStatus } from "@/generated/graphql";
 import { Calendar as CalendarIcon } from "iconsax-react-native";
 import { useCallback } from "react";
@@ -66,6 +67,7 @@ export default function TransactionInfo({
           data={data?.pages}
           keyExtractor={(_, index) => `${index}_income`}
           renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
           ListEmptyComponent={isLoading ? undefined : ListEmptyComponent}
           ListHeaderComponent={
             <ThemedView style={styles.headerView}>
@@ -88,7 +90,7 @@ export default function TransactionInfo({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 }, // <- important
+  container: { flex: 1, width: "100%" }, // <- important
 
   headerView: {
     flexDirection: "row",
@@ -108,5 +110,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
+  },
+
+  listContainer: {
+    width: maxWidth - 30,
   },
 });

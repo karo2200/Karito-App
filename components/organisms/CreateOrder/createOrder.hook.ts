@@ -78,7 +78,6 @@ export default function useCreateOrder() {
     let configDatas = [...baseData];
     setValue("locationType", LocationType.Residential);
     if (questions?.length > 0) {
-      let insertIndex = 4;
       questions?.forEach((question, index) => {
         setValue(
           question?.id?.toString(),
@@ -100,6 +99,8 @@ export default function useCreateOrder() {
       configDatas?.push({ type: "orderSubmitting" });
       return configDatas;
     } else if (!isLoading) {
+      configDatas?.push({ type: "previewOrder" });
+      configDatas?.push({ type: "orderSubmitting" });
       return configDatas;
     }
   }, [isLoading, questions]);
