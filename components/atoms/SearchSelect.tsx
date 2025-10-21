@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { Ionicons } from "@expo/vector-icons";
 import { SearchNormal1 } from "iconsax-react-native";
@@ -66,6 +67,7 @@ const SearchSelect = forwardRef<any, Props>(
           ref={actionSheetRef}
           containerStyle={{
             maxHeight: Platform.OS === "web" ? 400 : "75%",
+            width: Platform.OS === "web" ? maxWidth : "100%",
           }}
           onClose={() => actionSheetRef.current?.hide()}
         >

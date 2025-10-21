@@ -1,12 +1,13 @@
 import UploadIcon from "@/assets/icons/Upload";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { useUploadFile } from "@/graphql/upload";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Camera, Gallery } from "iconsax-react-native";
 import React, { useRef } from "react";
 import { Control, useController } from "react-hook-form";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
@@ -145,6 +146,9 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
         ref={actionSheetRef}
         gestureEnabled
         onClose={() => actionSheetRef.current?.hide()}
+        containerStyle={{
+          width: Platform.OS === "web" ? maxWidth : "100%",
+        }}
       >
         <View style={styles.sheetContainer}>
           <Pressable onPress={takePhoto} style={styles.btn}>

@@ -1,4 +1,6 @@
+import { isWeb } from "@/app/_layout";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { ArrowDown2, ArrowUp2 } from "iconsax-react-native";
 import React, { useRef, useState } from "react";
 import { useController } from "react-hook-form";
@@ -113,7 +115,7 @@ const Dropdown = React.forwardRef<any, DropDownProps>(
 
         if (screenHeight - (py + h) > maxH) {
           setDropdownPosition({
-            top: Platform.OS === "ios" ? py + 8 + h : py + 10,
+            top: Platform.OS === "ios" ? py + 8 + h : isWeb ? py + 40 : py + 10,
             bottom: undefined,
           });
         } else if (py > maxH) {
@@ -285,8 +287,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   overlay: {
-    width: "100%",
+    width: isWeb ? maxWidth : "100%",
     height: "100%",
+    alignSelf: "center",
   },
   dropdown: {
     position: "absolute",
