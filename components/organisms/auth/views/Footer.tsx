@@ -50,7 +50,7 @@ const Footer = ({
         disabledTextColor={Colors.mediumGray}
         isLoading={isNextLoading}
         fontType="bold"
-        style={{ width: 0.9 * maxWidth }}
+        style={{ width: 0.94 * maxWidth }}
       />
       {role && (
         <Text

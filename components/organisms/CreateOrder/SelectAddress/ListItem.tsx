@@ -1,6 +1,7 @@
 import { Divider, ThemedView } from "@/components";
 import CustomRadioButton from "@/components/atoms/CustomRadioButton";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useAddress_DeleteMutation,
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 3,
     flexDirection: "row",
-    width: "100%",
+    width: maxWidth - 40,
     justifyContent: "space-between",
   },
 
