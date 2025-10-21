@@ -2,13 +2,13 @@ import CustomImage from "@/components/atoms/CustomImage";
 import SearchWithModal from "@/components/atoms/SearchWithModal";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { CityDto } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import {
   Dimensions,
-  Platform,
   Pressable,
   StyleSheet,
   TouchableOpacity,
@@ -145,7 +145,7 @@ export default function Banner() {
 
 const styles = StyleSheet.create({
   image: {
-    width: Platform.OS === "web" ? Math.min(width, 480) : width,
+    width: maxWidth,
     height: 250,
     marginTop: 4,
   },

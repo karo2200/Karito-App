@@ -1,3 +1,4 @@
+import { maxWidth } from "@/constants/Dimension";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useMemo } from "react";
 import { Dimensions, Platform, View, type ViewProps } from "react-native";
@@ -35,7 +36,7 @@ export default function ThemedContainer({
         containerStyle,
         style,
         (isWeb || isLargeScreen) && {
-          maxWidth: 480,
+          maxWidth: maxWidth,
           alignSelf: "center",
           width: "100%",
         },

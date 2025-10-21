@@ -9,9 +9,9 @@ import { CustomImage, ThemedText, ThemedView } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
-import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
+import { DeviceHeight, DeviceWidth, maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
-import { Platform, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import useOtpHook from "./hooks/otp.hook";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    width: Platform.OS === "web" ? "100%" : DeviceWidth - 40,
+    width: maxWidth - 40,
     alignItems: "flex-end",
     alignSelf: "center",
   },

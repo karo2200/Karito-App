@@ -2,12 +2,12 @@ import React from "react";
 
 import { ThemedButton } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { DeviceHeight, DeviceWidth, maxWidth } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { UserType } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
-import { Platform, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
 
 type FooterProps = {
   onPress: () => void;
@@ -39,7 +39,7 @@ const Footer = ({
       router.replace("/LoginPage");
     }
   };
-
+  console.log({ maxWidth });
   return (
     <View style={[styles.button, style]}>
       <ThemedButton
@@ -71,7 +71,7 @@ export default Footer;
 const styles = StyleSheet.create({
   button: {
     marginBottom: DeviceHeight * 0.15,
-    width: Platform.OS === "web" ? "100%" : DeviceWidth - 30,
+    width: maxWidth - 30,
     alignSelf: "center",
     alignItems: "center",
   },

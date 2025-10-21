@@ -22,7 +22,6 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const baseData = [
-  // { type: "address" },
   { type: "selectDate" },
   { type: "gender" },
   {
@@ -53,8 +52,6 @@ const baseData = [
       },
     ],
   },
-  { type: "previewOrder" },
-  { type: "orderSubmitting" },
 ];
 
 export default function useCreateOrder() {
@@ -89,7 +86,7 @@ export default function useCreateOrder() {
             ? question?.options?.[0]
             : [question?.options?.[0]]
         );
-        configDatas.splice(index + insertIndex, 0, {
+        configDatas.push({
           type: "question",
           title: question?.text,
           questionType: question?.questionType,
@@ -99,6 +96,8 @@ export default function useCreateOrder() {
           }),
         });
       });
+      configDatas?.push({ type: "previewOrder" });
+      configDatas?.push({ type: "orderSubmitting" });
       return configDatas;
     } else if (!isLoading) {
       return configDatas;
