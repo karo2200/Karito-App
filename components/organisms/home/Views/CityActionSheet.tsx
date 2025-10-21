@@ -1,6 +1,7 @@
+import { isWeb } from "@/app/_layout";
 import { SearchWithModal, ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
+import { DeviceHeight, DeviceWidth, maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { CityDto } from "@/generated/graphql";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,7 +28,10 @@ const CityActionSheet = forwardRef(
       <ActionSheet
         ref={ref}
         keyboardHandlerEnabled={false}
-        containerStyle={{ minHeight: DeviceHeight / 2.5 }}
+        containerStyle={{
+          minHeight: DeviceHeight / 2.5,
+          width: isWeb ? maxWidth : "100%",
+        }}
         onClose={() => closeActionSheet()}
       >
         <View style={styles.header}>

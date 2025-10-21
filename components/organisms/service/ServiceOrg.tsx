@@ -1,5 +1,7 @@
+import { isWeb } from "@/app/_layout";
 import { Divider, SearchWithModal, ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { CityDto } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -77,7 +79,10 @@ export default function ServiceOrg() {
       <ActionSheet
         ref={cityActionSheetRef}
         keyboardHandlerEnabled={false}
-        containerStyle={{ minHeight: height / 2.5 }}
+        containerStyle={{
+          minHeight: height / 2.5,
+          width: isWeb ? maxWidth : "100%",
+        }}
         onClose={onCloseSheet}
       >
         <View style={styles.header}>

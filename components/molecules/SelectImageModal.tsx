@@ -43,19 +43,23 @@ const SelectImageModal = ({
   };
 
   return (
-    <ActionSheet ref={actionSheetRef} onClose={closeActionSheet}>
-      <View style={styles.container}>
-        {items?.map((item) => {
-          return (
-            <View style={{ alignItems: "center" }} key={item.title}>
-              <TouchableOpacity style={styles.toch} onPress={item?.onPress}>
-                {item?.icon}
-              </TouchableOpacity>
-              <ThemedText>{item?.title}</ThemedText>
-            </View>
-          );
-        })}
-      </View>
+    <ActionSheet
+      ref={actionSheetRef}
+      onClose={closeActionSheet}
+      containerStyle={styles.container}
+    >
+      {/* <View style={styles.container}> */}
+      {items?.map((item) => {
+        return (
+          <View style={{ alignItems: "center" }} key={item.title}>
+            <TouchableOpacity style={styles.toch} onPress={item?.onPress}>
+              {item?.icon}
+            </TouchableOpacity>
+            <ThemedText>{item?.title}</ThemedText>
+          </View>
+        );
+      })}
+      {/* </View> */}
     </ActionSheet>
   );
 };

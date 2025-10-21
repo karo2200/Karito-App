@@ -1,3 +1,4 @@
+import { isWeb } from "@/app/_layout";
 import CustomImage from "@/components/atoms/CustomImage";
 import SearchWithModal from "@/components/atoms/SearchWithModal";
 import ThemedText from "@/components/atoms/ThemedText";
@@ -104,7 +105,10 @@ export default function Banner() {
       <ActionSheet
         ref={cityActionSheetRef}
         keyboardHandlerEnabled={false}
-        containerStyle={{ minHeight: height / 2.5 }}
+        containerStyle={{
+          minHeight: height / 2.5,
+          width: isWeb ? maxWidth : "100%",
+        }}
         onClose={() => closeActionSheet()}
       >
         <View style={styles.header}>
