@@ -139,7 +139,7 @@ query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
       finalPrice
       basePrice
       discountAmount
-
+      trackingCode
       customer {
         firstName
         lastName
