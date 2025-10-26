@@ -69,7 +69,7 @@ const ExpertLogin = () => {
               forcePersianNumbers
             />
             <Footer
-              title="ثبت نام"
+              title="ورود"
               onPress={handleSubmit(onDoExpertLogin)}
               isNextLoading={isSendingCode}
               hasError={

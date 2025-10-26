@@ -78,7 +78,7 @@ const ExpertOTPSection = () => {
           <Footer
             onPress={handleSubmit(onDoExpertLogin)}
             isNextLoading={isVerifying || isSendingCode}
-            title="ثبت نام"
+            title="ورود"
             style={{ bottom: 0 }}
             hasError={
               errors?.["otpCode"]?.message?.length > 0 ||

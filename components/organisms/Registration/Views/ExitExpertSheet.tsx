@@ -55,7 +55,7 @@ export default function ExitExpertSheet({
           دارید؟
         </ThemedText>
         <ThemedButton
-          title="ثبت نام"
+          title="ورود"
           fontType="medium"
           onPress={() => {
             closeActionSheet();
