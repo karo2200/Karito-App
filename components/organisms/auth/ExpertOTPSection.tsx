@@ -90,7 +90,10 @@ const ExpertOTPSection = () => {
           />
         </FormProvider>
       </KeyboardAutoHide>
-      <ExpertIcon style={styles.image} />
+      <ExpertIcon
+        style={styles.image}
+        height={isWeb ? DeviceHeight / 2.5 : DeviceHeight / 2.5}
+      />
     </Fragment>
   );
 };

@@ -7,7 +7,13 @@ import { FontType } from "@/constants/Fonts";
 import { UserType } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, View, ViewStyle } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
 
 type FooterProps = {
   onPress: () => void;
@@ -39,7 +45,7 @@ const Footer = ({
       router.replace("/LoginPage");
     }
   };
-  console.log({ maxWidth });
+
   return (
     <View style={[styles.button, style]}>
       <ThemedButton
@@ -58,10 +64,16 @@ const Footer = ({
           onPress={onChangeRole}
         >{`ورود به عنوان ${role === UserType.Customer ? "متخصص" : "مشتری"}`}</Text>
       )}
-      <Text style={styles.txt}>
-        ورود به منزله پذیرش
-        <Text style={styles.color}> قوانین و مقررات</Text> کاریتو است.
-      </Text>
+      <TouchableOpacity
+        onPress={() => {
+          router.push("/PrivacyPolicyPage");
+        }}
+      >
+        <Text style={styles.txt}>
+          ورود به منزله پذیرش
+          <Text style={styles.color}> قوانین و مقررات</Text> کاریتو است.
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

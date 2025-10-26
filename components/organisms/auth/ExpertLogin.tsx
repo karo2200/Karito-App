@@ -85,7 +85,10 @@ const ExpertLogin = () => {
           </View>
         </FormProvider>
       </KeyboardAutoHide>
-      <ExpertIcon style={styles.image} />
+      <ExpertIcon
+        style={styles.image}
+        height={isWeb ? DeviceHeight / 2.5 : DeviceHeight / 2.5}
+      />
     </Fragment>
   );
 };
@@ -104,6 +107,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     zIndex: 1,
     left: "-5%",
-    height: isWeb ? DeviceHeight / 2.5 : DeviceHeight / 3,
+    height: isWeb ? DeviceHeight / 2.5 : DeviceHeight / 3.5,
   },
 });
