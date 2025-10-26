@@ -81,10 +81,7 @@ export default function RootLayout() {
                 <Stack.Protected guard={!isLoggedIn && !isExpert}>
                   <Stack.Screen name="LoginPage" />
                   <Stack.Screen name="OTPScreen" />
-                  <Stack.Screen
-                    name="PrivacyPolicyPage"
-                    options={expertScreenOptions}
-                  />
+                  {/* <Stack.Screen name="PrivacyPolicyPage" /> */}
                 </Stack.Protected>
 
                 <Stack.Protected guard={!isLoggedIn && isExpert}>
@@ -112,11 +109,12 @@ export default function RootLayout() {
                     name="VerificationStepPage"
                     options={expertScreenOptions}
                   />
-                  <Stack.Screen
-                    name="PrivacyPolicyPage"
-                    options={expertScreenOptions}
-                  />
+                  {/* <Stack.Screen name="PrivacyPolicyPage" /> */}
                 </Stack.Protected>
+                <Stack.Screen
+                  name="PrivacyPolicyPage"
+                  options={expertScreenOptions}
+                />
               </Stack>
             </ToastProvider>
           </SheetProvider>
