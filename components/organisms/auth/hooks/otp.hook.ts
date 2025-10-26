@@ -125,6 +125,8 @@ export default function useOtpHook() {
   };
 
   const onEditNumber = () => {
+    console.log("sss");
+
     router?.back();
   };
 

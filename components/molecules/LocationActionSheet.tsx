@@ -1,6 +1,7 @@
 import ConnectivityIcon from "@/assets/icons/Connectivity";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
@@ -30,7 +31,11 @@ export default function LocationActionSheet({
   };
 
   return (
-    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
+    <ActionSheet
+      ref={actionSheetRef}
+      containerStyle={styles.container}
+      onClose={() => closeActionSheet()}
+    >
       <View style={styles.header}>
         <Ionicons
           name="close"
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
 
   container: {
     minHeight: height / 3.5,
-    width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+    width: Platform.OS === "web" ? maxWidth : "100%",
   },
 
   mb: {

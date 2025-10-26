@@ -1,12 +1,15 @@
 import { Divider, ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { formatPrice } from "@/services/ParseData";
+import createOrderStore from "@/stores/createOrder";
 import { useRoute } from "@react-navigation/native";
 import moment from "jalali-moment";
 import { StyleSheet } from "react-native";
 
 export default function PreviewOrder(props: any) {
   const requestDate = props?.getValues()?.requestDate;
+
+  const { address } = createOrderStore();
 
   const basePrice = useRoute().params?.price;
 
@@ -27,7 +30,7 @@ export default function PreviewOrder(props: any) {
     { label: "خدمات درخواستی", value: props?.getValues()?.serviceType },
     {
       label: "آدرس",
-      value: props?.getValues()?.addressLabel,
+      value: address,
     },
   ];
 

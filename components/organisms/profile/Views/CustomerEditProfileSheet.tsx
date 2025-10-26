@@ -3,6 +3,7 @@ import ThemedInput from "@/components/atoms/ThemedInput";
 import ThemedText from "@/components/atoms/ThemedText";
 import { useToast } from "@/components/atoms/Toast";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import { Gender } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -95,7 +96,11 @@ const CustomerEditProfileSheet = ({
   };
 
   return (
-    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
+    <ActionSheet
+      ref={actionSheetRef}
+      containerStyle={styles.container}
+      onClose={closeActionSheet}
+    >
       <FormProvider {...methods}>
         <View style={styles.header}>
           <Ionicons
@@ -112,13 +117,15 @@ const CustomerEditProfileSheet = ({
             {...register("name")}
             placeholder="نام"
             maxLength={50}
+            required
           />
           <ThemedInput
             label=" نام خانوادگی"
             {...register("family")}
-            placeholder="نام خانوادگی*"
+            placeholder="نام خانوادگی"
             maxLength={50}
             style={styles.margin}
+            required
           />
           <ThemedButton
             title="ذخیره"
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
 
   container: {
     minHeight: height / 3.5,
-    width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+    width: Platform.OS === "web" ? maxWidth : "100%",
   },
 
   margin: { marginTop: 24 },

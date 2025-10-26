@@ -1,6 +1,7 @@
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import authCacheStore from "@/stores/authCacheStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
@@ -32,7 +33,11 @@ export default function ExitExpertSheet({
   };
 
   return (
-    <ActionSheet ref={actionSheetRef} containerStyle={styles.container}>
+    <ActionSheet
+      ref={actionSheetRef}
+      containerStyle={styles.container}
+      onClose={() => closeActionSheet()}
+    >
       <View style={styles.header}>
         <Ionicons
           name="close"
@@ -50,7 +55,7 @@ export default function ExitExpertSheet({
           دارید؟
         </ThemedText>
         <ThemedButton
-          title="ثبت نام"
+          title="ورود"
           fontType="medium"
           onPress={() => {
             closeActionSheet();
@@ -94,6 +99,6 @@ const styles = StyleSheet.create({
 
   container: {
     minHeight: height / 3.5,
-    width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+    width: Platform.OS === "web" ? maxWidth : "100%",
   },
 });

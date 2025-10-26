@@ -10,7 +10,7 @@ import { StyleSheet, View } from "react-native";
 import useExpertHook from "../hooks/Expert.hook";
 
 const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
-  const { router, profileData } = useExpertHook();
+  const { router, profileData, isLoggedIn } = useExpertHook();
 
   return (
     <View>
@@ -20,7 +20,11 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
         <InfoList
           title={"اطلاعات شخصی"}
           onPress={() => {
-            router.push("/PersonalInfoPage");
+            router.push(
+              isLoggedIn
+                ? "/(expertTabs)/profile/PersonalInfoPage"
+                : "/PersonalInfoPage"
+            );
           }}
           isVerified={
             profileData?.idCardVerificationStatus ===
@@ -30,12 +34,18 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
             profileData?.idCardVerificationStatus ===
             VerificationStatus.Rejected
           }
+          isLoggedIn={isLoggedIn}
         />
         <InfoList
           title={"مدارک"}
           onPress={() => {
-            router.push("/CertificateInfoPage");
+            router.push(
+              isLoggedIn
+                ? "/(expertTabs)/profile/CertificateInfoPage"
+                : "/CertificateInfoPage"
+            );
           }}
+          isLoggedIn={isLoggedIn}
           isVerified={
             profileData?.specializedDocumentsVerificationStatus ===
             VerificationStatus.Approved
@@ -45,20 +55,22 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
             VerificationStatus.Rejected
           }
         />
-        <InfoList
-          title={"احراز هویت"}
-          onPress={() => {
-            router.push("/VerificationStepPage");
-          }}
-          isVerified={
-            profileData?.identityVerificationVideoStatus ===
-            VerificationStatus.Approved
-          }
-          isReject={
-            profileData?.identityVerificationVideoStatus ===
-            VerificationStatus.Rejected
-          }
-        />
+        {!isLoggedIn && (
+          <InfoList
+            title={"احراز هویت"}
+            onPress={() => {
+              router.push("/VerificationStepPage");
+            }}
+            isVerified={
+              profileData?.identityVerificationVideoStatus ===
+              VerificationStatus.Approved
+            }
+            isReject={
+              profileData?.identityVerificationVideoStatus ===
+              VerificationStatus.Rejected
+            }
+          />
+        )}
       </View>
     </View>
   );
@@ -113,11 +125,13 @@ const InfoList = ({
   onPress,
   isVerified,
   isReject,
+  isLoggedIn,
 }: {
   isVerified: boolean;
   isReject: boolean;
   title: string;
   onPress: () => void;
+  isLoggedIn?: boolean;
 }) => {
   return (
     <View style={styles.container}>
@@ -126,7 +140,11 @@ const InfoList = ({
       </ThemedText>
 
       <View style={styles.rowView}>
-        <ThemedButton title="تکمیل" style={styles.btn} onPress={onPress} />
+        <ThemedButton
+          title={isLoggedIn ? "ویرایش" : "تکمیل"}
+          style={styles.btn}
+          onPress={onPress}
+        />
         <View
           style={[
             styles.label,

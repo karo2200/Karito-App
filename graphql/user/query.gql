@@ -28,13 +28,10 @@ query address_getMyAddresses(
         floorNumber
         buildingNumber
         unitNumber
-        neighborhood {
-          id
-          city {
-            name
-            id
-          }
+        title
+        city {
           name
+          id
         }
         text
       }
@@ -169,5 +166,24 @@ query specialist_getAll(
       }
     }
     status
+  }
+}
+
+query address_getAddressById($input: GetAddressByIdInput!) {
+  address_getAddressById(input: $input) {
+    result {
+      id
+      latitude
+      longitude
+      isPrimary
+      floorNumber
+      buildingNumber
+      unitNumber
+      city {
+        name
+        id
+      }
+      text
+    }
   }
 }

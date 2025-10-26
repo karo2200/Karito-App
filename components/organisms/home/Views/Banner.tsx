@@ -1,37 +1,62 @@
+import { isWeb } from "@/app/_layout";
 import CustomImage from "@/components/atoms/CustomImage";
 import SearchWithModal from "@/components/atoms/SearchWithModal";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { CityDto } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   Dimensions,
-  Platform,
   Pressable,
   StyleSheet,
   TouchableOpacity,
   View,
 } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import AddressActionSheet from "../../service/Views/AddressActionSheet";
+import useServiceTabHook from "../../service/serviceHook";
 import useHomeHook from "../hooks/Home.hook";
 
 const { width, height } = Dimensions.get("screen");
 
 export default function Banner() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
+  const cityActionSheetRef = useRef<ActionSheetRef>(null);
 
-  const { cityData, customerCity, onCityPress, activeBanner, router } =
-    useHomeHook();
+  const {
+    cityData,
+    //  customerCity, onCityPress,
+    activeBanner,
+    router,
+    isLoggedIn,
+  } = useHomeHook();
 
   const openActionSheet = () => {
-    actionSheetRef.current?.show();
+    if (isLoggedIn) {
+      actionSheetRef.current?.show();
+    } else {
+      cityActionSheetRef.current?.show();
+    }
   };
 
   const closeActionSheet = () => {
-    actionSheetRef.current?.hide();
+    if (isLoggedIn) {
+      actionSheetRef.current?.hide();
+    } else {
+      cityActionSheetRef.current?.hide();
+    }
   };
+
+  const { customerCity, onCityPress } = useServiceTabHook();
+
+  useEffect(() => {
+    if (!customerCity && isLoggedIn) {
+      actionSheetRef.current?.show();
+    }
+  }, [customerCity, isLoggedIn]);
 
   return (
     <View>
@@ -66,16 +91,25 @@ export default function Banner() {
           <TouchableOpacity onPress={openActionSheet} style={styles.button}>
             <Ionicons name="location-outline" size={20} color="#000" />
             <ThemedText type="text" style={styles.city}>
-              {customerCity ? customerCity : "انتخاب شهر"}
+              {customerCity ? customerCity : "انتخاب آدرس"}
             </ThemedText>
           </TouchableOpacity>
         </View>
       </View>
+      <AddressActionSheet
+        ref={actionSheetRef}
+        closeActionSheet={closeActionSheet}
+        onCityPress={onCityPress}
+      />
 
       <ActionSheet
-        ref={actionSheetRef}
+        ref={cityActionSheetRef}
         keyboardHandlerEnabled={false}
-        containerStyle={{ minHeight: height / 2.5 }}
+        containerStyle={{
+          minHeight: height / 2.5,
+          width: isWeb ? maxWidth : "100%",
+        }}
+        onClose={() => closeActionSheet()}
       >
         <View style={styles.header}>
           <Ionicons
@@ -98,7 +132,7 @@ export default function Banner() {
                   style={styles.cityView}
                   key={element?.id}
                   onPress={() => {
-                    onCityPress(element?.name);
+                    onCityPress(element);
                     closeActionSheet();
                   }}
                 >
@@ -115,7 +149,7 @@ export default function Banner() {
 
 const styles = StyleSheet.create({
   image: {
-    width: Platform.OS === "web" ? Math.min(width, 480) : width,
+    width: maxWidth,
     height: 250,
     marginTop: 4,
   },
@@ -139,6 +173,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 5 },
     shadowRadius: 10,
+    width: "93%",
+    alignSelf: "center",
   },
 
   input: {

@@ -7,6 +7,7 @@ import {
   City_GetAllDocument,
   CityDtoFilterInput,
   CityDtoSortInput,
+  GetPopularServiceTypesInput,
   PopularServiceTypeDtoFilterInput,
   PopularServiceTypeDtoSortInput,
   Province_GetAllDocument,
@@ -14,8 +15,8 @@ import {
   ProvinceDtoSortInput,
   ServiceTypes_GetPopularDocument,
   Specialist_GetAllDocument,
-  SpecialistProfileDtoFilterInput,
-  SpecialistProfileDtoSortInput,
+  SpecialistDtoFilterInput,
+  SpecialistDtoSortInput,
 } from "@/generated/graphql";
 import { graphqlFetcher } from "@/graphql/fetcher";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -46,11 +47,12 @@ type UseGetAllProvinceOptions = {
 type UseGetAllSpecialistOptions = {
   skip?: number;
   take?: number;
-  where?: SpecialistProfileDtoFilterInput;
-  order?: [SpecialistProfileDtoSortInput];
+  where?: SpecialistDtoFilterInput;
+  order?: [SpecialistDtoSortInput];
 };
 
 type UseGetAllPopularOptions = {
+  input: GetPopularServiceTypesInput;
   skip?: number;
   take?: number;
   where?: PopularServiceTypeDtoFilterInput;
@@ -62,8 +64,8 @@ export const useGetAllCityQuery = (options: UseGetAllCityOptions = {}) => {
     queryKey: [queryKeys.city_getAll, options],
     queryFn: async ({ pageParam = 0 }) => {
       return await graphqlFetcher(City_GetAllDocument, {
-        skip: pageParam * PAGE_SIZE,
-        take: PAGE_SIZE,
+        skip: pageParam * 30,
+        take: 30,
         ...options,
       });
     },

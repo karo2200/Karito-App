@@ -50,10 +50,11 @@ export function fetcher<TData, TVariables>(query: string, variables?: any) {
   return async (): Promise<any> => {
     const accessToken = authCacheStore?.getState()?.accessToken;
     console.log({ accessToken });
+    query.includes("serviceRequest_getAvailableRequests") &&
+      console.log(JSON.stringify({ variables }));
     if (
       !query.includes("auth_requestOtp") &&
       !query.includes("auth_verifyOtp") &&
-      !query.includes("neighborhood_getAll") &&
       (!accessToken || isTokenExpired(accessToken))
     ) {
       const newToken = await refreshAccessToken();

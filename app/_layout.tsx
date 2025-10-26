@@ -1,22 +1,26 @@
-import { ToastProvider, useToast } from "@/components/atoms/Toast";
+import { ToastProvider } from "@/components/atoms/Toast";
 import AuthProvider from "@/graphql/AuthProvider";
-import useNetworkStatus from "@/hooks/useNetworkStatus";
+import { NetworkWatcher } from "@/hooks/useNetworkStatus";
 import authCacheStore from "@/stores/authCacheStore";
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { I18nManager } from "react-native";
+import { I18nManager, Platform } from "react-native";
 import { SheetProvider } from "react-native-actions-sheet";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../sheets.tsx";
 import { RightIcon } from "./(tabs)/_layout";
 
-export default function RootLayout() {
-  const { isLoggedIn, isExpert, isSelectRole } = authCacheStore();
+export const isWeb = Platform.OS === "web";
 
-  const { showToast } = useToast();
+if (!isWeb) {
+  SplashScreen.preventAutoHideAsync();
+}
+
+export default function RootLayout() {
+  const { isLoggedIn, isExpert, isSelectRole, _hasHydrated } = authCacheStore();
 
   const [loaded] = useFonts({
     YekanBakhRegular: require("../assets/fonts/YekanBakhENRegular.ttf"),
@@ -24,30 +28,16 @@ export default function RootLayout() {
     YekanBakhMedium: require("../assets/fonts/YekanBakhENMedium.ttf"),
   });
 
-  const { isConnected, type, ip } = useNetworkStatus();
-
   useEffect(() => {
-    // if (!I18nManager.isRTL) {
     I18nManager.allowRTL(false);
     I18nManager.forceRTL(false);
-    // }
   }, []);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hide();
+    if (loaded && _hasHydrated) {
+      SplashScreen.hideAsync();
     }
-  }, [loaded]);
-
-  useEffect(() => {
-    console.log("....../", isConnected);
-    if (!isConnected) {
-      showToast({
-        message: "لطفا اتصال اینترنت خود را بررسی کنید",
-        type: "error",
-      });
-    }
-  }, [isConnected]);
+  }, [loaded, _hasHydrated]);
 
   const MyTheme = {
     ...DefaultTheme,
@@ -58,6 +48,9 @@ export default function RootLayout() {
   };
 
   if (!loaded) {
+    return null;
+  }
+  if (!_hasHydrated && !isWeb) {
     return null;
   }
 
@@ -74,6 +67,7 @@ export default function RootLayout() {
         <ThemeProvider value={MyTheme}>
           <SheetProvider>
             <ToastProvider>
+              <NetworkWatcher />
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Protected guard={isLoggedIn && isExpert}>
                   <Stack.Screen name="(expertTabs)" />
@@ -87,6 +81,7 @@ export default function RootLayout() {
                 <Stack.Protected guard={!isLoggedIn && !isExpert}>
                   <Stack.Screen name="LoginPage" />
                   <Stack.Screen name="OTPScreen" />
+                  {/* <Stack.Screen name="PrivacyPolicyPage" /> */}
                 </Stack.Protected>
 
                 <Stack.Protected guard={!isLoggedIn && isExpert}>
@@ -114,7 +109,12 @@ export default function RootLayout() {
                     name="VerificationStepPage"
                     options={expertScreenOptions}
                   />
+                  {/* <Stack.Screen name="PrivacyPolicyPage" /> */}
                 </Stack.Protected>
+                <Stack.Screen
+                  name="PrivacyPolicyPage"
+                  options={expertScreenOptions}
+                />
               </Stack>
             </ToastProvider>
           </SheetProvider>

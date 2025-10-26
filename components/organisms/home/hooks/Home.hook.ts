@@ -1,8 +1,13 @@
-import { SortEnumType, VerificationStatus } from "@/generated/graphql";
+import {
+  SortEnumType,
+  useCarousel_GetByIdQuery,
+  VerificationStatus,
+} from "@/generated/graphql";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
+import createOrderStore from "@/stores/createOrder";
 import { useRouter } from "expo-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGetServiceCategoriesQuery } from "../../service/hooks";
 import {
   useGetAllCityQuery,
@@ -15,15 +20,20 @@ export default function useHomeHook() {
 
   const { isLoggedIn } = authCacheStore();
 
-  const { customerCity, setCustomerCity } = authCacheStore();
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const { customerCity, setCustomerCity, customerCityId } = createOrderStore();
 
   const { data: cityData, isLoading } = useGetAllCityQuery({
     where: { isActive: { eq: true } },
   });
 
-  const { data: popularData } = useGetAllPopularQuery();
+  const { data: popularData } = useGetAllPopularQuery({
+    input: { cityId: customerCityId },
+  });
 
   const { data: specialData } = useGetAllPopularQuery({
+    input: { cityId: customerCityId },
     where: { isSpecial: { eq: true } },
   });
 
@@ -41,6 +51,11 @@ export default function useHomeHook() {
             eq: VerificationStatus.Approved,
           },
         },
+        {
+          city: {
+            id: { eq: customerCityId },
+          },
+        },
       ],
     },
     order: [{ averageRating: SortEnumType.Desc }],
@@ -49,7 +64,11 @@ export default function useHomeHook() {
   const { data: homeCategoryData } = useGetServiceCategoriesQuery();
 
   const { data: selectedCityData, isLoading: selectedCityLoading } =
-    useGetAllCityQuery({ where: { name: { eq: customerCity } } });
+    useGetAllCityQuery({ where: { id: { eq: customerCityId } } });
+
+  const { data: carouselData } = useCarousel_GetByIdQuery({
+    input: { id: selectedCityData?.pages[0]?.activeCarousel?.id },
+  });
 
   useEffect(() => {
     if (isLoggedIn) return;
@@ -68,6 +87,10 @@ export default function useHomeHook() {
   }, [isLoggedIn]);
 
   const onShow = () => {
+    if (isSheetOpen) return;
+
+    setIsSheetOpen(true);
+
     showSheet("confirmation-action", {
       payload: {
         hasLoading: false,
@@ -79,9 +102,10 @@ export default function useHomeHook() {
     });
   };
 
-  const { handleClose } = useShowSheetTimer(isLoggedIn, onShow, () =>
-    hideSheet("confirmation-action")
-  );
+  const { handleClose } = useShowSheetTimer(isLoggedIn, onShow, () => {
+    setIsSheetOpen(false);
+    hideSheet("confirmation-action");
+  });
 
   const onCityPress = (city: string) => {
     setCustomerCity(city);
@@ -94,10 +118,11 @@ export default function useHomeHook() {
     customerCity,
     onCityPress,
     activeBanner: selectedCityData?.pages[0]?.activeBanner,
-    activeCarousel: selectedCityData?.pages[0]?.activeCarousel,
+    activeCarousel: carouselData?.carousel_getById?.result?.serviceTypes ?? [],
     specialists: specialists?.pages,
     popularData: popularData?.pages ?? [],
     specialData: specialData?.pages ?? [],
+    isLoggedIn,
   };
 }
 

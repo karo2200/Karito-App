@@ -1,9 +1,11 @@
 import React, { Fragment } from "react";
 
+import { isWeb } from "@/app/_layout";
 import ExpertIcon from "@/assets/icons/ExpertIcon";
 import { ThemedText } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
+import { DeviceHeight } from "@/constants/Dimension";
 import { UserType } from "@/generated/graphql";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
@@ -67,7 +69,7 @@ const ExpertLogin = () => {
               forcePersianNumbers
             />
             <Footer
-              title="ثبت نام"
+              title="ورود"
               onPress={handleSubmit(onDoExpertLogin)}
               isNextLoading={isSendingCode}
               hasError={
@@ -83,7 +85,10 @@ const ExpertLogin = () => {
           </View>
         </FormProvider>
       </KeyboardAutoHide>
-      <ExpertIcon style={styles.image} />
+      <ExpertIcon
+        style={styles.image}
+        height={isWeb ? DeviceHeight / 2.5 : DeviceHeight / 2.5}
+      />
     </Fragment>
   );
 };
@@ -102,5 +107,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     zIndex: 1,
     left: "-5%",
+    height: isWeb ? DeviceHeight / 2.5 : DeviceHeight / 3.5,
   },
 });

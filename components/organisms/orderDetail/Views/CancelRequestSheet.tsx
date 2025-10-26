@@ -2,6 +2,7 @@ import CustomRadioButton from "@/components/atoms/CustomRadioButton";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -44,7 +45,8 @@ export default function CancelRequestSheet({
   return (
     <ActionSheet
       ref={actionSheetRef}
-      containerStyle={{ minHeight: height / 2.5 }}
+      containerStyle={{ minHeight: height / 2.5, width: maxWidth }}
+      onClose={() => closeActionSheet()}
     >
       <View style={styles.header}>
         <Ionicons
@@ -89,7 +91,7 @@ export default function CancelRequestSheet({
               onCancelReuest(cancelId, closeActionSheet);
             }
           }}
-          style={{ marginBottom: 40 }}
+          style={styles.btn}
         />
       </View>
     </ActionSheet>
@@ -115,4 +117,6 @@ const styles = StyleSheet.create({
   selectBtn: {
     paddingVertical: 12,
   },
+
+  btn: { marginBottom: 55, width: "100%" },
 });

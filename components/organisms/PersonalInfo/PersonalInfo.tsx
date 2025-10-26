@@ -11,7 +11,7 @@ import { VerificationStatus } from "@/generated/graphql";
 import { parseDate } from "@/services/ParseData";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import usePersonalInfoHook from "./hooks/PersonalInfo.hook";
 
@@ -121,7 +121,7 @@ const PersonalInfo = () => {
               label="ماه"
               data={monthsName}
               width={"33%"}
-              right={"9%"}
+              right={Platform.OS === "web" ? "40%" : "9%"}
             />
 
             <DropDownPicker
@@ -129,7 +129,7 @@ const PersonalInfo = () => {
               label="روز"
               data={days}
               width={"23%"}
-              right={"36%"}
+              right={Platform.OS === "web" ? "75%" : "36%"}
             />
           </View>
 

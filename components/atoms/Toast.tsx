@@ -1,6 +1,7 @@
 import DangerIcon from "@/assets/icons/DangerIcon";
 import SuccessIcon from "@/assets/icons/SuccessIcon";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { Ionicons } from "@expo/vector-icons";
 import React, {
   createContext,
@@ -210,6 +211,8 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     zIndex: 1000,
+    width: maxWidth * 0.94,
+    alignSelf: "center",
   },
 
   bottomToast: {
@@ -218,6 +221,7 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
     zIndex: 1000,
+    width: maxWidth * 0.94,
   },
 
   title: {
@@ -231,7 +235,7 @@ const styles = StyleSheet.create({
   },
 
   errorTitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.danger900,
   },
 

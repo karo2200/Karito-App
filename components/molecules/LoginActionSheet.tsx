@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 
+import { maxWidth } from "@/constants/Dimension";
 import { hideSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
 import { memo } from "react";
@@ -56,7 +57,11 @@ const LoginActionSheet = (props: SheetProps<"confirmation-action">) => {
   };
 
   return (
-    <ActionSheetContainer id="confirmation-action" onClose={() => onClose}>
+    <ActionSheetContainer
+      id="confirmation-action"
+      onClose={() => onClose}
+      containerStyle={styles.container}
+    >
       <View style={styles.container}>
         <View style={styles.contentView}>
           <TouchableOpacity
@@ -151,7 +156,7 @@ const styles = StyleSheet.create({
   },
   container: {
     minHeight: height / 5.5,
-    width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+    width: Platform.OS === "web" ? maxWidth : "100%",
     backgroundColor: "white",
     borderTopRightRadius: 12,
     borderTopLeftRadius: 12,

@@ -17,7 +17,7 @@ export default function SearchWithModal({
   const [search, setSearch] = useState("");
   const [filtered, setFiltered] = useState<CityDto[]>([]);
 
-  const { setCustomerCity, customerCity } = authCacheStore();
+  const { setCustomerCity, customerCity, setCustomerCityId } = authCacheStore();
 
   const handleSearch = (text: string) => {
     setSearch(text);
@@ -33,6 +33,7 @@ export default function SearchWithModal({
     setSearch(item?.name);
     setFiltered([]);
     setCustomerCity(item?.name);
+    setCustomerCityId(item?.id);
     onSelect?.();
   };
 
@@ -54,7 +55,7 @@ export default function SearchWithModal({
         />
       </View>
 
-      {filtered.length > 0 && (
+      {filtered?.length > 0 && (
         <View style={styles.dropdown}>
           <FlatList
             data={filtered}
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.disabledIcon,
     justifyContent: "center",
+    height: 40,
   },
 
   icon: {

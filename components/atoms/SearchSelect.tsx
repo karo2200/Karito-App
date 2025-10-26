@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { Ionicons } from "@expo/vector-icons";
 import { SearchNormal1 } from "iconsax-react-native";
@@ -26,10 +27,14 @@ type Props = {
   placeholder?: string;
   options: Option[];
   sheetTitle: string;
+  onEndReached?: () => void;
 };
 
 const SearchSelect = forwardRef<any, Props>(
-  ({ name, control, label, options, placeholder, sheetTitle }, ref) => {
+  (
+    { name, control, label, options, placeholder, sheetTitle, onEndReached },
+    ref
+  ) => {
     const { field, fieldState } = useController({ name, control });
     const [search, setSearch] = useState("");
     const actionSheetRef = useRef<ActionSheetRef>(null);
@@ -62,7 +67,9 @@ const SearchSelect = forwardRef<any, Props>(
           ref={actionSheetRef}
           containerStyle={{
             maxHeight: Platform.OS === "web" ? 400 : "75%",
+            width: Platform.OS === "web" ? maxWidth : "100%",
           }}
+          onClose={() => actionSheetRef.current?.hide()}
         >
           <View style={styles.header}>
             <Ionicons
@@ -88,6 +95,7 @@ const SearchSelect = forwardRef<any, Props>(
               contentContainerStyle={{ paddingBottom: 50 }}
               style={{ maxHeight: "80%" }}
               showsVerticalScrollIndicator={false}
+              onEndReached={onEndReached}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => {

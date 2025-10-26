@@ -30,7 +30,8 @@ const NationalCodeStep = ({
   onNextPress: () => void;
   onPrevPress: () => void;
 }) => {
-  const { phoneNumber, onRegistrationPress, nationalCode } = useExpertHook();
+  const { phoneNumber, onRegistrationPress, nationalCode, isLoggedIn } =
+    useExpertHook();
 
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
@@ -50,7 +51,10 @@ const NationalCodeStep = ({
   return (
     <KeyboardAutoHide>
       <FormProvider {...methods}>
-        <ScreenNameWithBack title="ثبت‌نام" onBackPress={onPrevPress} />
+        <ScreenNameWithBack
+          title={isLoggedIn ? "ویرایش اطلاعات" : "ثبت‌نام"}
+          onBackPress={onPrevPress}
+        />
         <View style={styles.form}>
           <ThemedInput
             label="شماره همراه *"
@@ -69,6 +73,7 @@ const NationalCodeStep = ({
             maxLength={10}
             forcePersianNumbers
             style={styles.margin}
+            readOnly={isLoggedIn && nationalCode?.length > 0}
           />
         </View>
 

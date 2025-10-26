@@ -4,12 +4,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import { CustomImage } from "@/components";
+import { CustomImage, ThemedView } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { UserType } from "@/generated/graphql";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import useLoginHook from "./login.hook";
 import Footer from "./views/Footer";
 import AuthHeader from "./views/Header";
@@ -40,7 +40,7 @@ const LoginSection = () => {
   return (
     <KeyboardAutoHide>
       <FormProvider {...methods}>
-        <View style={styles.form}>
+        <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
           <CustomImage
             localSource={require("@/assets/images/loginBg.png")}
             style={styles.image}
@@ -54,7 +54,8 @@ const LoginSection = () => {
             maxLength={11}
             forcePersianNumbers
           />
-        </View>
+        </ScrollView>
+        <ThemedView style={styles.flex1} />
         <Footer
           onPress={handleSubmit(onDoLogin)}
           isNextLoading={isSendingCode}
@@ -75,24 +76,18 @@ const LoginSection = () => {
 export default LoginSection;
 
 const styles = StyleSheet.create({
-  button: {
-    position: "absolute",
-    bottom: 100,
-    width: DeviceWidth - 40,
-    alignSelf: "center",
-    zIndex: 1,
-  },
-
   form: {
     width: "100%",
-    flex: 1,
+    flexGrow: 1,
   },
+
+  flex1: { flex: 1 },
 
   image: {
     alignSelf: "flex-end",
     width: DeviceWidth * 0.5,
     height: DeviceHeight * 0.6,
     position: "absolute",
-    zIndex: 1,
+    zIndex: -1,
   },
 });

@@ -4,6 +4,7 @@ import {
   useGetMyRevenueQuery,
   useRevenue_GetMyRevenueQuery,
 } from "@/generated/graphql";
+import { formatPrice } from "@/services/ParseData";
 import dayjs from "dayjs";
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
@@ -48,27 +49,29 @@ export default function IncomeInfo({}) {
   const infoArray = [
     {
       title: "درآمد ماه",
-      value: `${monthData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
+      value: `${formatPrice(monthData?.revenue_getMyRevenue?.result?.totalAmount ?? 0)} تومان`,
     },
     {
       title: "درآمد هفته",
-      value: `${weekData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
+      value: `${formatPrice(weekData?.revenue_getMyRevenue?.result?.totalAmount ?? 0)} تومان`,
     },
     {
       title: "درآمد امروز",
-      value: `${dayData?.revenue_getMyRevenue?.result?.totalAmount ?? 0} ریال`,
+      value: `${formatPrice(dayData?.revenue_getMyRevenue?.result?.totalAmount ?? 0)} تومان`,
     },
   ];
 
   return (
-    <ThemedView>
+    <ThemedView style={{ width: "100%" }}>
       <ThemedView style={styles.headerContainer}>
         <ThemedText
           type="defaultSemiBold"
           fontType="bold"
           style={styles.fontSize}
+          hasNumber
         >
-          {`${unSetteledAmount ?? 0}`} ریال
+          {`${formatPrice(unSetteledAmount ?? 0)}`}{" "}
+          <ThemedText type="default">تومان</ThemedText>
         </ThemedText>
         <ThemedText style={styles.headerTxt} fontType="bold">
           درآمد تسویه نشده
@@ -86,7 +89,7 @@ export default function IncomeInfo({}) {
             <ThemedText style={styles.title} numberOfLines={1}>
               {item.title}
             </ThemedText>
-            <ThemedText style={styles.value} fontType="bold">
+            <ThemedText style={styles.value} fontType="bold" hasNumber>
               {item.value}
             </ThemedText>
           </ThemedView>
@@ -108,7 +111,11 @@ const styles = StyleSheet.create({
 
   headerTxt: { color: Colors.darkGray },
 
-  list: { flexDirection: "row", justifyContent: "space-between" },
+  list: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
 
   listContainer: {
     width: "32%",

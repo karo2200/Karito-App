@@ -1,7 +1,7 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
+import { Colors } from "@/constants/Colors";
 import { FontType } from "@/constants/Fonts";
-import { useThemeColor } from "../../hooks/useThemeColor";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -15,6 +15,7 @@ export type ThemedTextProps = TextProps & {
     | "text"
     | "header";
   fontType?: "bold" | "regular" | "medium" | "extraBold";
+  hasNumber?: boolean;
 };
 
 export default function ThemedText({
@@ -23,17 +24,19 @@ export default function ThemedText({
   darkColor,
   type = "default",
   fontType = "regular",
+  hasNumber = false,
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const color = Colors.black;
 
   return (
     <Text
       style={[
         { color },
         {
-          fontFamily:
-            fontType === "bold"
+          fontFamily: hasNumber
+            ? FontType.Shabnam
+            : fontType === "bold"
               ? FontType.YekanBakhBold
               : fontType === "regular"
                 ? FontType.YekanBakhRegular

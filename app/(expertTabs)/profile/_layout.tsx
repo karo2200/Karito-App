@@ -7,6 +7,8 @@ export default function RootLayout() {
       <Stack.Screen name="address" />
       <Stack.Screen name="offers" />
       <Stack.Screen name="editProfile" />
+      <Stack.Screen name="PersonalInfoPage" />
+      <Stack.Screen name="CertificateInfoPage" />
     </Stack>
   );
 }

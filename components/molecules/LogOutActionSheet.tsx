@@ -1,6 +1,8 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import authCacheStore from "@/stores/authCacheStore";
+import createOrderStore from "@/stores/createOrder";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, Platform, StyleSheet, View } from "react-native";
@@ -19,6 +21,7 @@ export default function LogOutActionSheet({
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const { clearAuth } = authCacheStore();
+  const { clearAll } = createOrderStore();
 
   useEffect(() => {
     if (visible) {
@@ -55,6 +58,7 @@ export default function LogOutActionSheet({
           fontType="medium"
           onPress={() => {
             clearAuth();
+            clearAll();
             closeActionSheet();
           }}
         />
@@ -93,6 +97,6 @@ const styles = StyleSheet.create({
 
   container: {
     minHeight: height / 3.5,
-    width: Platform.OS === "web" ? Math.min(width, 480) : "100%",
+    width: Platform.OS === "web" ? maxWidth : "100%",
   },
 });

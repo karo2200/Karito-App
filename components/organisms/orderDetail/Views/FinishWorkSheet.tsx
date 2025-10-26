@@ -1,6 +1,8 @@
+import { isWeb } from "@/app/_layout";
 import CoopratoinIcon from "@/assets/icons/Coopretion";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useRef } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -34,7 +36,11 @@ export default function FinishWorkSheet({
   return (
     <ActionSheet
       ref={actionSheetRef}
-      containerStyle={{ minHeight: height / 2.5 }}
+      containerStyle={{
+        minHeight: height / 2.5,
+        width: isWeb ? maxWidth : "100%",
+      }}
+      onClose={() => closeActionSheet()}
     >
       <View style={styles.header}>
         <Ionicons

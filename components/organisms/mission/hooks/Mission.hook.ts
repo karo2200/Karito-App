@@ -43,7 +43,7 @@ export default function useMissionsHook() {
         { status: { neq: ServiceRequestStatus.CancelledBySpecialist } },
       ],
     },
-    order: [{ requestDate: SortEnumType.Desc }],
+    order: [{ requestDate: SortEnumType.Asc }],
   });
 
   const {
@@ -55,7 +55,7 @@ export default function useMissionsHook() {
     isLoading: copmleteLoading,
   } = useGetServiceAcceptanceQuery({
     where: { status: { eq: ServiceRequestStatus.Paid } },
-    order: [{ requestDate: SortEnumType.Desc }],
+    order: [{ requestDate: SortEnumType.Asc }],
   });
 
   return {

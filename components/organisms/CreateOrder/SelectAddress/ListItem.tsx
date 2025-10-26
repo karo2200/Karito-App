@@ -1,8 +1,13 @@
 import { Divider, ThemedView } from "@/components";
 import CustomRadioButton from "@/components/atoms/CustomRadioButton";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
-import { useAddress_DeleteMutation } from "@/generated/graphql";
+import {
+  useAddress_DeleteMutation,
+  useAddress_SetPrimaryMutation,
+} from "@/generated/graphql";
+import createOrderStore from "@/stores/createOrder";
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit, Trash } from "iconsax-react-native";
 import { memo } from "react";
@@ -13,19 +18,51 @@ import {
   View,
 } from "react-native";
 
-const ListItem = ({ item, index, length, onChange, field, router }) => {
-  const isChecked = field?.value === item?.id;
+const AddressListItem = ({
+  item,
+  index,
+  length,
+  onChange,
+  field,
+  router,
+  onClose,
+}: {
+  item: any;
+  index: number;
+  length: number;
+  onChange?: any;
+  field?: any;
+  router?: any;
+  onClose: () => void;
+}) => {
+  const {
+    addressId,
+    setAddressId,
+    setCustomerCity,
+    setCustomerCityId,
+    setAddress,
+  } = createOrderStore();
+
+  const isChecked = (field?.value ?? addressId) === item?.id;
 
   const { mutate, isPending } = useAddress_DeleteMutation();
+  const { mutate: primaryMutate, isPending: primaryPending } =
+    useAddress_SetPrimaryMutation();
   const queryClient = useQueryClient();
 
   const onRemoveAddress = () => {
+    const id = item?.id;
     mutate(
       { input: { addressId: item?.id } },
       {
         onSuccess: (data) => {
-          console.log(JSON.stringify({ data }));
           if (data?.address_delete?.status?.code === 1) {
+            if (addressId === id) {
+              setAddressId("");
+              setCustomerCity("");
+              setCustomerCityId("");
+              setAddress("");
+            }
             queryClient.invalidateQueries({
               queryKey: [queryKeys.address_getMyAddresses],
               exact: false,
@@ -37,9 +74,14 @@ const ListItem = ({ item, index, length, onChange, field, router }) => {
   };
 
   const onEditPress = () => {
-    router.push(
-      `/CreateAddress?nid=${item?.neighborhood?.id}&txt=${item?.text}&lat=${item?.latitude}&lng=${item?.longitude}&id=${item?.id}&bNo=${item?.buildingNumber}&fNo=${item?.floorNumber}&uNo=${item?.unitNumber}`
-    );
+    onClose?.();
+    router.push(`/CreateAddress?id=${item?.id}`);
+  };
+
+  const onItemClick = () => {
+    field?.onChange(item.id);
+    onChange?.(item);
+    primaryMutate({ input: { addressId: item?.id } });
   };
 
   return (
@@ -66,10 +108,7 @@ const ListItem = ({ item, index, length, onChange, field, router }) => {
         <CustomRadioButton
           checked={isChecked}
           label={item?.text}
-          onPress={() => {
-            field.onChange(item.id);
-            onChange?.(item);
-          }}
+          onPress={onItemClick}
         />
       </ThemedView>
       {index != (length > 1 ? length - 1 : 0) && <Divider height={24} />}
@@ -77,7 +116,7 @@ const ListItem = ({ item, index, length, onChange, field, router }) => {
   );
 };
 
-export default memo(ListItem);
+export default memo(AddressListItem);
 
 const styles = StyleSheet.create({
   editIcon: { backgroundColor: Colors.background },
@@ -87,7 +126,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: 3,
     flexDirection: "row",
-    width: "100%",
+    width: maxWidth - 40,
     justifyContent: "space-between",
   },
 

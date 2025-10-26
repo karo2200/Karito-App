@@ -23,7 +23,14 @@ export default function CustomFlatList({
         <ActivityIndicator color={Colors.hint500} />
       </View>
     );
-  return <FlatList {...rest} ref={ref} />;
+  return (
+    <FlatList
+      {...rest}
+      ref={ref}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+    />
+  );
 }
 
 const styles = StyleSheet.create({

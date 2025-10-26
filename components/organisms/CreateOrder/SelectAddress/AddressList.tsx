@@ -1,41 +1,67 @@
 import { CustomFlatList, ThemedButton, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 
+import createOrderStore from "@/stores/createOrder";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
-import { useController } from "react-hook-form";
 import { StyleSheet } from "react-native";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
+import EmptyAddressState from "./AddressEmpty";
 import ListItem from "./ListItem";
 
 export default function AddressList({
   onChange,
   setValue,
+  setEmptyState = false,
+  onClose,
 }: {
   onChange?: any;
   setValue?: any;
+  setEmptyState?: boolean;
+  onClose: () => void;
 }) {
   const router = useRouter();
-  const { field } = useController({ name: "addressId" });
 
-  const { data, fetchNextPage, hasNextPage } = useGetUserAddressesQuery();
+  const {
+    setAddressId,
+    setCustomerCity,
+    setCustomerCityId,
+    setAddress,
+    addressId,
+    address,
+  } = createOrderStore();
+
+  const { data, fetchNextPage, hasNextPage, isLoading } =
+    useGetUserAddressesQuery();
+
+  const adresses = data?.pages?.[0] ? data?.pages : [];
 
   useEffect(() => {
-    if (data?.pages?.[0]) {
-      const primaryAddress =
-        data?.pages.find((addr) => addr.isPrimary) ?? data?.pages?.[0];
+    setValue("addressId", addressId);
+    setValue("addressLabel", address);
+  }, [addressId]);
+
+  useEffect(() => {
+    if (data?.pages?.[0] && !isLoading) {
+      const primaryAddress = data?.pages.find((addr) => addr.isPrimary);
       setValue("addressId", primaryAddress?.id);
       setValue("addressLabel", primaryAddress?.text);
+      setAddressId?.(primaryAddress?.id);
+      setCustomerCity(primaryAddress?.city?.name);
+      setCustomerCityId(primaryAddress?.city?.id);
+      setAddress(primaryAddress?.text);
     }
   }, [data]);
 
   const onPress = () => {
+    onClose?.();
     router.push("/CreateAddress");
   };
 
   const renderItem = ({ item, index }) => (
     <ListItem
-      {...{ item, index, field, router, length: data?.pages?.length, onChange }}
+      {...{ item, index, router, length: data?.pages?.length, onChange }}
+      onClose={onClose}
     />
   );
 
@@ -46,24 +72,30 @@ export default function AddressList({
   return (
     <ThemedView style={styles.container}>
       <CustomFlatList
-        data={data?.pages ?? []}
+        data={adresses}
         renderItem={renderItem}
         keyExtractor={(item, index) => `${index}_${item?.value}`}
         onEndReached={onLoadMore}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          setEmptyState ? () => <EmptyAddressState /> : undefined
+        }
       />
-      <ThemedButton
-        title="افزودن آدرس جدید"
-        fontType={"bold"}
-        style={styles.btn}
-        type="outline"
-        onPress={onPress}
-      />
+      {adresses?.length > 0 && (
+        <ThemedButton
+          title="افزودن آدرس جدید"
+          fontType={"bold"}
+          style={styles.btn}
+          type="outline"
+          onPress={onPress}
+        />
+      )}
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  btn: { width: "100%", marginTop: 70, bottom: 20 },
+  btn: { width: "100%", marginTop: 70, bottom: 30 },
 
   container: { width: "100%", flex: 1 },
 

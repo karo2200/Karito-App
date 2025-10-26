@@ -1,3 +1,4 @@
+import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   LocationType,
@@ -6,6 +7,7 @@ import {
   useAddress_SetPrimaryMutation,
   useCreateRequestMutation,
 } from "@/generated/graphql";
+import createOrderStore from "@/stores/createOrder";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -20,7 +22,6 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const baseData = [
-  { type: "address" },
   { type: "selectDate" },
   { type: "gender" },
   {
@@ -51,15 +52,16 @@ const baseData = [
       },
     ],
   },
-  { type: "previewOrder" },
-  { type: "orderSubmitting" },
 ];
 
 export default function useCreateOrder() {
+  const toast = useToast();
   const methods = useForm<Record<string, any>, object>({
     mode: "onChange",
   });
   const { getValues, setValue, watch } = methods;
+
+  const { addressId } = createOrderStore();
 
   const params = useRoute().params;
   const { mutate, isPending } = useCreateRequestMutation();
@@ -76,7 +78,6 @@ export default function useCreateOrder() {
     let configDatas = [...baseData];
     setValue("locationType", LocationType.Residential);
     if (questions?.length > 0) {
-      let insertIndex = 4;
       questions?.forEach((question, index) => {
         setValue(
           question?.id?.toString(),
@@ -84,7 +85,7 @@ export default function useCreateOrder() {
             ? question?.options?.[0]
             : [question?.options?.[0]]
         );
-        configDatas.splice(index + insertIndex, 0, {
+        configDatas.push({
           type: "question",
           title: question?.text,
           questionType: question?.questionType,
@@ -94,20 +95,20 @@ export default function useCreateOrder() {
           }),
         });
       });
+      configDatas?.push({ type: "previewOrder" });
+      configDatas?.push({ type: "orderSubmitting" });
       return configDatas;
     } else if (!isLoading) {
+      configDatas?.push({ type: "previewOrder" });
+      configDatas?.push({ type: "orderSubmitting" });
       return configDatas;
     }
   }, [isLoading, questions]);
 
   const steps = (configDatas?.length ?? 0) - 1;
   const nextDisabled = useMemo(() => {
-    return (
-      stage === steps ||
-      (stage === 1 && !watch("time")) ||
-      (stage == 0 && !watch("addressId"))
-    );
-  }, [stage, watch("time"), watch("addressId")]);
+    return stage === steps || (stage === 0 && !watch("time"));
+  }, [stage, watch("time")]);
 
   const queryClient = useQueryClient();
   const { mutate: addressMutate } = useAddress_SetPrimaryMutation();
@@ -133,7 +134,7 @@ export default function useCreateOrder() {
           }
         );
     }
-    if (stage == 1) {
+    if (stage == 0) {
       const tehranDateTime = dayjs.tz(
         `${getValues().date} ${getValues().time}:00`,
         "YYYY-MM-DD HH:mm",
@@ -157,7 +158,7 @@ export default function useCreateOrder() {
       mutate(
         {
           input: {
-            addressId: values?.addressId,
+            addressId,
             description: "تست",
             locationType: values?.locationType,
             qnAs,
@@ -168,8 +169,15 @@ export default function useCreateOrder() {
         },
         {
           onSuccess(data, variables, context) {
-            if (data?.serviceRequest_create?.status?.code === 1) {
+            const resultCode = data?.serviceRequest_create?.status?.code;
+            if (resultCode === 1) {
               setStage((prev) => prev + 1);
+            } else if (resultCode === 0) {
+              toast.showToast({
+                message: "آدرس شما تحت پوشش خدمات کاریتو قرار ندارد",
+                type: "error",
+              });
+              router?.navigate("/(tabs)/service");
             }
           },
           onError(error, variables, context) {},

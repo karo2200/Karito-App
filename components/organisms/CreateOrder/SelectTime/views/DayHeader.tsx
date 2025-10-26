@@ -1,5 +1,6 @@
 import { CustomFlatList, Divider } from "@/components";
 import TimeListHeaderItem from "@/components/molecules/TimeListHeaderItem";
+import { maxWidth } from "@/constants/Dimension";
 import dayjs from "dayjs";
 import moment from "jalali-moment";
 import { createRef, useMemo, useRef } from "react";
@@ -71,6 +72,7 @@ export default function DayHeader({
       ItemSeparatorComponent={() => <Divider width={8} height={0} />}
       inverted
       snapToEnd
+      style={{ maxWidth: maxWidth - 40 }}
       showsHorizontalScrollIndicator={false}
     />
   );

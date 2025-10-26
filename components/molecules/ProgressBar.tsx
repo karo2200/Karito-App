@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import { DeviceWidth } from "@/constants/Dimension";
+import { maxWidth } from "@/constants/Dimension";
 import React, { JSX } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   progressContainer: {
     marginBottom: 16,
     borderRadius: 200,
-    width: DeviceWidth * 0.95,
+    width: maxWidth * 0.95,
   },
 
   progress: {

@@ -3,6 +3,7 @@ import HeaderItem from "@/components/molecules/ServiceHeaderItem";
 import { Colors } from "@/constants/Colors";
 import { hideSheet, showSheet } from "@/hooks/useShowSheet";
 import authCacheStore from "@/stores/authCacheStore";
+import createOrderStore from "@/stores/createOrder";
 import { useRouter } from "expo-router";
 import { useCallback } from "react";
 import { StyleSheet } from "react-native";
@@ -21,6 +22,8 @@ export default function ServiceBodySection({
   const router = useRouter();
 
   const { isLoggedIn } = authCacheStore();
+
+  const { addressId } = createOrderStore();
 
   const renderItem = useCallback(({ item, index }) => {
     const onPress = () => {
@@ -59,7 +62,11 @@ export default function ServiceBodySection({
   const EmptyState = useCallback(() => {
     return (
       <ThemedView style={styles.emptyState}>
-        <ThemedText>آیتمی برای نمایش وجود ندارد!</ThemedText>
+        {addressId?.length == 0 ? (
+          <ThemedText>لطفا آدرس خود را انتخاب کنید</ThemedText>
+        ) : (
+          <ThemedText>آیتمی برای نمایش وجود ندارد!</ThemedText>
+        )}
       </ThemedView>
     );
   }, []);

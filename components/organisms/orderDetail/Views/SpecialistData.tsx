@@ -1,8 +1,10 @@
+import { isWeb } from "@/app/_layout";
 import CustomImage from "@/components/atoms/CustomImage";
 import StarRating from "@/components/atoms/StartRating";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import { ServiceRequestStatus } from "@/generated/graphql";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Fragment, memo, useRef } from "react";
@@ -53,7 +55,11 @@ const SpecialistData = () => {
       </View>
       <ActionSheet
         ref={actionSheetRef}
-        containerStyle={{ minHeight: height / 2.5 }}
+        containerStyle={{
+          minHeight: height / 2.5,
+          width: isWeb ? maxWidth : "100%",
+        }}
+        onClose={() => closeActionSheet()}
       >
         <View style={styles.header}>
           <Ionicons

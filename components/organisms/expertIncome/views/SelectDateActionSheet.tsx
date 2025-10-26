@@ -3,7 +3,7 @@ import { Divider, ThemedButton } from "@/components";
 import { dropDownPositionType } from "@/components/atoms/DropDownPicker";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { DeviceHeight } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { monthsName } from "@/constants/StaticData";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import dayjs from "dayjs";
@@ -20,10 +20,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import ActionSheet, {
-  ActionSheetRef,
-  SheetDefinition,
-} from "react-native-actions-sheet";
+import ActionSheet, { SheetDefinition } from "react-native-actions-sheet";
 
 const { height } = Dimensions.get("window");
 declare module "react-native-actions-sheet" {
@@ -55,7 +52,6 @@ export default function SelectDateActionSheet({
   );
 
   const isReset = useRef(false);
-  const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const [currentMonth, setCurrentMonth] = useState(moment(startMoment));
   const [selected, setSelected] = useState(startMoment.format("jYYYY/jMM/jDD"));
@@ -178,12 +174,13 @@ export default function SelectDateActionSheet({
 
   return (
     <ActionSheet
-      ref={actionSheetRef}
       id="calendar-sheet"
       containerStyle={{
         minHeight: height / 3.5,
         maxHeight: 0.9 % DeviceHeight,
+        width: maxWidth,
       }}
+      onClose={onClose}
     >
       <View style={styles.header}>
         <Ionicons
@@ -206,7 +203,11 @@ export default function SelectDateActionSheet({
               flex: 1,
             }}
           >
-            <ThemedText style={{ textAlign: "center" }} fontType="regular">
+            <ThemedText
+              style={{ textAlign: "center" }}
+              fontType="regular"
+              hasNumber
+            >
               {currentMonth.locale("fa").format("jMMMM jYYYY")}
             </ThemedText>
           </Pressable>
@@ -250,6 +251,7 @@ export default function SelectDateActionSheet({
                 disabled={disabled}
               >
                 <ThemedText
+                  hasNumber
                   fontType="regular"
                   style={[
                     isSelected && styles.dayTextSelected,

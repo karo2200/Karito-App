@@ -22,13 +22,6 @@ query city_getAll(
         activeCarousel {
           id
           title
-          serviceTypes {
-            id
-            logo
-            name
-            banner
-            basePrice
-          }
         }
       }
       pageInfo {
@@ -61,5 +54,21 @@ query banner_getAll(
       totalCount
     }
     status
+  }
+}
+
+query carousel_getById($input: GetCarouselByIdInput!) {
+  carousel_getById(input: $input) {
+    result {
+      id
+      serviceTypes {
+        banner
+        basePrice
+        logo
+        name
+        id
+      }
+      title
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { DeviceWidth } from "@/constants/Dimension";
+import { maxWidth } from "@/constants/Dimension";
 import { useMemo } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 8,
     marginBottom: 4,
-    minWidth: DeviceWidth / 3 - 20,
+    minWidth: maxWidth / 3 - 20,
     alignItems: "center",
     justifyContent: "center",
   },

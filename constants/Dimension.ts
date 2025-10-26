@@ -1,4 +1,11 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
+
+const mainWidth = Dimensions.get("screen").width;
+
+export const maxWidth =
+  mainWidth > 600 || Platform.OS === "web"
+    ? Math.min(480, mainWidth)
+    : mainWidth;
 
 export const DeviceHeight = Dimensions.get("screen").height;
-export const DeviceWidth = Dimensions.get("screen").width;
+export const DeviceWidth = maxWidth;

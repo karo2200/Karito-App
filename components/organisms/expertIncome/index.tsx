@@ -9,7 +9,7 @@ export default function ExpertIncome() {
   const { onDateSelect, selectedDate } = useExpertIncome();
 
   return (
-    <ThemedView>
+    <ThemedView style={{ flex: 1 }}>
       <SelectDateActionSheet
         onClose={() => {
           SheetManager.hideAll();

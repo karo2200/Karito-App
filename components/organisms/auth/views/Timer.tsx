@@ -1,7 +1,6 @@
+import { isWeb } from "@/app/_layout";
 import { ThemedText } from "@/components";
 import { Colors } from "@/constants/Colors";
-import * as BackgroundTask from "expo-background-task";
-import * as TaskManager from "expo-task-manager";
 import React, {
   forwardRef,
   useEffect,
@@ -25,22 +24,25 @@ const formatTime = (seconds: number) => {
 };
 const BACKGROUND_TASK_IDENTIFIER = "background-task";
 
-// Background task definition
-TaskManager.defineTask(BACKGROUND_TASK_IDENTIFIER, async () => {
-  try {
-    const now = Date.now();
-  } catch (error) {
-    return BackgroundTask.BackgroundTaskResult.Failed;
+// ✅ Only load BackgroundTask & TaskManager for native platforms
+let BackgroundTask: any = null;
+let TaskManager: any = null;
+
+if (!isWeb) {
+  BackgroundTask = require("expo-background-task");
+  TaskManager = require("expo-task-manager");
+
+  // Define background task only once
+  if (!TaskManager.isTaskDefined(BACKGROUND_TASK_IDENTIFIER)) {
+    TaskManager.defineTask(BACKGROUND_TASK_IDENTIFIER, async () => {
+      try {
+        const now = Date.now();
+      } catch (error) {
+        return BackgroundTask.BackgroundTaskResult.Failed;
+      }
+      return BackgroundTask.BackgroundTaskResult.Success;
+    });
   }
-  return BackgroundTask.BackgroundTaskResult.Success;
-});
-
-async function registerBackgroundTaskAsync() {
-  return BackgroundTask.registerTaskAsync(BACKGROUND_TASK_IDENTIFIER);
-}
-
-async function unregisterBackgroundTaskAsync() {
-  return BackgroundTask.unregisterTaskAsync(BACKGROUND_TASK_IDENTIFIER);
 }
 
 const Timer = forwardRef(
@@ -54,8 +56,7 @@ const Timer = forwardRef(
   ) => {
     const [isTimerActive, setIsTimerActive] = useState(true);
     const [isRegistered, setIsRegistered] = useState(false);
-    const [status, setStatus] =
-      useState<BackgroundTask.BackgroundTaskStatus | null>(null);
+    const [status, setStatus] = useState<any | null>(null);
 
     // Countdown state
     const [seconds, setSeconds] = useState(120); // ⏱️ set your starting countdown time here
@@ -74,7 +75,7 @@ const Timer = forwardRef(
     };
 
     useEffect(() => {
-      updateAsync();
+      if (!isWeb) updateAsync();
     }, []);
 
     // Start countdown
@@ -168,9 +169,9 @@ const Timer = forwardRef(
     return (
       <>
         {isTimerActive ? (
-          <ThemedText
-            style={styles.timerTxt}
-          >{`${formatTime(seconds)}`}</ThemedText>
+          <ThemedText style={styles.timerTxt}>
+            {`${formatTime(seconds)}`}
+          </ThemedText>
         ) : (
           <>
             {isSendingCode ? (

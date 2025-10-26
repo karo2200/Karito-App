@@ -4,11 +4,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 
+import { isWeb } from "@/app/_layout";
 import ExpertIcon from "@/assets/icons/ExpertIcon";
 import { ThemedText, ThemedView } from "@/components";
 import KeyboardAutoHide from "@/components/atoms/KeyboardAutoHide";
 import ThemedCodeFeild from "@/components/atoms/ThemedCodeFeild";
 import { Colors } from "@/constants/Colors";
+import { DeviceHeight, DeviceWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { StyleSheet, View } from "react-native";
 import useOtpHook from "./hooks/otp.hook";
@@ -50,7 +52,7 @@ const ExpertOTPSection = () => {
       <KeyboardAutoHide>
         <FormProvider {...methods}>
           <View style={styles.form}>
-            <ThemedText style={styles.subtitle}>
+            <ThemedText style={styles.subtitle} hasNumber>
               {`لطفا کد چهار رقمی ارسال شده به شماره ${phoneNumber} را وارد کنید`}
             </ThemedText>
             <ThemedView style={styles.codeContainer}>
@@ -76,7 +78,7 @@ const ExpertOTPSection = () => {
           <Footer
             onPress={handleSubmit(onDoExpertLogin)}
             isNextLoading={isVerifying || isSendingCode}
-            title="ثبت نام"
+            title="ورود"
             style={{ bottom: 0 }}
             hasError={
               errors?.["otpCode"]?.message?.length > 0 ||
@@ -88,7 +90,10 @@ const ExpertOTPSection = () => {
           />
         </FormProvider>
       </KeyboardAutoHide>
-      <ExpertIcon style={styles.image} />
+      <ExpertIcon
+        style={styles.image}
+        height={isWeb ? DeviceHeight / 2.5 : DeviceHeight / 2.5}
+      />
     </Fragment>
   );
 };
@@ -104,8 +109,8 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    width: "100%",
-    flex: 1,
+    width: isWeb ? "92%" : DeviceWidth - 40,
+    alignSelf: "center",
     paddingTop: "15%",
   },
 
@@ -116,9 +121,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    alignSelf: "flex-start",
     zIndex: 1,
     left: "-5%",
+    height: isWeb ? DeviceHeight / 2.5 : DeviceHeight / 3,
   },
 
   codeContainer: {
@@ -136,10 +141,9 @@ const styles = StyleSheet.create({
   },
 
   absolute: {
-    position: "absolute",
-    top: 80,
-    zIndex: 1,
+    marginVertical: isWeb ? 10 : 0,
     alignItems: "center",
+    marginBottom: 40,
   },
 
   editText: { color: Colors.hint500, textAlign: "center" },

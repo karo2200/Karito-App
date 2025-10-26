@@ -1,9 +1,8 @@
 import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
-import DropDownPicker from "@/components/atoms/DropDownPicker";
 import ThemedInput from "@/components/atoms/ThemedInput";
-import { Colors } from "@/constants/Colors";
-import { DeviceHeight } from "@/constants/Dimension";
+import { useToast } from "@/components/atoms/Toast";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useAddress_CreateMutation,
@@ -14,16 +13,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
-import MapView from "./MapView";
-import { useGetNeighborhoodsQuery } from "./hooks";
+import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
+import GoogleMapView from "./GoogleMapView";
 
 const schema = yup.object().shape({
-  area: yup.string().required("لطفا محله را وارد کنید"),
   address: yup.string().required("لطفا آدرس را وارد کنید."),
+  title: yup.string().required("عنوان آدرس خود را وارد کنید."),
   lat: yup.number(),
   lng: yup.number(),
   buildingNumber: yup
@@ -43,10 +42,17 @@ const schema = yup.object().shape({
 export default function AddressMap() {
   const editItem = useRoute().params;
 
-  const { data } = useGetNeighborhoodsQuery({});
-  const neighborHoods = data?.pages?.[0] ? data?.pages : [];
+  const toast = useToast();
+
+  const { data: addressData } = useGetUserAddressesQuery({
+    where: { id: { eq: editItem?.id } },
+    take: 1,
+    skip: 0,
+  });
+  const currentAddress = addressData?.pages[0];
 
   const router = useRouter();
+  const mapRef = useRef(null);
 
   const { data: userData } = useUser_GetMyProfileQuery();
   const user = userData?.user_getMyProfile?.result;
@@ -54,23 +60,27 @@ export default function AddressMap() {
   const { ...methods } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues: {
-      address: editItem?.txt,
-      area: editItem?.nid,
-      lat: parseFloat(editItem?.lat),
-      lng: parseFloat(editItem?.lng),
-      floorNumber: editItem?.fNo,
-      buildingNumber: editItem?.bNo,
-      unitNumber: editItem?.uNo,
-    },
   });
-  const { handleSubmit, register, setValue } = methods;
+  const { handleSubmit, setValue } = methods;
 
-  const onLocationSelected = (latLng?: string) => {
-    if (!latLng || latLng?.length < 3) return;
+  useEffect(() => {
+    if (currentAddress) {
+      setValue("address", currentAddress?.text);
+      setValue("lat", currentAddress?.latitude ?? 0);
+      setValue("lng", currentAddress?.longitude ?? 0);
+      setValue("floorNumber", currentAddress?.floorNumber ?? 0);
+      setValue("buildingNumber", currentAddress?.buildingNumber ?? 0);
+      setValue("unitNumber", currentAddress?.unitNumber ?? 0);
+      setValue("title", currentAddress?.title ?? "");
+      mapRef.current?.changeLocation({
+        latitude: currentAddress?.latitude,
+        longitude: currentAddress?.longitude,
+      });
+    }
+  }, [currentAddress]);
+
+  const onLocationSelected = (latLngJson?: any) => {
     try {
-      const latLngJson = JSON.parse(latLng);
-
       setValue("lat", latLngJson?.lat);
       setValue("lng", latLngJson?.lng);
 
@@ -102,7 +112,6 @@ export default function AddressMap() {
   const queryClient = useQueryClient();
   const onPress = (formData) => {
     const input = {
-      neighborhoodId: formData?.area,
       latitude: formData?.lat,
       longitude: formData?.lng,
       customerId: user?.id,
@@ -110,6 +119,7 @@ export default function AddressMap() {
       buildingNumber: formData?.buildingNumber,
       unitNumber: formData?.unitNumber,
       floorNumber: formData?.floorNumber,
+      title: formData?.title,
     };
     if (editItem?.id) {
       editMutate(
@@ -122,6 +132,7 @@ export default function AddressMap() {
             buildingNumber: formData?.buildingNumber,
             unitNumber: formData?.unitNumber,
             floorNumber: formData?.floorNumber,
+            newTitle: formData?.title,
           },
         },
         {
@@ -134,7 +145,9 @@ export default function AddressMap() {
               router?.back();
             }
           },
-          onError: (edata) => {},
+          onError: (edata) => {
+            console.log(JSON.stringify({ edata }));
+          },
         }
       );
     } else {
@@ -144,23 +157,31 @@ export default function AddressMap() {
         },
         {
           onSuccess: (data) => {
-            if (data?.address_create?.status?.code === 1) {
+            console.log(JSON.stringify({ data }));
+            const resultCode = data?.address_create?.status?.code;
+            if (resultCode === 1) {
               queryClient.invalidateQueries({
                 queryKey: [queryKeys.address_getMyAddresses],
                 exact: false,
               });
               router?.back();
+            } else if (resultCode === 0) {
+              toast.showToast({
+                message: "آدرس در محدوده تحت پوشش کاریتو قرار ندارد.",
+              });
             }
           },
-          onError: (edata) => {},
+          onError: (edata) => {
+            console.log(JSON.stringify({ edata }));
+          },
         }
       );
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <ThemedView style={styles.flex1}>
+    <ThemedView style={styles.flex1}>
+      <ScrollView style={styles.container}>
         <FormProvider {...methods}>
           {editItem?.id && (
             <Breadcrumb
@@ -173,27 +194,13 @@ export default function AddressMap() {
           {!editItem?.id && <Divider height={24} />}
           <ThemedText fontType="bold">آدرس خود را مشخص کنید:</ThemedText>
           <Divider height={24} />
-
-          <View style={styles.dropdownContainer}>
-            <DropDownPicker
-              {...register("area")}
-              title="محله"
-              data={neighborHoods}
-              width={"100%"}
-              titleKey="name"
-              valueKey="id"
-              arrowBGColor={Colors.background}
-              arrowColor={Colors.gray500}
-              titleStyle={{ type: "subtitle" }}
-              containerViewStyle={{
-                width: "100%",
-                borderRadius: 6,
-                borderColor: Colors.disabledIcon,
-              }}
-              arrowSize={16}
-            />
-          </View>
-
+          <ThemedInput
+            placeholder=" خانه"
+            name="title"
+            label="عنوان آدرس"
+            labelStyle="sm"
+          />
+          <Divider height={24} />
           <ThemedInput
             placeholder="آدرس شما"
             name="address"
@@ -203,14 +210,6 @@ export default function AddressMap() {
           />
           <Divider height={24} />
           <ThemedView style={styles.addressView}>
-            <ThemedInput
-              label="پلاک"
-              name="buildingNumber"
-              style={{ width: "32%" }}
-              keyboardType="numeric"
-              maxLength={8}
-              labelStyle="sm"
-            />
             <ThemedInput
               label="واحد"
               name="unitNumber"
@@ -227,22 +226,41 @@ export default function AddressMap() {
               maxLength={4}
               labelStyle="sm"
             />
+            <ThemedInput
+              label="پلاک"
+              name="buildingNumber"
+              style={{ width: "32%" }}
+              keyboardType="numeric"
+              maxLength={8}
+              labelStyle="sm"
+            />
           </ThemedView>
           <Divider height={24} />
           <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
           <Divider height={16} />
           <ThemedView style={styles.mapView}>
-            <MapView onLocationSelected={onLocationSelected} />
+            <GoogleMapView
+              onLocationSelected={onLocationSelected}
+              latLng={
+                currentAddress?.id
+                  ? {
+                      lat: currentAddress?.latitude,
+                      lng: currentAddress?.longitude,
+                    }
+                  : undefined
+              }
+              ref={mapRef}
+            />
           </ThemedView>
-          <ThemedButton
-            title="ذخیره"
-            onPress={handleSubmit(onPress)}
-            isLoading={isPending || isUpdating}
-            style={styles.button}
-          />
         </FormProvider>
-      </ThemedView>
-    </ScrollView>
+      </ScrollView>
+      <ThemedButton
+        title="ذخیره"
+        onPress={handleSubmit(onPress)}
+        isLoading={isPending || isUpdating}
+        style={styles.button}
+      />
+    </ThemedView>
   );
 }
 
@@ -251,13 +269,18 @@ const styles = StyleSheet.create({
 
   flex1: { flex: 1 },
 
-  mapView: { height: DeviceHeight * 0.35 },
+  mapView: { height: DeviceHeight * 0.35, width: "100%" },
 
   dropdownContainer: {
     marginBottom: 12,
   },
 
-  button: { marginTop: 18, marginBottom: 50 },
+  button: {
+    marginTop: 18,
+    marginBottom: 50,
+    width: maxWidth * 0.93,
+    alignSelf: "center",
+  },
 
   addressView: {
     flexDirection: "row",

@@ -112,16 +112,17 @@ export default function OrderDetailScreen() {
               {serviceData?.status !== ServiceRequestStatus.PendingPayment &&
               serviceData?.status !== ServiceRequestStatus.Paid &&
               isExpert ? (
-                <Pressable onPress={() => setCancelRequestVisible(true)}>
-                  {cancelWorkPending ? (
-                    <ActivityIndicator />
-                  ) : (
-                    <ThemedText style={{ color: Colors.darkError }}>
-                      لغو سفارش
-                    </ThemedText>
-                  )}
-                </Pressable>
+                <View />
               ) : (
+                // <Pressable onPress={() => setCancelRequestVisible(true)}>
+                //   {cancelWorkPending ? (
+                //     <ActivityIndicator />
+                //   ) : (
+                //     <ThemedText style={{ color: Colors.darkError }}>
+                //       لغو سفارش
+                //     </ThemedText>
+                //   )}
+                // </Pressable>
                 <View />
               )}
               <View
@@ -255,6 +256,16 @@ export default function OrderDetailScreen() {
             </React.Fragment>
           )}
         </View>
+        {serviceData?.status !== ServiceRequestStatus.Pending && (
+          <View style={styles.rowView}>
+            <ThemedText type="text" style={{ color: Colors.label }}>
+              {serviceData?.trackingCode}
+            </ThemedText>
+            <ThemedText type="text" style={{ color: Colors.gray500 }}>
+              کد رهگیری
+            </ThemedText>
+          </View>
+        )}
         {isExpert && (
           <View>
             <Divider height={16} />

@@ -53,22 +53,13 @@ query serviceRequest_getMyAcceptances(
       items {
         address {
           text
-          latitude
-          longitude
-          neighborhood {
-            id
-            city {
-              name
-              id
-            }
+          city {
             name
+            id
           }
         }
         finalPrice
-        cancellationReason {
-          id
-          name
-        }
+
         customer {
           firstName
           lastName
@@ -119,6 +110,9 @@ query serviceRequest_getMyAcceptancesIncom(
           lastName
           phoneNumber
         }
+        serviceType {
+          name
+        }
         paidAt
         id
       }
@@ -137,24 +131,15 @@ query serviceRequest_getById($input: GetServiceRequestByIdInput!) {
     result {
       address {
         text
-        latitude
-        longitude
-        neighborhood {
-          id
-          city {
-            name
-            id
-          }
+        city {
           name
+          id
         }
       }
       finalPrice
       basePrice
       discountAmount
-      cancellationReason {
-        id
-        name
-      }
+      trackingCode
       customer {
         firstName
         lastName

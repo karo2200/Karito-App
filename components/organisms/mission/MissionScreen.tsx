@@ -1,11 +1,11 @@
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
+import { maxWidth } from "@/constants/Dimension";
 import * as React from "react";
 import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -114,6 +114,6 @@ const styles = StyleSheet.create({
   },
 
   page: {
-    width: Platform.OS === "web" ? Math.min(width, 480) : width,
+    width: maxWidth,
   },
 });
