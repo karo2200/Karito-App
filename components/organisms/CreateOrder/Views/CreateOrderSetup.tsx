@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components";
 import React, { JSX } from "react";
+import OrderDescription from "../OrderDescription";
 import OrderQuestions from "../OrderQuestions";
 import OrderSubmittingOrg from "../OrderSubmitting";
 import PreviewOrder from "../PreviewOrder/PreviewOrder";
@@ -8,7 +9,7 @@ import SelectOrderTime from "../SelectTime";
 
 type CreateOrderSetupProp = {
   type:
-    | "address"
+    | "description"
     | "selectDate"
     | "gender"
     | "question"
@@ -38,11 +39,13 @@ export function CreateOrderSetup(props: CreateOrderSetupProp): JSX.Element {
       return <PreviewOrder {...props} />;
 
     case "orderSubmitting":
-      return <OrderSubmittingOrg {...props} />;
+      return <OrderSubmittingOrg />;
     case "gender":
       return <SelectGender {...props} />;
     case "question":
       return <OrderQuestions {...props} />;
+    case "description":
+      return <OrderDescription {...props} />;
 
     default:
       return <ThemedText>Not implemented: {type}</ThemedText>;
