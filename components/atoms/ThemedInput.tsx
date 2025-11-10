@@ -36,6 +36,7 @@ const CustomInput = React.forwardRef(
       style,
       labelStyle = "normal",
       forcePersianNumbers,
+      rules,
     }: {
       name: any;
       placeholder?: string;
@@ -79,11 +80,12 @@ const CustomInput = React.forwardRef(
       control?: any;
       labelStyle?: "normal" | "sm";
       forcePersianNumbers?: boolean;
+      rules?: any;
     },
 
     ref: any
   ) => {
-    const { field, fieldState } = useController({ name, control });
+    const { field, fieldState } = useController({ name, control, rules });
 
     const onChange = (value: string) => {
       field?.onChange(value);

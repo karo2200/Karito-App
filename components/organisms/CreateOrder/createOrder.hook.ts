@@ -95,20 +95,20 @@ export default function useCreateOrder() {
           }),
         });
       });
-      configDatas?.push({ type: "previewOrder" });
-      configDatas?.push({ type: "orderSubmitting" });
-      return configDatas;
-    } else if (!isLoading) {
-      configDatas?.push({ type: "previewOrder" });
-      configDatas?.push({ type: "orderSubmitting" });
-      return configDatas;
     }
+    configDatas?.push({ type: "description" });
+    configDatas?.push({ type: "previewOrder" });
+    configDatas?.push({ type: "orderSubmitting" });
+
+    return configDatas;
   }, [isLoading, questions]);
 
   const steps = (configDatas?.length ?? 0) - 1;
   const nextDisabled = useMemo(() => {
+    if (configDatas[stage]?.type === "description" && !watch("description"))
+      return true;
     return stage === steps || (stage === 0 && !watch("time"));
-  }, [stage, watch("time")]);
+  }, [stage, watch("time"), watch("description")]);
 
   const queryClient = useQueryClient();
   const { mutate: addressMutate } = useAddress_SetPrimaryMutation();
@@ -159,7 +159,7 @@ export default function useCreateOrder() {
         {
           input: {
             addressId,
-            description: "تست",
+            description: values?.description,
             locationType: values?.locationType,
             qnAs,
             requestDate: values?.requestDate,
