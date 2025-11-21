@@ -16,6 +16,7 @@ export type UploadFile = {
 };
 
 export async function fileUploader(file: UploadFile) {
+  console.log("SS", JSON.stringify({ file }));
   const info = await FileSystem.getInfoAsync(file.uri);
   const size = file.size ?? info.size ?? 0;
 
