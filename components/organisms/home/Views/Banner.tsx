@@ -120,7 +120,12 @@ export default function Banner() {
           />
           <ThemedText fontType="bold">کدام شهر هستید؟</ThemedText>
         </View>
-        <SearchWithModal list={cityData} onSelect={() => closeActionSheet()} />
+        <SearchWithModal
+          list={cityData}
+          onSelect={() => {
+            closeActionSheet();
+          }}
+        />
         <View style={styles.contentView}>
           <ThemedText type="text" style={styles.title} fontType="bold">
             شهرهای پر بازدید

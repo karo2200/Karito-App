@@ -48,18 +48,18 @@ const ExpertLogin = () => {
             >
               کسب درآمد از حرفه و تخصص!
             </ThemedText>
-            <ThemedText>
+            <ThemedText style={{ marginBottom: "5%" }}>
               با ثبت‌نام در کاریتو برای تخصص خود مشتری پیدا کنید و به کسب درآمد
               روزانه بپردازید.
             </ThemedText>
 
-            <ThemedText
+            {/* <ThemedText
               fontType="bold"
               type="defaultSemiBold"
               style={{ marginTop: "10%", marginBottom: 16 }}
             >
               تکمیل ثبت‌نام
-            </ThemedText>
+            </ThemedText> */}
             <ThemedInput
               label="لطفا شماره موبایل خود را وارد کنید."
               {...register("phone")}
@@ -87,7 +87,7 @@ const ExpertLogin = () => {
       </KeyboardAutoHide>
       <ExpertIcon
         style={styles.image}
-        height={isWeb ? DeviceHeight / 2.5 : DeviceHeight / 2.5}
+        height={isWeb ? DeviceHeight / 3 : DeviceHeight / 2.5}
       />
     </Fragment>
   );
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   image: {
     alignSelf: "flex-start",
     zIndex: 1,
-    left: "-5%",
-    height: isWeb ? DeviceHeight / 2.5 : DeviceHeight / 3.5,
+    left: "-10%",
+    height: isWeb ? DeviceHeight / 3 : DeviceHeight / 2.5,
   },
 });

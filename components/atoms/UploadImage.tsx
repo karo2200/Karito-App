@@ -54,6 +54,7 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
         name: `${Date.now()}-image.jpg`,
         type: result.assets[0]?.mimeType,
         size: result.assets[0]?.fileSize,
+        // file: result.assets[0]?.file,
       };
 
       actionSheetRef.current?.hide();
@@ -81,6 +82,7 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
         name: `${Date.now()}-image.jpg`,
         type: result.assets[0]?.mimeType,
         size: result.assets[0]?.fileSize,
+        // file: result.assets[0]?.file,
       };
       actionSheetRef.current?.hide();
       upload(file, {
@@ -119,6 +121,7 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
             <ThemedButton
               title="تغییر"
               type="outline"
+              isLoading={isPending}
               onPress={openSheet}
               style={styles.button}
             />

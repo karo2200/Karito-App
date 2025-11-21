@@ -92,7 +92,7 @@ const ExpertOTPSection = () => {
       </KeyboardAutoHide>
       <ExpertIcon
         style={styles.image}
-        height={isWeb ? DeviceHeight / 2.5 : DeviceHeight / 2.5}
+        height={isWeb ? DeviceHeight / 3 : DeviceHeight / 2.5}
       />
     </Fragment>
   );
@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
 
   image: {
     zIndex: 1,
-    left: "-5%",
-    height: isWeb ? DeviceHeight / 2.5 : DeviceHeight / 3,
+    left: "-10%",
+    height: isWeb ? DeviceHeight / 3 : DeviceHeight / 2.5,
   },
 
   codeContainer: {

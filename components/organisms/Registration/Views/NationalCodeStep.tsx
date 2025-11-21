@@ -10,6 +10,23 @@ import { StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import useExpertHook from "../hooks/Expert.hook";
 
+function isValidIranNationalCode(code) {
+  if (!/^\d{10}$/.test(code)) return false;
+
+  const digits = code.split("").map(Number);
+  const check = digits[9];
+  const sum = digits
+    .slice(0, 9)
+    .reduce((acc, digit, index) => acc + digit * (10 - index), 0);
+
+  const remainder = sum % 11;
+
+  return (
+    (remainder < 2 && check === remainder) ||
+    (remainder >= 2 && check === 11 - remainder)
+  );
+}
+
 const schema = yup.object().shape({
   phone: yup
     .string()
@@ -17,9 +34,11 @@ const schema = yup.object().shape({
     .required("لطفا شماره موبایل خود را وارد کنید"),
   code: yup
     .string()
-    .matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید")
-    .length(4, "کد چهار رقمی را وارد کنید")
-    .length(10, "کد ملی بدرستی وارد نشده است")
+    .matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید") // 👈 این خط
+    .length(10, "کد ملی باید ۱۰ رقم باشد")
+    .test("is-valid-national-id", "کد ملی معتبر نیست", (value) =>
+      value ? isValidIranNationalCode(value) : false
+    )
     .required("لطفا کد ملی خود را وارد کنید"),
 });
 
