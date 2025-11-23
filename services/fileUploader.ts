@@ -5,6 +5,7 @@ import {
 } from "@/generated/graphql";
 import { graphqlFetcher } from "@/graphql/fetcher";
 import * as FileSystem from "expo-file-system";
+import { Platform } from "react-native";
 
 const MIN_CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -16,14 +17,17 @@ export type UploadFile = {
 };
 
 export async function fileUploader(file: UploadFile) {
-  console.log("SS", JSON.stringify({ file }));
-  const info = await FileSystem.getInfoAsync(file.uri);
-  const size = file.size ?? info.size ?? 0;
+  let size = file?.size;
+  let info = { size: 0 };
+  if (!file?.size && Platform.OS === "web") {
+    info = await FileSystem.getInfoAsync(file.uri);
+    size = info?.size;
+  }
 
-  if (size <= MIN_CHUNK_SIZE) {
+  if ((size ?? 0) <= MIN_CHUNK_SIZE) {
     return uploadSinglePart(file);
   } else {
-    return uploadMultiPart(file, size);
+    return uploadMultiPart(file, size ?? 0);
   }
 }
 

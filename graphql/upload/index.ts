@@ -11,7 +11,6 @@ export type UploadFile = {
 export function useUploadFile() {
   return useMutation({
     mutationFn: async (file: UploadFile) => {
-      console.log(JSON.stringify({ uploader: file }));
       return await fileUploader(file);
     },
   });

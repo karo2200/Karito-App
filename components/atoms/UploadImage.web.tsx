@@ -2,19 +2,20 @@
 import UploadIcon from "@/assets/icons/Upload";
 import { Colors } from "@/constants/Colors";
 import { maxWidth } from "@/constants/Dimension";
+import { FontType } from "@/constants/Fonts";
 import { useUploadFile } from "@/graphql/upload";
 import { Image } from "expo-image";
 import { Camera, Gallery } from "iconsax-react-native";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Control, useController } from "react-hook-form";
 import {
   ActivityIndicator,
   Modal,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import CameraModalWeb from "./CameraModal.web";
 import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
 import { useToast } from "./Toast";
@@ -26,6 +27,10 @@ type Props = {
   description?: string;
 };
 
+const blobToFile = (blob: Blob, fileName: string) => {
+  return new File([blob], fileName, { type: blob.type });
+};
+
 export default function UploadImage({
   name,
   control,
@@ -33,37 +38,22 @@ export default function UploadImage({
   description,
 }: Props) {
   const { field } = useController({ name, control });
+  const [cameraVisible, setCameraVisible] = useState(false);
+
   const { showToast } = useToast();
   const { mutate: upload, isPending } = useUploadFile();
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Direct DOM input ref rendered in JSX (web only file so this is safe)
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  // Trigger input click, optionally enabling camera capture
-  const triggerInput = (useCamera: boolean) => {
-    const input = inputRef.current;
-    if (!input) return;
-
-    // set capture attribute for camera; some browsers respect it
-    if (useCamera) input.setAttribute("capture", "environment");
-    else input.removeAttribute("capture");
-
-    // reset value so selecting same file again will trigger change
-    input.value = "";
-    input.click();
-  };
-
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
+    const file = e?.target?.files?.[0];
     if (!file) {
       setModalVisible(false);
       return;
     }
 
     // Pass File directly to your upload hook
-    console.log(JSON.stringify({ file }), { e });
+
     upload(file, {
       onSuccess: (url) => field.onChange(url),
       onError: (ee) => {
@@ -78,13 +68,6 @@ export default function UploadImage({
   return (
     <View style={{ marginVertical: 16 }}>
       {/* Hidden native input - rendered directly */}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        onChange={handleInputChange}
-      />
 
       {label && <ThemedText style={styles.label}>{label}</ThemedText>}
       {description && (
@@ -105,6 +88,7 @@ export default function UploadImage({
               title="تغییر"
               type="outline"
               isLoading={isPending}
+              style={{ width: 94, marginTop: 16 }}
               onPress={() => setModalVisible(true)}
             />
           </>
@@ -135,24 +119,51 @@ export default function UploadImage({
       <Modal visible={modalVisible} transparent animationType="slide">
         <View style={styles.webModalBackdrop}>
           <View style={[styles.webModalContent, { width: maxWidth }]}>
-            <Text style={styles.webModalTitle}>انتخاب عکس</Text>
+            <ThemedText style={styles.webModalTitle}>انتخاب عکس</ThemedText>
+
+            {/* Hidden Inputs */}
+            <input
+              id="upload-gallery"
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={(e) => handleInputChange(e)}
+            />
+
+            <input
+              id="upload-camera"
+              type="file"
+              accept="image/*"
+              capture="environment"
+              style={{ display: "none" }}
+              onChange={(e) => handleInputChange(e)}
+            />
 
             <View style={styles.webOptions}>
+              {/* Camera button */}
               <TouchableOpacity
-                style={styles.webOptionButton}
-                onPress={() => triggerInput(true)} // camera
+                onPress={() => {
+                  setModalVisible(false);
+                  setCameraVisible(true);
+                }}
+                style={styles.webOptionButtonLabel}
               >
                 <Camera size={20} color={Colors.semiBlack} />
-                <Text style={styles.webOptionText}>گرفتن با دوربین</Text>
+                <ThemedText style={styles.webOptionText}>
+                  گرفتن با دوربین
+                </ThemedText>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.webOptionButton}
-                onPress={() => triggerInput(false)} // gallery
+              {/* Gallery button */}
+              <label
+                htmlFor="upload-gallery"
+                style={styles.webOptionButtonLabel}
               >
                 <Gallery size={20} color={Colors.semiBlack} />
-                <Text style={styles.webOptionText}>انتخاب از گالری</Text>
-              </TouchableOpacity>
+                <ThemedText style={styles.webOptionText}>
+                  انتخاب از گالری
+                </ThemedText>
+              </label>
             </View>
 
             <ThemedButton
@@ -164,6 +175,22 @@ export default function UploadImage({
           </View>
         </View>
       </Modal>
+      <CameraModalWeb
+        visible={cameraVisible}
+        onClose={() => setCameraVisible(false)}
+        onCapture={(blob) => {
+          console.log({ blob });
+          const file = blobToFile(blob, "photo.jpg");
+
+          upload(file, {
+            onSuccess: (url) => field.onChange(url),
+            onError: () =>
+              showToast({ type: "error", message: "خطا! دوباره تلاش کنید." }),
+          });
+
+          setCameraVisible(false);
+        }}
+      />
     </View>
   );
 }
@@ -201,6 +228,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
+    alignSelf: "center",
   },
   webModalTitle: {
     fontSize: 18,
@@ -221,4 +249,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   webOptionText: { marginTop: 10 },
+  webOptionButtonLabel: {
+    flex: 1,
+    padding: 16,
+    marginHorizontal: 6,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.mediumGray,
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    display: "flex",
+    flexDirection: "column",
+    fontFamily: FontType.YekanBakhBold,
+  },
 });
