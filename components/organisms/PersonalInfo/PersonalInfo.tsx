@@ -84,7 +84,6 @@ const PersonalInfo = () => {
   }, [nationalCode, profileData]);
 
   const years = generateYears();
-  console.log("uuu", years);
 
   return (
     <FormProvider {...methods}>
