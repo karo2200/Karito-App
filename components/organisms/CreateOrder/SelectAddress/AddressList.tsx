@@ -54,8 +54,8 @@ export default function AddressList({
   }, [data]);
 
   const onPress = () => {
-    onClose?.();
     router.push("/CreateAddress");
+    onClose?.();
   };
 
   const renderItem = ({ item, index }) => (
@@ -97,7 +97,7 @@ export default function AddressList({
 const styles = StyleSheet.create({
   btn: { width: "100%", marginTop: 70, bottom: 30 },
 
-  container: { width: "100%", flex: 1 },
+  container: { width: "100%", flex: 1, alignItems: "center" },
 
   editIcon: { backgroundColor: Colors.background },
 
