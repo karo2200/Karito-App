@@ -78,7 +78,9 @@ export default function AddressList({
         onEndReached={onLoadMore}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          setEmptyState ? () => <EmptyAddressState /> : undefined
+          setEmptyState
+            ? () => <EmptyAddressState onPressNewAddress={onPress} />
+            : undefined
         }
       />
       {adresses?.length > 0 && (

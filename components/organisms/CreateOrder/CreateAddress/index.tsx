@@ -2,7 +2,7 @@ import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { useToast } from "@/components/atoms/Toast";
-import { DeviceHeight, maxWidth } from "@/constants/Dimension";
+import { DeviceHeight } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
   useAddress_CreateMutation,
@@ -267,7 +267,7 @@ export default function AddressMap() {
 const styles = StyleSheet.create({
   container: { flexGrow: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
 
-  flex1: { flex: 1 },
+  flex1: { flex: 1, alignItems: "center" },
 
   mapView: { height: DeviceHeight * 0.35, width: "100%" },
 
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 18,
     marginBottom: 50,
-    width: maxWidth * 0.93,
+    width: "100%",
     alignSelf: "center",
   },
 
