@@ -35,6 +35,11 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
             VerificationStatus.Rejected
           }
           isLoggedIn={isLoggedIn}
+          isComplete={
+            profileData?.firstName &&
+            profileData?.lastName &&
+            profileData?.idCardImageUrl
+          }
         />
         <InfoList
           title={"مدارک"}
@@ -54,6 +59,7 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
             profileData?.specializedDocumentsVerificationStatus ===
             VerificationStatus.Rejected
           }
+          isComplete={profileData?.specializedDocumentUrls?.length > 0}
         />
         {!isLoggedIn && (
           <InfoList
@@ -69,6 +75,7 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
               profileData?.identityVerificationVideoStatus ===
               VerificationStatus.Rejected
             }
+            isComplete={!!profileData?.identityVerificationVideoUrl}
           />
         )}
       </View>
@@ -126,12 +133,14 @@ const InfoList = ({
   isVerified,
   isReject,
   isLoggedIn,
+  isComplete = false,
 }: {
   isVerified: boolean;
   isReject: boolean;
   title: string;
   onPress: () => void;
   isLoggedIn?: boolean;
+  isComplete?: boolean;
 }) => {
   return (
     <View style={styles.container}>
@@ -162,7 +171,13 @@ const InfoList = ({
                   : Colors.darkGray,
             }}
           >
-            {isVerified ? "تایید شده" : isReject ? "رد شده" : "در انتظار تایید"}
+            {isVerified
+              ? "تایید شده"
+              : isReject
+                ? "رد شده"
+                : isComplete
+                  ? "در انتظار تایید"
+                  : "در انتظار تکمیل"}
           </ThemedText>
         </View>
       </View>

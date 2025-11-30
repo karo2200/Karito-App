@@ -1,7 +1,7 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  SpecialistProfileDto,
+  SpecialistDto,
   useSpecialist_SetLocationAndSpecialtyMutation,
   VerificationStatus,
 } from "@/generated/graphql";
@@ -47,7 +47,7 @@ export default function useExpertHook() {
 
   const { data: expertData } = useGetSpecialistProfile();
 
-  const profileData: SpecialistProfileDto =
+  const profileData: SpecialistDto =
     expertData?.specialist_getMyProfile?.result;
   console.log(JSON.stringify({ profileData }));
   useEffect(() => {

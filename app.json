@@ -30,6 +30,15 @@
           "action": "VIEW",
           "data": [
             {
+              "scheme": "karitoapp"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        },
+        {
+          "action": "VIEW",
+          "data": [
+            {
               "scheme": "https",
               "host": "karito.com",
               "pathPrefix": "/payments"
