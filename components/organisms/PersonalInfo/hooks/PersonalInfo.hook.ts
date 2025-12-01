@@ -16,7 +16,7 @@ export default function usePersonalInfoHook() {
 
   const { showToast } = useToast();
 
-  const { nationalCode } = authCacheStore();
+  const { nationalCode, isLoggedIn } = authCacheStore();
 
   const queryClient = useQueryClient();
 
@@ -58,7 +58,11 @@ export default function usePersonalInfoHook() {
               message: "اطلاعات با موفقیت ثبت شد.",
               type: "success",
             });
-            router.back();
+            if (isLoggedIn) {
+              router.push("/profile");
+            } else {
+              router.back();
+            }
           } else {
             showToast({
               message: data?.specialist_setPersonalInformation?.status?.message,

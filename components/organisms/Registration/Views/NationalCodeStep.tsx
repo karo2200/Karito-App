@@ -35,10 +35,11 @@ const schema = yup.object().shape({
   code: yup
     .string()
     .matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید") // 👈 این خط
+    .test("is-valid-national-id", "کد ملی معتبر نیست", (value) => {
+      return value ? isValidIranNationalCode(value) : false;
+    })
     .length(10, "کد ملی باید ۱۰ رقم باشد")
-    .test("is-valid-national-id", "کد ملی معتبر نیست", (value) =>
-      value ? isValidIranNationalCode(value) : false
-    )
+
     .required("لطفا کد ملی خود را وارد کنید"),
 });
 

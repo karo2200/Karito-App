@@ -10,7 +10,7 @@ import { StyleSheet, View } from "react-native";
 import useExpertHook from "../hooks/Expert.hook";
 
 const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
-  const { router, profileData, isLoggedIn } = useExpertHook();
+  const { router, profileData, isLoggedIn, userAproved } = useExpertHook();
 
   return (
     <View>
@@ -61,7 +61,7 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
           }
           isComplete={profileData?.specializedDocumentUrls?.length > 0}
         />
-        {!isLoggedIn && (
+        {!userAproved && (
           <InfoList
             title={"احراز هویت"}
             onPress={() => {

@@ -28,11 +28,11 @@ const schema = yup.object().shape({
     .string()
     .length(10, "کد ملی بدرستی وارد نشده است")
     .required("لطفا کد ملی خود را وارد کنید"),
-  codeImage: yup.string().required(""),
+  codeImage: yup.string().required("عکس کارت ملی خود را وارد کنید"),
   year: yup.string(),
   month: yup.string(),
   day: yup.string(),
-  profilePhoto: yup.string(),
+  profilePhoto: yup.string().required("عکس خود را وارد کنید"),
 });
 
 const PersonalInfo = () => {
@@ -145,7 +145,7 @@ const PersonalInfo = () => {
           <UploadImage
             name="profilePhoto"
             control={control}
-            label="عکس پروفایل"
+            label="عکس پروفایل*"
             description="یک عکس برای پروفایل خود انتخاب کنید."
           />
           <ThemedInput
@@ -163,7 +163,7 @@ const PersonalInfo = () => {
             <UploadImage
               name="codeImage"
               control={control}
-              label="عکس کارت ملی"
+              label="عکس کارت ملی*"
               description="عکس کارت ملی خود را بارگذاری کنید."
             />
           )}

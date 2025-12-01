@@ -48,7 +48,7 @@ export const days = [
 
 export const generateYears = () => {
   const start = 1330;
-  const end = 1393;
+  const end = 1386;
 
   const result = [];
 
