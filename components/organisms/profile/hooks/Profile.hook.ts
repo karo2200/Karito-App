@@ -1,15 +1,21 @@
+import { useToast } from "@/components/atoms/Toast";
 import {
+  useAuth_SwitchRoleMutation,
+  UserType,
   useSpecialist_GetMyProfileQuery,
   useUser_GetMyProfileQuery,
   useUser_UpdateProfileMutation,
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Linking, Platform } from "react-native";
 
 export default function useProfileHook() {
   const router = useRouter();
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
 
   const [exitVisible, setExitVisible] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
@@ -21,6 +27,7 @@ export default function useProfileHook() {
     setIsLoggedIn,
     setAccessToken,
     setRefreshToken,
+    refreshToken,
   } = authCacheStore();
 
   const { data } = useUser_GetMyProfileQuery();
@@ -32,12 +39,56 @@ export default function useProfileHook() {
   const { mutate: updateMutate, isPending: updatePending } =
     useUser_UpdateProfileMutation();
 
+  const { mutate: switchMutate, isPending: switchPending } =
+    useAuth_SwitchRoleMutation();
+
   const onCallPress = () => {
     if (Platform.OS === "web") {
       window.location.href = `tel:${"0214443300"}`;
     } else {
       Linking.openURL(`tel:${"0214443300"}`);
     }
+  };
+
+  const onSwitchRole = () => {
+    switchMutate(
+      {
+        input: {
+          currentRefreshToken: refreshToken,
+          targetUserType: isExpert ? UserType.Customer : UserType.Specialist,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          console.log("11", data, refreshToken);
+          if (data?.auth_switchRole?.status?.code === 1) {
+            setAccessToken(data?.auth_switchRole?.result?.accessToken);
+            setRefreshToken(data?.auth_switchRole?.result?.refreshToken);
+            queryClient.invalidateQueries();
+            if (isExpert) {
+              setIsExpert(false);
+            } else {
+              setIsExpert(true);
+            }
+            showToast({
+              type: "success",
+              message: "اطلاعات با موفقیت بروز شد.",
+            });
+          } else {
+            if (data?.auth_switchRole?.status?.value === "UserNotFound") {
+              if (isExpert) {
+                setIsExpert(false);
+              } else {
+                setIsExpert(true);
+              }
+              setIsLoggedIn(false);
+              setAccessToken("");
+              setRefreshToken("");
+            }
+          }
+        },
+      }
+    );
   };
 
   return {
@@ -56,5 +107,7 @@ export default function useProfileHook() {
     setIsLoggedIn,
     setAccessToken,
     setRefreshToken,
+    onSwitchRole,
+    switchPending,
   };
 }

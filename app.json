@@ -16,7 +16,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.karitoapp",
-      "associatedDomains": ["applinks:karito.com"],
+      "associatedDomains": ["applinks:api.karito.net"],
       "config": {
         "googleMapsApiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
       },
@@ -40,8 +40,8 @@
           "data": [
             {
               "scheme": "https",
-              "host": "karito.com",
-              "pathPrefix": "/payments"
+              "host": "api.karito.net",
+              "pathPrefix": "/payment"
             }
           ],
           "category": ["BROWSABLE", "DEFAULT"]
