@@ -7,6 +7,7 @@ import {
   useUser_UpdateProfileMutation,
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
+import createOrderStore from "@/stores/createOrder";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -28,7 +29,10 @@ export default function useProfileHook() {
     setAccessToken,
     setRefreshToken,
     refreshToken,
+    clearAuth,
   } = authCacheStore();
+
+  const { clearAll } = createOrderStore();
 
   const { data } = useUser_GetMyProfileQuery();
 
@@ -81,6 +85,8 @@ export default function useProfileHook() {
               } else {
                 setIsExpert(true);
               }
+              clearAuth();
+              clearAll();
               setIsLoggedIn(false);
               setAccessToken("");
               setRefreshToken("");
