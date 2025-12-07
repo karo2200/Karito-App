@@ -10,7 +10,13 @@ import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { CallCalling } from "iconsax-react-native";
 import * as React from "react";
-import { Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import CustomerEditProfileSheet from "./Views/CustomerEditProfileSheet";
 import useProfileHook from "./hooks/Profile.hook";
 
@@ -20,15 +26,13 @@ export default function ProfileScreen() {
     setExitVisible,
     isExpert,
     onCallPress,
-    setIsExpert,
     router,
     userData,
     isLoggedIn,
-    setIsLoggedIn,
     editVisible,
     setEditVisible,
-    setAccessToken,
-    setRefreshToken,
+    onSwitchRole,
+    switchPending,
   } = useProfileHook();
 
   return (
@@ -145,21 +149,26 @@ export default function ProfileScreen() {
           activeOpacity={0.7}
           style={styles.payment}
           onPress={() => {
-            if (isExpert) {
-              setIsExpert(false);
-            } else {
-              setIsExpert(true);
-            }
-
-            setIsLoggedIn(false);
-            setAccessToken("");
-            setRefreshToken("");
+            onSwitchRole();
           }}
         >
-          <ThemedText fontType="bold" style={styles.textBtn}>
-            ورود به عنوان {isExpert ? "مشتری" : "متخصص"}
-          </ThemedText>
-          <Ionicons name="log-in-outline" size={24} color={Colors.hint500} />
+          {switchPending ? (
+            <ActivityIndicator
+              color={Colors.hint500}
+              style={{ paddingVertical: 2 }}
+            />
+          ) : (
+            <>
+              <ThemedText fontType="bold" style={styles.textBtn}>
+                ورود به عنوان {isExpert ? "مشتری" : "متخصص"}
+              </ThemedText>
+              <Ionicons
+                name="log-in-outline"
+                size={24}
+                color={Colors.hint500}
+              />
+            </>
+          )}
         </TouchableOpacity>
       )}
       <LogOutActionSheet

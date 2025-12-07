@@ -10,7 +10,7 @@ import * as yup from "yup";
 import useCertificateInfoHook from "./hooks/CertificateInfo.hook";
 
 const schema = yup.object().shape({
-  doc1: yup.string().required(""),
+  doc1: yup.string().required("لطفا حداقل یک مدرک وارد کنید"),
   doc2: yup.string(),
   doc3: yup.string(),
 });

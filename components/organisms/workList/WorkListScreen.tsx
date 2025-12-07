@@ -15,6 +15,7 @@ import {
   View,
 } from "react-native";
 import OrderCard from "../order/Views/OrderCard";
+import useExpertHook from "../Registration/hooks/Expert.hook";
 import useWorkOutHook from "./hooks/WorkList.hook";
 
 const { height } = Dimensions.get("screen");
@@ -31,6 +32,7 @@ export default function WorkListScreen() {
     setSearchText,
     isLoading,
   } = useWorkOutHook();
+  const { userAproved } = useExpertHook();
 
   const listRef = React.useRef<FlatList>(null);
 
@@ -82,7 +84,9 @@ export default function WorkListScreen() {
             <View style={styles.flex1}>
               <NoOrderIcon />
               <ThemedText style={styles.title}>
-                هیچ سفارشی در لیست ندارید!
+                {userAproved
+                  ? " هیچ سفارشی در لیست ندارید!"
+                  : "در انتظار تایید از طرف ادمین باشید"}
               </ThemedText>
             </View>
           )}

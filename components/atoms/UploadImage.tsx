@@ -1,13 +1,14 @@
 import UploadIcon from "@/assets/icons/Upload";
 import { Colors } from "@/constants/Colors";
 import { maxWidth } from "@/constants/Dimension";
+import { FontType } from "@/constants/Fonts";
 import { useUploadFile } from "@/graphql/upload";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { Camera, Gallery } from "iconsax-react-native";
 import React, { useRef } from "react";
 import { Control, useController } from "react-hook-form";
-import { Platform, Pressable, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import ThemedButton from "./ThemedButton";
 import ThemedText from "./ThemedText";
@@ -32,7 +33,7 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
 
   const { showToast } = useToast();
 
-  const { field } = useController({
+  const { field, fieldState } = useController({
     control,
     name,
   });
@@ -143,7 +144,9 @@ const UploadImage: React.FC<UploadImageFieldProps> = ({
           </>
         )}
       </View>
-
+      {fieldState.error?.message && (
+        <Text style={styles.errorTxt}>{fieldState.error?.message}</Text>
+      )}
       {/* Action Sheet */}
       <ActionSheet
         ref={actionSheetRef}
@@ -207,5 +210,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingBottom: 50,
+  },
+
+  errorTxt: {
+    color: Colors.darkError,
+    fontSize: 12,
+    fontFamily: FontType.YekanBakhRegular,
+    textAlign: "right",
   },
 });
