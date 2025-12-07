@@ -6,7 +6,7 @@ import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import ThemedText from "@/components/atoms/ThemedText";
 import UploadImage from "@/components/atoms/UploadImage";
-import { days, monthsName } from "@/constants/StaticData";
+import { days, generateYears, monthsName } from "@/constants/StaticData";
 import { VerificationStatus } from "@/generated/graphql";
 import { parseDate } from "@/services/ParseData";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -28,11 +28,11 @@ const schema = yup.object().shape({
     .string()
     .length(10, "کد ملی بدرستی وارد نشده است")
     .required("لطفا کد ملی خود را وارد کنید"),
-  codeImage: yup.string().required(""),
-  year: yup.string().matches(/^[0-9]+$/, "لطفا فقط اعداد انگلیسی وارد کنید"),
+  codeImage: yup.string().required("عکس کارت ملی خود را وارد کنید"),
+  year: yup.string(),
   month: yup.string(),
   day: yup.string(),
-  profilePhoto: yup.string(),
+  profilePhoto: yup.string().required("عکس خود را وارد کنید"),
 });
 
 const PersonalInfo = () => {
@@ -83,6 +83,8 @@ const PersonalInfo = () => {
       ));
   }, [nationalCode, profileData]);
 
+  const years = generateYears();
+
   return (
     <FormProvider {...methods}>
       <ScreenNameWithBack title="اطلاعات شخصی" />
@@ -107,13 +109,20 @@ const PersonalInfo = () => {
           />
           <ThemedText style={styles.birthdate}>تاریخ تولد</ThemedText>
           <View style={styles.rowView}>
-            <ThemedInput
+            {/* <ThemedInput
               {...register("year")}
               placeholder="سال"
               keyboardType="numeric"
               maxLength={4}
               style={{ width: "40%" }}
               forcePersianNumbers
+            /> */}
+            <DropDownPicker
+              {...register("year")}
+              label="سال"
+              data={years}
+              width={"40%"}
+              right={Platform.OS === "web" ? "10%" : "-25%"}
             />
 
             <DropDownPicker
@@ -136,7 +145,7 @@ const PersonalInfo = () => {
           <UploadImage
             name="profilePhoto"
             control={control}
-            label="عکس پروفایل"
+            label="عکس پروفایل*"
             description="یک عکس برای پروفایل خود انتخاب کنید."
           />
           <ThemedInput
@@ -154,7 +163,7 @@ const PersonalInfo = () => {
             <UploadImage
               name="codeImage"
               control={control}
-              label="عکس کارت ملی"
+              label="عکس کارت ملی*"
               description="عکس کارت ملی خود را بارگذاری کنید."
             />
           )}

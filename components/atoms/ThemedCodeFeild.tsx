@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   cell: {
     width: 46,
     height: 46,
-    lineHeight: 29,
+    lineHeight: 46,
     fontSize: 24,
     borderWidth: 1,
     textAlignVertical: "center",

@@ -1,7 +1,7 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
-  SpecialistProfileDto,
+  SpecialistDto,
   useSpecialist_SetLocationAndSpecialtyMutation,
   VerificationStatus,
 } from "@/generated/graphql";
@@ -15,7 +15,10 @@ import {
   useGetAllprovinceQuery,
 } from "../../home/hooks/Home.query";
 import { useGetSpecialistProfile } from "../../PersonalInfo/hooks/personalInfo.query";
-import { useGetSubServiceCategoriesQuery } from "../../service/hooks";
+import {
+  useGetServiceCategoriesQuery,
+  useGetSubServiceCategoriesQuery,
+} from "../../service/hooks";
 import { useGetServiceTypesQuery } from "../../subService/hooks";
 
 export default function useExpertHook() {
@@ -47,9 +50,9 @@ export default function useExpertHook() {
 
   const { data: expertData } = useGetSpecialistProfile();
 
-  const profileData: SpecialistProfileDto =
+  const profileData: SpecialistDto =
     expertData?.specialist_getMyProfile?.result;
-  console.log(JSON.stringify({ profileData }));
+
   useEffect(() => {
     if (!isLoggedIn) {
       if (
@@ -84,6 +87,8 @@ export default function useExpertHook() {
   const { data: subCategoriesData } = useGetSubServiceCategoriesQuery({
     take: 50,
   });
+
+  const { data: categoriesData } = useGetServiceCategoriesQuery({ take: 100 });
 
   const { data: serviceTypeData } = useGetServiceTypesQuery({
     take: 100,
@@ -132,6 +137,36 @@ export default function useExpertHook() {
     return phone.replace(/^\+98/, "0");
   }
 
+  const canGoNext = Boolean(
+    profileData?.firstName &&
+      profileData?.lastName &&
+      profileData?.idCardImageUrl &&
+      profileData?.identityVerificationVideoUrl &&
+      profileData?.nationalCode &&
+      profileData?.phoneNumber &&
+      profileData?.profileImageUrl &&
+      profileData?.specializedDocumentUrls?.length > 0
+  );
+
+  if (canGoNext) {
+    showToast({
+      message: "منتظر تایید از طرف ادمین باشید",
+      type: "success",
+    });
+  }
+
+  const userAproved =
+    profileData?.specializedDocumentsVerificationStatus ===
+      VerificationStatus.Approved &&
+    profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
+    profileData?.identityVerificationVideoStatus ===
+      VerificationStatus.Approved;
+
+  const onLoginWithoutVerify = () => {
+    setIsExpert(true);
+    setIsLoggedIn(true);
+  };
+
   return {
     router,
     page,
@@ -159,5 +194,10 @@ export default function useExpertHook() {
     nationalCode: profileData?.nationalCode ?? nationalCode,
     isLoggedIn,
     onLoadMoreCity,
+    categoriesData:
+      (categoriesData?.pages as [{ name: string; id: string }]) ?? [],
+    canGoNext,
+    onLoginWithoutVerify,
+    userAproved,
   };
 }

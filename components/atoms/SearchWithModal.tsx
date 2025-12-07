@@ -5,6 +5,7 @@ import authCacheStore from "@/stores/authCacheStore";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { FlatList, Pressable, StyleSheet, TextInput, View } from "react-native";
+import useServiceTabHook from "../organisms/service/serviceHook";
 import ThemedText from "./ThemedText";
 
 export default function SearchWithModal({
@@ -17,7 +18,8 @@ export default function SearchWithModal({
   const [search, setSearch] = useState("");
   const [filtered, setFiltered] = useState<CityDto[]>([]);
 
-  const { setCustomerCity, customerCity, setCustomerCityId } = authCacheStore();
+  const { setCustomerCity, setCustomerCityId } = authCacheStore();
+  const { onCityPress } = useServiceTabHook();
 
   const handleSearch = (text: string) => {
     setSearch(text);
@@ -34,6 +36,7 @@ export default function SearchWithModal({
     setFiltered([]);
     setCustomerCity(item?.name);
     setCustomerCityId(item?.id);
+    onCityPress(item);
     onSelect?.();
   };
 

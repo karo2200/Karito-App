@@ -113,7 +113,9 @@ export default function RootLayout() {
               }}
               listeners={{
                 focus: () => {
-                  router.replace("/(expertTabs)/workList");
+                  setTimeout(() => {
+                    router.replace("/(expertTabs)/workList");
+                  }, 100);
                 },
               }}
             />

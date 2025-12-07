@@ -77,6 +77,8 @@ export const authCacheStore = create<AuthCacheType>(
           isLoggedIn: false,
           isExpert: undefined,
           nationalCode: "",
+          customerCity: "",
+          userId: "",
           phone: "",
           isSelectRole: false,
         }),

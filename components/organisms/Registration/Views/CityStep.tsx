@@ -42,6 +42,7 @@ const CityStep = ({
     stepPending,
     isLoggedIn,
     onLoadMoreCity,
+    categoriesData,
   } = useExpertHook();
 
   const { ...methods } = useForm({
@@ -60,6 +61,8 @@ const CityStep = ({
     formState: { errors },
     control,
     watch,
+    setValue,
+    resetField,
   } = methods;
 
   const onPress = (formData: any) => {
@@ -69,6 +72,9 @@ const CityStep = ({
   useEffect(() => {
     setProvince(watch("state"));
     setCategory(watch("profession"));
+    if (profileData?.serviceSubCategory?.id !== watch("profession")) {
+      setValue("serviceTypes", []);
+    }
   }, [watch("state"), watch("profession")]);
 
   return (

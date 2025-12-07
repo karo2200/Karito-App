@@ -175,6 +175,11 @@ export type AdminDtoSortInput = {
   registeredAt?: InputMaybe<SortEnumType>;
 };
 
+export type AdminRequestOtpInput = {
+  phoneNumber: Scalars["String"]["input"];
+  targetUserType: UserType;
+};
+
 export type ApplyDiscountCodeToServiceRequestInput = {
   discountCode: Scalars["String"]["input"];
   serviceRequestId: Scalars["UUID"]["input"];
@@ -322,6 +327,7 @@ export type CancellationReasonDto = {
   __typename?: "CancellationReasonDto";
   id: Scalars["UUID"]["output"];
   name: Scalars["String"]["output"];
+  targets: Array<UserType>;
 };
 
 /** A segment of a collection. */
@@ -339,6 +345,7 @@ export type CancellationReasonDtoFilterInput = {
   id?: InputMaybe<UuidOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<CancellationReasonDtoFilterInput>>;
+  targets?: InputMaybe<ListUserTypeOperationFilterInput>;
 };
 
 export type CancellationReasonDtoSortInput = {
@@ -455,6 +462,7 @@ export type CreateBannerInput = {
 
 export type CreateCancellationReasonInput = {
   name: Scalars["String"]["input"];
+  targets: Array<UserType>;
 };
 
 export type CreateCarouselInput = {
@@ -1197,6 +1205,13 @@ export type ListStringOperationFilterInput = {
   some?: InputMaybe<StringOperationFilterInput>;
 };
 
+export type ListUserTypeOperationFilterInput = {
+  all?: InputMaybe<UserTypeOperationFilterInput>;
+  any?: InputMaybe<Scalars["Boolean"]["input"]>;
+  none?: InputMaybe<UserTypeOperationFilterInput>;
+  some?: InputMaybe<UserTypeOperationFilterInput>;
+};
+
 export enum LocationType {
   Commercial = "COMMERCIAL",
   Office = "OFFICE",
@@ -1222,8 +1237,10 @@ export type Mutation = {
   address_update: SingleResponseBaseOfAddressDto;
   /** Allows an owner to create a new admin user. */
   admin_create: ResponseBase;
+  auth_adminRequestOtpForUser: ResponseBaseOfString;
   auth_refreshToken: ResponseBaseOfAuthResult;
   auth_requestOtp: ResponseBase;
+  auth_switchRole: ResponseBaseOfAuthResult;
   auth_verifyOtp: ResponseBaseOfAuthResult;
   banner_create: ResponseBaseOfBannerDto;
   banner_delete: ResponseBase;
@@ -1308,12 +1325,20 @@ export type MutationAdmin_CreateArgs = {
   input: CreateAdminInput;
 };
 
+export type MutationAuth_AdminRequestOtpForUserArgs = {
+  input: AdminRequestOtpInput;
+};
+
 export type MutationAuth_RefreshTokenArgs = {
   input: RefreshTokenRequestInput;
 };
 
 export type MutationAuth_RequestOtpArgs = {
   input: RequestOtpInput;
+};
+
+export type MutationAuth_SwitchRoleArgs = {
+  input: SwitchRoleInput;
 };
 
 export type MutationAuth_VerifyOtpArgs = {
@@ -2114,6 +2139,12 @@ export type ResponseBaseOfSpecialistRevenueDto = {
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
+export type ResponseBaseOfString = {
+  __typename?: "ResponseBaseOfString";
+  result?: Maybe<Scalars["String"]["output"]>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
 export type ResponseBaseOfTotalRevenueDto = {
   __typename?: "ResponseBaseOfTotalRevenueDto";
   result?: Maybe<TotalRevenueDto>;
@@ -2657,6 +2688,11 @@ export type SubscriptionOnServiceRequestStatusChangedArgs = {
   userId: Scalars["UUID"]["input"];
 };
 
+export type SwitchRoleInput = {
+  currentRefreshToken: Scalars["String"]["input"];
+  targetUserType: UserType;
+};
+
 export type TotalRevenueDto = {
   __typename?: "TotalRevenueDto";
   totalGross: Scalars["Decimal"]["output"];
@@ -2684,6 +2720,7 @@ export type UpdateBannerInput = {
 export type UpdateCancellationReasonInput = {
   id: Scalars["UUID"]["input"];
   name: Scalars["String"]["input"];
+  targets: Array<UserType>;
 };
 
 export type UpdateCarouselInput = {
@@ -2773,6 +2810,13 @@ export enum UserType {
   Customer = "CUSTOMER",
   Specialist = "SPECIALIST",
 }
+
+export type UserTypeOperationFilterInput = {
+  eq?: InputMaybe<UserType>;
+  in?: InputMaybe<Array<UserType>>;
+  neq?: InputMaybe<UserType>;
+  nin?: InputMaybe<Array<UserType>>;
+};
 
 export type UuidOperationFilterInput = {
   eq?: InputMaybe<Scalars["UUID"]["input"]>;
@@ -2889,6 +2933,23 @@ export type Auth_RefreshTokenMutationVariables = Exact<{
 export type Auth_RefreshTokenMutation = {
   __typename?: "Mutation";
   auth_refreshToken: {
+    __typename?: "ResponseBaseOfAuthResult";
+    status?: any | null;
+    result?: {
+      __typename?: "AuthResult";
+      accessToken: string;
+      refreshToken: string;
+    } | null;
+  };
+};
+
+export type Auth_SwitchRoleMutationVariables = Exact<{
+  input: SwitchRoleInput;
+}>;
+
+export type Auth_SwitchRoleMutation = {
+  __typename?: "Mutation";
+  auth_switchRole: {
     __typename?: "ResponseBaseOfAuthResult";
     status?: any | null;
     result?: {
@@ -4348,6 +4409,45 @@ export const useAuth_RefreshTokenMutation = <
     mutationFn: (variables?: Auth_RefreshTokenMutationVariables) =>
       fetcher<Auth_RefreshTokenMutation, Auth_RefreshTokenMutationVariables>(
         Auth_RefreshTokenDocument,
+        variables,
+      )(),
+    ...options,
+  });
+};
+
+export const Auth_SwitchRoleDocument = `
+    mutation auth_switchRole($input: SwitchRoleInput!) {
+  auth_switchRole(input: $input) {
+    status
+    result {
+      accessToken
+      refreshToken
+    }
+  }
+}
+    `;
+
+export const useAuth_SwitchRoleMutation = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: UseMutationOptions<
+    Auth_SwitchRoleMutation,
+    TError,
+    Auth_SwitchRoleMutationVariables,
+    TContext
+  >,
+) => {
+  return useMutation<
+    Auth_SwitchRoleMutation,
+    TError,
+    Auth_SwitchRoleMutationVariables,
+    TContext
+  >({
+    mutationKey: ["auth_switchRole"],
+    mutationFn: (variables?: Auth_SwitchRoleMutationVariables) =>
+      fetcher<Auth_SwitchRoleMutation, Auth_SwitchRoleMutationVariables>(
+        Auth_SwitchRoleDocument,
         variables,
       )(),
     ...options,
