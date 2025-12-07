@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    minHeight: height / 3.5,
+    maxHeight: height / 3.5,
     width: Platform.OS === "web" ? maxWidth : "100%",
   },
 
