@@ -2876,6 +2876,13 @@ export type Address_CreateMutation = {
   address_create: {
     __typename?: "SingleResponseBaseOfAddressDto";
     status?: any | null;
+    result?: {
+      __typename?: "AddressDto";
+      id: any;
+      title: string;
+      text: string;
+      city: { __typename?: "CityDto"; id: any; name: string };
+    } | null;
   };
 };
 
@@ -4213,6 +4220,15 @@ export const Address_CreateDocument = `
     mutation address_create($input: AddAddressInput!) {
   address_create(input: $input) {
     status
+    result {
+      id
+      city {
+        id
+        name
+      }
+      title
+      text
+    }
   }
 }
     `;

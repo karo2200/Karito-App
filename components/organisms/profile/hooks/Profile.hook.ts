@@ -93,6 +93,9 @@ export default function useProfileHook() {
             }
           }
         },
+        onError: (edata) => {
+          console.log(JSON.stringify({ edata }));
+        },
       }
     );
   };

@@ -5,10 +5,13 @@ import { useToast } from "@/components/atoms/Toast";
 import { DeviceHeight } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  AddressDto,
   useAddress_CreateMutation,
+  useAddress_SetPrimaryMutation,
   useAddress_UpdateMutation,
   useUser_GetMyProfileQuery,
 } from "@/generated/graphql";
+import createOrderStore from "@/stores/createOrder";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
@@ -43,6 +46,15 @@ export default function AddressMap() {
   const editItem = useRoute().params;
 
   const toast = useToast();
+
+  const {
+    setAddressId,
+    setCustomerCity,
+    setCustomerCityId,
+    setAddress,
+    addressId,
+    address,
+  } = createOrderStore();
 
   const { data: addressData } = useGetUserAddressesQuery({
     where: { id: { eq: editItem?.id } },
@@ -108,8 +120,27 @@ export default function AddressMap() {
   const { mutate, isPending } = useAddress_CreateMutation();
   const { mutate: editMutate, isPending: isUpdating } =
     useAddress_UpdateMutation();
+  const { mutate: primaryMutate, isPending: primaryPending } =
+    useAddress_SetPrimaryMutation();
 
   const queryClient = useQueryClient();
+
+  const setPrimaryAddress = (address: AddressDto) => {
+    primaryMutate(
+      { input: { addressId: address?.id } },
+      {
+        onSuccess: (data) => {
+          setAddressId(address?.id);
+          setCustomerCity(address?.city?.name);
+          setCustomerCityId(address?.city?.id);
+          setAddress(address?.text);
+          router?.back();
+        },
+        onError: () => router?.back(),
+      }
+    );
+  };
+
   const onPress = (formData) => {
     const input = {
       latitude: formData?.lat,
@@ -164,7 +195,7 @@ export default function AddressMap() {
                 queryKey: [queryKeys.address_getMyAddresses],
                 exact: false,
               });
-              router?.back();
+              setPrimaryAddress(data?.address_create?.result);
             } else if (resultCode === 0) {
               toast.showToast({
                 message: "آدرس در محدوده تحت پوشش کاریتو قرار ندارد.",
@@ -257,7 +288,7 @@ export default function AddressMap() {
       <ThemedButton
         title="ذخیره"
         onPress={handleSubmit(onPress)}
-        isLoading={isPending || isUpdating}
+        isLoading={isPending || isUpdating || primaryPending}
         style={styles.button}
       />
     </ThemedView>

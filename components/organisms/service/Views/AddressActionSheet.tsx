@@ -1,10 +1,13 @@
 import { Divider, ThemedText, ThemedView } from "@/components";
 import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import createOrderStore from "@/stores/createOrder";
-import { forwardRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { StyleSheet } from "react-native";
-import ActionSheet, { SheetDefinition } from "react-native-actions-sheet";
+import ActionSheet, {
+  ActionSheetRef,
+  SheetDefinition,
+} from "react-native-actions-sheet";
 import AddressList from "../../CreateOrder/SelectAddress/AddressList";
 declare module "react-native-actions-sheet" {
   interface Sheets {
@@ -21,6 +24,7 @@ const AddressActionSheet = forwardRef(
     ref
   ) => {
     const { setAddressId, setAddress } = createOrderStore();
+    const innerRef = useRef<ActionSheetRef>(null);
     const methods = useForm<Record<string, any>, object>({
       mode: "onChange",
     });
@@ -32,12 +36,19 @@ const AddressActionSheet = forwardRef(
       onCityPress(item);
       closeActionSheet?.();
     };
+    useImperativeHandle(ref, () => ({
+      show: () => {
+        innerRef?.current?.show();
+      },
+      hide: () => {
+        innerRef.current?.hide();
+      },
+    }));
 
     return (
       <ActionSheet
-        ref={ref}
+        ref={innerRef}
         keyboardHandlerEnabled={false}
-        id="addresslist-sheet"
         containerStyle={styles.containerStyle}
         onClose={() => closeActionSheet?.()}
       >
