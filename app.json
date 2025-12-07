@@ -6,7 +6,11 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "karitoapp",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -20,7 +24,10 @@
       "config": {
         "googleMapsApiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
       },
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "allowBackup": false,
@@ -44,7 +51,10 @@
               "pathPrefix": "/payment"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ],
       "icon": "./assets/images/icon.png",
@@ -130,7 +140,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "0a0c8be9-6922-475d-9f10-37155d496d98"
+        "projectId": "2c8e2eb3-e89d-4207-940e-047a47fc1c5b"
       }
     }
   }
