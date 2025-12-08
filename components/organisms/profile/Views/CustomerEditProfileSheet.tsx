@@ -67,7 +67,15 @@ const CustomerEditProfileSheet = ({
     handleSubmit,
     register,
     formState: { errors },
+    setValue,
   } = methods;
+
+  useEffect(() => {
+    if (userData) {
+      setValue("family", userData?.lastName);
+      setValue("name", userData?.firstName);
+    }
+  }, [userData]);
 
   const onRegistrationPress = (formData: any) => {
     updateMutate(

@@ -178,8 +178,8 @@ export default function useExpertHook() {
     exitVisible,
     setExitVisible,
     phoneNumber:
-      params?.phone ??
-      phone ??
+      params?.phone ||
+      phone ||
       convertIranPhoneNumber(profileData?.phoneNumber),
     onRegistrationPress,
     provincePending,
