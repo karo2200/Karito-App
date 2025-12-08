@@ -300,7 +300,7 @@ export default function AddressMap() {
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
+  container: { flexGrow: 1, backgroundColor: "#fff" },
 
   flex1: { flex: 1, alignItems: "center" },
 
