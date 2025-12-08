@@ -2876,6 +2876,13 @@ export type Address_CreateMutation = {
   address_create: {
     __typename?: "SingleResponseBaseOfAddressDto";
     status?: any | null;
+    result?: {
+      __typename?: "AddressDto";
+      id: any;
+      title: string;
+      text: string;
+      city: { __typename?: "CityDto"; id: any; name: string };
+    } | null;
   };
 };
 
@@ -3072,6 +3079,7 @@ export type City_GetAllQuery = {
         id: any;
         isActive: boolean;
         name: string;
+        boundary: string;
         province: { __typename?: "ProvinceDto"; id: any; name: string };
         activeBanner?: {
           __typename?: "BannerDto";
@@ -4213,6 +4221,15 @@ export const Address_CreateDocument = `
     mutation address_create($input: AddAddressInput!) {
   address_create(input: $input) {
     status
+    result {
+      id
+      city {
+        id
+        name
+      }
+      title
+      text
+    }
   }
 }
     `;
@@ -4727,6 +4744,7 @@ export const City_GetAllDocument = `
         id
         isActive
         name
+        boundary
         province {
           id
           name

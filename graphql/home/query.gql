@@ -10,6 +10,7 @@ query city_getAll(
         id
         isActive
         name
+        boundary
         province {
           id
           name

@@ -5,7 +5,11 @@ import { FontStyle } from "@/constants/Fonts";
 import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 
-export default function EmptyAddressState() {
+export default function EmptyAddressState({
+  onPressNewAddress,
+}: {
+  onPressNewAddress?: () => void;
+}) {
   const router = useRouter();
 
   const onPress = () => {
@@ -23,7 +27,7 @@ export default function EmptyAddressState() {
         title="افزودن آدرس جدید"
         fontType={FontStyle.bold}
         style={styles.btn}
-        onPress={onPress}
+        onPress={onPressNewAddress ?? onPress}
         type="outline"
       />
     </ThemedView>

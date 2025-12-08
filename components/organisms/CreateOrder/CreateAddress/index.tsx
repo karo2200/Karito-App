@@ -2,13 +2,16 @@ import { Divider, ThemedButton, ThemedText, ThemedView } from "@/components";
 import Breadcrumb from "@/components/atoms/Breadcrumb";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { useToast } from "@/components/atoms/Toast";
-import { DeviceHeight, maxWidth } from "@/constants/Dimension";
+import { DeviceHeight } from "@/constants/Dimension";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  AddressDto,
   useAddress_CreateMutation,
+  useAddress_SetPrimaryMutation,
   useAddress_UpdateMutation,
   useUser_GetMyProfileQuery,
 } from "@/generated/graphql";
+import createOrderStore from "@/stores/createOrder";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRoute } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,6 +21,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
+import { useGetAllCityQuery } from "../../home/hooks/Home.query";
 import GoogleMapView from "./GoogleMapView";
 
 const schema = yup.object().shape({
@@ -42,7 +46,18 @@ const schema = yup.object().shape({
 export default function AddressMap() {
   const editItem = useRoute().params;
 
+  const { data: cities } = useGetAllCityQuery();
+  console.log(JSON.stringify({ cities }));
   const toast = useToast();
+
+  const {
+    setAddressId,
+    setCustomerCity,
+    setCustomerCityId,
+    setAddress,
+    addressId,
+    address,
+  } = createOrderStore();
 
   const { data: addressData } = useGetUserAddressesQuery({
     where: { id: { eq: editItem?.id } },
@@ -108,8 +123,27 @@ export default function AddressMap() {
   const { mutate, isPending } = useAddress_CreateMutation();
   const { mutate: editMutate, isPending: isUpdating } =
     useAddress_UpdateMutation();
+  const { mutate: primaryMutate, isPending: primaryPending } =
+    useAddress_SetPrimaryMutation();
 
   const queryClient = useQueryClient();
+
+  const setPrimaryAddress = (address: AddressDto) => {
+    primaryMutate(
+      { input: { addressId: address?.id } },
+      {
+        onSuccess: (data) => {
+          setAddressId(address?.id);
+          setCustomerCity(address?.city?.name);
+          setCustomerCityId(address?.city?.id);
+          setAddress(address?.text);
+          router?.back();
+        },
+        onError: () => router?.back(),
+      }
+    );
+  };
+
   const onPress = (formData) => {
     const input = {
       latitude: formData?.lat,
@@ -164,7 +198,7 @@ export default function AddressMap() {
                 queryKey: [queryKeys.address_getMyAddresses],
                 exact: false,
               });
-              router?.back();
+              setPrimaryAddress(data?.address_create?.result);
             } else if (resultCode === 0) {
               toast.showToast({
                 message: "آدرس در محدوده تحت پوشش کاریتو قرار ندارد.",
@@ -249,6 +283,7 @@ export default function AddressMap() {
                     }
                   : undefined
               }
+              cities={cities?.pages}
               ref={mapRef}
             />
           </ThemedView>
@@ -257,7 +292,7 @@ export default function AddressMap() {
       <ThemedButton
         title="ذخیره"
         onPress={handleSubmit(onPress)}
-        isLoading={isPending || isUpdating}
+        isLoading={isPending || isUpdating || primaryPending}
         style={styles.button}
       />
     </ThemedView>
@@ -267,7 +302,7 @@ export default function AddressMap() {
 const styles = StyleSheet.create({
   container: { flexGrow: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
 
-  flex1: { flex: 1 },
+  flex1: { flex: 1, alignItems: "center" },
 
   mapView: { height: DeviceHeight * 0.35, width: "100%" },
 
@@ -278,7 +313,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 18,
     marginBottom: 50,
-    width: maxWidth * 0.93,
+    width: "100%",
     alignSelf: "center",
   },
 
