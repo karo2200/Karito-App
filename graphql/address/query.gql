@@ -1,0 +1,6 @@
+query city_getAllBoundariesWkt {
+  city_getAllBoundariesWkt {
+    result
+    status
+  }
+}

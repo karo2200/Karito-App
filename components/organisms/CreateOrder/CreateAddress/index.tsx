@@ -9,6 +9,7 @@ import {
   useAddress_CreateMutation,
   useAddress_SetPrimaryMutation,
   useAddress_UpdateMutation,
+  useCity_GetAllBoundariesWktQuery,
   useUser_GetMyProfileQuery,
 } from "@/generated/graphql";
 import createOrderStore from "@/stores/createOrder";
@@ -21,7 +22,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
-import { useGetAllCityQuery } from "../../home/hooks/Home.query";
 import GoogleMapView from "./GoogleMapView";
 
 const schema = yup.object().shape({
@@ -46,8 +46,8 @@ const schema = yup.object().shape({
 export default function AddressMap() {
   const editItem = useRoute().params;
 
-  const { data: cities } = useGetAllCityQuery();
-  console.log(JSON.stringify({ cities }));
+  const { data: wkt } = useCity_GetAllBoundariesWktQuery();
+
   const toast = useToast();
 
   const {
@@ -283,7 +283,7 @@ export default function AddressMap() {
                     }
                   : undefined
               }
-              cities={cities?.pages}
+              wkt={wkt?.city_getAllBoundariesWkt?.result}
               ref={mapRef}
             />
           </ThemedView>

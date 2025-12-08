@@ -2,12 +2,46 @@ import * as Location from "expo-location";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Alert, Platform, StyleSheet } from "react-native";
 
+const parseWktMultiPolygon = (wkt) => {
+  // Remove SRID if exists
+  wkt = wkt.replace(/^SRID=\d+;/, "").trim();
+
+  if (!wkt.startsWith("MULTIPOLYGON")) {
+    throw new Error("Not a MULTIPOLYGON WKT");
+  }
+
+  // Remove the MULTIPOLYGON ( prefix and trailing ))
+  const inner = wkt
+    .replace("MULTIPOLYGON", "")
+    .trim()
+    .replace(/^\(\(\(/, "")
+    .replace(/\)\)\)$/, "");
+
+  // Split polygons
+  const polygonsRaw = inner.split(")), ((");
+
+  const polygons = polygonsRaw.map((polyStr) => {
+    // Split points
+    const points = polyStr.split(",").map((point) => {
+      const [lng, lat] = point.trim().split(" ").map(Number);
+      return { latitude: lat, longitude: lng };
+    });
+    return points;
+  });
+
+  return polygons;
+};
+
 const GoogleMapView = forwardRef(
   (
     {
       onLocationSelected,
       latLng,
-      cities, // 👈 کل لیست city_getAll
+      wkt,
+    }: {
+      onLocationSelected: ({ lat, lng }: { lat: number; lng: number }) => void;
+      latLng?: any;
+      wkt?: any;
     },
     ref
   ) => {
@@ -31,47 +65,28 @@ const GoogleMapView = forwardRef(
       },
     }));
 
-    // 🟦 تبدیل boundary → مختصات
-    const parseWKTPolygon = (polygonString) => {
-      const cleaned = polygonString?.replace("POLYGON((", "").replace("))", "");
-
-      return cleaned?.split(",").map((pair) => {
-        const [lng, lat] = pair?.trim()?.split(" ");
-        return {
-          latitude: Number(lat),
-          longitude: Number(lng),
-        };
-      });
-    };
-
     // 🟪 تبدیل همه‌ی شهرها به polygon
     useEffect(() => {
-      if (!cities || cities?.length === 0) return;
+      if (!wkt || wkt?.length < 10) return;
 
-      const result = cities.map((c) => ({
-        id: c.id,
-        name: c.name,
-        coords: parseWKTPolygon(c.boundary),
-      }));
-
-      setPolygons(result);
-    }, [cities]);
+      const polygons = parseWktMultiPolygon(wkt);
+      setPolygons(polygons);
+    }, [wkt]);
 
     // 🟥 چک داخل polygon بودن
     const isPointInPolygon = (point, polygon) => {
+      let x = point.longitude,
+        y = point.latitude;
       let inside = false;
-      if (!polygon) return;
 
-      for (let i = 0, j = polygon?.length - 1; i < polygon?.length; j = i++) {
-        const xi = polygon[i].latitude;
-        const yi = polygon[i].longitude;
-        const xj = polygon[j].latitude;
-        const yj = polygon[j].longitude;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].longitude,
+          yi = polygon[i].latitude;
+        const xj = polygon[j].longitude,
+          yj = polygon[j].latitude;
 
         const intersect =
-          yi > point.longitude !== yj > point.longitude &&
-          point.latitude <
-            ((xj - xi) * (point.longitude - yi)) / (yj - yi) + xi;
+          yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
 
         if (intersect) inside = !inside;
       }
@@ -101,13 +116,13 @@ const GoogleMapView = forwardRef(
 
           // بررسی داخل کدام پلیگان بودن
           const matchedPolygon = polygons.find((poly) =>
-            isPointInPolygon(point, poly.coords)
+            isPointInPolygon(point, poly)
           );
 
           if (!matchedPolygon) {
             Alert.alert(
               "خارج از محدوده",
-              "لطفاً داخل یکی از محدوده‌ها کلیک کنید"
+              "لطفا داخل محدوده‌های آبی  کلیک کنید"
             );
             return;
           }
@@ -117,22 +132,17 @@ const GoogleMapView = forwardRef(
           onLocationSelected?.({
             lat: latitude,
             lng: longitude,
-            cityId: matchedPolygon.id,
           });
         }}
       >
-        {polygons.map((poly) => (
-          <>
-            {poly?.id && poly?.coords && (
-              <Polygon
-                key={poly.id}
-                coordinates={poly.coords}
-                strokeColor="rgba(0,0,255,0.9)"
-                fillColor="rgba(0,0,255,0.2)"
-                strokeWidth={2}
-              />
-            )}
-          </>
+        {polygons.map((coords, index) => (
+          <Polygon
+            key={index}
+            coordinates={coords}
+            strokeWidth={2}
+            strokeColor="rgba(0,0,0,0.5)"
+            fillColor="rgba(0,150,255,0.2)"
+          />
         ))}
 
         <Marker coordinate={coordinate} />
