@@ -24,4 +24,5 @@ export const queryKeys = {
   city_getAvailableServiceCategories: "city_getAvailableServiceCategories",
   city_getAvailableServiceSubCategories:
     "city_getAvailableServiceSubCategories",
+  city_getAllBoundariesWkt: "city_getAllBoundariesWkt",
 };

@@ -1744,6 +1744,7 @@ export type Query = {
   carousel_getAll: ListResponseBaseOfCarouselDto;
   carousel_getById: ResponseBaseOfCarouselDto;
   city_getAll: ListResponseBaseOfCityDto;
+  city_getAllBoundariesWkt: ResponseBaseOfString;
   city_getAvailableServiceCategories: ListResponseBaseOfServiceCategoryDto;
   city_getAvailableServiceSubCategories: ListResponseBaseOfServiceSubCategoryDto;
   city_getAvailableServiceTypes: ListResponseBaseOfServiceTypeDto;
@@ -2905,6 +2906,19 @@ export type Address_DeleteMutationVariables = Exact<{
 export type Address_DeleteMutation = {
   __typename?: "Mutation";
   address_delete: { __typename?: "ResponseBase"; status?: any | null };
+};
+
+export type City_GetAllBoundariesWktQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type City_GetAllBoundariesWktQuery = {
+  __typename?: "Query";
+  city_getAllBoundariesWkt: {
+    __typename?: "ResponseBaseOfString";
+    result?: string | null;
+    status?: any | null;
+  };
 };
 
 export type Auth_RequestOtpMutationVariables = Exact<{
@@ -4320,6 +4334,82 @@ export const useAddress_DeleteMutation = <TError = unknown, TContext = unknown>(
       )(),
     ...options,
   });
+};
+
+export const City_GetAllBoundariesWktDocument = `
+    query city_getAllBoundariesWkt {
+  city_getAllBoundariesWkt {
+    result
+    status
+  }
+}
+    `;
+
+export const useCity_GetAllBoundariesWktQuery = <
+  TData = City_GetAllBoundariesWktQuery,
+  TError = unknown,
+>(
+  variables?: City_GetAllBoundariesWktQueryVariables,
+  options?: Omit<
+    UseQueryOptions<City_GetAllBoundariesWktQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      City_GetAllBoundariesWktQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<City_GetAllBoundariesWktQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["city_getAllBoundariesWkt"]
+        : ["city_getAllBoundariesWkt", variables],
+    queryFn: fetcher<
+      City_GetAllBoundariesWktQuery,
+      City_GetAllBoundariesWktQueryVariables
+    >(City_GetAllBoundariesWktDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteCity_GetAllBoundariesWktQuery = <
+  TData = InfiniteData<City_GetAllBoundariesWktQuery>,
+  TError = unknown,
+>(
+  variables: City_GetAllBoundariesWktQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<City_GetAllBoundariesWktQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      City_GetAllBoundariesWktQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<City_GetAllBoundariesWktQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["city_getAllBoundariesWkt.infinite"]
+            : ["city_getAllBoundariesWkt.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<
+            City_GetAllBoundariesWktQuery,
+            City_GetAllBoundariesWktQueryVariables
+          >(City_GetAllBoundariesWktDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
 };
 
 export const Auth_RequestOtpDocument = `
