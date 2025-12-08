@@ -3079,6 +3079,7 @@ export type City_GetAllQuery = {
         id: any;
         isActive: boolean;
         name: string;
+        boundary: string;
         province: { __typename?: "ProvinceDto"; id: any; name: string };
         activeBanner?: {
           __typename?: "BannerDto";
@@ -4743,6 +4744,7 @@ export const City_GetAllDocument = `
         id
         isActive
         name
+        boundary
         province {
           id
           name

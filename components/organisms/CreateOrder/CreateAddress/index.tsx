@@ -21,6 +21,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
+import { useGetAllCityQuery } from "../../home/hooks/Home.query";
 import GoogleMapView from "./GoogleMapView";
 
 const schema = yup.object().shape({
@@ -45,6 +46,8 @@ const schema = yup.object().shape({
 export default function AddressMap() {
   const editItem = useRoute().params;
 
+  const { data: cities } = useGetAllCityQuery();
+  console.log(JSON.stringify({ cities }));
   const toast = useToast();
 
   const {
@@ -280,6 +283,7 @@ export default function AddressMap() {
                     }
                   : undefined
               }
+              cities={cities?.pages}
               ref={mapRef}
             />
           </ThemedView>
