@@ -11,8 +11,10 @@ import { DeviceHeight } from "@/constants/Dimension";
 import { Camera, CameraView, useCameraPermissions } from "expo-camera";
 import { CameraType } from "expo-image-picker";
 import { useEffect } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, Platform, StyleSheet, Text, View } from "react-native";
 
+import { blobToFile } from "@/components/atoms/UploadImage.web";
+import WebVideoRecorder from "./WebVideoRecorder";
 import useVerificationVideoHook from "./verification.hook";
 
 export default function VerificationStep() {
@@ -22,6 +24,7 @@ export default function VerificationStep() {
     textList,
     stopRecording,
     recordVideo,
+    setVideo,
     video,
     isRecording,
     cameraRef,
@@ -57,6 +60,16 @@ export default function VerificationStep() {
       <View style={styles.flex1}>
         {video && !isRecording ? (
           <VideoPlayer style={styles.camera} videoSource={video} />
+        ) : Platform.OS === "web" ? (
+          <WebVideoRecorder
+            onFinish={(blob) => {
+              console.log("BLOB READY: ", blob);
+              const file = blobToFile(blob, "video.webm");
+              console.log({ blob });
+              setVideo(blob);
+              // setTimeout(()=>sendVideo(),1000)
+            }}
+          />
         ) : (
           <CameraView
             style={styles.camera}

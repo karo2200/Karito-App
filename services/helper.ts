@@ -4,8 +4,8 @@ export function getStatusFa(status: string, isCustomer?: boolean) {
   switch (status) {
     case ServiceRequestStatus.AcceptedBySpecialist:
       return isCustomer ? "پذیرفته شده توسط متخصص" : "در انتظار انجام";
-    case ServiceRequestStatus.CancelledBySpecialist ||
-      ServiceRequestStatus.CancelledByCustomer:
+    case ServiceRequestStatus.CancelledBySpecialist:
+    case ServiceRequestStatus.CancelledByCustomer:
       return "لغو شده";
     case ServiceRequestStatus.Paid:
       return "تکمیل شده";

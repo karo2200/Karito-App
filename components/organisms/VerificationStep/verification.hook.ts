@@ -132,5 +132,6 @@ export default function useVerificationVideoHook() {
     isPending,
     stopRecording,
     recordVideo,
+    setVideo,
   };
 }

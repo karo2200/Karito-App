@@ -67,7 +67,15 @@ const CustomerEditProfileSheet = ({
     handleSubmit,
     register,
     formState: { errors },
+    setValue,
   } = methods;
+
+  useEffect(() => {
+    if (userData) {
+      setValue("family", userData?.lastName);
+      setValue("name", userData?.firstName);
+    }
+  }, [userData]);
 
   const onRegistrationPress = (formData: any) => {
     updateMutate(
@@ -164,7 +172,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    minHeight: height / 3.5,
+    maxHeight: height / 3.5,
     width: Platform.OS === "web" ? maxWidth : "100%",
   },
 

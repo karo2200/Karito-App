@@ -38,6 +38,7 @@ export default function useExpertHook() {
     setIsLoggedIn,
     setIsExpert,
     isLoggedIn,
+    isExpert,
   } = authCacheStore();
 
   const [page, setPage] = useState<number>(1);
@@ -134,6 +135,8 @@ export default function useExpertHook() {
   };
 
   function convertIranPhoneNumber(phone) {
+    if (!phone) return "";
+    phone = String(phone);
     return phone.replace(/^\+98/, "0");
   }
 
@@ -155,12 +158,13 @@ export default function useExpertHook() {
     });
   }
 
-  const userAproved =
-    profileData?.specializedDocumentsVerificationStatus ===
-      VerificationStatus.Approved &&
-    profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
-    profileData?.identityVerificationVideoStatus ===
-      VerificationStatus.Approved;
+  const userAproved = isExpert
+    ? profileData?.specializedDocumentsVerificationStatus ===
+        VerificationStatus.Approved &&
+      profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
+      profileData?.identityVerificationVideoStatus ===
+        VerificationStatus.Approved
+    : true;
 
   const onLoginWithoutVerify = () => {
     setIsExpert(true);
@@ -199,5 +203,6 @@ export default function useExpertHook() {
     canGoNext,
     onLoginWithoutVerify,
     userAproved,
+    isExpert,
   };
 }

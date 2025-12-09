@@ -1,6 +1,15 @@
 mutation address_create($input: AddAddressInput!) {
   address_create(input: $input) {
     status
+    result {
+      id
+      city {
+        id
+        name
+      }
+      title
+      text
+    }
   }
 }
 
