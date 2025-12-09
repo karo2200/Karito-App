@@ -48,8 +48,8 @@ const GoogleMapView = forwardRef(
     const delta = { latitudeDelta: 0.015, longitudeDelta: 0.015 };
 
     const [coordinate, setCoordinate] = useState({
-      latitude: latLng?.lat ?? 35.7219,
-      longitude: latLng?.lng ?? 51.3347,
+      latitude: latLng?.lat ?? 35.79458477902628,
+      longitude: latLng?.lng ?? 51.45496364682913,
       ...delta,
     });
 
@@ -126,7 +126,7 @@ const GoogleMapView = forwardRef(
             );
             return;
           }
-
+          console.log({ latitude, longitude });
           // انتخاب معتبر
           setCoordinate({ latitude, longitude, ...delta });
           onLocationSelected?.({
