@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   btn: {
-    bottom: 40,
+    bottom: 50,
     position: "absolute",
   },
 });

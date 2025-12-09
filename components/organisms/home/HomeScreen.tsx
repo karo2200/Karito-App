@@ -4,7 +4,6 @@ import { ScrollView, View } from "react-native";
 import Banner from "./Views/Banner";
 import Categories from "./Views/Categories";
 import HorizontalServiceList from "./Views/HorizontalServiceList";
-import HorizontalSpeciaLists from "./Views/HorizontalSpeciaLists";
 import useHomeHook from "./hooks/Home.hook";
 
 const HomeScreen = () => {
@@ -27,7 +26,7 @@ const HomeScreen = () => {
           loading={false}
           data={specialData}
         />
-        <HorizontalSpeciaLists data={specialists} />
+        {/* <HorizontalSpeciaLists data={specialists} /> */}
       </View>
     </ScrollView>
   );
