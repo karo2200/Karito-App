@@ -55,21 +55,31 @@ export default function useExpertHook() {
     expertData?.specialist_getMyProfile?.result;
 
   useEffect(() => {
+    if (!profileData) return;
+
+    const allApproved =
+      profileData?.specializedDocumentsVerificationStatus ===
+        VerificationStatus.Approved &&
+      profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
+      profileData?.identityVerificationVideoStatus ===
+        VerificationStatus.Approved;
+
     if (!isLoggedIn) {
-      if (
-        profileData?.specializedDocumentsVerificationStatus ===
-          VerificationStatus.Approved &&
-        profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
-        profileData?.identityVerificationVideoStatus ===
-          VerificationStatus.Approved
-      ) {
+      if (allApproved) {
         setIsExpert(true);
         setIsLoggedIn(true);
-      } else if (profileData?.nationalCode && profileData?.serviceSubCategory) {
+        return;
+      }
+
+      if (
+        profileData?.nationalCode &&
+        profileData?.serviceSubCategory &&
+        page !== 3
+      ) {
         setPage(3);
       }
     } else {
-      setPage(1);
+      if (page !== 1) setPage(1);
     }
   }, [profileData, isLoggedIn]);
 
@@ -151,12 +161,14 @@ export default function useExpertHook() {
       profileData?.specializedDocumentUrls?.length > 0
   );
 
-  if (canGoNext) {
-    showToast({
-      message: "منتظر تایید از طرف ادمین باشید",
-      type: "success",
-    });
-  }
+  useEffect(() => {
+    if (canGoNext && page == 3) {
+      showToast({
+        message: "منتظر تایید از طرف ادمین باشید",
+        type: "success",
+      });
+    }
+  }, [canGoNext, page]);
 
   const userAproved = isExpert
     ? profileData?.specializedDocumentsVerificationStatus ===

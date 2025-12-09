@@ -35,11 +35,11 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
             VerificationStatus.Rejected
           }
           isLoggedIn={isLoggedIn}
-          isComplete={
+          isComplete={Boolean(
             profileData?.firstName &&
-            profileData?.lastName &&
-            profileData?.idCardImageUrl
-          }
+              profileData?.lastName &&
+              profileData?.idCardImageUrl
+          )}
         />
         <InfoList
           title={"مدارک"}
