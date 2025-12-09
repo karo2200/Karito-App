@@ -1,8 +1,6 @@
 import { ServiceRequestStatus } from "@/generated/graphql";
 
 export function getStatusFa(status: string, isCustomer?: boolean) {
-  console.log("ssss", status);
-
   switch (status) {
     case ServiceRequestStatus.AcceptedBySpecialist:
       return isCustomer ? "پذیرفته شده توسط متخصص" : "در انتظار انجام";
