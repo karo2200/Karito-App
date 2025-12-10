@@ -161,15 +161,6 @@ export default function useExpertHook() {
       profileData?.specializedDocumentUrls?.length > 0
   );
 
-  useEffect(() => {
-    if (canGoNext && page == 3) {
-      showToast({
-        message: "منتظر تایید از طرف ادمین باشید",
-        type: "success",
-      });
-    }
-  }, [canGoNext, page]);
-
   const userAproved = isExpert
     ? profileData?.specializedDocumentsVerificationStatus ===
         VerificationStatus.Approved &&
@@ -177,6 +168,15 @@ export default function useExpertHook() {
       profileData?.identityVerificationVideoStatus ===
         VerificationStatus.Approved
     : true;
+
+  useEffect(() => {
+    if (canGoNext && page === 3 && !userAproved) {
+      showToast({
+        message: "منتظر تایید از طرف ادمین باشید",
+        type: "success",
+      });
+    }
+  }, [canGoNext, page, userAproved]);
 
   const onLoginWithoutVerify = () => {
     setIsExpert(true);
