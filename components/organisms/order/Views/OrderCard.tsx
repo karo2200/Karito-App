@@ -42,7 +42,7 @@ const OrderCard = ({
               <ThemedText type="text" style={styles.user}>
                 {item?.specialist?.firstName} {item?.specialist?.lastName}
               </ThemedText>
-              <UserFrameIcon />
+              {item?.specialist && <UserFrameIcon />}
             </>
           ) : (
             <View style={styles.addressView}>

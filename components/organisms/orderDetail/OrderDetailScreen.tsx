@@ -256,16 +256,16 @@ export default function OrderDetailScreen() {
             </React.Fragment>
           )}
         </View>
-        {serviceData?.status !== ServiceRequestStatus.Pending && (
-          <View style={styles.rowView}>
-            <ThemedText type="text" style={{ color: Colors.label }}>
-              {serviceData?.trackingCode}
-            </ThemedText>
-            <ThemedText type="text" style={{ color: Colors.gray500 }}>
-              کد رهگیری
-            </ThemedText>
-          </View>
-        )}
+
+        <View style={styles.rowView}>
+          <ThemedText type="text" style={{ color: Colors.label }}>
+            {serviceData?.trackingCode}
+          </ThemedText>
+          <ThemedText type="text" style={{ color: Colors.gray500 }}>
+            کد رهگیری
+          </ThemedText>
+        </View>
+
         {serviceData?.status === ServiceRequestStatus.CancelledByCustomer && (
           <View style={styles.rowView}>
             <ThemedText type="text" style={styles.address} numberOfLines={2}>
