@@ -9,15 +9,17 @@ export default function ListEmptyOrder({
 }: {
   onSeeListPress: () => void;
 }) {
-  const { userAproved } = useExpertHook();
+  const { userAproved, isExpert } = useExpertHook();
 
   return (
     <View style={styles.flex1}>
       <NoOrderIcon />
       <ThemedText style={styles.title}>
-        {userAproved
+        {!isExpert
           ? " هیچ سفارشی در لیست ندارید!"
-          : "در انتظار تایید از طرف ادمین باشید"}
+          : userAproved
+            ? " هیچ سفارشی در لیست ندارید!"
+            : "در انتظار تایید از طرف ادمین باشید"}
       </ThemedText>
       {userAproved && (
         <TouchableOpacity

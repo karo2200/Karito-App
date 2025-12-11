@@ -266,6 +266,16 @@ export default function OrderDetailScreen() {
             </ThemedText>
           </View>
         )}
+        {serviceData?.status === ServiceRequestStatus.CancelledByCustomer && (
+          <View style={styles.rowView}>
+            <ThemedText type="text" style={styles.address} numberOfLines={2}>
+              {serviceData?.cancellationReason?.name}
+            </ThemedText>
+            <ThemedText type="text" style={{ color: Colors.gray500 }}>
+              علت لغو سفارش
+            </ThemedText>
+          </View>
+        )}
         {isExpert && (
           <View>
             <Divider height={16} />

@@ -3459,6 +3459,10 @@ export type ServiceRequest_GetByIdQuery = {
         text: string;
         city: { __typename?: "CityDto"; name: string; id: any };
       };
+      cancellationReason?: {
+        __typename?: "CancellationReasonDto";
+        name: string;
+      } | null;
       customer: {
         __typename?: "CustomerDto";
         firstName?: string | null;
@@ -5707,6 +5711,9 @@ export const ServiceRequest_GetByIdDocument = `
           name
           id
         }
+      }
+      cancellationReason {
+        name
       }
       finalPrice
       basePrice
