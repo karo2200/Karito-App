@@ -29,7 +29,9 @@ export default function useProfileHook() {
     setAccessToken,
     setRefreshToken,
     refreshToken,
-    clearAuth,
+    setNationalCode,
+    setCustomerCity,
+    setPhone,
   } = authCacheStore();
 
   const { clearAll } = createOrderStore();
@@ -85,7 +87,10 @@ export default function useProfileHook() {
               } else {
                 setIsExpert(true);
               }
-              clearAuth();
+              // clearAuth();
+              setNationalCode("");
+              setCustomerCity("");
+              setPhone("");
               clearAll();
               setIsLoggedIn(false);
               setAccessToken("");
