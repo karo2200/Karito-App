@@ -62,12 +62,23 @@ const CityStep = ({
     control,
     watch,
     setValue,
-    resetField,
   } = methods;
 
   const onPress = (formData: any) => {
     onRegisterCity(formData, onNextPress);
   };
+
+  useEffect(() => {
+    if (profileData) {
+      setValue("state", profileData?.city?.province?.id);
+      setValue("city", profileData?.city?.id);
+      setValue("profession", profileData?.serviceSubCategory?.id);
+      setValue(
+        "serviceTypes",
+        profileData?.serviceTypes?.map((opt: any) => opt?.id)
+      );
+    }
+  }, [profileData]);
 
   useEffect(() => {
     setProvince(watch("state"));

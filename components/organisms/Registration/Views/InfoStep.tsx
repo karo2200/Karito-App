@@ -67,6 +67,7 @@ const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
             onPress={() => {
               router.push("/VerificationStepPage");
             }}
+            isLoggedIn={isLoggedIn}
             isVerified={
               profileData?.identityVerificationVideoStatus ===
               VerificationStatus.Approved

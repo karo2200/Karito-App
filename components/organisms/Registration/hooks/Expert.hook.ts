@@ -23,11 +23,8 @@ import { useGetServiceTypesQuery } from "../../subService/hooks";
 
 export default function useExpertHook() {
   const router = useRouter();
-
   const { params } = useRoute();
-
   const queryClient = useQueryClient();
-
   const { showToast } = useToast();
 
   const {
@@ -43,6 +40,7 @@ export default function useExpertHook() {
 
   const [page, setPage] = useState<number>(1);
   const [exitVisible, setExitVisible] = useState<boolean>(false);
+
   const [province, setProvince] = useState<string>("");
   const [category, setCategory] = useState<string>("");
 
@@ -50,38 +48,8 @@ export default function useExpertHook() {
     useSpecialist_SetLocationAndSpecialtyMutation();
 
   const { data: expertData } = useGetSpecialistProfile();
-
   const profileData: SpecialistDto =
     expertData?.specialist_getMyProfile?.result;
-
-  useEffect(() => {
-    if (!profileData) return;
-
-    const allApproved =
-      profileData?.specializedDocumentsVerificationStatus ===
-        VerificationStatus.Approved &&
-      profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
-      profileData?.identityVerificationVideoStatus ===
-        VerificationStatus.Approved;
-
-    if (!isLoggedIn) {
-      if (allApproved) {
-        setIsExpert(true);
-        setIsLoggedIn(true);
-        return;
-      }
-
-      if (
-        profileData?.nationalCode &&
-        profileData?.serviceSubCategory &&
-        page !== 3
-      ) {
-        setPage(3);
-      }
-    } else {
-      if (page !== 1) setPage(1);
-    }
-  }, [profileData, isLoggedIn]);
 
   const { data: provinceData, isPending: provincePending } =
     useGetAllprovinceQuery({ take: 50 });
@@ -144,30 +112,45 @@ export default function useExpertHook() {
     );
   };
 
-  function convertIranPhoneNumber(phone) {
-    if (!phone) return "";
-    phone = String(phone);
-    return phone.replace(/^\+98/, "0");
-  }
+  const userAproved = isAllDocumentsApproved(profileData);
+  const canGoNext = isProfileFullyUploaded(profileData);
 
-  const canGoNext = Boolean(
-    profileData?.firstName &&
-      profileData?.lastName &&
-      profileData?.idCardImageUrl &&
-      profileData?.identityVerificationVideoUrl &&
-      profileData?.nationalCode &&
-      profileData?.phoneNumber &&
-      profileData?.profileImageUrl &&
-      profileData?.specializedDocumentUrls?.length > 0
-  );
+  const phoneNumber =
+    params?.phone || phone || convertIranPhoneNumber(profileData?.phoneNumber);
 
-  const userAproved = isExpert
-    ? profileData?.specializedDocumentsVerificationStatus ===
+  useEffect(() => {
+    if (!profileData) return;
+    if (canGoNext) {
+      setIsExpert(true);
+      setIsLoggedIn(true);
+      return;
+    }
+
+    const allApproved =
+      profileData?.specializedDocumentsVerificationStatus ===
         VerificationStatus.Approved &&
       profileData?.idCardVerificationStatus === VerificationStatus.Approved &&
       profileData?.identityVerificationVideoStatus ===
-        VerificationStatus.Approved
-    : true;
+        VerificationStatus.Approved;
+
+    if (!isLoggedIn) {
+      if (allApproved) {
+        setIsExpert(true);
+        setIsLoggedIn(true);
+        return;
+      }
+
+      if (
+        profileData?.nationalCode &&
+        profileData?.serviceSubCategory &&
+        page !== 3
+      ) {
+        setPage(3);
+      }
+    } else {
+      if (page !== 1) setPage(1);
+    }
+  }, [profileData, isLoggedIn]);
 
   useEffect(() => {
     if (canGoNext && page === 3 && !userAproved) {
@@ -189,10 +172,8 @@ export default function useExpertHook() {
     setPage,
     exitVisible,
     setExitVisible,
-    phoneNumber:
-      params?.phone ||
-      phone ||
-      convertIranPhoneNumber(profileData?.phoneNumber),
+    phoneNumber,
+
     onRegistrationPress,
     provincePending,
     provinceData: provinceData?.pages as [{ name: string; id: string }],
@@ -217,4 +198,32 @@ export default function useExpertHook() {
     userAproved,
     isExpert,
   };
+}
+
+function convertIranPhoneNumber(phone?: string) {
+  if (!phone) return "";
+  return String(phone).replace(/^\+98/, "0");
+}
+
+function isProfileFullyUploaded(p?: SpecialistDto) {
+  if (!p) return false;
+  return Boolean(
+    p.firstName &&
+      p.lastName &&
+      p.idCardImageUrl &&
+      p.identityVerificationVideoUrl &&
+      p.nationalCode &&
+      p.phoneNumber &&
+      p.profileImageUrl &&
+      p.specializedDocumentUrls?.length > 0
+  );
+}
+
+function isAllDocumentsApproved(p?: SpecialistDto) {
+  if (!p) return false;
+  return (
+    p.specializedDocumentsVerificationStatus === VerificationStatus.Approved &&
+    p.idCardVerificationStatus === VerificationStatus.Approved &&
+    p.identityVerificationVideoStatus === VerificationStatus.Approved
+  );
 }
