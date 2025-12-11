@@ -21,7 +21,7 @@ export default function ListEmptyOrder({
             ? " هیچ سفارشی در لیست ندارید!"
             : "در انتظار تایید از طرف ادمین باشید"}
       </ThemedText>
-      {userAproved && (
+      {!isExpert ? (
         <TouchableOpacity
           style={styles.btn}
           activeOpacity={1}
@@ -29,6 +29,16 @@ export default function ListEmptyOrder({
         >
           <ThemedText style={styles.txtBtn}>مشاهده لیست خدمات</ThemedText>
         </TouchableOpacity>
+      ) : (
+        userAproved && (
+          <TouchableOpacity
+            style={styles.btn}
+            activeOpacity={1}
+            onPress={onSeeListPress}
+          >
+            <ThemedText style={styles.txtBtn}>مشاهده لیست خدمات</ThemedText>
+          </TouchableOpacity>
+        )
       )}
     </View>
   );

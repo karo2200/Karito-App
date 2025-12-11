@@ -10,6 +10,7 @@ query serviceRequest_getMyRequests(
         address {
           text
         }
+        trackingCode
         basePrice
         finalPrice
         customer {

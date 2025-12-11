@@ -3302,6 +3302,7 @@ export type ServiceRequest_GetMyRequestsQuery = {
       totalCount: number;
       items?: Array<{
         __typename?: "ServiceRequestDto";
+        trackingCode: string;
         basePrice: any;
         finalPrice: any;
         description?: string | null;
@@ -5377,6 +5378,7 @@ export const ServiceRequest_GetMyRequestsDocument = `
         address {
           text
         }
+        trackingCode
         basePrice
         finalPrice
         customer {

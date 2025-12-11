@@ -19,7 +19,23 @@ const OrderCard = ({
 }) => {
   return (
     <View style={styles.container}>
-      <ThemedText fontType="bold">{item?.serviceType?.name}</ThemedText>
+      <View style={styles.flexView}>
+        {item?.status !== ServiceRequestStatus.Pending && (
+          <ThemedText type="text" style={{ color: Colors.label }}>
+            {item?.trackingCode}
+          </ThemedText>
+        )}
+        <ThemedText
+          fontType="bold"
+          numberOfLines={2}
+          style={{
+            width:
+              item?.status !== ServiceRequestStatus.Pending ? "65%" : "100%",
+          }}
+        >
+          {item?.serviceType?.name}
+        </ThemedText>
+      </View>
       <View style={styles.dateView}>
         <ThemedText type="text" style={styles.date}>
           {formatToJalali(item?.requestDate)}
@@ -95,6 +111,13 @@ const styles = StyleSheet.create({
     padding: 12,
     width: "93%",
     marginBottom: 8,
+  },
+
+  flexView: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    flex: 1,
+    justifyContent: "space-between",
   },
 
   date: {
