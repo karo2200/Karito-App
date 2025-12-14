@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import { maxWidth } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { Ionicons } from "@expo/vector-icons";
 import { SearchNormal1 } from "iconsax-react-native";
@@ -113,34 +113,34 @@ const SearchMultiSelect = forwardRef<any, Props>(
               onChangeText={setSearch}
               style={styles.input}
             />
-
-            <FlatList
-              data={filtered}
-              keyExtractor={(item) => item.id}
-              contentContainerStyle={{ paddingBottom: 50 }}
-              showsVerticalScrollIndicator={false}
-              style={{ maxHeight: "80%" }}
-              renderItem={({ item }) => {
-                const checked = tempSelected.includes(item.id);
-                return (
-                  <TouchableOpacity
-                    onPress={() => toggleSelect(item.id)}
-                    style={styles.selectBtn}
-                  >
-                    <View style={styles.row}>
-                      <ThemedText style={{ marginRight: 8 }}>
-                        {item.name}
-                      </ThemedText>
-                      <Ionicons
-                        name={checked ? "checkbox" : "square-outline"}
-                        size={22}
-                        color={checked ? Colors.hint500 : Colors.grayMedium}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
-            />
+            <View style={{ maxHeight: DeviceHeight / 1.5 }}>
+              <FlatList
+                data={filtered}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={{ paddingBottom: 50 }}
+                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => {
+                  const checked = tempSelected.includes(item.id);
+                  return (
+                    <TouchableOpacity
+                      onPress={() => toggleSelect(item.id)}
+                      style={styles.selectBtn}
+                    >
+                      <View style={styles.row}>
+                        <ThemedText style={{ marginRight: 8 }}>
+                          {item.name}
+                        </ThemedText>
+                        <Ionicons
+                          name={checked ? "checkbox" : "square-outline"}
+                          size={22}
+                          color={checked ? Colors.hint500 : Colors.grayMedium}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            </View>
             <ThemedButton
               title="انتخاب"
               fontType="bold"

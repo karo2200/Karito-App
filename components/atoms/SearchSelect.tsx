@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import { maxWidth } from "@/constants/Dimension";
+import { DeviceHeight, maxWidth } from "@/constants/Dimension";
 import { FontType } from "@/constants/Fonts";
 import { Ionicons } from "@expo/vector-icons";
 import { SearchNormal1 } from "iconsax-react-native";
@@ -88,31 +88,31 @@ const SearchSelect = forwardRef<any, Props>(
               onChangeText={setSearch}
               style={styles.input}
             />
-
-            <FlatList
-              data={filtered}
-              keyExtractor={(item) => item.id}
-              contentContainerStyle={{ paddingBottom: 50 }}
-              style={{ maxHeight: "80%" }}
-              showsVerticalScrollIndicator={false}
-              onEndReached={onEndReached}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    field?.onChange(item?.id);
-                  }}
-                  style={styles.selectBtn}
-                >
-                  <CustomRadioButton
-                    label={item?.name}
-                    checked={item?.id === field?.value}
+            <View style={{ maxHeight: DeviceHeight / 1.5 }}>
+              <FlatList
+                data={filtered}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={{ paddingBottom: 50 }}
+                showsVerticalScrollIndicator={false}
+                onEndReached={onEndReached}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
                     onPress={() => {
                       field?.onChange(item?.id);
                     }}
-                  />
-                </TouchableOpacity>
-              )}
-            />
+                    style={styles.selectBtn}
+                  >
+                    <CustomRadioButton
+                      label={item?.name}
+                      checked={item?.id === field?.value}
+                      onPress={() => {
+                        field?.onChange(item?.id);
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
             <ThemedButton
               title="انتخاب"
               fontType="bold"
