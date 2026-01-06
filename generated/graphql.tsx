@@ -204,15 +204,20 @@ export type AuthResult = {
 export type AvailableServiceRequestDto = {
   __typename?: "AvailableServiceRequestDto";
   address: AddressDto;
+  arrivedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  assignedAt?: Maybe<Scalars["DateTime"]["output"]>;
   basePrice: Scalars["Decimal"]["output"];
   cancellationReason?: Maybe<CancellationReasonDto>;
+  cancelledAt?: Maybe<Scalars["DateTime"]["output"]>;
+  completedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  createdAt: Scalars["DateTime"]["output"];
   customer: CustomerDto;
-  customerShare: Scalars["Decimal"]["output"];
   description?: Maybe<Scalars["String"]["output"]>;
   discountAmount: Scalars["Decimal"]["output"];
   distance: Scalars["Float"]["output"];
   finalPrice: Scalars["Decimal"]["output"];
   id: Scalars["UUID"]["output"];
+  orderNumber: Scalars["Long"]["output"];
   paidAt?: Maybe<Scalars["DateTime"]["output"]>;
   qnAs: Array<ServiceRequestQnADto>;
   rateAndReview?: Maybe<RateAndReviewDto>;
@@ -221,6 +226,7 @@ export type AvailableServiceRequestDto = {
   settledAt?: Maybe<Scalars["DateTime"]["output"]>;
   specialist?: Maybe<SpecialistDto>;
   specialistGenderRequirement: Gender;
+  specialistShare: Scalars["Decimal"]["output"];
   status: ServiceRequestStatus;
   trackingCode: Scalars["String"]["output"];
 };
@@ -238,16 +244,21 @@ export type AvailableServiceRequestDtoCollectionSegment = {
 export type AvailableServiceRequestDtoFilterInput = {
   address?: InputMaybe<AddressDtoFilterInput>;
   and?: InputMaybe<Array<AvailableServiceRequestDtoFilterInput>>;
+  arrivedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  assignedAt?: InputMaybe<DateTimeOperationFilterInput>;
   basePrice?: InputMaybe<DecimalOperationFilterInput>;
   cancellationReason?: InputMaybe<CancellationReasonDtoFilterInput>;
+  cancelledAt?: InputMaybe<DateTimeOperationFilterInput>;
+  completedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   customer?: InputMaybe<CustomerDtoFilterInput>;
-  customerShare?: InputMaybe<DecimalOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   discountAmount?: InputMaybe<DecimalOperationFilterInput>;
   distance?: InputMaybe<FloatOperationFilterInput>;
   finalPrice?: InputMaybe<DecimalOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<AvailableServiceRequestDtoFilterInput>>;
+  orderNumber?: InputMaybe<LongOperationFilterInput>;
   paidAt?: InputMaybe<DateTimeOperationFilterInput>;
   qnAs?: InputMaybe<ListFilterInputTypeOfServiceRequestQnADtoFilterInput>;
   rateAndReview?: InputMaybe<RateAndReviewDtoFilterInput>;
@@ -256,21 +267,27 @@ export type AvailableServiceRequestDtoFilterInput = {
   settledAt?: InputMaybe<DateTimeOperationFilterInput>;
   specialist?: InputMaybe<SpecialistDtoFilterInput>;
   specialistGenderRequirement?: InputMaybe<GenderOperationFilterInput>;
+  specialistShare?: InputMaybe<DecimalOperationFilterInput>;
   status?: InputMaybe<ServiceRequestStatusOperationFilterInput>;
   trackingCode?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type AvailableServiceRequestDtoSortInput = {
   address?: InputMaybe<AddressDtoSortInput>;
+  arrivedAt?: InputMaybe<SortEnumType>;
+  assignedAt?: InputMaybe<SortEnumType>;
   basePrice?: InputMaybe<SortEnumType>;
   cancellationReason?: InputMaybe<CancellationReasonDtoSortInput>;
+  cancelledAt?: InputMaybe<SortEnumType>;
+  completedAt?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
   customer?: InputMaybe<CustomerDtoSortInput>;
-  customerShare?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   discountAmount?: InputMaybe<SortEnumType>;
   distance?: InputMaybe<SortEnumType>;
   finalPrice?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  orderNumber?: InputMaybe<SortEnumType>;
   paidAt?: InputMaybe<SortEnumType>;
   rateAndReview?: InputMaybe<RateAndReviewDtoSortInput>;
   requestDate?: InputMaybe<SortEnumType>;
@@ -278,6 +295,7 @@ export type AvailableServiceRequestDtoSortInput = {
   settledAt?: InputMaybe<SortEnumType>;
   specialist?: InputMaybe<SpecialistDtoSortInput>;
   specialistGenderRequirement?: InputMaybe<SortEnumType>;
+  specialistShare?: InputMaybe<SortEnumType>;
   status?: InputMaybe<SortEnumType>;
   trackingCode?: InputMaybe<SortEnumType>;
 };
@@ -514,7 +532,6 @@ export type CreateServiceRequestInput = {
   addressId: Scalars["UUID"]["input"];
   description: Scalars["String"]["input"];
   gender?: InputMaybe<Gender>;
-  locationType: LocationType;
   qnAs: Array<QnAInput>;
   requestDate: Scalars["DateTime"]["input"];
   serviceTypeId: Scalars["UUID"]["input"];
@@ -531,6 +548,7 @@ export type CreateServiceTypeInput = {
   abbreviation: Scalars["String"]["input"];
   banner: Scalars["String"]["input"];
   basePrice: Scalars["Decimal"]["input"];
+  fixedGender?: InputMaybe<Gender>;
   isSpecial: Scalars["Boolean"]["input"];
   logo: Scalars["String"]["input"];
   name: Scalars["String"]["input"];
@@ -539,7 +557,7 @@ export type CreateServiceTypeInput = {
 
 export type CreateServiceTypeQuestionInput = {
   isRequired: Scalars["Boolean"]["input"];
-  options: Array<Scalars["String"]["input"]>;
+  options: Array<ServiceTypeQuestionOptionInput>;
   questionType: QuestionType;
   serviceTypeId: Scalars["UUID"]["input"];
   title: Scalars["String"]["input"];
@@ -925,6 +943,13 @@ export type ListFilterInputTypeOfServiceTypeDtoFilterInput = {
   some?: InputMaybe<ServiceTypeDtoFilterInput>;
 };
 
+export type ListFilterInputTypeOfServiceTypeQuestionOptionDtoFilterInput = {
+  all?: InputMaybe<ServiceTypeQuestionOptionDtoFilterInput>;
+  any?: InputMaybe<Scalars["Boolean"]["input"]>;
+  none?: InputMaybe<ServiceTypeQuestionOptionDtoFilterInput>;
+  some?: InputMaybe<ServiceTypeQuestionOptionDtoFilterInput>;
+};
+
 export type ListResponseBaseOfAddressDto = {
   __typename?: "ListResponseBaseOfAddressDto";
   result?: Maybe<AddressDtoCollectionSegment>;
@@ -1212,12 +1237,20 @@ export type ListUserTypeOperationFilterInput = {
   some?: InputMaybe<UserTypeOperationFilterInput>;
 };
 
-export enum LocationType {
-  Commercial = "COMMERCIAL",
-  Office = "OFFICE",
-  Residential = "RESIDENTIAL",
-  Vacant = "VACANT",
-}
+export type LongOperationFilterInput = {
+  eq?: InputMaybe<Scalars["Long"]["input"]>;
+  gt?: InputMaybe<Scalars["Long"]["input"]>;
+  gte?: InputMaybe<Scalars["Long"]["input"]>;
+  in?: InputMaybe<Array<InputMaybe<Scalars["Long"]["input"]>>>;
+  lt?: InputMaybe<Scalars["Long"]["input"]>;
+  lte?: InputMaybe<Scalars["Long"]["input"]>;
+  neq?: InputMaybe<Scalars["Long"]["input"]>;
+  ngt?: InputMaybe<Scalars["Long"]["input"]>;
+  ngte?: InputMaybe<Scalars["Long"]["input"]>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars["Long"]["input"]>>>;
+  nlt?: InputMaybe<Scalars["Long"]["input"]>;
+  nlte?: InputMaybe<Scalars["Long"]["input"]>;
+};
 
 export type MarkAsArrivedInput = {
   latitude: Scalars["Float"]["input"];
@@ -1589,6 +1622,13 @@ export type MutationUser_UpdateProfileArgs = {
   input: UpdateUserProfileInput;
 };
 
+export type NullableOfGenderOperationFilterInput = {
+  eq?: InputMaybe<Gender>;
+  in?: InputMaybe<Array<InputMaybe<Gender>>>;
+  neq?: InputMaybe<Gender>;
+  nin?: InputMaybe<Array<InputMaybe<Gender>>>;
+};
+
 export type PaymentDto = {
   __typename?: "PaymentDto";
   amount: Scalars["Decimal"]["output"];
@@ -1647,6 +1687,7 @@ export type PopularServiceTypeDto = {
   abbreviation: Scalars["String"]["output"];
   banner: Scalars["String"]["output"];
   basePrice: Scalars["Decimal"]["output"];
+  fixedGender?: Maybe<Gender>;
   id: Scalars["UUID"]["output"];
   isSpecial: Scalars["Boolean"]["output"];
   logo: Scalars["String"]["output"];
@@ -1670,6 +1711,7 @@ export type PopularServiceTypeDtoFilterInput = {
   and?: InputMaybe<Array<PopularServiceTypeDtoFilterInput>>;
   banner?: InputMaybe<StringOperationFilterInput>;
   basePrice?: InputMaybe<DecimalOperationFilterInput>;
+  fixedGender?: InputMaybe<NullableOfGenderOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isSpecial?: InputMaybe<BooleanOperationFilterInput>;
   logo?: InputMaybe<StringOperationFilterInput>;
@@ -1683,6 +1725,7 @@ export type PopularServiceTypeDtoSortInput = {
   abbreviation?: InputMaybe<SortEnumType>;
   banner?: InputMaybe<SortEnumType>;
   basePrice?: InputMaybe<SortEnumType>;
+  fixedGender?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   isSpecial?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
@@ -1723,7 +1766,9 @@ export type ProvinceDtoSortInput = {
 };
 
 export type QnAInput = {
-  answers: Array<Scalars["String"]["input"]>;
+  numericAnswer?: InputMaybe<Scalars["Decimal"]["input"]>;
+  optionId?: InputMaybe<Scalars["UUID"]["input"]>;
+  optionIds?: InputMaybe<Array<Scalars["UUID"]["input"]>>;
   questionId: Scalars["UUID"]["input"];
 };
 
@@ -1931,6 +1976,7 @@ export type QueryStats_GetTotalRevenueArgs = {
 
 export enum QuestionType {
   CheckBox = "CHECK_BOX",
+  Numeric = "NUMERIC",
   RadioButton = "RADIO_BUTTON",
 }
 
@@ -2208,14 +2254,19 @@ export type ServiceCategoryDtoSortInput = {
 export type ServiceRequestDto = {
   __typename?: "ServiceRequestDto";
   address: AddressDto;
+  arrivedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  assignedAt?: Maybe<Scalars["DateTime"]["output"]>;
   basePrice: Scalars["Decimal"]["output"];
   cancellationReason?: Maybe<CancellationReasonDto>;
+  cancelledAt?: Maybe<Scalars["DateTime"]["output"]>;
+  completedAt?: Maybe<Scalars["DateTime"]["output"]>;
+  createdAt: Scalars["DateTime"]["output"];
   customer: CustomerDto;
-  customerShare: Scalars["Decimal"]["output"];
   description?: Maybe<Scalars["String"]["output"]>;
   discountAmount: Scalars["Decimal"]["output"];
   finalPrice: Scalars["Decimal"]["output"];
   id: Scalars["UUID"]["output"];
+  orderNumber: Scalars["Long"]["output"];
   paidAt?: Maybe<Scalars["DateTime"]["output"]>;
   qnAs: Array<ServiceRequestQnADto>;
   rateAndReview?: Maybe<RateAndReviewDto>;
@@ -2224,6 +2275,7 @@ export type ServiceRequestDto = {
   settledAt?: Maybe<Scalars["DateTime"]["output"]>;
   specialist?: Maybe<SpecialistDto>;
   specialistGenderRequirement: Gender;
+  specialistShare: Scalars["Decimal"]["output"];
   status: ServiceRequestStatus;
   trackingCode: Scalars["String"]["output"];
 };
@@ -2241,15 +2293,20 @@ export type ServiceRequestDtoCollectionSegment = {
 export type ServiceRequestDtoFilterInput = {
   address?: InputMaybe<AddressDtoFilterInput>;
   and?: InputMaybe<Array<ServiceRequestDtoFilterInput>>;
+  arrivedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  assignedAt?: InputMaybe<DateTimeOperationFilterInput>;
   basePrice?: InputMaybe<DecimalOperationFilterInput>;
   cancellationReason?: InputMaybe<CancellationReasonDtoFilterInput>;
+  cancelledAt?: InputMaybe<DateTimeOperationFilterInput>;
+  completedAt?: InputMaybe<DateTimeOperationFilterInput>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
   customer?: InputMaybe<CustomerDtoFilterInput>;
-  customerShare?: InputMaybe<DecimalOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   discountAmount?: InputMaybe<DecimalOperationFilterInput>;
   finalPrice?: InputMaybe<DecimalOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<ServiceRequestDtoFilterInput>>;
+  orderNumber?: InputMaybe<LongOperationFilterInput>;
   paidAt?: InputMaybe<DateTimeOperationFilterInput>;
   qnAs?: InputMaybe<ListFilterInputTypeOfServiceRequestQnADtoFilterInput>;
   rateAndReview?: InputMaybe<RateAndReviewDtoFilterInput>;
@@ -2258,20 +2315,26 @@ export type ServiceRequestDtoFilterInput = {
   settledAt?: InputMaybe<DateTimeOperationFilterInput>;
   specialist?: InputMaybe<SpecialistDtoFilterInput>;
   specialistGenderRequirement?: InputMaybe<GenderOperationFilterInput>;
+  specialistShare?: InputMaybe<DecimalOperationFilterInput>;
   status?: InputMaybe<ServiceRequestStatusOperationFilterInput>;
   trackingCode?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type ServiceRequestDtoSortInput = {
   address?: InputMaybe<AddressDtoSortInput>;
+  arrivedAt?: InputMaybe<SortEnumType>;
+  assignedAt?: InputMaybe<SortEnumType>;
   basePrice?: InputMaybe<SortEnumType>;
   cancellationReason?: InputMaybe<CancellationReasonDtoSortInput>;
+  cancelledAt?: InputMaybe<SortEnumType>;
+  completedAt?: InputMaybe<SortEnumType>;
+  createdAt?: InputMaybe<SortEnumType>;
   customer?: InputMaybe<CustomerDtoSortInput>;
-  customerShare?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   discountAmount?: InputMaybe<SortEnumType>;
   finalPrice?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  orderNumber?: InputMaybe<SortEnumType>;
   paidAt?: InputMaybe<SortEnumType>;
   rateAndReview?: InputMaybe<RateAndReviewDtoSortInput>;
   requestDate?: InputMaybe<SortEnumType>;
@@ -2279,6 +2342,7 @@ export type ServiceRequestDtoSortInput = {
   settledAt?: InputMaybe<SortEnumType>;
   specialist?: InputMaybe<SpecialistDtoSortInput>;
   specialistGenderRequirement?: InputMaybe<SortEnumType>;
+  specialistShare?: InputMaybe<SortEnumType>;
   status?: InputMaybe<SortEnumType>;
   trackingCode?: InputMaybe<SortEnumType>;
 };
@@ -2402,6 +2466,7 @@ export type ServiceTypeDto = {
   abbreviation: Scalars["String"]["output"];
   banner: Scalars["String"]["output"];
   basePrice: Scalars["Decimal"]["output"];
+  fixedGender?: Maybe<Gender>;
   id: Scalars["UUID"]["output"];
   isSpecial: Scalars["Boolean"]["output"];
   logo: Scalars["String"]["output"];
@@ -2424,6 +2489,7 @@ export type ServiceTypeDtoFilterInput = {
   and?: InputMaybe<Array<ServiceTypeDtoFilterInput>>;
   banner?: InputMaybe<StringOperationFilterInput>;
   basePrice?: InputMaybe<DecimalOperationFilterInput>;
+  fixedGender?: InputMaybe<NullableOfGenderOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isSpecial?: InputMaybe<BooleanOperationFilterInput>;
   logo?: InputMaybe<StringOperationFilterInput>;
@@ -2436,6 +2502,7 @@ export type ServiceTypeDtoSortInput = {
   abbreviation?: InputMaybe<SortEnumType>;
   banner?: InputMaybe<SortEnumType>;
   basePrice?: InputMaybe<SortEnumType>;
+  fixedGender?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   isSpecial?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
@@ -2447,7 +2514,7 @@ export type ServiceTypeQuestionDto = {
   __typename?: "ServiceTypeQuestionDto";
   id: Scalars["UUID"]["output"];
   isRequired: Scalars["Boolean"]["output"];
-  options: Array<Scalars["String"]["output"]>;
+  options: Array<ServiceTypeQuestionOptionDto>;
   questionType: QuestionType;
   serviceType: ServiceTypeDto;
   text: Scalars["String"]["output"];
@@ -2467,7 +2534,7 @@ export type ServiceTypeQuestionDtoFilterInput = {
   and?: InputMaybe<Array<ServiceTypeQuestionDtoFilterInput>>;
   id?: InputMaybe<UuidOperationFilterInput>;
   isRequired?: InputMaybe<BooleanOperationFilterInput>;
-  options?: InputMaybe<ListStringOperationFilterInput>;
+  options?: InputMaybe<ListFilterInputTypeOfServiceTypeQuestionOptionDtoFilterInput>;
   or?: InputMaybe<Array<ServiceTypeQuestionDtoFilterInput>>;
   questionType?: InputMaybe<QuestionTypeOperationFilterInput>;
   serviceType?: InputMaybe<ServiceTypeDtoFilterInput>;
@@ -2480,6 +2547,26 @@ export type ServiceTypeQuestionDtoSortInput = {
   questionType?: InputMaybe<SortEnumType>;
   serviceType?: InputMaybe<ServiceTypeDtoSortInput>;
   text?: InputMaybe<SortEnumType>;
+};
+
+export type ServiceTypeQuestionOptionDto = {
+  __typename?: "ServiceTypeQuestionOptionDto";
+  id: Scalars["UUID"]["output"];
+  price: Scalars["Decimal"]["output"];
+  text: Scalars["String"]["output"];
+};
+
+export type ServiceTypeQuestionOptionDtoFilterInput = {
+  and?: InputMaybe<Array<ServiceTypeQuestionOptionDtoFilterInput>>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  or?: InputMaybe<Array<ServiceTypeQuestionOptionDtoFilterInput>>;
+  price?: InputMaybe<DecimalOperationFilterInput>;
+  text?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type ServiceTypeQuestionOptionInput = {
+  price: Scalars["Decimal"]["input"];
+  text: Scalars["String"]["input"];
 };
 
 export type SetActiveBannerInput = {
@@ -2769,6 +2856,7 @@ export type UpdateServiceTypeInput = {
   abbreviation: Scalars["String"]["input"];
   banner: Scalars["String"]["input"];
   basePrice: Scalars["Decimal"]["input"];
+  fixedGender?: InputMaybe<Gender>;
   id: Scalars["UUID"]["input"];
   isSpecial: Scalars["Boolean"]["input"];
   logo: Scalars["String"]["input"];
@@ -2778,7 +2866,7 @@ export type UpdateServiceTypeInput = {
 export type UpdateServiceTypeQuestionInput = {
   id: Scalars["UUID"]["input"];
   isRequired: Scalars["Boolean"]["input"];
-  options: Array<Scalars["String"]["input"]>;
+  options: Array<ServiceTypeQuestionOptionInput>;
   questionType: QuestionType;
   title: Scalars["String"]["input"];
 };
@@ -3721,8 +3809,14 @@ export type ServiceTypeQuestion_GetByServiceTypeQuery = {
         __typename?: "ServiceTypeQuestionDto";
         id: any;
         text: string;
-        options: Array<string>;
+        isRequired: boolean;
         questionType: QuestionType;
+        options: Array<{
+          __typename?: "ServiceTypeQuestionOptionDto";
+          text: string;
+          price: any;
+          id: any;
+        }>;
       }> | null;
       pageInfo: {
         __typename?: "CollectionSegmentInfo";
@@ -3757,6 +3851,7 @@ export type ServiceTypes_GetAllQuery = {
         name: string;
         logo: string;
         id: any;
+        fixedGender?: Gender | null;
         basePrice: any;
         serviceSubCategory: {
           __typename?: "ServiceSubCategoryDto";
@@ -3859,6 +3954,7 @@ export type ServiceTypes_GetPopularQuery = {
         name: string;
         logo: string;
         id: any;
+        fixedGender?: Gender | null;
         basePrice: any;
         requestCount: number;
         serviceSubCategory: {
@@ -6505,7 +6601,12 @@ export const ServiceTypeQuestion_GetByServiceTypeDocument = `
       items {
         id
         text
-        options
+        isRequired
+        options {
+          text
+          price
+          id
+        }
         questionType
       }
       pageInfo {
@@ -6602,6 +6703,7 @@ export const ServiceTypes_GetAllDocument = `
         name
         logo
         id
+        fixedGender
         basePrice
         serviceSubCategory {
           id
@@ -6811,6 +6913,7 @@ export const ServiceTypes_GetPopularDocument = `
         name
         logo
         id
+        fixedGender
         basePrice
         requestCount
         serviceSubCategory {

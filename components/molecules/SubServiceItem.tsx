@@ -5,10 +5,10 @@ import ThemedText from "../atoms/ThemedText";
 
 export default function SubServiceItem({ item, index }) {
   const router = useRouter();
-
+  console.log({ item });
   const onPress = () =>
     router.push(
-      `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}`
+      `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}&fixedGender=${item?.fixedGender}`
     );
 
   return (

@@ -1,4 +1,4 @@
-import { ThemedView } from "@/components";
+import { ThemedText, ThemedView } from "@/components";
 import { ProgressBar } from "@/components/molecules/ProgressBar";
 import { FormProvider } from "react-hook-form";
 import { StyleSheet } from "react-native";
@@ -8,6 +8,7 @@ import useCreateOrder from "./createOrder.hook";
 
 export default function CreateOrderOrg() {
   const {
+    totalPrice,
     progressPersent,
     stage,
     configDatas,
@@ -37,12 +38,17 @@ export default function CreateOrderOrg() {
           />
         </ThemedView>
         {!isLast && (
-          <BottomFooter
-            onNextPress={onNextPress}
-            onBackPress={onBackPress}
-            nextDisabled={nextDisabled}
-            nextLoading={nextLoading}
-          />
+          <>
+            {configDatas?.[stage]?.type === "question" && (
+              <ThemedText>{`قیمت نهایی: ${totalPrice}`}</ThemedText>
+            )}
+            <BottomFooter
+              onNextPress={onNextPress}
+              onBackPress={onBackPress}
+              nextDisabled={nextDisabled}
+              nextLoading={nextLoading}
+            />
+          </>
         )}
       </FormProvider>
     </ThemedView>

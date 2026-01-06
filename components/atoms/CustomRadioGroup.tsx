@@ -1,4 +1,5 @@
 import { Divider, ThemedText, ThemedView } from "@/components";
+import createOrderStore from "@/stores/createOrder";
 import React, { JSX } from "react";
 import { useController } from "react-hook-form";
 import { StyleSheet, TouchableOpacity } from "react-native";
@@ -28,23 +29,33 @@ export default React.forwardRef(
     ref: any
   ) => {
     const { field, fieldState } = useController({ name });
+    const { prices, setPrices } = createOrderStore();
+
     const onChangeItem = async (item: any) => {
-      field.onChange(item?.value);
+      field.onChange(item);
       onChange?.(item);
+      const tempPrices = [...prices];
+      const index = tempPrices?.findIndex((item) => item?.id === name);
+      if (index > -1) {
+        tempPrices?.splice(index, 1);
+      }
+      tempPrices.push({ id: name, price: item?.price, text: item?.text });
+      setPrices(tempPrices);
     };
 
     return (
       <ThemedView>
         {label && (
           <ThemedText fontType="bold" style={styles.label}>
-            {label}
+            {`${label} ${field?.value?.price ? `(${field?.value?.price}) تومان` : ""}`}
           </ThemedText>
         )}
         <ThemedView>
           {data?.map((item: any, index: number) => {
-            const isChecked = field?.value === item?.value;
+            const isChecked = field?.value?.text === item?.text;
+
             return (
-              <ThemedView key={`${index}_${item?.value}`}>
+              <ThemedView key={`${index}_${item?.text}`}>
                 <ThemedView style={styles.groupView}>
                   {RightIcon && (
                     <TouchableOpacity
@@ -56,7 +67,7 @@ export default React.forwardRef(
                   )}
                   <CustomRadioButton
                     checked={isChecked}
-                    label={item?.label}
+                    label={`${item?.text}_${item?.price}`}
                     onPress={() => {
                       onChangeItem(item);
                     }}

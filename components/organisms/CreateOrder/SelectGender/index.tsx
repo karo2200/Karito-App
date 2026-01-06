@@ -4,6 +4,7 @@ import { DeviceWidth } from "@/constants/Dimension";
 import { Gender } from "@/generated/graphql";
 import { Man, Woman } from "iconsax-react-native";
 import { useState } from "react";
+import { useController } from "react-hook-form";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 const genderOptions = [
@@ -14,6 +15,7 @@ const genderOptions = [
 
 export default function SelectGender(props: any) {
   const [seleted, setSelected] = useState<Gender | undefined>(undefined);
+  const { field } = useController({ name: "gender" });
 
   return (
     <ThemedView>
@@ -25,7 +27,7 @@ export default function SelectGender(props: any) {
           <TouchableOpacity
             key={`${value}_${index}`}
             onPress={() => {
-              props?.setValue("gender", value);
+              field?.onChange(value);
               setSelected(value);
             }}
             style={[

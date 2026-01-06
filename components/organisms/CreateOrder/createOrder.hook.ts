@@ -1,58 +1,23 @@
 import { useToast } from "@/components/atoms/Toast";
-import { queryKeys } from "@/constants/queryKeys";
 import {
-  LocationType,
   QnAInput,
   QuestionType,
-  useAddress_SetPrimaryMutation,
   useCreateRequestMutation,
 } from "@/generated/graphql";
 import createOrderStore from "@/stores/createOrder";
 import { useRoute } from "@react-navigation/native";
-import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { router } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGetServiceTypeQuestionsQuery } from "./hooks";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const baseData = [
-  { type: "selectDate" },
-  { type: "gender" },
-  {
-    type: "question",
-    title: "فضای مد نظر شما برای دریافت سفارش چگونه است؟",
-    name: "locationType",
-    questionType: QuestionType.RadioButton,
-    data: [
-      {
-        label: "فضای مسکونی",
-        value: LocationType.Residential,
-        id: 0,
-      },
-      {
-        label: "فضای تجاری",
-        value: LocationType.Commercial,
-        id: 1,
-      },
-      {
-        label: "فضای اداری",
-        value: LocationType.Office,
-        id: 2,
-      },
-      {
-        label: "فضای تخلیه شده",
-        value: LocationType.Vacant,
-        id: 3,
-      },
-    ],
-  },
-];
+const baseData = [{ type: "selectDate" }];
 
 export default function useCreateOrder() {
   const toast = useToast();
@@ -61,7 +26,7 @@ export default function useCreateOrder() {
   });
   const { getValues, setValue, watch } = methods;
 
-  const { addressId } = createOrderStore();
+  const { addressId, prices, clearAll } = createOrderStore();
 
   const params = useRoute().params;
   const { mutate, isPending } = useCreateRequestMutation();
@@ -73,29 +38,17 @@ export default function useCreateOrder() {
     input: { serviceTypeId: params?.sub },
   });
   const questions = data?.pages?.[0] ? data?.pages : [];
-
+  console.log(JSON.stringify(params));
   const configDatas = useMemo(() => {
-    let configDatas = [...baseData];
-    setValue("locationType", LocationType.Residential);
-    if (questions?.length > 0) {
-      questions?.forEach((question, index) => {
-        setValue(
-          question?.id?.toString(),
-          question?.questionType === QuestionType.RadioButton
-            ? question?.options?.[0]
-            : [question?.options?.[0]]
-        );
-        configDatas.push({
-          type: "question",
-          title: question?.text,
-          questionType: question?.questionType,
-          name: question?.id?.toString(),
-          data: question?.options?.map((option, index) => {
-            return { label: option, value: option, id: index };
-          }),
-        });
-      });
-    }
+    let configDatas = [];
+
+    configDatas?.push({
+      type: "question",
+      data: questions,
+      askGender: params?.fixedGender === "null",
+    });
+    baseData?.forEach((item) => configDatas?.push(item));
+
     configDatas?.push({ type: "description" });
     configDatas?.push({ type: "previewOrder" });
     configDatas?.push({ type: "orderSubmitting" });
@@ -105,36 +58,31 @@ export default function useCreateOrder() {
 
   const steps = (configDatas?.length ?? 0) - 1;
   const nextDisabled = useMemo(() => {
+    if (configDatas[stage]?.type === "selectDate" && !watch("time"))
+      return true;
     if (configDatas[stage]?.type === "description" && !watch("description"))
       return true;
-    return stage === steps || (stage === 0 && !watch("time"));
+    return stage === steps;
   }, [stage, watch("time"), watch("description")]);
-
-  const queryClient = useQueryClient();
-  const { mutate: addressMutate } = useAddress_SetPrimaryMutation();
 
   const onNextPress = () => {
     const values = getValues();
-    if (stage == 0) {
-      if (values?.addressId)
-        addressMutate(
-          {
-            input: {
-              addressId: values?.addressId,
-            },
-          },
-          {
-            onSuccess: (data) => {
-              if (data?.address_setPrimary?.status?.code === 1) {
-                queryClient.invalidateQueries({
-                  queryKey: [queryKeys.address_getMyAddresses],
-                });
-              }
-            },
-          }
-        );
+
+    if (configDatas[stage]?.type === "question") {
+      let canContinue = true;
+      for (const element of questions) {
+        if (element?.isRequired && !getValues()?.[element?.id]) {
+          toast.showToast({
+            message: `پاسخ به سوال ${element?.text} الزامی است`,
+            type: "error",
+          });
+          canContinue = false;
+          break; // اینجا حلقه رو متوقف می‌کنه
+        }
+      }
+      if (!canContinue) return;
     }
-    if (stage == 0) {
+    if (configDatas[stage]?.type === "selectDate") {
       const tehranDateTime = dayjs.tz(
         `${getValues().date} ${getValues().time}:00`,
         "YYYY-MM-DD HH:mm",
@@ -160,7 +108,6 @@ export default function useCreateOrder() {
           input: {
             addressId,
             description: values?.description,
-            locationType: values?.locationType,
             qnAs,
             requestDate: values?.requestDate,
             serviceTypeId: params?.sub,
@@ -190,6 +137,18 @@ export default function useCreateOrder() {
     if (stage > 0) setStage((prev) => prev - 1);
   };
 
+  const total = useMemo(() => {
+    let total = params?.price ? parseInt(params?.price) : 0;
+    prices?.forEach((element) => {
+      total += element?.price;
+    });
+    return total;
+  }, [prices, params]);
+
+  useEffect(() => {
+    return () => clearAll();
+  }, []);
+
   const isLast = stage === steps;
 
   return {
@@ -198,6 +157,7 @@ export default function useCreateOrder() {
     stage,
     nextDisabled,
     isLast,
+    totalPrice: total,
 
     configDatas: !configDatas ? [] : configDatas,
 

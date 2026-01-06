@@ -8,7 +8,12 @@ query serviceTypeQuestion_getByServiceType(
       items {
         id
         text
-        options
+        isRequired
+        options {
+          text
+          price
+          id
+        }
         questionType
       }
       pageInfo {

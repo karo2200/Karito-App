@@ -20,7 +20,9 @@
     },
     "ios": {
       "bundleIdentifier": "com.karitoapp",
-      "associatedDomains": ["applinks:api.karito.net"],
+      "associatedDomains": [
+        "applinks:api.karito.net"
+      ],
       "config": {
         "googleMapsApiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
       },
@@ -40,7 +42,10 @@
               "scheme": "karitoapp"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         },
         {
           "action": "VIEW",
@@ -63,8 +68,8 @@
         "backgroundColor": "#0088cc"
       },
       "permissions": [
-        "ACCESS_NETWORK_STATE",
-        "INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.INTERNET",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.CAMERA",
@@ -140,7 +145,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "2c8e2eb3-e89d-4207-940e-047a47fc1c5b"
+        "projectId": "0a0c8be9-6922-475d-9f10-37155d496d98"
       }
     }
   }
