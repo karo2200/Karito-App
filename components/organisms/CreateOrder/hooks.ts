@@ -38,5 +38,6 @@ export const useGetServiceTypeQuestionsQuery = ({
           .flat(),
       };
     },
+    enabled: !!input?.serviceTypeId,
   });
 };

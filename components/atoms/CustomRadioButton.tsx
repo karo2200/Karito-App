@@ -13,72 +13,49 @@ export default function CustomRadioButton({
   onPress?: () => void;
 }) {
   return (
-    <ThemedView style={styles.flex1}>
-      {checked ? (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.5}>
-          <ThemedView style={styles.container}>
-            <ThemedView style={styles.flex1} />
-            <ThemedText numberOfLines={2} style={styles.width}>
-              {label}
-            </ThemedText>
-            <ThemedView style={styles.outView}>
-              <ThemedView style={styles.filledCircle} />
-            </ThemedView>
-          </ThemedView>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.5}>
-          <ThemedView style={styles.container}>
-            <ThemedView style={styles.flex1} />
-            <ThemedText numberOfLines={2} style={styles.width}>
-              {label}
-            </ThemedText>
-            <ThemedView style={styles.unCheckedView} />
-          </ThemedView>
-        </TouchableOpacity>
-      )}
-    </ThemedView>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.5} style={{ flex: 1 }}>
+      <ThemedView style={styles.flex1}>
+        <ThemedView
+          style={[styles.outView, checked && { borderColor: Colors.hint500 }]}
+        >
+          {checked && <ThemedView style={styles.filledCircle} />}
+        </ThemedView>
+        <ThemedText
+          numberOfLines={2}
+          fontType="semiBold"
+          style={[styles.width, checked && { color: Colors.hint900 }]}
+        >
+          {label}
+        </ThemedText>
+      </ThemedView>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  flex1: { flex: 1 },
+  flex1: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    width: "100%",
+  },
 
   outView: {
-    borderColor: Colors.hint500,
-    borderWidth: 2,
-    height: 20,
-    width: 20,
+    borderColor: Colors.gray["200"],
+    borderWidth: 0.9,
+    height: 18,
+    width: 18,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 4,
+    marginLeft: 10,
   },
 
   filledCircle: {
     backgroundColor: Colors.hint500,
-    height: 14,
-    width: 14,
-    borderRadius: 7,
+    height: 12,
+    width: 12,
+    borderRadius: 10,
   },
 
-  unCheckedView: {
-    borderColor: Colors.mediumGray,
-    borderWidth: 2,
-    height: 20,
-    width: 20,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 4,
-  },
-
-  container: {
-    alignItems: "center",
-    flexDirection: "row",
-    marginLeft: 4,
-    flexShrink: 1,
-  },
-
-  width: { width: "90%" },
+  width: { fontSize: 14, color: Colors.black },
 });

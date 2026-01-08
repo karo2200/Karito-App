@@ -29,7 +29,7 @@ export default function ServiceBodySection({
     const onPress = () => {
       if (isLoggedIn)
         router.push(
-          `/service/SubServicePage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${item?.serviceCategory?.name}`
+          `/CreateOrderPage/CreateOrderPage?id=${item?.id}&subService=${item?.name}&logo=${item?.logo}&service=${item?.serviceCategory?.name}`
         );
       else {
         showSheet("confirmation-action", {

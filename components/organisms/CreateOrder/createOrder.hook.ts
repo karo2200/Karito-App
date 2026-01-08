@@ -26,30 +26,43 @@ export default function useCreateOrder() {
   });
   const { getValues, setValue, watch } = methods;
 
-  const { addressId, prices, clearAll } = createOrderStore();
+  const { addressId, prices, clearAll, setPrices } = createOrderStore();
 
   const params = useRoute().params;
   const { mutate, isPending } = useCreateRequestMutation();
 
   const [stage, setStage] = useState<number>(0);
-  setValue("serviceType", params?.name);
+  const serviceType = watch("serviceType");
 
   const { data, isLoading } = useGetServiceTypeQuestionsQuery({
-    input: { serviceTypeId: params?.sub },
+    input: { serviceTypeId: serviceType?.id },
   });
   const questions = data?.pages?.[0] ? data?.pages : [];
-  console.log(JSON.stringify(params));
+
+  useEffect(() => {
+    if (questions?.length > 0 && prices?.length > 0) {
+      const findIndex = questions?.findIndex(
+        (item) => item?.id === prices?.[0]?.id
+      );
+      if (findIndex == -1) {
+        prices?.forEach((item, index) => setValue(item?.id, undefined));
+        setPrices([]);
+      }
+    }
+  }, [serviceType, questions]);
+
   const configDatas = useMemo(() => {
     let configDatas = [];
-
+    configDatas?.push({ type: "serviceType", ...params });
     configDatas?.push({
       type: "question",
       data: questions,
-      askGender: params?.fixedGender === "null",
+      askGender: !serviceType?.fixedGender,
+      serviceType,
     });
     baseData?.forEach((item) => configDatas?.push(item));
 
-    configDatas?.push({ type: "description" });
+    // configDatas?.push({ type: "description" });
     configDatas?.push({ type: "previewOrder" });
     configDatas?.push({ type: "orderSubmitting" });
 
@@ -57,18 +70,46 @@ export default function useCreateOrder() {
   }, [isLoading, questions]);
 
   const steps = (configDatas?.length ?? 0) - 1;
+  const values = getValues();
   const nextDisabled = useMemo(() => {
-    if (configDatas[stage]?.type === "selectDate" && !watch("time"))
-      return true;
+    if (configDatas[stage]?.type == "question") {
+      const disabled = questions.some((question) => {
+        if (!question.isRequired) return false;
+
+        const value = values[question.id];
+
+        // radio / single value
+        if (question.questionType === "RADIO_BUTTON") {
+          return !value;
+        }
+
+        // checkbo
+        if (question.questionType === "CHECK_BOX") {
+          return !Array.isArray(value) || value.length === 0;
+        }
+
+        return false;
+      });
+
+      if (!serviceType?.fixedGender && !values?.["gender"]) return true;
+      return disabled;
+    }
+
+    // if (configDatas[stage]?.type === "selectDate" && !watch("dateTime"))
+    //   return true;
+
     if (configDatas[stage]?.type === "description" && !watch("description"))
       return true;
+
+    if (!watch("serviceType")) return true;
+
     return stage === steps;
-  }, [stage, watch("time"), watch("description")]);
+  }, [stage, watch()]);
 
   const onNextPress = () => {
     const values = getValues();
-
-    if (configDatas[stage]?.type === "question") {
+    console.log("mm", { type: currentStep?.type });
+    if (currentStep?.type === "question") {
       let canContinue = true;
       for (const element of questions) {
         if (element?.isRequired && !getValues()?.[element?.id]) {
@@ -82,24 +123,21 @@ export default function useCreateOrder() {
       }
       if (!canContinue) return;
     }
-    if (configDatas[stage]?.type === "selectDate") {
-      const tehranDateTime = dayjs.tz(
-        `${getValues().date} ${getValues().time}:00`,
-        "YYYY-MM-DD HH:mm",
-        "Asia/Tehran"
-      );
-      setValue("requestDate", tehranDateTime);
+    if (currentStep?.type === "selectDate") {
+      setValue("requestDate", getValues().dateTime);
     }
-    if (stage === steps - 1) {
+    if (currentStep?.type === "previewOrder") {
       let qnAs: QnAInput[] = [];
-
+      console.log("NN");
       questions?.forEach((item, index) => {
+        console.log(JSON.stringify({ ii: values?.[item?.id] }));
         qnAs?.push({
           questionId: item?.id,
-          answers:
+          optionId:
             item?.questionType == QuestionType.RadioButton
               ? [values?.[item?.id]]
               : [],
+          // optionIds:values?.[item?.id]?.
         });
       });
 
@@ -107,7 +145,7 @@ export default function useCreateOrder() {
         {
           input: {
             addressId,
-            description: values?.description,
+            description: "",
             qnAs,
             requestDate: values?.requestDate,
             serviceTypeId: params?.sub,
@@ -127,7 +165,9 @@ export default function useCreateOrder() {
               router?.navigate("/(tabs)/service");
             }
           },
-          onError(error, variables, context) {},
+          onError(error, variables, context) {
+            console.log({ error });
+          },
         }
       );
     } else setStage((prev) => prev + 1);
@@ -137,13 +177,20 @@ export default function useCreateOrder() {
     if (stage > 0) setStage((prev) => prev - 1);
   };
 
-  const total = useMemo(() => {
-    let total = params?.price ? parseInt(params?.price) : 0;
-    prices?.forEach((element) => {
-      total += element?.price;
-    });
-    return total;
-  }, [prices, params]);
+  const currentStep = configDatas?.[stage];
+
+  const totalPrice = useMemo(() => {
+    if (currentStep.type === "serviceType") {
+      return serviceType?.basePrice ?? 0;
+    } else {
+      const totalPrice =
+        prices && prices?.length > 0
+          ? serviceType?.basePrice +
+            prices.reduce((sum, item) => sum + (item.price || 0), 0)
+          : serviceType?.basePrice;
+      return totalPrice;
+    }
+  }, [stage, serviceType, prices]);
 
   useEffect(() => {
     return () => clearAll();
@@ -157,7 +204,8 @@ export default function useCreateOrder() {
     stage,
     nextDisabled,
     isLast,
-    totalPrice: total,
+    totalPrice,
+    currentStep,
 
     configDatas: !configDatas ? [] : configDatas,
 
@@ -169,6 +217,6 @@ export default function useCreateOrder() {
     getValues,
     watch,
 
-    nextLoading: stage === steps - 1 && isPending,
+    nextLoading: currentStep?.type === "previewOrder" && isPending,
   };
 }

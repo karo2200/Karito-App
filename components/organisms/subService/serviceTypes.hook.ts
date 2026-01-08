@@ -1,8 +1,7 @@
-import { useRoute } from "@react-navigation/native";
 import { useGetServiceTypesQuery } from "./hooks";
 
-export default function useServiceTypesHook() {
-  const param = useRoute().params;
+export default function useServiceTypesHook(props) {
+  const param = props;
 
   const { data, isPending, fetchNextPage, hasNextPage } =
     useGetServiceTypesQuery({

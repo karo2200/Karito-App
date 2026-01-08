@@ -29,6 +29,7 @@ export const Colors = {
   hint200: "#ADA9F7",
   hint900: "#4000AD",
   gray50: "#F9FAFB",
+  hint: { "800": "#3d2da6", "600": "#5D47EA" },
   mediumGray: "#A3A3A3",
   lightGray: "#F6F6F6",
   gray100: "#D9D9D9",
@@ -54,6 +55,7 @@ export const Colors = {
   titleGreen: "#00691E",
   iconGreen: "#00BC55",
   danger50: "#FEEBEE",
+  danger10: "#FEE4E2",
   danger900: "#B21F21",
   danger200: "#EB9A9C",
   danger500: "#EF443C",
@@ -69,4 +71,19 @@ export const Colors = {
   successDark: "#059669",
   infoDark: "#3B82F6",
   warningDark: "#FB923C",
+  success: {
+    "500": "#12B76A",
+  },
+  gray: {
+    "200": "#E9EAEB",
+    desc: "#535862",
+    "950": "#0A0D12",
+    "600": "#535862",
+  },
+  error: {
+    "950": "#55160C",
+  },
+  info: {
+    "500": "#2E90FA",
+  },
 };

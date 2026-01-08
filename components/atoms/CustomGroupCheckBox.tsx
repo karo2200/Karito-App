@@ -1,4 +1,7 @@
-import { Divider, ThemedText, ThemedView } from "@/components";
+import { ThemedText, ThemedView } from "@/components";
+import { Colors } from "@/constants/Colors";
+import { DeviceWidth } from "@/constants/Dimension";
+import { formatPrice } from "@/services/ParseData";
 import createOrderStore from "@/stores/createOrder";
 import React from "react";
 import { useController } from "react-hook-form";
@@ -60,17 +63,32 @@ export default React.forwardRef(
             const isChecked = field?.value?.some((el) => el.text === item.text);
 
             return (
-              <ThemedView key={`${index}_${item?.value}`}>
-                <ThemedView style={styles.groupView}>
-                  <CustomCheckbox
-                    checked={isChecked}
-                    label={`${item?.text}_${item?.price}`}
-                    onPress={() => onToggleItem(item)}
-                  />
-                </ThemedView>
-                {index !== data?.length - 1 && (
-                  <Divider height={dividerHeight} />
+              <ThemedView
+                style={[
+                  styles.groupView,
+                  isChecked && {
+                    borderWidth: 2,
+                    borderColor: Colors.hint500,
+                    backgroundColor: "#FBFAFF",
+                  },
+                ]}
+                key={`${index}_${item?.value}`}
+              >
+                {item?.price && (
+                  <ThemedText
+                    hasNumber
+                    fontType="semiBold"
+                    style={{
+                      fontSize: 10,
+                      color: isChecked ? Colors.hint["800"] : Colors.gray900,
+                    }}
+                  >{`${formatPrice(item?.price)} تومان`}</ThemedText>
                 )}
+                <CustomCheckbox
+                  checked={isChecked}
+                  label={`${item?.text}`}
+                  onPress={() => onToggleItem(item)}
+                />
               </ThemedView>
             );
           })}
@@ -83,12 +101,14 @@ export default React.forwardRef(
 const styles = StyleSheet.create({
   groupView: {
     alignItems: "center",
-    overflow: "hidden",
-    marginBottom: 3,
     flexDirection: "row",
-    flexShrink: 1,
-    width: "100%",
-    backgroundColor: "blue",
+    width: DeviceWidth * 0.9,
+    borderColor: Colors.gray["200"],
+    borderRadius: 8,
+    padding: 16,
+    borderWidth: 1,
+    marginBottom: 16,
+    justifyContent: "space-between",
   },
 
   label: { marginBottom: 16 },

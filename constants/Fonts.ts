@@ -1,9 +1,13 @@
 import { useFonts } from "expo-font";
 
 export enum FontStyle {
-  bold = "bold",
-  regular = "regular",
-  medium = "medium",
+  bold = "YekanBakhBold",
+  regular = "YekanBakhRegular",
+  medium = "YekanBakhMedium",
+  semiBold = "YekanBakhHeavy",
+  thin = "YekanBakhThin",
+  light = "YekanBakhLight",
+  extraBold = "YekanBakhHeavy",
 }
 
 export enum FontType {

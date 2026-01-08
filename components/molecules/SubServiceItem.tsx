@@ -1,39 +1,70 @@
 import { Colors } from "@/constants/Colors";
-import { useRouter } from "expo-router";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { formatPrice } from "@/services/ParseData";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import ThemedText from "../atoms/ThemedText";
 
-export default function SubServiceItem({ item, index }) {
-  const router = useRouter();
-  console.log({ item });
-  const onPress = () =>
-    router.push(
-      `/CreateOrderPage/CreateOrderPage?sub=${item?.id}&name=${item?.name}&price=${item?.basePrice}&fixedGender=${item?.fixedGender}`
-    );
-
+export default function SubServiceItem({ item, index, onPress, checked }) {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <ThemedText style={styles.label}>{item?.name}</ThemedText>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        checked && { borderWidth: 2, borderColor: Colors.hint500 },
+      ]}
+      onPress={onPress}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <ThemedText
+          style={[styles.price, checked && { color: Colors.hint["800"] }]}
+          fontType="semiBold"
+          hasNumber
+        >
+          {`${formatPrice(item?.basePrice)} تومان`}
+        </ThemedText>
+        <View>
+          <ThemedText
+            style={[styles.title, checked && { color: Colors.hint900 }]}
+            fontType="extraBold"
+          >
+            {item?.name}
+          </ThemedText>
+          {item?.desc && (
+            <ThemedText style={styles.desc} fontType="regular">
+              سرویس عادی نظافت شامل موارد ابتدایی
+            </ThemedText>
+          )}
+        </View>
+      </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  label: {
-    color: Colors.gray900,
-    marginRight: 16,
+  title: {
+    color: Colors.black,
     fontSize: 14,
-    fontWeight: "400",
+  },
+  price: {
+    color: Colors.black,
+    fontSize: 10,
+  },
+
+  desc: {
+    color: Colors.gray["desc"],
+    fontSize: 10,
   },
 
   container: {
     borderWidth: 1,
-    borderRadius: 6,
-    borderColor: Colors.grayMedium,
-    alignItems: "center",
+    borderRadius: 8,
+    borderColor: Colors.gray["200"],
     justifyContent: "center",
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+    padding: 16,
     width: "100%",
   },
 });

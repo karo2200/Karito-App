@@ -19,3 +19,7 @@ export function getStatusFa(status: string, isCustomer?: boolean) {
       return "نامشخص";
   }
 }
+
+export const toPersianNumber = (value: string | number) => {
+  return value.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
+};

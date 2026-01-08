@@ -1,16 +1,17 @@
 import { ThemedText, ThemedView } from "@/components";
+import CustomRadioGroup from "@/components/atoms/CustomRadioGroup";
 import { Colors } from "@/constants/Colors";
 import { DeviceWidth } from "@/constants/Dimension";
 import { Gender } from "@/generated/graphql";
 import { Man, Woman } from "iconsax-react-native";
 import { useState } from "react";
 import { useController } from "react-hook-form";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 
 const genderOptions = [
-  { title: "زن", value: Gender.Female, Icon: Woman },
-  { title: "مرد", value: Gender.Male, Icon: Man },
-  { title: "مهم نیست", value: undefined },
+  { text: "زن", value: Gender.Female, Icon: Woman },
+  { text: "مرد", value: Gender.Male, Icon: Man },
+  { text: "مهم نیست", value: undefined },
 ];
 
 export default function SelectGender(props: any) {
@@ -23,30 +24,7 @@ export default function SelectGender(props: any) {
         جنسیت متخصص را انتخاب کنید:
       </ThemedText>
       <ThemedView style={styles.listContainer}>
-        {genderOptions?.map(({ value, Icon, title }, index) => (
-          <TouchableOpacity
-            key={`${value}_${index}`}
-            onPress={() => {
-              field?.onChange(value);
-              setSelected(value);
-            }}
-            style={[
-              value === seleted
-                ? styles.selectedContainer
-                : styles.deSelectedContainer,
-              { marginRight: index != 2 ? 12 : 0 },
-            ]}
-          >
-            <ThemedText
-              style={
-                value === seleted ? styles.selectedText : styles.deSelectedText
-              }
-            >
-              {title}
-            </ThemedText>
-            {Icon && <Icon size={20} color={Colors.semiBlack} />}
-          </TouchableOpacity>
-        ))}
+        <CustomRadioGroup name="gender" data={genderOptions} />
       </ThemedView>
     </ThemedView>
   );
