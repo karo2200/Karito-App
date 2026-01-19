@@ -1,83 +1,92 @@
+import { ThemedText } from "@/components";
 import { isWeb } from "@/services/helper";
-import React, { useEffect, useMemo } from "react";
-import { Alert, Platform, StyleSheet, View } from "react-native";
+import * as Location from "expo-location";
+import React, { useEffect, useMemo, useState } from "react";
+import { Alert, Platform, Pressable, StyleSheet, View } from "react-native";
 import { WebView } from "react-native-webview";
-import { parseWktMultiPolygon } from "./GoogleMapView.native";
 
 type LatLng = [number, number];
 type Polygon = LatLng[];
 type MultiPolygon = Polygon[];
 
-const fallbackPolygon: Polygon = [
-  [35.704, 51.335],
-  [35.703, 51.345],
-  [35.696, 51.343],
-  [35.697, 51.334],
-];
+const parseWktMultiPolygon = (wkt) => {
+  // Remove SRID if exists
+  wkt = wkt.replace(/^SRID=\d+;/, "").trim();
 
-const toLatLng = (lngLat: number[]): LatLng => [lngLat[1], lngLat[0]];
-
-const parseWktPolygons = (wkt?: string): MultiPolygon => {
-  if (!wkt) return [fallbackPolygon];
-  const normalized = wkt.replace(/^SRID=\d+;?/i, "").trim();
-  const match = normalized.match(
-    /^(MULTIPOLYGON|POLYGON)\s*\(\s*([\s\S]*)\s*\)$/i
-  );
-
-  if (!match) return [fallbackPolygon];
-
-  const type = match[1].toUpperCase();
-  const body = match[2];
-  const polygons: MultiPolygon = [];
-
-  const parseRing = (ringText: string): Polygon => {
-    const points = ringText
-      .split(",")
-      .map((pair) => pair.trim().split(/\\s+/).map(Number))
-      .filter((coords) => coords.length >= 2 && !coords.some(Number.isNaN))
-      .map(toLatLng);
-    return points;
-  };
-
-  if (type === "POLYGON") {
-    const rings = body.replace(/^\\(|\\)$/g, "").split("),(");
-    const outer = parseRing(rings[0] ?? "");
-    if (outer.length) polygons.push(outer);
+  if (!wkt.startsWith("MULTIPOLYGON")) {
+    throw new Error("Not a MULTIPOLYGON WKT");
   }
 
-  if (type === "MULTIPOLYGON") {
-    const polygonTexts = body.replace(/^\\(\\(|\\)\\)$/g, "").split(")),((");
-    polygonTexts.forEach((polygonText) => {
-      const rings = polygonText.split(")), ((");
+  // Remove the MULTIPOLYGON ( prefix and trailing ))
+  const inner = wkt
+    .replace("MULTIPOLYGON", "")
+    .trim()
+    .replace(/^\(\(\(/, "")
+    .replace(/\)\)\)$/, "");
 
-      const outer = parseRing(rings[0] ?? "");
-      if (outer.length) polygons.push(outer);
+  // Split polygons
+  const polygonsRaw = inner.split(")), ((");
+
+  const polygons = polygonsRaw.map((polyStr) => {
+    // Split points
+    const points = polyStr.split(",").map((point) => {
+      const [lng, lat] = point.trim().split(" ").map(Number);
+      return [lat, lng];
     });
-  }
+    return points;
+  });
 
-  return polygons.length ? polygons : [fallbackPolygon];
+  return polygons;
 };
 
-const html = (polygons: MultiPolygon) => `<!DOCTYPE html>
+const html = (
+  polygons: MultiPolygon,
+  showLocation?: boolean,
+  currentLocation?: LatLng | null
+) =>
+  `<!DOCTYPE html>
 <html lang="fa">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <link rel="stylesheet" href="https://static.neshan.org/sdk/leaflet/v1.9.4/neshan-sdk/v1.0.8/index.css"/>
   <script src="https://static.neshan.org/sdk/leaflet/v1.9.4/neshan-sdk/v1.0.8/index.js"></script>
-  <style>html,body,#map{height:100%;width:100%;margin:0}</style>
+  <style>
+  html,body,#map{height:100%;width:100%;margin:0}
+  .current-location-btn{
+    position:absolute;
+    bottom:20px;
+    right:20px;
+    z-index:1000;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:999px;
+    width:44px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 12px rgba(15,23,42,0.15);
+    cursor:pointer;
+  }
+  .current-location-btn:active{transform:scale(0.98)}
+</style>
 </head>
 <body>
   <div id="map"></div>
+  <button id="current-location" class="current-location-btn" title="موقعیت فعلی">
+    ⦿
+  </button>
 <script>
   const polygons = ${JSON.stringify(polygons)};
+  const currentLocation = ${JSON.stringify(currentLocation)};
 
   const initialPoint = polygons[0]?.[0] ?? [35.699756, 51.338076];
   const map = new L.Map("map", {
     key: "web.0aae3f9bf3ed481db86d2adf916535e9",
     maptype: "neshan",
     center: initialPoint,
-    zoom: 100,
+    zoom: 14,
   });
 
   const polygonLayers = polygons.map((polygonPoints) =>
@@ -98,6 +107,26 @@ const html = (polygons: MultiPolygon) => `<!DOCTYPE html>
   }
 
   let marker = L.marker(initialPoint).addTo(map);
+  let currentLocationMarker = null;
+
+  function upsertCurrentLocation(lat, lng) {
+    if (!currentLocationMarker) {
+      currentLocationMarker = L.circleMarker([lat, lng], {
+        radius: 6,
+        color: "#2563eb",
+        fillColor: "#3b82f6",
+        fillOpacity: 0.9,
+        weight: 2,
+      }).addTo(map);
+      return;
+    }
+    currentLocationMarker.setLatLng([lat, lng]);
+  }
+
+  if (currentLocation && currentLocation.length === 2) {
+    upsertCurrentLocation(currentLocation[0], currentLocation[1]);
+    map.setView([currentLocation[0], currentLocation[1]], 14);
+  }
 
   function isPointInPolygon(point, vs) {
     const x = point[0], y = point[1];
@@ -150,13 +179,34 @@ export default function NeshanMap({
   boundariesWkt,
   onLocationSelected,
 }: NeshanMapProps) {
+  const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
+
+  useEffect(() => {
+    requestNativeCurrentLocation();
+  }, []);
+
   const polygons = useMemo(() => {
     if (boundariesWkt?.length > 0)
       return parseWktMultiPolygon(boundariesWkt ?? undefined);
     else return [];
   }, [boundariesWkt]);
-  const source = useMemo(() => ({ html: html(polygons) }), [polygons]);
+
+  const source = useMemo(
+    () => ({ html: html(polygons, isWeb, currentLocation) }),
+    [currentLocation, polygons]
+  );
   const Iframe = "iframe" as React.ElementType;
+
+  const requestNativeCurrentLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") return;
+      const position = await Location.getCurrentPositionAsync({});
+      setCurrentLocation([position.coords.latitude, position.coords.longitude]);
+    } catch (error) {
+      Alert.alert("هشدار", "دسترسی به موقعیت مکانی امکان‌پذیر نیست.");
+    }
+  };
 
   const handleMessage = (event: any) => {
     try {
@@ -177,7 +227,6 @@ export default function NeshanMap({
   useEffect(() => {
     if (Platform.OS !== "web") return;
     const handler = (event: MessageEvent) => {
-      const data = event.data;
       handleMessage(event);
     };
     window.addEventListener("message", handler);
@@ -190,7 +239,7 @@ export default function NeshanMap({
         <Iframe
           srcDoc={source.html}
           style={styles.map}
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts allow-same-origin allow-geolocation"
         />
       ) : (
         <WebView
@@ -199,7 +248,16 @@ export default function NeshanMap({
           source={source}
           style={styles.map}
           nestedScrollEnabled
+          geolocationEnabled
         />
+      )}
+      {Platform.OS !== "web" && currentLocation && (
+        <Pressable
+          style={styles.currentLocationButton}
+          onPress={requestNativeCurrentLocation}
+        >
+          <ThemedText style={styles.currentLocationText}>⦿</ThemedText>
+        </Pressable>
       )}
     </View>
   );
@@ -208,4 +266,27 @@ export default function NeshanMap({
 const styles = StyleSheet.create({
   container: { flex: 1, width: "100%" },
   map: { border: "none", width: "100%", height: "100%" },
+  currentLocationButton: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    shadowColor: "#0f172a",
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+    zIndex: 1,
+  },
+  currentLocationText: {
+    color: "#2563eb",
+    fontSize: 18,
+  },
 });
