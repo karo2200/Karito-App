@@ -94,7 +94,6 @@ export default function TimePickerRow() {
             cellCount={2}
             keyboardType="number-pad"
             textContentType="oneTimeCode"
-            autoFocus
             renderCell={({ index, symbol, isFocused }) => (
               <ThemedText key={index} hasNumber style={styles.codeCell}>
                 {symbol || (isFocused && <Cursor />)}

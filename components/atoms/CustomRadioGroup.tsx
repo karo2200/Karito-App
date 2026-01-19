@@ -24,7 +24,6 @@ export default React.forwardRef(
     const { prices, setPrices } = createOrderStore();
 
     const onChangeItem = async (item: any) => {
-      console.log({ name });
       field.onChange(item);
       onChange?.(item);
       if (item?.price) {
@@ -37,7 +36,6 @@ export default React.forwardRef(
         setPrices(tempPrices);
       }
     };
-    console.log(JSON.stringify({ prices }));
 
     return (
       <ThemedView>
@@ -68,6 +66,7 @@ export default React.forwardRef(
               )}
               <CustomRadioButton
                 checked={isChecked}
+                backgroundColor={isChecked ? "#FBFAFF" : Colors.white}
                 label={`${item?.text}`}
                 onPress={() => {
                   onChangeItem(item);

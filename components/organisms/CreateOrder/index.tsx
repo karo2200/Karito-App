@@ -24,15 +24,13 @@ export default function CreateOrderOrg() {
 
     methods,
     setValue,
-    watch,
-    getValues,
   } = useCreateOrder();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["left", "right", "bottom"]}>
       {!isLast && stage < 3 && <ProgressBar step={stage + 1} />}
       <FormProvider {...methods}>
-        <ScrollView style={{ flex: 1, flexGrow: 1, paddingHorizontal: 16 }}>
+        <ScrollView style={styles.scroll}>
           <Divider height={24} />
           <CreateOrderSetup
             setValue={setValue}
@@ -51,7 +49,7 @@ export default function CreateOrderOrg() {
         )}
         {configDatas[stage].type == "previewOrder" && (
           <ThemedButton
-            onNextPress={onNextPress}
+            onPress={onNextPress}
             isLoading={nextLoading}
             title="ثبت درخواست"
             style={{
@@ -74,7 +72,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    paddingTop: 20,
   },
 
   flex1: { flex: 1 },
+
+  scroll: { flex: 1, flexGrow: 1, paddingHorizontal: 16, width: "100%" },
 });

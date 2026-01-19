@@ -7,14 +7,16 @@ export default function CustomRadioButton({
   label,
   checked,
   onPress,
+  backgroundColor,
 }: {
   checked: boolean;
   label?: string;
   onPress?: () => void;
+  backgroundColor?: string;
 }) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.5} style={{ flex: 1 }}>
-      <ThemedView style={styles.flex1}>
+      <ThemedView style={[styles.flex1, { backgroundColor }]}>
         <ThemedView
           style={[styles.outView, checked && { borderColor: Colors.hint500 }]}
         >
@@ -57,5 +59,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  width: { fontSize: 14, color: Colors.black },
+  width: { fontSize: 14, color: Colors.black, flexShrink: 1 },
 });

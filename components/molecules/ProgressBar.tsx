@@ -28,7 +28,13 @@ export function ProgressBar({ step }: { step?: number }): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  image: { width: 44, height: 44, borderRadius: 4, overflow: "hidden" },
+  image: {
+    width: 44,
+    height: 44,
+    borderRadius: 4,
+    overflow: "hidden",
+    resizeMode: "contain",
+  },
 
   rowView: {
     flexDirection: "row-reverse",

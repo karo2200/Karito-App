@@ -40,10 +40,6 @@ export const createOrderStore = create<CreateOrderStoreType>(
       setStepPrices: (prices: any) => set({ prices }),
       clearAll: () =>
         set({
-          addressId: "",
-          customerCity: "",
-          customerCityId: "",
-          address: "",
           prices: [],
         }),
     }),

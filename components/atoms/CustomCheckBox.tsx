@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
+    backgroundColor: "transparent",
   },
 
   outView: {

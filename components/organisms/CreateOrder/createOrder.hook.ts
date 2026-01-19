@@ -95,8 +95,8 @@ export default function useCreateOrder() {
       return disabled;
     }
 
-    // if (configDatas[stage]?.type === "selectDate" && !watch("dateTime"))
-    //   return true;
+    if (configDatas[stage]?.type === "selectDate" && !watch("dateTime"))
+      return true;
 
     if (configDatas[stage]?.type === "description" && !watch("description"))
       return true;
@@ -108,7 +108,7 @@ export default function useCreateOrder() {
 
   const onNextPress = () => {
     const values = getValues();
-    console.log("mm", { type: currentStep?.type });
+
     if (currentStep?.type === "question") {
       let canContinue = true;
       for (const element of questions) {
@@ -128,16 +128,18 @@ export default function useCreateOrder() {
     }
     if (currentStep?.type === "previewOrder") {
       let qnAs: QnAInput[] = [];
-      console.log("NN");
+
       questions?.forEach((item, index) => {
-        console.log(JSON.stringify({ ii: values?.[item?.id] }));
         qnAs?.push({
           questionId: item?.id,
           optionId:
             item?.questionType == QuestionType.RadioButton
-              ? [values?.[item?.id]]
-              : [],
-          // optionIds:values?.[item?.id]?.
+              ? values?.[item?.id]?.id
+              : undefined,
+          optionIds:
+            item?.questionType == QuestionType.CheckBox
+              ? values?.[item?.id]?.map((item: any) => item?.id)
+              : undefined,
         });
       });
 
@@ -148,8 +150,8 @@ export default function useCreateOrder() {
             description: "",
             qnAs,
             requestDate: values?.requestDate,
-            serviceTypeId: params?.sub,
-            gender: values?.gender,
+            serviceTypeId: serviceType?.id,
+            gender: values?.gender?.value,
           },
         },
         {

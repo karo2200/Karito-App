@@ -61,16 +61,11 @@ export default function Banner() {
   return (
     <View>
       {activeBanner ? (
-        <CustomImage
-          style={styles.image}
-          src={activeBanner?.imageUrl}
-          resizeMode="fill"
-        />
+        <CustomImage style={styles.image} src={activeBanner?.imageUrl} />
       ) : (
         <CustomImage
           localSource={require("@/assets/images/Home-Banner.png")}
           style={styles.image}
-          resizeMode="fill"
         />
       )}
       <View style={styles.inputContainer}>
@@ -81,12 +76,6 @@ export default function Banner() {
           >
             <Ionicons name="search-outline" size={20} />
             <ThemedText>جستجوی خدمت</ThemedText>
-            {/* <TextInput
-              style={styles.input}
-              placeholder="جستجوی خدمت"
-              textAlign="right"
-              placeholderTextColor={Colors.unfilledText}
-            /> */}
           </Pressable>
           <TouchableOpacity onPress={openActionSheet} style={styles.button}>
             <Ionicons name="location-outline" size={20} color="#000" />
