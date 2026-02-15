@@ -5,6 +5,7 @@ import {
   ButtonProps,
   StyleProp,
   StyleSheet,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -20,6 +21,7 @@ type ThemedButtonProps = ButtonProps & {
   disabledColor?: string;
   disabledTextColor?: string;
   isLoading?: boolean;
+  textStyle?: StyleProp<TextStyle>;
 };
 
 export default function ThemedButton({
@@ -34,6 +36,7 @@ export default function ThemedButton({
   disabledColor = Colors.gray300,
   disabledTextColor = Colors.white,
   isLoading,
+  textStyle,
   ...rest
 }: ThemedButtonProps) {
   return (
@@ -60,21 +63,22 @@ export default function ThemedButton({
             style={styles.flex1}
             disabled={disabled}
           >
+            {LeftIcon && LeftIcon}
             <ThemedText
-              style={
+              style={[
                 disabled
                   ? { color: disabledTextColor }
                   : type == "outline"
                     ? styles.textColor
-                    : styles.textFilledColor
-              }
+                    : styles.textFilledColor,
+                textStyle,
+              ]}
               fontType={fontType}
             >
               {title}
             </ThemedText>
             {rightIcon}
           </TouchableOpacity>
-          {LeftIcon && LeftIcon}
         </>
       )}
     </View>

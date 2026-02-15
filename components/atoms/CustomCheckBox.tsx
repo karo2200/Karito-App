@@ -14,60 +14,51 @@ export default function CustomCheckbox({
   onPress?: () => void;
 }) {
   return (
-    <ThemedView style={styles.flex1}>
-      {checked ? (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.5}>
-          <ThemedView style={styles.container}>
-            <ThemedView style={styles.flex1} />
-            <ThemedText numberOfLines={2} style={styles.width}>
-              {label}
-            </ThemedText>
-            <ThemedView style={styles.outView}>
-              <TickSquare size={24} color={Colors.hint500} />
-            </ThemedView>
-          </ThemedView>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.5}>
-          <ThemedView style={styles.container}>
-            <ThemedView style={styles.flex1} />
-            <ThemedText numberOfLines={2} style={styles.width}>
-              {label}
-            </ThemedText>
-            <ThemedView style={styles.unCheckedView} />
-          </ThemedView>
-        </TouchableOpacity>
-      )}
-    </ThemedView>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.5}>
+      <ThemedView style={styles.flex1}>
+        <ThemedText
+          numberOfLines={2}
+          style={[styles.width, checked && { color: Colors.hint900 }]}
+          fontType="semiBold"
+        >
+          {label}
+        </ThemedText>
+        {checked ? (
+          <TickSquare size={18} color={Colors.hint500} variant="Bold" />
+        ) : (
+          <ThemedView style={styles.unCheckedView} />
+        )}
+      </ThemedView>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  flex1: { flex: 1 },
+  flex1: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: "transparent",
+  },
 
   outView: {
     alignItems: "center",
     justifyContent: "center",
-    height: 22,
-    width: 22,
-    marginLeft: 4,
+    height: 18,
+    width: 18,
   },
 
   unCheckedView: {
-    borderColor: Colors.mediumGray,
-    borderWidth: 2,
-    height: 22,
-    width: 22,
-    marginLeft: 4,
-    borderRadius: 6,
+    borderColor: Colors.gray["200"],
+    borderWidth: 0.9,
+    height: 18,
+    width: 18,
+    borderRadius: 4,
   },
 
-  container: {
-    alignItems: "center",
-    flexDirection: "row",
-    marginLeft: 4,
-    flexShrink: 1,
+  width: {
+    fontSize: 14,
+    color: Colors.black,
+    marginHorizontal: 10,
   },
-
-  width: { width: "90%" },
 });

@@ -4,7 +4,7 @@ import { commonStyles } from "@/constants/CommonStyles";
 
 export default function CreateOrderPage() {
   return (
-    <ThemedContainer style={commonStyles.container}>
+    <ThemedContainer style={commonStyles.containerFullWidth}>
       <CreateOrderOrg />
     </ThemedContainer>
   );

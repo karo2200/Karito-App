@@ -62,6 +62,7 @@ export default function useVerificationVideoHook() {
 
   const sendVideo = async () => {
     setIsSendingVideo(true);
+    
     const fileInfo = await FileSystem.getInfoAsync(video);
 
     upload(

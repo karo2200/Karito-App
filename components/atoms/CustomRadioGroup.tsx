@@ -1,7 +1,11 @@
-import { Divider, ThemedText, ThemedView } from "@/components";
+import { ThemedText, ThemedView } from "@/components";
+import { Colors } from "@/constants/Colors";
+import { DeviceWidth } from "@/constants/Dimension";
+import { formatPrice } from "@/services/ParseData";
+import createOrderStore from "@/stores/createOrder";
 import React, { JSX } from "react";
 import { useController } from "react-hook-form";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import CustomRadioButton from "./CustomRadioButton";
 
 type RadioGroupProps = {
@@ -15,60 +19,62 @@ type RadioGroupProps = {
 };
 
 export default React.forwardRef(
-  (
-    {
-      name,
-      data,
-      label,
-      RightIcon,
-      dividerHeight = 24,
-      onChange,
-      onRightIconPress,
-    }: RadioGroupProps,
-    ref: any
-  ) => {
-    const { field, fieldState } = useController({ name });
+  ({ name, data, onChange }: RadioGroupProps, ref: any) => {
+    const { field } = useController({ name });
+    const { prices, setPrices } = createOrderStore();
+
     const onChangeItem = async (item: any) => {
-      field.onChange(item?.value);
+      field.onChange(item);
       onChange?.(item);
+      if (item?.price) {
+        const tempPrices = [...prices];
+        const index = tempPrices?.findIndex((item) => item?.id === name);
+        if (index > -1) {
+          tempPrices?.splice(index, 1);
+        }
+        tempPrices.push({ id: name, price: item?.price, text: item?.text });
+        setPrices(tempPrices);
+      }
     };
 
     return (
       <ThemedView>
-        {label && (
-          <ThemedText fontType="bold" style={styles.label}>
-            {label}
-          </ThemedText>
-        )}
-        <ThemedView>
-          {data?.map((item: any, index: number) => {
-            const isChecked = field?.value === item?.value;
-            return (
-              <ThemedView key={`${index}_${item?.value}`}>
-                <ThemedView style={styles.groupView}>
-                  {RightIcon && (
-                    <TouchableOpacity
-                      disabled={!onRightIconPress}
-                      onPress={() => onRightIconPress?.(item)}
-                    >
-                      {RightIcon}
-                    </TouchableOpacity>
-                  )}
-                  <CustomRadioButton
-                    checked={isChecked}
-                    label={item?.label}
-                    onPress={() => {
-                      onChangeItem(item);
-                    }}
-                  />
-                </ThemedView>
-                {index != data?.length - 1 && (
-                  <Divider height={dividerHeight} />
-                )}
-              </ThemedView>
-            );
-          })}
-        </ThemedView>
+        {data?.map((item: any, index: number) => {
+          const isChecked = field?.value?.text === item?.text;
+
+          return (
+            <ThemedView
+              style={[
+                styles.groupView,
+                isChecked && {
+                  borderWidth: 2,
+                  borderColor: Colors.hint500,
+                  backgroundColor: "#FBFAFF",
+                },
+              ]}
+              key={`${index}_${item?.text}`}
+            >
+              {item?.price && (
+                <ThemedText
+                  hasNumber
+                  fontType="semiBold"
+                  style={{
+                    fontSize: 10,
+                    color: isChecked ? Colors.hint["800"] : Colors.gray900,
+                  }}
+                >{`${formatPrice(item?.price)} تومان`}</ThemedText>
+              )}
+              <CustomRadioButton
+                checked={isChecked}
+                backgroundColor={isChecked ? "#FBFAFF" : Colors.white}
+                label={`${item?.text}`}
+                onPress={() => {
+                  onChangeItem(item);
+                }}
+              />
+            </ThemedView>
+          );
+        })}
       </ThemedView>
     );
   }
@@ -77,12 +83,15 @@ export default React.forwardRef(
 const styles = StyleSheet.create({
   groupView: {
     alignItems: "center",
-    overflow: "hidden",
-    marginBottom: 3,
     flexDirection: "row",
-    flexShrink: 1,
-    width: "100%",
+    width: DeviceWidth * 0.9,
+    borderColor: Colors.gray["200"],
+    borderRadius: 8,
+    padding: 16,
+    borderWidth: 1,
+    marginBottom: 16,
+    justifyContent: "space-between",
   },
 
-  label: { marginBottom: 16 },
+  label: { marginBottom: 16, color: Colors.black },
 });

@@ -22,7 +22,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
 import * as yup from "yup";
 import { useGetUserAddressesQuery } from "../../address/hooks/Address.query";
-import GoogleMapView from "./GoogleMapView";
+import NeshanMap from "./NeshanMap";
 
 const schema = yup.object().shape({
   address: yup.string().required("لطفا آدرس را وارد کنید."),
@@ -191,7 +191,6 @@ export default function AddressMap() {
         },
         {
           onSuccess: (data) => {
-            console.log(JSON.stringify({ data }));
             const resultCode = data?.address_create?.status?.code;
             if (resultCode === 1) {
               queryClient.invalidateQueries({
@@ -273,7 +272,11 @@ export default function AddressMap() {
           <ThemedText type="subtitle">موقعیت روی نقشه</ThemedText>
           <Divider height={16} />
           <ThemedView style={styles.mapView}>
-            <GoogleMapView
+            <NeshanMap
+              boundariesWkt={wkt?.city_getAllBoundariesWkt?.result}
+              onLocationSelected={onLocationSelected}
+            />
+            {/* <GoogleMapView
               onLocationSelected={onLocationSelected}
               latLng={
                 currentAddress?.id
@@ -285,7 +288,7 @@ export default function AddressMap() {
               }
               wkt={wkt?.city_getAllBoundariesWkt?.result}
               ref={mapRef}
-            />
+            /> */}
           </ThemedView>
         </FormProvider>
       </ScrollView>

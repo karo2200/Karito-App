@@ -1,45 +1,65 @@
 import { Colors } from "@/constants/Colors";
-import { maxWidth } from "@/constants/Dimension";
+import { useRoute } from "@react-navigation/native";
 import React, { JSX } from "react";
 import { StyleSheet, View } from "react-native";
+import { CustomImage, ThemedText, ThemedView } from "..";
+import CircularStepProgress from "./CircularStepProgress";
 
-export function ProgressBar({
-  percent,
-  bg = Colors.hint50,
-  color = Colors.hint500,
-  height = 6,
-}: {
-  percent: number;
-  bg?: string;
-  color?: string;
-  height?: number;
-}): JSX.Element {
+export function ProgressBar({ step }: { step?: number }): JSX.Element {
+  const item = useRoute().params;
+
   return (
-    <View
-      style={[
-        styles.progressContainer,
-        { height, backgroundColor: bg, borderColor: bg },
-      ]}
-    >
-      <View
-        style={[
-          styles.progress,
-          { width: `${percent}%`, backgroundColor: color, borderColor: color },
-        ]}
-      ></View>
-    </View>
+    <ThemedView style={styles.rowView}>
+      <CustomImage src={item?.logo} style={styles.image} resizeMode="cover" />
+      <ThemedView style={styles.margin}>
+        <ThemedText
+          fontType="bold"
+          style={{ fontSize: 14, color: Colors.black }}
+        >{`درخواست سرویس «${item?.subService}»`}</ThemedText>
+        <ThemedText
+          style={{ fontSize: 12, color: Colors.gray500 }}
+          numberOfLines={1}
+        >{`خدمات مربوط به ${item?.service}`}</ThemedText>
+      </ThemedView>
+      <View style={{ flex: 1 }} />
+      <CircularStepProgress step={step} />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  progressContainer: {
-    marginBottom: 16,
-    borderRadius: 200,
-    width: maxWidth * 0.95,
+  image: {
+    width: 44,
+    height: 44,
+    borderRadius: 4,
+    overflow: "hidden",
+    resizeMode: "contain",
   },
 
-  progress: {
-    height: "100%",
-    borderRadius: 200,
+  rowView: {
+    flexDirection: "row-reverse",
+    paddingHorizontal: 16,
   },
+
+  margin: {
+    marginRight: 8,
+    justifyContent: "space-between",
+  },
+
+  infoView: {
+    borderWidth: 1,
+    borderRadius: 6,
+    backgroundColor: Colors.info50,
+    borderColor: Colors.info200,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row-reverse",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    width: "100%",
+  },
+
+  infoText: { color: Colors.info900, marginRight: 16, fontWeight: "400" },
+
+  flex1: { flex: 1, width: "100%" },
 });

@@ -5,4 +5,5 @@ export const commonStyles = StyleSheet.create({
   flexAndWidth: { flex: 1, width: "100%" },
 
   container: { paddingHorizontal: 15, paddingTop: 15 },
+  containerFullWidth: { paddingTop: 0 },
 });

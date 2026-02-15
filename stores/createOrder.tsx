@@ -13,6 +13,10 @@ type CreateOrderStoreType = {
   address?: string;
   setAddress: (adr: string) => void;
   clearAll: () => void;
+  prices: any[];
+  setPrices: (value: any[]) => void;
+  stepPrices?: any[];
+  setStepPrices: (value: any[]) => void;
 };
 type AuthCacheStore = (
   config: StateCreator<CreateOrderStoreType>,
@@ -26,16 +30,17 @@ export const createOrderStore = create<CreateOrderStoreType>(
       customerCity: "",
       customerCityId: "",
       address: "",
+      prices: [],
+      stepPrices: [0, 0, 0],
       setAddressId: (addressId: string) => set({ addressId }),
       setCustomerCityId: (customerCityId: string) => set({ customerCityId }),
       setCustomerCity: (customerCity: string) => set({ customerCity }),
       setAddress: (address: string) => set({ address }),
+      setPrices: (prices: any) => set({ prices }),
+      setStepPrices: (prices: any) => set({ prices }),
       clearAll: () =>
         set({
-          addressId: "",
-          customerCity: "",
-          customerCityId: "",
-          address: "",
+          prices: [],
         }),
     }),
     {

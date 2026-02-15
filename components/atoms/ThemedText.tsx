@@ -1,7 +1,7 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
 import { Colors } from "@/constants/Colors";
-import { FontType } from "@/constants/Fonts";
+import { FontStyle, FontType } from "@/constants/Fonts";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -14,7 +14,14 @@ export type ThemedTextProps = TextProps & {
     | "link"
     | "text"
     | "header";
-  fontType?: "bold" | "regular" | "medium" | "extraBold";
+  fontType?:
+    | "bold"
+    | "regular"
+    | "medium"
+    | "extraBold"
+    | "thin"
+    | "semiBold"
+    | "light";
   hasNumber?: boolean;
 };
 
@@ -36,13 +43,9 @@ export default function ThemedText({
         {
           fontFamily: hasNumber
             ? FontType.Shabnam
-            : fontType === "bold"
-              ? FontType.YekanBakhBold
-              : fontType === "regular"
-                ? FontType.YekanBakhRegular
-                : fontType === "extraBold"
-                  ? FontType.YekanBakhHeavy
-                  : FontType.YekanBakhMedium,
+            : FontStyle?.[fontType]
+              ? FontStyle[fontType]
+              : FontType.YekanBakhMedium,
           textAlign: "right",
         },
         type === "default" ? styles.default : undefined,

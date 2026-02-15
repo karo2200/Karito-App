@@ -2,7 +2,7 @@ import * as Location from "expo-location";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Alert, Platform, StyleSheet } from "react-native";
 
-const parseWktMultiPolygon = (wkt) => {
+export const parseWktMultiPolygon = (wkt) => {
   // Remove SRID if exists
   wkt = wkt.replace(/^SRID=\d+;/, "").trim();
 
@@ -24,7 +24,7 @@ const parseWktMultiPolygon = (wkt) => {
     // Split points
     const points = polyStr.split(",").map((point) => {
       const [lng, lat] = point.trim().split(" ").map(Number);
-      return { latitude: lat, longitude: lng };
+      return [lat, lng];
     });
     return points;
   });

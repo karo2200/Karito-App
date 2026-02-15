@@ -1,14 +1,18 @@
-import { ThemedView } from "@/components";
+import TickIcon from "@/assets/icons/tick";
+import { Divider, ThemedButton } from "@/components";
 import { ProgressBar } from "@/components/molecules/ProgressBar";
+import { Colors } from "@/constants/Colors";
 import { FormProvider } from "react-hook-form";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import BottomFooter from "./Views/BottomFooter";
 import { CreateOrderSetup } from "./Views/CreateOrderSetup";
 import useCreateOrder from "./createOrder.hook";
 
 export default function CreateOrderOrg() {
   const {
-    progressPersent,
+    totalPrice,
+    currentStep,
     stage,
     configDatas,
     nextDisabled,
@@ -20,37 +24,58 @@ export default function CreateOrderOrg() {
 
     methods,
     setValue,
-    watch,
-    getValues,
   } = useCreateOrder();
 
   return (
-    <ThemedView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["left", "right", "bottom"]}>
+      {!isLast && stage < 3 && <ProgressBar step={stage + 1} />}
       <FormProvider {...methods}>
-        {!isLast && <ProgressBar percent={Math.floor(progressPersent)} />}
-        <ThemedView style={styles.container}>
+        <ScrollView style={styles.scroll}>
+          <Divider height={24} />
           <CreateOrderSetup
             setValue={setValue}
-            {...configDatas[stage]}
-            getValues={getValues}
-            watch={watch}
+            {...currentStep}
+            totalPrice={totalPrice}
           />
-        </ThemedView>
-        {!isLast && (
+        </ScrollView>
+        {!isLast && stage < 3 && (
           <BottomFooter
             onNextPress={onNextPress}
             onBackPress={onBackPress}
             nextDisabled={nextDisabled}
             nextLoading={nextLoading}
+            totalPrice={totalPrice}
+          />
+        )}
+        {configDatas[stage].type == "previewOrder" && (
+          <ThemedButton
+            onPress={onNextPress}
+            isLoading={nextLoading}
+            title="ثبت درخواست"
+            style={{
+              marginHorizontal: 16,
+              backgroundColor: Colors.success["500"],
+              borderColor: Colors.success["500"],
+              alignItems: "center",
+            }}
+            textStyle={{ fontSize: 14, color: Colors.white }}
+            fontType="semiBold"
+            LeftIcon={<TickIcon width={24} height={24} color={Colors.white} />}
           />
         )}
       </FormProvider>
-    </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: "100%" },
+  container: {
+    flex: 1,
+    width: "100%",
+    paddingTop: 20,
+  },
 
   flex1: { flex: 1 },
+
+  scroll: { flex: 1, flexGrow: 1, paddingHorizontal: 16, width: "100%" },
 });

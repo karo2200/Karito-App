@@ -3,7 +3,7 @@ import TimeListHeaderItem from "@/components/molecules/TimeListHeaderItem";
 import { maxWidth } from "@/constants/Dimension";
 import dayjs from "dayjs";
 import moment from "jalali-moment";
-import { createRef, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useController } from "react-hook-form";
 
 const weekDays = [
@@ -32,37 +32,26 @@ const generateNext7Days = () => {
   });
 };
 
-export default function DayHeader({
-  setSelectedDate,
-}: {
-  setSelectedDate?: (date: any) => void;
-}) {
+export default function DayHeader() {
   const { field } = useController({ name: "date" });
-  const dayRefs = useRef(Array.from({ length: 7 }, () => createRef<any>()));
+  const dates = useMemo(() => generateNext7Days(), []);
 
-  const dates = useMemo(() => {
-    const data = generateNext7Days();
-
-    if (!field?.value) {
-      const item = data?.[0]?.value;
-      field.onChange(item);
-      setSelectedDate?.(item);
+  useEffect(() => {
+    if (!field?.value && dates?.[0]?.value) {
+      field.onChange(dates[0].value);
     }
+  }, [dates, field?.value, field?.onChange]);
 
-    return data;
-  }, []);
+  const renderItem = useCallback(
+    ({ item }) => {
+      const onItemPress = () => {
+        field.onChange?.(item?.value);
+      };
 
-  const renderItem = ({ item, index }) => {
-    const itemRef = dayRefs.current[index];
-
-    const onItemPress = () => {
-      setSelectedDate?.(item?.value);
-    };
-
-    return (
-      <TimeListHeaderItem item={item} onItemPress={onItemPress} ref={itemRef} />
-    );
-  };
+      return <TimeListHeaderItem item={item} onItemPress={onItemPress} />;
+    },
+    [field.onChange]
+  );
 
   return (
     <CustomFlatList

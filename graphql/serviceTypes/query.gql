@@ -14,6 +14,7 @@ query serviceTypes_getAll(
         name
         logo
         id
+        fixedGender
         basePrice
         serviceSubCategory {
           id
@@ -96,6 +97,7 @@ query serviceTypes_getPopular(
         name
         logo
         id
+        fixedGender
         basePrice
         requestCount
         serviceSubCategory {

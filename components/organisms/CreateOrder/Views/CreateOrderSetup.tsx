@@ -1,9 +1,10 @@
 import { ThemedText } from "@/components";
 import React, { JSX } from "react";
+import SubCategoryOrg from "../../subService/SubCategoryOrg";
 import OrderDescription from "../OrderDescription";
-import OrderQuestions from "../OrderQuestions";
 import OrderSubmittingOrg from "../OrderSubmitting";
 import PreviewOrder from "../PreviewOrder/PreviewOrder";
+import Questionarie from "../Questionarie";
 import SelectGender from "../SelectGender";
 import SelectOrderTime from "../SelectTime";
 
@@ -14,27 +15,29 @@ type CreateOrderSetupProp = {
     | "gender"
     | "question"
     | "previewOrder"
-    | "orderSubmitting";
+    | "orderSubmitting"
+    | "serviceType";
   errors: any;
   style?: any;
   onClose?: VoidFunction;
-  watch?: any;
   setValue?: any;
   setStage?: any;
   data?: any[];
   title?: string;
   name?: string;
-  getValues?: any;
+  totalPrice?: number;
 };
 
 export function CreateOrderSetup(props: CreateOrderSetupProp): JSX.Element {
   const type = props?.type || "selectDate";
   switch (type) {
-    // case "address":
-    //   return <AddressOrg {...props} />;
+    case "serviceType":
+      return <SubCategoryOrg {...props} />;
+    case "question":
+      return <Questionarie {...props} />;
 
     case "selectDate":
-      return <SelectOrderTime {...props} />;
+      return <SelectOrderTime />;
     case "previewOrder":
       return <PreviewOrder {...props} />;
 
@@ -42,8 +45,6 @@ export function CreateOrderSetup(props: CreateOrderSetupProp): JSX.Element {
       return <OrderSubmittingOrg />;
     case "gender":
       return <SelectGender {...props} />;
-    case "question":
-      return <OrderQuestions {...props} />;
     case "description":
       return <OrderDescription {...props} />;
 
