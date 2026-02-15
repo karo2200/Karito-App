@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "KaritoApp",
+    "name": "KaritoAppQA",
     "slug": "KaritoApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,7 +19,7 @@
       "backgroundColor": "#0088cc"
     },
     "ios": {
-      "bundleIdentifier": "com.karitoapp",
+      "bundleIdentifier": "com.qakaritoapp",
       "associatedDomains": [
         "applinks:api.karito.net"
       ],
@@ -82,7 +82,7 @@
           "apiKey": "AIzaSyCX4GMIn55MBje7o7b7_6cGMmaWxYgOmGM"
         }
       },
-      "package": "com.karitoApp"
+      "package": "com.qakaritoApp"
     },
     "web": {
       "bundler": "metro",
