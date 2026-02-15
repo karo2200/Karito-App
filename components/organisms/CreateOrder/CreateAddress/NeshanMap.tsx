@@ -74,9 +74,13 @@ const html = (
 </head>
 <body>
   <div id="map"></div>
-  <button id="current-location" class="current-location-btn" title="موقعیت فعلی">
+  ${
+    showLocation
+      ? `<button id="current-location" class="current-location-btn" title="موقعیت فعلی">
     ⦿
-  </button>
+    </button>`
+      : ""
+  }
 <script>
   const polygons = ${JSON.stringify(polygons)};
   const currentLocation = ${JSON.stringify(currentLocation)};
@@ -104,6 +108,9 @@ const html = (
       polygonLayers[0].getBounds()
     );
     map.fitBounds(bounds);
+    if (map.getZoom() < 13) {
+      map.setView(bounds.getCenter(), 13);
+    }
   }
 
   let marker = L.marker(initialPoint).addTo(map);
