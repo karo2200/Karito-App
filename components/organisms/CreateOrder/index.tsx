@@ -2,6 +2,7 @@ import TickIcon from "@/assets/icons/tick";
 import { Divider, ThemedButton } from "@/components";
 import { ProgressBar } from "@/components/molecules/ProgressBar";
 import { Colors } from "@/constants/Colors";
+import { useRef } from "react";
 import { FormProvider } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +11,7 @@ import { CreateOrderSetup } from "./Views/CreateOrderSetup";
 import useCreateOrder from "./createOrder.hook";
 
 export default function CreateOrderOrg() {
+  const scrollRef = useRef<ScrollView>(null);
   const {
     totalPrice,
     currentStep,
@@ -30,9 +32,10 @@ export default function CreateOrderOrg() {
     <SafeAreaView style={styles.container} edges={["left", "right", "bottom"]}>
       {!isLast && stage < 3 && <ProgressBar step={stage + 1} />}
       <FormProvider {...methods}>
-        <ScrollView style={styles.scroll}>
+        <ScrollView style={styles.scroll} ref={scrollRef}>
           <Divider height={24} />
           <CreateOrderSetup
+            scrollRef={scrollRef}
             setValue={setValue}
             {...currentStep}
             totalPrice={totalPrice}
