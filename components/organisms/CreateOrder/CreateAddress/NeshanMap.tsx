@@ -85,7 +85,7 @@ const html = (
   const polygons = ${JSON.stringify(polygons)};
   const currentLocation = ${JSON.stringify(currentLocation)};
 
-  const initialPoint = polygons[0]?.[0] ?? [35.699756, 51.338076];
+  const initialPoint = [35.718010487597745, 51.35169209296634];
   const map = new L.Map("map", {
     key: "web.0aae3f9bf3ed481db86d2adf916535e9",
     maptype: "neshan",
@@ -103,11 +103,6 @@ const html = (
   );
 
   if (polygonLayers.length > 0) {
-    const bounds = polygonLayers.reduce(
-      (acc, layer) => acc.extend(layer.getBounds()),
-      polygonLayers[0].getBounds()
-    );
-    map.fitBounds(bounds);
     if (map.getZoom() < 13) {
       map.setView(bounds.getCenter(), 13);
     }
@@ -188,6 +183,53 @@ export default function NeshanMap({
 }: NeshanMapProps) {
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);
 
+  const showLocationError = () => {
+    Alert.alert("هشدار", "دسترسی به موقعیت مکانی امکان‌پذیر نیست.");
+  };
+
+  const requestNativeCurrentLocation = async (showError = false) => {
+    try {
+      if (Platform.OS === "web") {
+        if (!navigator?.geolocation) {
+          if (showError) showLocationError();
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setCurrentLocation([
+              position.coords.latitude,
+              position.coords.longitude,
+            ]);
+          },
+          () => {
+            if (showError) showLocationError();
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000,
+          }
+        );
+        return;
+      }
+
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      console.log({ status });
+      if (status !== "granted") {
+        if (showError) showLocationError();
+        return;
+      }
+
+      const position = await Location.getCurrentPositionAsync({});
+      console.log({ position });
+      setCurrentLocation([position.coords.latitude, position.coords.longitude]);
+    } catch (eee) {
+      console.log({ eee });
+      if (showError) showLocationError();
+    }
+  };
+
   useEffect(() => {
     requestNativeCurrentLocation();
   }, []);
@@ -204,17 +246,6 @@ export default function NeshanMap({
   );
   const Iframe = "iframe" as React.ElementType;
 
-  const requestNativeCurrentLocation = async () => {
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") return;
-      const position = await Location.getCurrentPositionAsync({});
-      setCurrentLocation([position.coords.latitude, position.coords.longitude]);
-    } catch (error) {
-      Alert.alert("هشدار", "دسترسی به موقعیت مکانی امکان‌پذیر نیست.");
-    }
-  };
-
   const handleMessage = (event: any) => {
     try {
       const data = isWeb ? event.data : JSON.parse(event.nativeEvent.data);
@@ -224,6 +255,7 @@ export default function NeshanMap({
           data.message ?? "نقطه انتخابی خارج از محدوده است."
         );
       } else if (data?.type === "MAP_CLICK") {
+        console.log({ data });
         onLocationSelected?.(data);
       }
     } catch {
@@ -261,7 +293,7 @@ export default function NeshanMap({
       {Platform.OS !== "web" && currentLocation && (
         <Pressable
           style={styles.currentLocationButton}
-          onPress={requestNativeCurrentLocation}
+          onPress={() => requestNativeCurrentLocation(true)}
         >
           <ThemedText style={styles.currentLocationText}>⦿</ThemedText>
         </Pressable>

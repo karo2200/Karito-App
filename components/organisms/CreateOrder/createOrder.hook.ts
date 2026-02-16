@@ -147,7 +147,7 @@ export default function useCreateOrder() {
         {
           input: {
             addressId,
-            description: "",
+            description: values?.description ?? "",
             qnAs,
             requestDate: values?.requestDate,
             serviceTypeId: serviceType?.id,
