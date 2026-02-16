@@ -40,6 +40,8 @@ const CustomInput = React.forwardRef(
       forcePersianNumbers,
       rules,
       inputStyle,
+      onFocus,
+      onBlur,
     }: {
       name: any;
       placeholder?: string;
@@ -85,6 +87,8 @@ const CustomInput = React.forwardRef(
       forcePersianNumbers?: boolean;
       rules?: any;
       inputStyle?: StyleProp<TextStyle> | undefined;
+      onFocus?: () => void;
+      onBlur?: () => void;
     },
 
     ref: any
@@ -146,6 +150,8 @@ const CustomInput = React.forwardRef(
             value={field.value?.toString()}
             onChangeText={onChange}
             // onBlur={field.onBlur}
+            onFocus={onFocus}
+            onBlur={onBlur}
             style={[
               styles.inputStyle,
               {

@@ -1,10 +1,11 @@
-import { Divider, ThemedText, ThemedView } from "@/components";
+import { ThemedText, ThemedView } from "@/components";
 import ThemedInput from "@/components/atoms/ThemedInput";
 import { Colors } from "@/constants/Colors";
 import { DeviceWidth } from "@/constants/Dimension";
 import { Gender, QuestionType } from "@/generated/graphql";
+import { useKeyboardHeight } from "@/services/useKeyboardHeight";
 import { useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import OrderQuestions from "../OrderQuestions";
 import QuestionDivider from "../Views/QuestionDivider";
 
@@ -16,6 +17,7 @@ const genderOptions = [
 
 export default function Questionarie(props: any) {
   const { serviceType, data } = props;
+  const keyboardHeight = useKeyboardHeight();
 
   const questions = useMemo(() => {
     let qa = data;
@@ -31,37 +33,44 @@ export default function Questionarie(props: any) {
   }, [data]);
 
   return (
-    <ThemedView>
-      {questions?.map((item, index) => (
-        <View key={`${item?.id?.toString()}_${index}`}>
-          <OrderQuestions
-            name={item?.id?.toString()}
-            label={item?.text}
-            data={item?.options}
-            questionType={item?.questionType}
-            key={item?.id?.toString()}
-            isRequired={item?.isRequired}
+    <KeyboardAvoidingView behavior="height">
+      <ThemedView>
+        {questions?.map((item, index) => (
+          <View key={`${item?.id?.toString()}_${index}`}>
+            <OrderQuestions
+              name={item?.id?.toString()}
+              label={item?.text}
+              data={item?.options}
+              questionType={item?.questionType}
+              key={item?.id?.toString()}
+              isRequired={item?.isRequired}
+            />
+            <QuestionDivider />
+          </View>
+        ))}
+        <View
+          style={[
+            styles.descContainer,
+            { marginBottom: keyboardHeight > 0 ? keyboardHeight + 24 : 24 },
+          ]}
+        >
+          <ThemedText fontType="bold" style={styles.label}>
+            توضیحات:
+          </ThemedText>
+          <ThemedInput
+            name="description"
+            textArea
+            placeholder="به عنوان مثال ۱۰۰ متر"
+            inputStyle={styles.inputStyle}
           />
-          <QuestionDivider />
         </View>
-      ))}
-      <View style={styles.descContainer}>
-        <ThemedText fontType="bold" style={styles.label}>
-          توضیحات:
-        </ThemedText>
-        <ThemedInput
-          name="description"
-          textArea
-          placeholder="به عنوان مثال ۱۰۰ متر"
-          inputStyle={styles.inputStyle}
-        />
-      </View>
-      <Divider height={24} />
-    </ThemedView>
+      </ThemedView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  contentContainer: { flexGrow: 1 },
   inputStyle: { paddingTop: 14, paddingHorizontal: 16, fontSize: 12 },
   label: {
     fontSize: 14,
