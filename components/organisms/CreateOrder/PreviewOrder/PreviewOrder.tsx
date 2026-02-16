@@ -38,6 +38,10 @@ export default function PreviewOrder(props: any) {
       label: "آدرس",
       value: address,
     },
+    {
+      label: "توضیحات سفارش:",
+      value: values?.description,
+    },
   ];
 
   return (

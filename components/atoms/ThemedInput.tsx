@@ -6,9 +6,11 @@ import { useController } from "react-hook-form";
 import {
   DimensionValue,
   LayoutChangeEvent,
+  StyleProp,
   StyleSheet,
   Text,
   TextInput,
+  TextStyle,
   View,
   ViewStyle,
 } from "react-native";
@@ -37,6 +39,7 @@ const CustomInput = React.forwardRef(
       labelStyle = "normal",
       forcePersianNumbers,
       rules,
+      inputStyle,
     }: {
       name: any;
       placeholder?: string;
@@ -81,6 +84,7 @@ const CustomInput = React.forwardRef(
       labelStyle?: "normal" | "sm";
       forcePersianNumbers?: boolean;
       rules?: any;
+      inputStyle?: StyleProp<TextStyle> | undefined;
     },
 
     ref: any
@@ -121,7 +125,12 @@ const CustomInput = React.forwardRef(
             )}
           </Text>
         )}
-        <View style={[styles.inputView, textArea && { height: 100 }]}>
+        <View
+          style={[
+            styles.inputView,
+            textArea && { height: 100, borderRadius: 8 },
+          ]}
+        >
           {leftIcon && leftIcon}
           <TextInput
             editable={!disabled}
@@ -152,6 +161,7 @@ const CustomInput = React.forwardRef(
                   ? FontType.Shabnam
                   : FontType.YekanBakhRegular,
               },
+              inputStyle,
             ]}
           />
           {clearIcon && <CloseCircle color={Colors.gray300} variant="Bold" />}
@@ -184,7 +194,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: Colors.strokeGray,
+    borderColor: Colors.gray["200"],
     backgroundColor: Colors.background,
   },
 
