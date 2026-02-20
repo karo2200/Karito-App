@@ -220,6 +220,7 @@ export type AvailableServiceRequestDto = {
   orderNumber: Scalars["Long"]["output"];
   paidAt?: Maybe<Scalars["DateTime"]["output"]>;
   qnAs: Array<ServiceRequestQnADto>;
+  rankingScore: Scalars["Float"]["output"];
   rateAndReview?: Maybe<RateAndReviewDto>;
   requestDate: Scalars["DateTime"]["output"];
   serviceType: ServiceTypeDto;
@@ -261,6 +262,7 @@ export type AvailableServiceRequestDtoFilterInput = {
   orderNumber?: InputMaybe<LongOperationFilterInput>;
   paidAt?: InputMaybe<DateTimeOperationFilterInput>;
   qnAs?: InputMaybe<ListFilterInputTypeOfServiceRequestQnADtoFilterInput>;
+  rankingScore?: InputMaybe<FloatOperationFilterInput>;
   rateAndReview?: InputMaybe<RateAndReviewDtoFilterInput>;
   requestDate?: InputMaybe<DateTimeOperationFilterInput>;
   serviceType?: InputMaybe<ServiceTypeDtoFilterInput>;
@@ -289,6 +291,7 @@ export type AvailableServiceRequestDtoSortInput = {
   id?: InputMaybe<SortEnumType>;
   orderNumber?: InputMaybe<SortEnumType>;
   paidAt?: InputMaybe<SortEnumType>;
+  rankingScore?: InputMaybe<SortEnumType>;
   rateAndReview?: InputMaybe<RateAndReviewDtoSortInput>;
   requestDate?: InputMaybe<SortEnumType>;
   serviceType?: InputMaybe<ServiceTypeDtoSortInput>;
@@ -1327,6 +1330,8 @@ export type Mutation = {
   serviceType_create: ResponseBaseOfServiceTypeDto;
   serviceType_delete: ResponseBase;
   serviceType_update: ResponseBaseOfServiceTypeDto;
+  settings_updateSkillLimitationSettings: ResponseBase;
+  settings_updateSpecialistRequestRankingSettings: ResponseBase;
   specialist_setLocationAndSpecialty: ResponseBase;
   specialist_setPersonalInformation: ResponseBase;
   specialist_updateIdentityVerificationVideo: ResponseBase;
@@ -1586,6 +1591,14 @@ export type MutationServiceType_UpdateArgs = {
   input: UpdateServiceTypeInput;
 };
 
+export type MutationSettings_UpdateSkillLimitationSettingsArgs = {
+  input: UpdateSkillLimitationSettingsInput;
+};
+
+export type MutationSettings_UpdateSpecialistRequestRankingSettingsArgs = {
+  input: UpdateSkillMatchingSettingsInput;
+};
+
 export type MutationSpecialist_SetLocationAndSpecialtyArgs = {
   input: SetLocationAndSpecialtyInput;
 };
@@ -1828,6 +1841,8 @@ export type Query = {
   serviceType_getById: ResponseBaseOfServiceTypeDto;
   serviceTypes_getAll: ListResponseBaseOfServiceTypeDto;
   serviceTypes_getPopular: ListResponseBaseOfPopularServiceTypeDto;
+  settings_getSkillLimitationSettings: ResponseBaseOfSkillLimitationSettings;
+  settings_getSpecialistRequestRankingSettings: ResponseBaseOfSpecialistRequestRankingSettings;
   /** Returns all specialists. */
   specialist_getAll: ListResponseBaseOfSpecialistDto;
   /** Returns a specialist by their ID. */
@@ -2174,9 +2189,21 @@ export type ResponseBaseOfServiceTypeQuestionDto = {
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
+export type ResponseBaseOfSkillLimitationSettings = {
+  __typename?: "ResponseBaseOfSkillLimitationSettings";
+  result?: Maybe<SkillLimitationSettings>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
 export type ResponseBaseOfSpecialistDto = {
   __typename?: "ResponseBaseOfSpecialistDto";
   result?: Maybe<SpecialistDto>;
+  status?: Maybe<Scalars["Any"]["output"]>;
+};
+
+export type ResponseBaseOfSpecialistRequestRankingSettings = {
+  __typename?: "ResponseBaseOfSpecialistRequestRankingSettings";
+  result?: Maybe<SpecialistRequestRankingSettings>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
 
@@ -2587,7 +2614,7 @@ export type SetCityAvailableServiceTypesInput = {
 export type SetLocationAndSpecialtyInput = {
   cityId: Scalars["UUID"]["input"];
   serviceSubCategoryId: Scalars["UUID"]["input"];
-  serviceTypeIds: Array<Scalars["UUID"]["input"]>;
+  specialtyInputs: Array<SpecialtyInput>;
 };
 
 export type SetPersonalInformationInput = {
@@ -2632,6 +2659,19 @@ export type SingleResponseBaseOfServiceTypeQuestionDto = {
   result?: Maybe<ServiceTypeQuestionDto>;
   status?: Maybe<Scalars["Any"]["output"]>;
 };
+
+export type SkillLimitationSettings = {
+  __typename?: "SkillLimitationSettings";
+  maxOptionalSkills: Scalars["Int"]["output"];
+  maxPrimarySkills: Scalars["Int"]["output"];
+  maxSecondarySkills: Scalars["Int"]["output"];
+};
+
+export enum SkillPriority {
+  Optional = "OPTIONAL",
+  Primary = "PRIMARY",
+  Secondary = "SECONDARY",
+}
 
 export enum SortEnumType {
   Asc = "ASC",
@@ -2739,12 +2779,33 @@ export type SpecialistDtoSortInput = {
   successfulMissions?: InputMaybe<SortEnumType>;
 };
 
+export type SpecialistRequestRankingSettings = {
+  __typename?: "SpecialistRequestRankingSettings";
+  budgetScoreMultiplier: Scalars["Float"]["output"];
+  distancePenaltyFactor: Scalars["Float"]["output"];
+  distancePenaltyMax: Scalars["Float"]["output"];
+  distancePenaltyPower: Scalars["Float"]["output"];
+  enableDistancePenalty: Scalars["Boolean"]["output"];
+  enableRegistrationAgePenalty: Scalars["Boolean"]["output"];
+  optionalSkillWeight: Scalars["Float"]["output"];
+  primarySkillWeight: Scalars["Float"]["output"];
+  registrationAgePenaltyFactor: Scalars["Float"]["output"];
+  registrationAgePenaltyMax: Scalars["Float"]["output"];
+  registrationAgePenaltyPower: Scalars["Float"]["output"];
+  secondarySkillWeight: Scalars["Float"]["output"];
+};
+
 export type SpecialistRevenueDto = {
   __typename?: "SpecialistRevenueDto";
   settledAmount: Scalars["Decimal"]["output"];
   specialist: SpecialistDto;
   totalAmount: Scalars["Decimal"]["output"];
   unsettledAmount: Scalars["Decimal"]["output"];
+};
+
+export type SpecialtyInput = {
+  priority: SkillPriority;
+  serviceTypeId: Scalars["UUID"]["input"];
 };
 
 export type StatsRangeInput = {
@@ -2869,6 +2930,27 @@ export type UpdateServiceTypeQuestionInput = {
   options: Array<ServiceTypeQuestionOptionInput>;
   questionType: QuestionType;
   title: Scalars["String"]["input"];
+};
+
+export type UpdateSkillLimitationSettingsInput = {
+  maxOptionalSkills: Scalars["Int"]["input"];
+  maxPrimarySkills: Scalars["Int"]["input"];
+  maxSecondarySkills: Scalars["Int"]["input"];
+};
+
+export type UpdateSkillMatchingSettingsInput = {
+  budgetScoreMultiplier: Scalars["Float"]["input"];
+  distancePenaltyFactor: Scalars["Float"]["input"];
+  distancePenaltyMax: Scalars["Float"]["input"];
+  distancePenaltyPower: Scalars["Float"]["input"];
+  enableDistancePenalty: Scalars["Boolean"]["input"];
+  enableRegistrationAgePenalty: Scalars["Boolean"]["input"];
+  optionalSkillWeight: Scalars["Float"]["input"];
+  primarySkillWeight: Scalars["Float"]["input"];
+  registrationAgePenaltyFactor: Scalars["Float"]["input"];
+  registrationAgePenaltyMax: Scalars["Float"]["input"];
+  registrationAgePenaltyPower: Scalars["Float"]["input"];
+  secondarySkillWeight: Scalars["Float"]["input"];
 };
 
 export type UpdateSpecializedDocumentsInput = {
@@ -3404,7 +3486,16 @@ export type ServiceRequest_GetMyRequestsQuery = {
           firstName?: string | null;
           phoneNumber: string;
         };
-        serviceType: { __typename?: "ServiceTypeDto"; name: string; id: any };
+        serviceType: {
+          __typename?: "ServiceTypeDto";
+          name: string;
+          id: any;
+          serviceSubCategory: {
+            __typename?: "ServiceSubCategoryDto";
+            name: string;
+            id: any;
+          };
+        };
         specialist?: {
           __typename?: "SpecialistDto";
           lastName?: string | null;
@@ -5489,6 +5580,10 @@ export const ServiceRequest_GetMyRequestsDocument = `
         serviceType {
           name
           id
+          serviceSubCategory {
+            name
+            id
+          }
         }
         specialist {
           lastName

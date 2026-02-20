@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components";
-import React, { JSX } from "react";
+import React, { JSX, RefObject } from "react";
+import { ScrollView } from "react-native";
 import SubCategoryOrg from "../../subService/SubCategoryOrg";
 import OrderDescription from "../OrderDescription";
 import OrderSubmittingOrg from "../OrderSubmitting";
@@ -26,6 +27,7 @@ type CreateOrderSetupProp = {
   title?: string;
   name?: string;
   totalPrice?: number;
+  scrollRef?: RefObject<ScrollView | null>;
 };
 
 export function CreateOrderSetup(props: CreateOrderSetupProp): JSX.Element {
