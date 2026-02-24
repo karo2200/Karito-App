@@ -25,6 +25,10 @@ query serviceRequest_getMyRequests(
         serviceType {
           name
           id
+          serviceSubCategory {
+            name
+            id
+          }
         }
         specialist {
           lastName

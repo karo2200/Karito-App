@@ -4,6 +4,7 @@ import GuestMode from "@/components/molecules/GuestMode";
 import { Colors } from "@/constants/Colors";
 import { commonStyles } from "@/constants/CommonStyles";
 import { DeviceWidth, maxWidth } from "@/constants/Dimension";
+import { SearchNormal } from "iconsax-react-native";
 import * as React from "react";
 import {
   NativeScrollEvent,
@@ -14,19 +15,26 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import CanceledOrders from "./Views/CanceledOrders";
-import FinishedOrdes from "./Views/FinishedOrders";
-import InProgressOrders from "./Views/InProgressOrders";
+import OrderFilterModal from "./Views/FilterModal";
+import OrderList from "./Views/OrderList";
 import useOrderHook from "./hooks/Order.hook";
 
 export default function OrderScreen() {
-  const { setActiveTab, activeTab, scrollRef, isLoggedIn } = useOrderHook();
-
-  const tabs = [
-    { label: "سفارش‌های جاری", content: <InProgressOrders /> },
-    { label: "سفارش‌های گذشته", content: <FinishedOrdes /> },
-    { label: "سفارش‌های لغو شده", content: <CanceledOrders /> },
-  ];
+  const {
+    setActiveTab,
+    activeTab,
+    scrollRef,
+    isLoggedIn,
+    tabs,
+    data,
+    isLoading,
+    isRefetching,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+    router,
+  } = useOrderHook();
+  const [isFilterVisible, setIsFilterVisible] = React.useState(false);
 
   const onTabPress = (index: number) => {
     setActiveTab(index);
@@ -41,27 +49,47 @@ export default function OrderScreen() {
   return isLoggedIn ? (
     <View>
       {/* Tab Bar */}
-      <ScrollView
-        horizontal
-        pagingEnabled
-        contentContainerStyle={styles.tabContainer}
-        showsHorizontalScrollIndicator={false}
-      >
-        {tabs.map((tab, index) => (
-          <TouchableOpacity key={index} onPress={() => onTabPress(index)}>
-            <ThemedText
-              type="text"
+      <View style={{ marginHorizontal: 16, paddingTop: 20, marginBottom: 10 }}>
+        <ThemedText fontType="bold">سفارش‌های من</ThemedText>
+        <ThemedText type="subtitle" style={{ color: Colors.gray500 }}>
+          پیگیری و مشاهده وضعیت سفارش‌ها
+        </ThemedText>
+      </View>
+      <View style={styles.tabsearchContainer}>
+        <View style={styles.tabContainer}>
+          {tabs.map((tab, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => onTabPress(index)}
               style={[
-                styles.tabLabel,
-                activeTab === index && styles.tabLabelActive,
+                styles.tabItem,
+                {
+                  backgroundColor:
+                    activeTab === index ? Colors.karito["50"] : "transparent",
+                },
               ]}
             >
-              {tab.label}
-            </ThemedText>
-            {activeTab === index && <View style={styles.tabButtonActive} />}
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+              <ThemedText
+                type="text"
+                style={[
+                  styles.tabLabel,
+                  activeTab === index && styles.tabLabelActive,
+                ]}
+                fontType={activeTab === index ? "semiBold" : "regular"}
+              >
+                {tab.label}
+              </ThemedText>
+              <View style={styles.divider} />
+            </TouchableOpacity>
+          ))}
+        </View>
+        <TouchableOpacity
+          style={styles.searchBar}
+          onPress={() => setIsFilterVisible(true)}
+        >
+          <SearchNormal color={Colors.gray["500"]} size={18} />
+        </TouchableOpacity>
+      </View>
 
       {/* Tab Content */}
       <ScrollView
@@ -78,10 +106,26 @@ export default function OrderScreen() {
       >
         {tabs.map((tab, index) => (
           <View key={index} style={styles.page}>
-            {tab.content}
+            <OrderList
+              {...{
+                data: data?.pages,
+                isLoading,
+                isRefetching,
+                hasNextPage,
+                fetchNextPage,
+                refetch,
+                router,
+              }}
+            />
           </View>
         ))}
       </ScrollView>
+      {isFilterVisible && (
+        <OrderFilterModal
+          visible={isFilterVisible}
+          onClose={() => setIsFilterVisible(false)}
+        />
+      )}
     </View>
   ) : (
     <ThemedContainer style={commonStyles.container}>
@@ -92,13 +136,27 @@ export default function OrderScreen() {
 
 const styles = StyleSheet.create({
   tabContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.gray100,
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    flex: 1,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.gray[200],
+    height: 36,
+    overflow: "hidden",
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "row-reverse",
+  },
+
+  tabsearchContainer: {
+    justifyContent: "space-between",
     flexDirection: "row-reverse",
     alignItems: "center",
     marginHorizontal: 15,
-    width: "93%",
   },
 
   tabButton: {
@@ -116,17 +174,31 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 2,
   },
 
+  divider: { height: 36, width: 1, backgroundColor: Colors.gray[200] },
+
   tabLabel: {
-    color: Colors.label,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    color: Colors.gray["500"],
+    flex: 1,
+    textAlign: "center",
   },
 
   tabLabelActive: {
-    color: Colors.hint500,
+    color: Colors.karito["600"],
   },
 
   page: {
     width: Platform.OS === "web" ? maxWidth : DeviceWidth,
+    marginTop: 10,
+  },
+
+  searchBar: {
+    height: 36,
+    width: 36,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.gray["200"],
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 10,
   },
 });

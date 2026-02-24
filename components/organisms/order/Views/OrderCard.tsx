@@ -3,10 +3,23 @@ import UserFrameIcon from "@/assets/icons/UserFrameIcon";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { ServiceRequestDto, ServiceRequestStatus } from "@/generated/graphql";
-import { getStatusFa } from "@/services/helper";
+import { getStatusFa, toPersianNumber } from "@/services/helper";
 import { formatPrice, formatToJalali } from "@/services/ParseData";
-import React from "react";
+import { Calendar } from "iconsax-react-native";
+import React, { useMemo } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+
+const getDynamicLabelStyle = (orderStatus?: {
+  bgColor?: string;
+  borderColor?: string;
+}) => ({
+  backgroundColor: orderStatus?.bgColor,
+  borderColor: orderStatus?.borderColor,
+});
+
+const getStatusTextStyle = (orderStatus?: { textColor?: string }) => ({
+  color: orderStatus?.textColor,
+});
 
 const OrderCard = ({
   item,
@@ -17,70 +30,71 @@ const OrderCard = ({
   isCustomer?: boolean;
   onOrderPress: () => void;
 }) => {
+  const orderStatus = useMemo(() => {
+    return getStatusFa(item?.status, isCustomer);
+  }, [item?.status, isCustomer]);
+
+  const titleWidth =
+    item?.status !== ServiceRequestStatus.Pending ? "65%" : "100%";
+
   return (
     <View style={styles.container}>
       <View style={styles.flexView}>
-        {item?.status !== ServiceRequestStatus.Pending && (
-          <ThemedText type="text" style={{ color: Colors.label }}>
-            {item?.trackingCode}
-          </ThemedText>
-        )}
         <ThemedText
-          fontType="bold"
+          fontType="semiBold"
           numberOfLines={2}
-          style={{
-            width:
-              item?.status !== ServiceRequestStatus.Pending ? "65%" : "100%",
-          }}
+          style={[styles.title, { width: titleWidth }]}
         >
-          {item?.serviceType?.name}
+          {`${item?.serviceType?.name} (${item?.serviceType?.serviceSubCategory?.name})`}
         </ThemedText>
       </View>
+
       <View style={styles.dateView}>
+        <Calendar size={16} color={Colors.gray500} />
         <ThemedText type="text" style={styles.date}>
-          {formatToJalali(item?.requestDate)}
+          {toPersianNumber(formatToJalali(item?.requestDate))}
         </ThemedText>
       </View>
-      <View style={styles.rowView}>
-        <ThemedText
-          fontType="bold"
-          style={{
-            color: Colors.hint500,
-            minWidth: "26%",
-            textAlign: "left",
-          }}
-        >
-          {formatPrice(item?.finalPrice)} تومان
+
+      <View style={styles.dateView}>
+        <Calendar size={16} color={Colors.gray500} />
+        <ThemedText style={styles.date} type="text">
+          {toPersianNumber(formatPrice(item?.finalPrice))} تومان
         </ThemedText>
-        <View style={styles.row}>
-          {isCustomer ? (
-            <>
-              <ThemedText type="text" style={styles.user}>
-                {item?.specialist?.firstName} {item?.specialist?.lastName}
-              </ThemedText>
-              {item?.specialist && <UserFrameIcon />}
-            </>
-          ) : (
-            <View style={styles.addressView}>
-              <ThemedText type="text" style={styles.user}>
-                {item?.address?.text}
-              </ThemedText>
-              <LocationIcon width={16} height={16} />
-            </View>
-          )}
-        </View>
       </View>
+
+      <View style={styles.row}>
+        {isCustomer ? (
+          <>
+            <ThemedText type="text" style={styles.user}>
+              {item?.specialist?.firstName} {item?.specialist?.lastName}
+            </ThemedText>
+            {item?.specialist && <UserFrameIcon color={Colors.gray500} />}
+          </>
+        ) : (
+          <View style={styles.addressView}>
+            <ThemedText type="text" style={styles.user}>
+              {item?.address?.text}
+            </ThemedText>
+            <LocationIcon width={16} height={16} />
+          </View>
+        )}
+      </View>
+
       <View style={styles.rowView}>
         {isCustomer ? (
-          <View style={styles.label}>
-            <ThemedText type="text">
-              {getStatusFa(item?.status, isCustomer)}
+          <View style={[styles.label, getDynamicLabelStyle(orderStatus)]}>
+            <ThemedText
+              type="text"
+              style={[styles.statusText, getStatusTextStyle(orderStatus)]}
+            >
+              {orderStatus?.text}
             </ThemedText>
           </View>
         ) : item?.status !== ServiceRequestStatus.Pending ? (
           <View style={styles.label}>
-            <ThemedText type="text">
-              {getStatusFa(item?.status, isCustomer)}
+            <ThemedText type="text" style={styles.defaultStatusText}>
+              {orderStatus?.text}
             </ThemedText>
           </View>
         ) : (
@@ -92,7 +106,9 @@ const OrderCard = ({
           style={styles.detailBtn}
           onPress={onOrderPress}
         >
-          <ThemedText style={{ color: "white" }}>جزئیات</ThemedText>
+          <ThemedText style={styles.detailText} type="text">
+            جزئیات سفارش
+          </ThemedText>
         </TouchableOpacity>
       </View>
     </View>
@@ -114,22 +130,24 @@ const styles = StyleSheet.create({
   },
 
   flexView: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "flex-end",
     flex: 1,
-    justifyContent: "space-between",
+  },
+
+  title: {
+    fontSize: 14,
+    color: Colors.gray900,
   },
 
   date: {
-    color: Colors.hint500,
+    color: Colors.gray500,
+    marginHorizontal: 7,
+    fontSize: 12,
   },
 
   dateView: {
-    backgroundColor: Colors.hint50,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
     alignSelf: "flex-end",
+    flexDirection: "row-reverse",
   },
 
   rowView: {
@@ -138,25 +156,48 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  user: { marginRight: 4, color: Colors.link25 },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
 
-  row: { flexDirection: "row", alignItems: "center" },
+  user: {
+    marginRight: 6,
+    color: Colors.gray500,
+  },
 
   label: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    backgroundColor: "white",
+    paddingVertical: 6,
+    backgroundColor: Colors.info["100"],
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: Colors.grayMedium,
+    borderColor: Colors.info["300"],
     borderRadius: 4,
+    flex: 1,
+  },
+
+  statusText: {
+    fontSize: 12,
+  },
+
+  defaultStatusText: {
+    fontSize: 12,
   },
 
   detailBtn: {
-    paddingVertical: 4,
-    paddingHorizontal: 12,
-    backgroundColor: Colors.hint500,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
+    backgroundColor: Colors.gray["100"],
+    borderColor: Colors.gray["300"],
+    borderWidth: 1,
+    borderRadius: 4,
+    marginLeft: 10,
+  },
 
-    borderRadius: 6,
+  detailText: {
+    color: Colors.gray["600"],
+    fontSize: 12,
   },
 
   addressView: {

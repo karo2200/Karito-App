@@ -2,23 +2,29 @@ import { ThemedText, ThemedView } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { TickSquare } from "iconsax-react-native";
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TextStyle, TouchableOpacity } from "react-native";
 
 export default function CustomCheckbox({
   label,
   checked,
   onPress,
+  labelStyle,
 }: {
   checked: boolean;
   label?: string;
   onPress?: () => void;
+  labelStyle?: TextStyle;
 }) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.5}>
       <ThemedView style={styles.flex1}>
         <ThemedText
           numberOfLines={2}
-          style={[styles.width, checked && { color: Colors.hint900 }]}
+          style={[
+            styles.width,
+            labelStyle,
+            checked && { color: Colors.hint900 },
+          ]}
           fontType="semiBold"
         >
           {label}
