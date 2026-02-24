@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import OrderFilterModal from "./Views/FilterModal";
 import OrderList from "./Views/OrderList";
 import useOrderHook from "./hooks/Order.hook";
 
@@ -33,6 +34,7 @@ export default function OrderScreen() {
     refetch,
     router,
   } = useOrderHook();
+  const [isFilterVisible, setIsFilterVisible] = React.useState(false);
 
   const onTabPress = (index: number) => {
     setActiveTab(index);
@@ -81,9 +83,12 @@ export default function OrderScreen() {
             </TouchableOpacity>
           ))}
         </View>
-        <View style={styles.searchBar}>
+        <TouchableOpacity
+          style={styles.searchBar}
+          onPress={() => setIsFilterVisible(true)}
+        >
           <SearchNormal color={Colors.gray["500"]} size={18} />
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/* Tab Content */}
@@ -115,6 +120,12 @@ export default function OrderScreen() {
           </View>
         ))}
       </ScrollView>
+      {isFilterVisible && (
+        <OrderFilterModal
+          visible={isFilterVisible}
+          onClose={() => setIsFilterVisible(false)}
+        />
+      )}
     </View>
   ) : (
     <ThemedContainer style={commonStyles.container}>
