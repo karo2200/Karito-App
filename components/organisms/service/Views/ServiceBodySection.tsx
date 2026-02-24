@@ -69,7 +69,7 @@ export default function ServiceBodySection({
         )}
       </ThemedView>
     );
-  }, []);
+  }, [addressId]);
 
   return (
     <ThemedView>

@@ -1,6 +1,7 @@
 import { useToast } from "@/components/atoms/Toast";
 import { queryKeys } from "@/constants/queryKeys";
 import {
+  SkillPriority,
   SpecialistDto,
   useSpecialist_SetLocationAndSpecialtyMutation,
   VerificationStatus,
@@ -90,7 +91,9 @@ export default function useExpertHook() {
         input: {
           cityId: formData?.city,
           serviceSubCategoryId: formData?.profession,
-          serviceTypeIds: formData?.serviceTypes,
+          specialtyInputs: formData?.serviceTypes?.map((item) => {
+            return { serviceTypeId: item, priority: SkillPriority.Primary };
+          }),
         },
       },
       {
@@ -108,6 +111,7 @@ export default function useExpertHook() {
             });
           }
         },
+        onError: (data) => console.log(JSON.stringify({ edata: data })),
       }
     );
   };
