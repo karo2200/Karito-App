@@ -10,11 +10,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import * as yup from "yup";
 import useExpertHook from "../hooks/Expert.hook";
+import { useGetCityServiceTypesQuery } from "../hooks/hooks";
 
 const schema = yup.object().shape({
   state: yup.string().required("انتخاب کنید"),
   city: yup.string().required("انتخاب کنید"),
-  profession: yup.string().required("انتخاب کنید"),
+  // profession: yup.string().required("انتخاب کنید"),
   serviceTypes: yup
     .array()
     .of(yup.string().required("گزینه معتبر نیست"))
@@ -34,15 +35,11 @@ const CityStep = ({
     provinceData,
     setProvince,
     cityData,
-    serviceTypeData,
-    subCategoriesData,
-    setCategory,
     onRegisterCity,
     profileData,
     stepPending,
     isLoggedIn,
     onLoadMoreCity,
-    categoriesData,
   } = useExpertHook();
 
   const { ...methods } = useForm({
@@ -51,7 +48,7 @@ const CityStep = ({
     defaultValues: {
       state: profileData?.city?.province?.id,
       city: profileData?.city?.id,
-      profession: profileData?.serviceSubCategory?.id,
+      // profession: profileData?.serviceSubCategory?.id,
       serviceTypes: profileData?.serviceTypes?.map((opt: any) => opt?.id),
     },
   });
@@ -64,6 +61,11 @@ const CityStep = ({
     setValue,
   } = methods;
 
+  const { data: serviceTypeData, refetch } = useGetCityServiceTypesQuery({
+    input: { cityId: watch("city") },
+    enabled: !watch("city") ? false : true,
+  });
+
   const onPress = (formData: any) => {
     onRegisterCity(formData, onNextPress);
   };
@@ -72,7 +74,7 @@ const CityStep = ({
     if (profileData) {
       setValue("state", profileData?.city?.province?.id);
       setValue("city", profileData?.city?.id);
-      setValue("profession", profileData?.serviceSubCategory?.id);
+      // setValue("profession", profileData?.serviceSubCategory?.id);
       setValue(
         "serviceTypes",
         profileData?.serviceTypes?.map((opt: any) => opt?.id)
@@ -82,11 +84,15 @@ const CityStep = ({
 
   useEffect(() => {
     setProvince(watch("state"));
-    setCategory(watch("profession"));
-    if (profileData?.serviceSubCategory?.id !== watch("profession")) {
-      setValue("serviceTypes", []);
-    }
-  }, [watch("state"), watch("profession")]);
+    // setCategory(watch("profession"));
+    // if (profileData?.serviceSubCategory?.id !== watch("profession")) {
+    //   setValue("serviceTypes", []);
+    // }
+  }, [watch("state")]);
+  useEffect(() => {
+    console.log({ city: watch("city") });
+    if (watch("city")) refetch();
+  }, [watch("city")]);
 
   return (
     <KeyboardAutoHide>
@@ -118,22 +124,22 @@ const CityStep = ({
               onEndReached={onLoadMoreCity}
             />
 
-            <SearchSelect
+            {/* <SearchSelect
               label="تخصص *"
               name="profession"
               control={control}
               placeholder="انتخاب کنید"
               options={subCategoriesData}
               sheetTitle="انتخاب تخصص"
-            />
+            /> */}
 
             <SearchMultiSelect
               label="ماموریت *"
               name="serviceTypes"
               control={control}
               placeholder="انتخاب کنید"
-              options={serviceTypeData}
-              sheetTitle={`انتخاب ماموریت در ${serviceTypeData?.[0]?.serviceSubCategory?.name}`}
+              options={serviceTypeData?.pages ?? []}
+              sheetTitle={`انتخاب ماموریت`}
             />
           </View>
         )}

@@ -109,11 +109,6 @@ query specialist_getMyProfile {
           name
         }
       }
-      serviceTypes {
-        id
-        logo
-        name
-      }
       specializedDocumentsVerificationStatus
       specializedDocumentUrls
     }

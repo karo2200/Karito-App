@@ -109,3 +109,32 @@ query serviceTypes_getPopular(
     status
   }
 }
+
+query city_getAvailableServiceTypes(
+  $input: GetAvailableServiceTypesForCityInput!
+  $skip: Int
+  $take: Int
+  $order: [ServiceTypeDtoSortInput!]
+  $where: ServiceTypeDtoFilterInput
+) {
+  city_getAvailableServiceTypes(input: $input) {
+    result(skip: $skip, take: $take, order: $order, where: $where) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      items {
+        name
+        logo
+        id
+        fixedGender
+        basePrice
+        serviceSubCategory {
+          id
+          name
+        }
+      }
+    }
+    status
+  }
+}

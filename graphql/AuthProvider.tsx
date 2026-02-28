@@ -1,5 +1,6 @@
 import {
   MutationCache,
+  QueryCache,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
@@ -15,6 +16,9 @@ export const queryClient = new QueryClient({
   mutationCache: new MutationCache({
     onError: async (error: any, variables) => {},
     onSuccess: async (data: any) => {},
+  }),
+  queryCache: new QueryCache({
+    onError: (error) => console.log(JSON.stringify({ error })),
   }),
 });
 

@@ -72,7 +72,6 @@ export default function useExpertHook() {
 
   const { data: serviceTypeData } = useGetServiceTypesQuery({
     take: 100,
-    where: { serviceSubCategory: { id: { eq: category } } },
   });
 
   const onLoadMoreCity = () => {
@@ -90,7 +89,6 @@ export default function useExpertHook() {
       {
         input: {
           cityId: formData?.city,
-          serviceSubCategoryId: formData?.profession,
           specialtyInputs: formData?.serviceTypes?.map((item) => {
             return { serviceTypeId: item, priority: SkillPriority.Primary };
           }),
@@ -223,7 +221,7 @@ function isProfileFullyUploaded(p?: SpecialistDto) {
   );
 }
 
-function isAllDocumentsApproved(p?: SpecialistDto) {
+export function isAllDocumentsApproved(p?: SpecialistDto) {
   if (!p) return false;
   return (
     p.specializedDocumentsVerificationStatus === VerificationStatus.Approved &&

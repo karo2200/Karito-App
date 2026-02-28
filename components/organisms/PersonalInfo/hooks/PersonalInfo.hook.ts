@@ -53,6 +53,7 @@ export default function usePersonalInfoHook() {
           if (data?.specialist_setPersonalInformation?.status?.code === 1) {
             queryClient.invalidateQueries({
               queryKey: [queryKeys.specialist_getMyProfile],
+              exact: false,
             });
             showToast({
               message: "اطلاعات با موفقیت ثبت شد.",

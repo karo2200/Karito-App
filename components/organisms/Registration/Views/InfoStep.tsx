@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Divider from "@/components/atoms/Divider";
 import ScreenNameWithBack from "@/components/atoms/ScreenNameWithBack";
 import ThemedButton from "@/components/atoms/ThemedButton";
 import ThemedText from "@/components/atoms/ThemedText";
 import { Colors } from "@/constants/Colors";
-import { VerificationStatus } from "@/generated/graphql";
+import { SpecialistDto, VerificationStatus } from "@/generated/graphql";
+import authCacheStore from "@/stores/authCacheStore";
+import { useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import useExpertHook from "../hooks/Expert.hook";
+import { useGetSpecialistProfile } from "../../PersonalInfo/hooks/personalInfo.query";
+import { isAllDocumentsApproved } from "../hooks/Expert.hook";
 
 const InfoStep = ({ onPrevPress }: { onPrevPress: () => void }) => {
-  const { router, profileData, isLoggedIn, userAproved } = useExpertHook();
+  const router = useRouter();
+  const { data: expertData, refetch } = useGetSpecialistProfile();
+  const profileData: SpecialistDto =
+    expertData?.specialist_getMyProfile?.result;
+  const userAproved = isAllDocumentsApproved(profileData);
+  const isLoggedIn = authCacheStore((state) => state.isLoggedIn);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <View>

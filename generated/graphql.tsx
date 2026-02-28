@@ -404,6 +404,11 @@ export type CarouselDtoSortInput = {
   title?: InputMaybe<SortEnumType>;
 };
 
+export type ChangePasswordInput = {
+  newPassword: Scalars["String"]["input"];
+  oldPassword: Scalars["String"]["input"];
+};
+
 export type CityDto = {
   __typename?: "CityDto";
   abbreviation: Scalars["String"]["output"];
@@ -527,6 +532,7 @@ export type CreateRateAndReviewInput = {
 
 export type CreateServiceCategoryInput = {
   abbreviation: Scalars["String"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
   logo: Scalars["String"]["input"];
   name: Scalars["String"]["input"];
 };
@@ -542,6 +548,7 @@ export type CreateServiceRequestInput = {
 
 export type CreateServiceSubCategoryInput = {
   abbreviation: Scalars["String"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
   logo: Scalars["String"]["input"];
   name: Scalars["String"]["input"];
   serviceCategoryId: Scalars["UUID"]["input"];
@@ -551,6 +558,7 @@ export type CreateServiceTypeInput = {
   abbreviation: Scalars["String"]["input"];
   banner: Scalars["String"]["input"];
   basePrice: Scalars["Decimal"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
   fixedGender?: InputMaybe<Gender>;
   isSpecial: Scalars["Boolean"]["input"];
   logo: Scalars["String"]["input"];
@@ -1240,6 +1248,12 @@ export type ListUserTypeOperationFilterInput = {
   some?: InputMaybe<UserTypeOperationFilterInput>;
 };
 
+export type LoginUserInput = {
+  password: Scalars["String"]["input"];
+  phoneNumber: Scalars["String"]["input"];
+  userType: UserType;
+};
+
 export type LongOperationFilterInput = {
   eq?: InputMaybe<Scalars["Long"]["input"]>;
   gt?: InputMaybe<Scalars["Long"]["input"]>;
@@ -1274,6 +1288,9 @@ export type Mutation = {
   /** Allows an owner to create a new admin user. */
   admin_create: ResponseBase;
   auth_adminRequestOtpForUser: ResponseBaseOfString;
+  auth_adminSetPassword: ResponseBase;
+  auth_changePassword: ResponseBaseOfAuthResult;
+  auth_login: ResponseBaseOfAuthResult;
   auth_refreshToken: ResponseBaseOfAuthResult;
   auth_requestOtp: ResponseBase;
   auth_switchRole: ResponseBaseOfAuthResult;
@@ -1311,6 +1328,7 @@ export type Mutation = {
   s3_generatePresignedUrls: ResponseBaseOfS3MultipartUploadUrlsResultDto;
   serviceCategory_create: ResponseBaseOfServiceCategoryDto;
   serviceCategory_delete: ResponseBase;
+  serviceCategory_setActive: ResponseBaseOfServiceCategoryDto;
   serviceCategory_update: ResponseBaseOfServiceCategoryDto;
   serviceRequest_accept: SingleResponseBaseOfServiceRequestDto;
   serviceRequest_applyDiscount: ResponseBaseOfServiceRequestDto;
@@ -1323,12 +1341,14 @@ export type Mutation = {
   serviceRequest_removeDiscount: ResponseBaseOfServiceRequestDto;
   serviceSubCategory_create: ResponseBaseOfServiceSubCategoryDto;
   serviceSubCategory_delete: ResponseBase;
+  serviceSubCategory_setActive: ResponseBaseOfServiceSubCategoryDto;
   serviceSubCategory_update: ResponseBaseOfServiceSubCategoryDto;
   serviceTypeQuestion_create: ResponseBaseOfServiceTypeQuestionDto;
   serviceTypeQuestion_delete: ResponseBase;
   serviceTypeQuestion_update: ResponseBaseOfServiceTypeQuestionDto;
   serviceType_create: ResponseBaseOfServiceTypeDto;
   serviceType_delete: ResponseBase;
+  serviceType_setActive: ResponseBaseOfServiceTypeDto;
   serviceType_update: ResponseBaseOfServiceTypeDto;
   settings_updateSkillLimitationSettings: ResponseBase;
   settings_updateSpecialistRequestRankingSettings: ResponseBase;
@@ -1365,6 +1385,18 @@ export type MutationAdmin_CreateArgs = {
 
 export type MutationAuth_AdminRequestOtpForUserArgs = {
   input: AdminRequestOtpInput;
+};
+
+export type MutationAuth_AdminSetPasswordArgs = {
+  input: SetPasswordInput;
+};
+
+export type MutationAuth_ChangePasswordArgs = {
+  input: ChangePasswordInput;
+};
+
+export type MutationAuth_LoginArgs = {
+  input: LoginUserInput;
 };
 
 export type MutationAuth_RefreshTokenArgs = {
@@ -1515,6 +1547,10 @@ export type MutationServiceCategory_DeleteArgs = {
   input: DeleteServiceCategoryInput;
 };
 
+export type MutationServiceCategory_SetActiveArgs = {
+  input: SetServiceCategoryActiveInput;
+};
+
 export type MutationServiceCategory_UpdateArgs = {
   input: UpdateServiceCategoryInput;
 };
@@ -1563,6 +1599,10 @@ export type MutationServiceSubCategory_DeleteArgs = {
   input: DeleteServiceSubCategoryInput;
 };
 
+export type MutationServiceSubCategory_SetActiveArgs = {
+  input: SetServiceSubCategoryActiveInput;
+};
+
 export type MutationServiceSubCategory_UpdateArgs = {
   input: UpdateServiceSubCategoryInput;
 };
@@ -1585,6 +1625,10 @@ export type MutationServiceType_CreateArgs = {
 
 export type MutationServiceType_DeleteArgs = {
   input: DeleteServiceTypeInput;
+};
+
+export type MutationServiceType_SetActiveArgs = {
+  input: SetServiceTypeActiveInput;
 };
 
 export type MutationServiceType_UpdateArgs = {
@@ -1700,8 +1744,10 @@ export type PopularServiceTypeDto = {
   abbreviation: Scalars["String"]["output"];
   banner: Scalars["String"]["output"];
   basePrice: Scalars["Decimal"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   fixedGender?: Maybe<Gender>;
   id: Scalars["UUID"]["output"];
+  isActive: Scalars["Boolean"]["output"];
   isSpecial: Scalars["Boolean"]["output"];
   logo: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
@@ -1724,8 +1770,10 @@ export type PopularServiceTypeDtoFilterInput = {
   and?: InputMaybe<Array<PopularServiceTypeDtoFilterInput>>;
   banner?: InputMaybe<StringOperationFilterInput>;
   basePrice?: InputMaybe<DecimalOperationFilterInput>;
+  description?: InputMaybe<StringOperationFilterInput>;
   fixedGender?: InputMaybe<NullableOfGenderOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  isActive?: InputMaybe<BooleanOperationFilterInput>;
   isSpecial?: InputMaybe<BooleanOperationFilterInput>;
   logo?: InputMaybe<StringOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
@@ -1738,8 +1786,10 @@ export type PopularServiceTypeDtoSortInput = {
   abbreviation?: InputMaybe<SortEnumType>;
   banner?: InputMaybe<SortEnumType>;
   basePrice?: InputMaybe<SortEnumType>;
+  description?: InputMaybe<SortEnumType>;
   fixedGender?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  isActive?: InputMaybe<SortEnumType>;
   isSpecial?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
@@ -2247,7 +2297,9 @@ export type S3SinglepartUploadUrlsResultDto = {
 export type ServiceCategoryDto = {
   __typename?: "ServiceCategoryDto";
   abbreviation: Scalars["String"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["UUID"]["output"];
+  isActive: Scalars["Boolean"]["output"];
   logo: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
 };
@@ -2265,7 +2317,9 @@ export type ServiceCategoryDtoCollectionSegment = {
 export type ServiceCategoryDtoFilterInput = {
   abbreviation?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<ServiceCategoryDtoFilterInput>>;
+  description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  isActive?: InputMaybe<BooleanOperationFilterInput>;
   logo?: InputMaybe<StringOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ServiceCategoryDtoFilterInput>>;
@@ -2273,7 +2327,9 @@ export type ServiceCategoryDtoFilterInput = {
 
 export type ServiceCategoryDtoSortInput = {
   abbreviation?: InputMaybe<SortEnumType>;
+  description?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  isActive?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
 };
@@ -2416,6 +2472,10 @@ export type ServiceRequestStatusOperationFilterInput = {
 
 export type ServiceRequestsDto = {
   __typename?: "ServiceRequestsDto";
+  firstRequest?: Maybe<Scalars["DateTime"]["output"]>;
+  lastRequest?: Maybe<Scalars["DateTime"]["output"]>;
+  maxPrice: Scalars["Float"]["output"];
+  minPrice: Scalars["Float"]["output"];
   successfulRequests: Scalars["Int"]["output"];
   totalRequests: Scalars["Int"]["output"];
 };
@@ -2423,7 +2483,9 @@ export type ServiceRequestsDto = {
 export type ServiceSubCategoryDto = {
   __typename?: "ServiceSubCategoryDto";
   abbreviation: Scalars["String"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["UUID"]["output"];
+  isActive: Scalars["Boolean"]["output"];
   logo: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
   serviceCategory: ServiceCategoryDto;
@@ -2442,7 +2504,9 @@ export type ServiceSubCategoryDtoCollectionSegment = {
 export type ServiceSubCategoryDtoFilterInput = {
   abbreviation?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<ServiceSubCategoryDtoFilterInput>>;
+  description?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  isActive?: InputMaybe<BooleanOperationFilterInput>;
   logo?: InputMaybe<StringOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ServiceSubCategoryDtoFilterInput>>;
@@ -2451,7 +2515,9 @@ export type ServiceSubCategoryDtoFilterInput = {
 
 export type ServiceSubCategoryDtoSortInput = {
   abbreviation?: InputMaybe<SortEnumType>;
+  description?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  isActive?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
   serviceCategory?: InputMaybe<ServiceCategoryDtoSortInput>;
@@ -2493,8 +2559,10 @@ export type ServiceTypeDto = {
   abbreviation: Scalars["String"]["output"];
   banner: Scalars["String"]["output"];
   basePrice: Scalars["Decimal"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   fixedGender?: Maybe<Gender>;
   id: Scalars["UUID"]["output"];
+  isActive: Scalars["Boolean"]["output"];
   isSpecial: Scalars["Boolean"]["output"];
   logo: Scalars["String"]["output"];
   name: Scalars["String"]["output"];
@@ -2516,8 +2584,10 @@ export type ServiceTypeDtoFilterInput = {
   and?: InputMaybe<Array<ServiceTypeDtoFilterInput>>;
   banner?: InputMaybe<StringOperationFilterInput>;
   basePrice?: InputMaybe<DecimalOperationFilterInput>;
+  description?: InputMaybe<StringOperationFilterInput>;
   fixedGender?: InputMaybe<NullableOfGenderOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
+  isActive?: InputMaybe<BooleanOperationFilterInput>;
   isSpecial?: InputMaybe<BooleanOperationFilterInput>;
   logo?: InputMaybe<StringOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
@@ -2529,8 +2599,10 @@ export type ServiceTypeDtoSortInput = {
   abbreviation?: InputMaybe<SortEnumType>;
   banner?: InputMaybe<SortEnumType>;
   basePrice?: InputMaybe<SortEnumType>;
+  description?: InputMaybe<SortEnumType>;
   fixedGender?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  isActive?: InputMaybe<SortEnumType>;
   isSpecial?: InputMaybe<SortEnumType>;
   logo?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
@@ -2613,8 +2685,12 @@ export type SetCityAvailableServiceTypesInput = {
 
 export type SetLocationAndSpecialtyInput = {
   cityId: Scalars["UUID"]["input"];
-  serviceSubCategoryId: Scalars["UUID"]["input"];
   specialtyInputs: Array<SpecialtyInput>;
+};
+
+export type SetPasswordInput = {
+  newPassword: Scalars["String"]["input"];
+  userId: Scalars["UUID"]["input"];
 };
 
 export type SetPersonalInformationInput = {
@@ -2629,6 +2705,21 @@ export type SetPersonalInformationInput = {
 
 export type SetPrimaryAddressInput = {
   addressId: Scalars["UUID"]["input"];
+};
+
+export type SetServiceCategoryActiveInput = {
+  isActive: Scalars["Boolean"]["input"];
+  serviceCategoryId: Scalars["UUID"]["input"];
+};
+
+export type SetServiceSubCategoryActiveInput = {
+  isActive: Scalars["Boolean"]["input"];
+  serviceSubCategoryId: Scalars["UUID"]["input"];
+};
+
+export type SetServiceTypeActiveInput = {
+  id: Scalars["UUID"]["input"];
+  isActive: Scalars["Boolean"]["input"];
 };
 
 export type SetUserBlockStateInput = {
@@ -2901,6 +2992,7 @@ export type UpdateProvinceInput = {
 
 export type UpdateServiceCategoryInput = {
   abbreviation: Scalars["String"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
   newLogo: Scalars["String"]["input"];
   newName: Scalars["String"]["input"];
   serviceCategoryId: Scalars["UUID"]["input"];
@@ -2908,6 +3000,7 @@ export type UpdateServiceCategoryInput = {
 
 export type UpdateServiceSubCategoryInput = {
   abbreviation: Scalars["String"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
   newLogo: Scalars["String"]["input"];
   newName: Scalars["String"]["input"];
   serviceSubCategoryId: Scalars["UUID"]["input"];
@@ -2917,6 +3010,7 @@ export type UpdateServiceTypeInput = {
   abbreviation: Scalars["String"]["input"];
   banner: Scalars["String"]["input"];
   basePrice: Scalars["Decimal"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
   fixedGender?: InputMaybe<Gender>;
   id: Scalars["UUID"]["input"];
   isSpecial: Scalars["Boolean"]["input"];
@@ -3703,6 +3797,22 @@ export type CancellationReason_GetAllQuery = {
   };
 };
 
+export type CountMyRequestsQueryVariables = Exact<{
+  where?: InputMaybe<ServiceRequestDtoFilterInput>;
+}>;
+
+export type CountMyRequestsQuery = {
+  __typename?: "Query";
+  serviceRequest_getMyRequests: {
+    __typename?: "ListResponseBaseOfServiceRequestDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceRequestDtoCollectionSegment";
+      totalCount: number;
+    } | null;
+  };
+};
+
 export type Payment_GetMyPaymentsQueryVariables = Exact<{
   where?: InputMaybe<PaymentDtoFilterInput>;
   order?: InputMaybe<Array<PaymentDtoSortInput> | PaymentDtoSortInput>;
@@ -4058,6 +4168,43 @@ export type ServiceTypes_GetPopularQuery = {
   };
 };
 
+export type City_GetAvailableServiceTypesQueryVariables = Exact<{
+  input: GetAvailableServiceTypesForCityInput;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  take?: InputMaybe<Scalars["Int"]["input"]>;
+  order?: InputMaybe<Array<ServiceTypeDtoSortInput> | ServiceTypeDtoSortInput>;
+  where?: InputMaybe<ServiceTypeDtoFilterInput>;
+}>;
+
+export type City_GetAvailableServiceTypesQuery = {
+  __typename?: "Query";
+  city_getAvailableServiceTypes: {
+    __typename?: "ListResponseBaseOfServiceTypeDto";
+    status?: any | null;
+    result?: {
+      __typename?: "ServiceTypeDtoCollectionSegment";
+      pageInfo: {
+        __typename?: "CollectionSegmentInfo";
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+      items?: Array<{
+        __typename?: "ServiceTypeDto";
+        name: string;
+        logo: string;
+        id: any;
+        fixedGender?: Gender | null;
+        basePrice: any;
+        serviceSubCategory: {
+          __typename?: "ServiceSubCategoryDto";
+          id: any;
+          name: string;
+        };
+      }> | null;
+    } | null;
+  };
+};
+
 export type S3_CompleteMultipartUploadMutationVariables = Exact<{
   input: CompleteMultipartUploadInput;
 }>;
@@ -4326,12 +4473,6 @@ export type Specialist_GetMyProfileQuery = {
           name: string;
         };
       } | null;
-      serviceTypes: Array<{
-        __typename?: "ServiceTypeDto";
-        id: any;
-        logo: string;
-        name: string;
-      }>;
     } | null;
   };
 };
@@ -6094,6 +6235,77 @@ export const useInfiniteCancellationReason_GetAllQuery = <
   );
 };
 
+export const CountMyRequestsDocument = `
+    query countMyRequests($where: ServiceRequestDtoFilterInput) {
+  serviceRequest_getMyRequests {
+    result(where: $where) {
+      totalCount
+    }
+    status
+  }
+}
+    `;
+
+export const useCountMyRequestsQuery = <
+  TData = CountMyRequestsQuery,
+  TError = unknown,
+>(
+  variables?: CountMyRequestsQueryVariables,
+  options?: Omit<
+    UseQueryOptions<CountMyRequestsQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<CountMyRequestsQuery, TError, TData>["queryKey"];
+  },
+) => {
+  return useQuery<CountMyRequestsQuery, TError, TData>({
+    queryKey:
+      variables === undefined
+        ? ["countMyRequests"]
+        : ["countMyRequests", variables],
+    queryFn: fetcher<CountMyRequestsQuery, CountMyRequestsQueryVariables>(
+      CountMyRequestsDocument,
+      variables,
+    ),
+    ...options,
+  });
+};
+
+export const useInfiniteCountMyRequestsQuery = <
+  TData = InfiniteData<CountMyRequestsQuery>,
+  TError = unknown,
+>(
+  variables: CountMyRequestsQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<CountMyRequestsQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      CountMyRequestsQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<CountMyRequestsQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey:
+          (optionsQueryKey ?? variables === undefined)
+            ? ["countMyRequests.infinite"]
+            : ["countMyRequests.infinite", variables],
+        queryFn: (metaData) =>
+          fetcher<CountMyRequestsQuery, CountMyRequestsQueryVariables>(
+            CountMyRequestsDocument,
+            { ...variables, ...(metaData.pageParam ?? {}) },
+          )(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
 export const Payment_GetMyPaymentsDocument = `
     query payment_getMyPayments($where: PaymentDtoFilterInput, $order: [PaymentDtoSortInput!], $take: Int, $skip: Int) {
   payment_getMyPayments {
@@ -7086,6 +7298,95 @@ export const useInfiniteServiceTypes_GetPopularQuery = <
   );
 };
 
+export const City_GetAvailableServiceTypesDocument = `
+    query city_getAvailableServiceTypes($input: GetAvailableServiceTypesForCityInput!, $skip: Int, $take: Int, $order: [ServiceTypeDtoSortInput!], $where: ServiceTypeDtoFilterInput) {
+  city_getAvailableServiceTypes(input: $input) {
+    result(skip: $skip, take: $take, order: $order, where: $where) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+      items {
+        name
+        logo
+        id
+        fixedGender
+        basePrice
+        serviceSubCategory {
+          id
+          name
+        }
+      }
+    }
+    status
+  }
+}
+    `;
+
+export const useCity_GetAvailableServiceTypesQuery = <
+  TData = City_GetAvailableServiceTypesQuery,
+  TError = unknown,
+>(
+  variables: City_GetAvailableServiceTypesQueryVariables,
+  options?: Omit<
+    UseQueryOptions<City_GetAvailableServiceTypesQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseQueryOptions<
+      City_GetAvailableServiceTypesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useQuery<City_GetAvailableServiceTypesQuery, TError, TData>({
+    queryKey: ["city_getAvailableServiceTypes", variables],
+    queryFn: fetcher<
+      City_GetAvailableServiceTypesQuery,
+      City_GetAvailableServiceTypesQueryVariables
+    >(City_GetAvailableServiceTypesDocument, variables),
+    ...options,
+  });
+};
+
+export const useInfiniteCity_GetAvailableServiceTypesQuery = <
+  TData = InfiniteData<City_GetAvailableServiceTypesQuery>,
+  TError = unknown,
+>(
+  variables: City_GetAvailableServiceTypesQueryVariables,
+  options: Omit<
+    UseInfiniteQueryOptions<City_GetAvailableServiceTypesQuery, TError, TData>,
+    "queryKey"
+  > & {
+    queryKey?: UseInfiniteQueryOptions<
+      City_GetAvailableServiceTypesQuery,
+      TError,
+      TData
+    >["queryKey"];
+  },
+) => {
+  return useInfiniteQuery<City_GetAvailableServiceTypesQuery, TError, TData>(
+    (() => {
+      const { queryKey: optionsQueryKey, ...restOptions } = options;
+      return {
+        queryKey: optionsQueryKey ?? [
+          "city_getAvailableServiceTypes.infinite",
+          variables,
+        ],
+        queryFn: (metaData) =>
+          fetcher<
+            City_GetAvailableServiceTypesQuery,
+            City_GetAvailableServiceTypesQueryVariables
+          >(City_GetAvailableServiceTypesDocument, {
+            ...variables,
+            ...(metaData.pageParam ?? {}),
+          })(),
+        ...restOptions,
+      };
+    })(),
+  );
+};
+
 export const S3_CompleteMultipartUploadDocument = `
     mutation s3_completeMultipartUpload($input: CompleteMultipartUploadInput!) {
   s3_completeMultipartUpload(input: $input) {
@@ -7761,11 +8062,6 @@ export const Specialist_GetMyProfileDocument = `
           logo
           name
         }
-      }
-      serviceTypes {
-        id
-        logo
-        name
       }
       specializedDocumentsVerificationStatus
       specializedDocumentUrls
