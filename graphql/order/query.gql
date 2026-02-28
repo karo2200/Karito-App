@@ -200,3 +200,12 @@ query cancellationReason_getAll(
     status
   }
 }
+
+query countMyRequests($where: ServiceRequestDtoFilterInput) {
+  serviceRequest_getMyRequests {
+    result(where: $where) {
+      totalCount
+    }
+    status
+  }
+}

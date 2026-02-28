@@ -3,63 +3,84 @@ import { maxWidth } from "@/constants/Dimension";
 import { formatPrice } from "@/services/ParseData";
 import { toPersianNumber } from "@/services/helper";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
-import React from "react";
+import React, { useEffect } from "react";
+import { useController } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "..";
 
-export default function RangeSlider({
-  min = 0,
-  max = 100,
-  step = 1,
-  setToValue,
-  setFromValue,
-}: {
-  min: number;
-  max: number;
-  step: number;
-  setToValue?: any;
-  setFromValue?: any;
-}) {
-  const [nonCollidingMultiSliderValue, setNonCollidingMultiSliderValue] =
-    React.useState([min, max]);
+const RangeSlider = React.forwardRef(
+  (
+    {
+      min = 0,
+      max = 100,
+      step = 1,
+      setToValue,
+      setFromValue,
+      name,
+      defaultValue,
+    }: {
+      min: number;
+      max: number;
+      step: number;
+      setToValue?: any;
+      setFromValue?: any;
+      name: string;
+      defaultValue?: any;
+    },
+    ref
+  ) => {
+    const { field } = useController({ name });
+    const [nonCollidingMultiSliderValue, setNonCollidingMultiSliderValue] =
+      React.useState([min, max]);
 
-  const nonCollidingMultiSliderValuesChange = (values) => {
-    setNonCollidingMultiSliderValue(values);
-    setToValue?.(values[1]);
-    setFromValue?.(values[0]);
-  };
+    useEffect(() => {
+      setNonCollidingMultiSliderValue([
+        defaultValue?.from ?? min,
+        defaultValue?.to ?? max,
+      ]);
+    }, [defaultValue]);
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.labelContainer}>
-        <ThemedText style={styles.label}>
-          {`${toPersianNumber(formatPrice(nonCollidingMultiSliderValue[0]))}`}
-        </ThemedText>
-        <ThemedText style={styles.label}>
-          {`${toPersianNumber(formatPrice(nonCollidingMultiSliderValue[1]))}`}
-        </ThemedText>
+    const nonCollidingMultiSliderValuesChange = (values) => {
+      setNonCollidingMultiSliderValue(values);
+      setToValue?.(values[1]);
+      setFromValue?.(values[0]);
+      field.onChange({ to: values[1], from: values[0] });
+    };
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.labelContainer}>
+          <ThemedText style={styles.label}>
+            {`${toPersianNumber(formatPrice(nonCollidingMultiSliderValue[0]))}`}
+          </ThemedText>
+          <ThemedText style={styles.label}>
+            {`${toPersianNumber(formatPrice(nonCollidingMultiSliderValue[1]))}`}
+          </ThemedText>
+        </View>
+        <MultiSlider
+          values={[
+            nonCollidingMultiSliderValue[0],
+            nonCollidingMultiSliderValue[1],
+          ]}
+          sliderLength={maxWidth * 0.61}
+          onValuesChange={nonCollidingMultiSliderValuesChange}
+          min={min}
+          max={max}
+          step={step}
+          allowOverlap={false}
+          snapped
+          minMarkerOverlapDistance={10}
+          trackStyle={styles.track}
+          selectedStyle={styles.select}
+          markerStyle={styles.marker}
+          pressedMarkerStyle={styles.pressedMarker}
+        />
       </View>
-      <MultiSlider
-        values={[
-          nonCollidingMultiSliderValue[0],
-          nonCollidingMultiSliderValue[1],
-        ]}
-        sliderLength={maxWidth * 0.61}
-        onValuesChange={nonCollidingMultiSliderValuesChange}
-        min={min}
-        max={max}
-        step={step}
-        allowOverlap={false}
-        snapped
-        minMarkerOverlapDistance={10}
-        trackStyle={styles.track}
-        selectedStyle={styles.select}
-        markerStyle={styles.marker}
-        pressedMarkerStyle={styles.pressedMarker}
-      />
-    </View>
-  );
-}
+    );
+  }
+);
+
+export default RangeSlider;
 
 const styles = StyleSheet.create({
   container: {

@@ -5,6 +5,7 @@ import {
   SortEnumType,
 } from "@/generated/graphql";
 import authCacheStore from "@/stores/authCacheStore";
+import useOrderFilterModalStore from "@/stores/orderFilterModalStore";
 import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -21,6 +22,9 @@ type TabItem = {
 };
 
 export default function useOrderHook() {
+  const appliedFilter = useOrderFilterModalStore(
+    (state) => state.appliedFilter
+  );
   const router = useRouter();
 
   const { params } = useRoute();
@@ -102,7 +106,7 @@ export default function useOrderHook() {
 
   const { data, isRefetching, refetch, hasNextPage, fetchNextPage, isLoading } =
     useGetServiceRequestsQuery({
-      where: tabs[activeTab]?.condition?.where,
+      where: { ...tabs[activeTab]?.condition?.where, ...appliedFilter },
       order: [{ requestDate: SortEnumType.Asc }],
     });
 
